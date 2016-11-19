@@ -109,7 +109,6 @@ class MailBox(object):
     def parse_uid_arg(message_uid_arg: str or [str]) -> str:
         """
         Prepare list of uid for use in commands: delete/copy/move/seen
-        :param message_uid_arg - may bee list of str: ['1',], and str: '1'|'1,2'
         """
         if not message_uid_arg:
             raise ValueError('message_uid_arg should not be empty')

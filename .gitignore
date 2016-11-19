@@ -1,0 +1,12 @@
+# Python not-source files
+__pycache__/
+
+# environment
+/.python-version
+
+# IDE files
+/.idea/
+*~
+
+# Git .orig
+*.orig
