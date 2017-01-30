@@ -10,3 +10,9 @@ __pycache__/
 
 # Git .orig
 *.orig
+
+# pwd
+passwords.ini
+
+# other
+samples/_test.py
