@@ -276,6 +276,11 @@ class MailMessage(object):
         return None
 
     @property
+    def date_str(self) -> str:
+        """Message date"""
+        return str(self.obj['Date'] or '')
+
+    @property
     def text(self) -> str or None:
         """The text of the mail message"""
         for part in self.obj.walk():
