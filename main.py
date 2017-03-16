@@ -287,7 +287,7 @@ class MailMessage(object):
             # multipart/* are just containers
             if part.get_content_maintype() == 'multipart':
                 continue
-            if part.get_content_type() == 'text/plain':
+            if part.get_content_type() in ('text/plain', 'text/'):
                 return part.get_payload(decode=True).decode('utf-8', 'ignore')
         return None
 
