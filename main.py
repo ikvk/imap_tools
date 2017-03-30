@@ -1,16 +1,46 @@
 import re
 import email
 import imaplib
-import datetime
-from typing import Iterable
+from typing import Iterator, Iterable
 from email.header import decode_header
+import imap_utf7
 
 # Maximal line length when calling readline(). This is to prevent reading arbitrary length lines.
 imaplib._MAXLINE = 4 * 1024 * 1024  # 4Mb
 
 
+class BaseImapToolsError(Exception):
+    """Base exception"""
+
+
+# todo
+def _check_ok_status(command, typ, data):
+    """
+    Check that command responses status equals expected status
+    If not, raises BaseImapToolsError
+    """
+    if typ != 'OK':
+        raise BaseImapToolsError(
+            'Response status for command "{command}" = "{typ}", "OK" expected, data: {data}'.format(
+                command=command, typ=typ, data=str(data)))
+
+
+def _quote(arg):
+    if isinstance(arg, str):
+        return '"' + arg.replace('\\', '\\\\').replace('"', '\\"') + '"'
+    else:
+        return b'"' + arg.replace(b'\\', b'\\\\').replace(b'"', b'\\"') + b'"'
+
+
+def _pairs_to_dict(items: list) -> dict:
+    """Example: ['MESSAGES', '3', 'UIDNEXT', '4'] -> {'MESSAGES': '3', 'UIDNEXT': '4'}"""
+    if len(items) % 2 != 0:
+        raise ValueError('An even-length array is expected')
+    return dict((items[i * 2], items[i * 2 + 1]) for i in range(len(items) // 2))
+
+
 class MailBox(object):
-    """The mail box"""
+    """Working with the email box throught IMAP"""
 
     # UID parse rules
     pattern_uid_re_set = [
@@ -18,22 +48,17 @@ class MailBox(object):
         re.compile('(?P<uid>\d+) \(RFC822'),  # icewarp
     ]
 
-    # some search criteria
-    criteria_unseen = 'UNSEEN'
-    criteria_seen = 'SEEN'
-    criteria_all = 'ALL'
-
     # standard mail message flags
     standard_rw_flags = ('SEEN', 'ANSWERED', 'FLAGGED', 'DELETED', 'DRAFT')
 
-    class MailBoxError(Exception):
-        """Base exception"""
-
-    class MailBoxFolderError(MailBoxError):
-        """Wrong folder name error"""
-
-    class MailBoxSearchError(MailBoxError):
+    class MailBoxSearchError(BaseImapToolsError):
         """Search error"""
+
+    class MailBoxWrongFlagError(BaseImapToolsError):
+        """Wrong flag for "flag" method"""
+
+    class MailBoxUidParamError(BaseImapToolsError):
+        """Wrong uid param"""
 
     def __init__(self, *args):
         self.box = imaplib.IMAP4_SSL(*args)
@@ -42,19 +67,16 @@ class MailBox(object):
         self._username = username
         self._password = password
         self._initial_folder = initial_folder
-        result = self.box.login(self._username, self._password)
-        self.set_folder(self._initial_folder)
-        # self.folder = MailFolderManager()
-        return result
+        self.box.login(self._username, self._password)
+        self.folder = MailFolderManager(self.box)
+        self.folder.set(self._initial_folder)
 
-    def set_folder(self, folder):
-        """Select current folder"""
-        res = self.box.select(folder)
-        if res[0] != 'OK':
-            raise self.MailBoxFolderError(res[1])
+    def logout(self):
+        self.box.logout()
 
     @staticmethod
-    def parse_uid(data: bytes) -> str or None:
+    def _parse_uid(data: bytes) -> str or None:
+        """Parse email uid"""
         for pattern_uid_re in MailBox.pattern_uid_re_set:
             uid_match = pattern_uid_re.search(data.decode())
             if uid_match:
@@ -62,8 +84,9 @@ class MailBox(object):
         return None
 
     @staticmethod
-    def clean_message_data(data):
+    def _clean_message_data(data):
         """
+        :param data: Message object model
         Get message data and uid data
         *Elements may contain byte strings in any order, like: b'4517 (FLAGS (\\Recent NonJunk))'
         """
@@ -80,122 +103,78 @@ class MailBox(object):
 
         return message_data, uid_data
 
-    def fetch(self, search_criteria: str = None, limit: int = None, miss_defect=True) -> Iterable:
+    def fetch(self, search_criteria: str = 'ALL', limit: int = None, miss_defect=True) -> Iterator[object]:
         """
         Mail message generator in current folder by search criteria
         :param search_criteria: Message search criteria (see examples at ./doc/imap_search_criteria.txt)
         :param limit: limit on the number of read emails
         :param miss_defect: miss defect emails
         """
-        typ, data = self.box.search(None, search_criteria or self.criteria_all)
+        typ, data = self.box.search(None, search_criteria)
         if typ != 'OK':
             raise self.MailBoxSearchError('{0}: {1}'.format(typ, str(data)))
         # first element is string with email numbers through the gap
-        message_id_set = data[0].decode().split(' ') if data[0] else ()
-        for i, message_id in enumerate(message_id_set):
+        for i, message_id in enumerate(data[0].decode().split(' ') if data[0] else ()):
             if limit and i >= limit:
                 break
             # get message by id
             typ, data = self.box.fetch(message_id, "(RFC822 UID)")  # *RFC-822 - format of the mail message
-            message_data, uid_data = self.clean_message_data(data)
+            message_data, uid_data = self._clean_message_data(data)
             message_obj = email.message_from_bytes(message_data)
             if message_obj:
-                if not message_obj.defects or not miss_defect:  # miss defect emails
-                    yield MailMessage(message_id, self.parse_uid(uid_data), message_obj)
+                if miss_defect and message_obj.defects:
+                    continue
+                yield MailMessage(message_id, self._parse_uid(uid_data), message_obj)
 
     @staticmethod
-    def parse_uid_arg(message_uid_arg: str or [str]) -> str:
-        """
-        Prepare list of uid for use in commands: delete/copy/move/seen
-        """
-        if not message_uid_arg:
-            raise ValueError('message_uid_arg should not be empty')
-        elif type(message_uid_arg) is list:
-            return ','.join(message_uid_arg)
-        elif type(message_uid_arg) is str:
-            return message_uid_arg
-        else:
-            raise TypeError('str or list expected, {} given'.format(type(message_uid_arg)))
+    def _uid_str(uid_list: Iterable[str]) -> str:
+        """Prepare list of uid for use in commands: delete/copy/move/seen"""
+        if not uid_list:
+            raise MailBox.MailBoxUidParamError('uid_list should be not empty')
+        if type(uid_list) is str:
+            raise MailBox.MailBoxUidParamError('uid_list can not be str')
+        return ','.join(uid_list)
 
-    def logout(self) -> tuple:
-        return self.box.logout()
+    def expunge(self) -> tuple:
+        return self.box.expunge()
 
-    def delete(self, message_uid_arg: str or [str], do_expunge: bool = True) -> bool:
-        """
-        Delete (email message/group of email messages)
-        The most effective way: group - to pass a list of uid, a single method - pass the uid
-        """
-        if not message_uid_arg:
-            return True
-        store_result = self.box.uid('STORE', self.parse_uid_arg(message_uid_arg), '+FLAGS', '(\Deleted)')
-        result = store_result[0] == 'OK'
-        if result and do_expunge:
-            self.expunge()
-        return result
+    def delete(self, uid_list: [str]) -> tuple:
+        """Delete email messages"""
+        store_result = self.box.uid('STORE', self._uid_str(uid_list), '+FLAGS', '(\Deleted)')
+        expunge_result = self.expunge()
+        return store_result, expunge_result
 
-    def copy(self, message_uid_arg: str or [str], destination_folder: str, do_expunge: bool = True) -> bool:
-        """
-        Copy (email message/group of email messages) into the specified folder
-        The most effective way: group - to pass a list of uid, a single method - pass the uid
-        """
-        if not message_uid_arg:
-            return True
-        copy_result = self.box.uid('COPY', self.parse_uid_arg(message_uid_arg), destination_folder)
-        result = copy_result[0] == 'OK'
-        if result and do_expunge:
-            self.expunge()
-        return result
+    def copy(self, uid_list: [str], destination_folder: str) -> tuple:
+        """Copy email messages into the specified folder"""
+        return self.box.uid('COPY', self._uid_str(uid_list), destination_folder)
 
-    def move(self, message_uid_arg: str or [str], destination_folder: str, do_expunge: bool = True) -> bool:
-        """
-        Move (email message/group of email messages) into the specified folder
-        The most effective way: group - to pass a list of uid, a single method - pass the uid
-        """
-        if not message_uid_arg:
-            return True
-        result = False
-        uid_arg = self.parse_uid_arg(message_uid_arg)
-        copy_result = self.copy(uid_arg, destination_folder, do_expunge=False)
-        if copy_result:
-            result = self.delete(uid_arg, do_expunge=False)
-            if result and do_expunge:
-                self.expunge()
-        return result
+    def move(self, uid_list: [str], destination_folder: str) -> tuple:
+        """Move email messages into the specified folder"""
+        uid_arg = self._uid_str(uid_list)
+        copy_result = self.copy(uid_arg, destination_folder)
+        delete_result = self.delete(uid_arg)
+        return copy_result, delete_result
 
-    def flag(self, message_uid_arg: str or [str], flag_set: [str] or str, value: bool, do_expunge: bool = True) -> bool:
+    def flag(self, uid_list: [str], flag_set: [str], value: bool) -> tuple:
         """
         Change email flag
         Typical flags contains in MailBox.standard_rw_flags
-        The most effective way: group - to pass a list of uid, a single method - pass the uid
         """
-        flag_set = [flag_set] if type(flag_set) is str else flag_set
         for flag_name in flag_set:
             if flag_name.upper() not in self.standard_rw_flags:
-                raise TypeError('Unsupported flag: {}'.format(flag_name))
-        if not message_uid_arg:
-            return True
-        store_result = self.box.uid('STORE', self.parse_uid_arg(message_uid_arg), ('+' if value else '-') + 'FLAGS',
-                                    '({})'.format(' '.join(('\\' + i for i in flag_set))))
-        result = store_result[0] == 'OK'
-        if result and do_expunge:
-            self.expunge()
-        return result
+                raise self.MailBoxWrongFlagError('Unsupported flag: {}'.format(flag_name))
+        store_result = self.box.uid(
+            'STORE', self._uid_str(uid_list), ('+' if value else '-') + 'FLAGS',
+            '({})'.format(' '.join(('\\' + i for i in flag_set))))
+        expunge_result = self.expunge()
+        return store_result, expunge_result
 
-    def seen(self, message_uid_arg: str or [str], seen_val: bool, do_expunge: bool = True) -> bool:
+    def seen(self, uid_list: [str], seen_val: bool) -> tuple:
         """
         Mark email as read/unread
         This is shortcut for flag method
-        The most effective way: group - to pass a list of uid, a single method - pass the uid
         """
-        return self.flag(message_uid_arg, 'Seen', seen_val, do_expunge)
-
-    def expunge(self) -> tuple:
-        """
-        Remove any messages from the currently selected folder that have the \Deleted flag set.
-        *Generates an EXPUNGE response for each deleted message.
-        *Returned data contains a list of EXPUNGE message numbers in order received.
-        """
-        return self.box.expunge()
+        return self.flag(uid_list, 'Seen', seen_val)
 
 
 class MailMessage(object):
@@ -207,7 +186,7 @@ class MailMessage(object):
         self.obj = msg_obj
 
     @staticmethod
-    def decode_value(value, encoding):
+    def _decode_value(value, encoding):
         """Converts value to utf-8 encoding"""
         if isinstance(value, bytes):
             if encoding in ['utf-8', None]:
@@ -221,11 +200,11 @@ class MailMessage(object):
         """Message subject"""
         if 'subject' in self.obj:
             msg_subject = decode_header(self.obj['subject'])
-            return self.decode_value(msg_subject[0][0], msg_subject[0][1])
+            return self._decode_value(msg_subject[0][0], msg_subject[0][1])
         return ''
 
     @staticmethod
-    def parse_email_address(address: str) -> dict:
+    def _parse_email_address(address: str) -> dict:
         """
         Parse email address str, example: "Ivan Petrov" <ivan@mail.ru>
         @:return dict(name: str, email: str, full: str)
@@ -246,8 +225,8 @@ class MailMessage(object):
         """The address of the sender (all data)"""
         from_header_cleaned = re.sub('[\n\r\t]+', ' ', self.obj['from'])
         msg_from = decode_header(from_header_cleaned)
-        msg_txt = ''.join(self.decode_value(part[0], part[1]) for part in msg_from)
-        return self.parse_email_address(msg_txt)
+        msg_txt = ''.join(self._decode_value(part[0], part[1]) for part in msg_from)
+        return self._parse_email_address(msg_txt)
 
     @property
     def from_(self) -> str:
@@ -259,7 +238,8 @@ class MailMessage(object):
         """The addresses of the recipients (all data)"""
         if 'to' in self.obj:
             msg_to = decode_header(self.obj['to'])
-            return [self.parse_email_address(part) for part in self.decode_value(msg_to[0][0], msg_to[0][1]).split(',')]
+            return [self._parse_email_address(part) for part in
+                    self._decode_value(msg_to[0][0], msg_to[0][1]).split(',')]
         return []
 
     @property
@@ -268,15 +248,7 @@ class MailMessage(object):
         return [i['email'] for i in self.to_values]
 
     @property
-    def date(self) -> datetime.datetime or None:
-        """Message date"""
-        if self.obj['Date']:
-            return datetime.datetime.strptime(
-                self.obj['Date'].split(', ')[-1].split(' (')[0], "%d %b %Y %H:%M:%S %z")
-        return None
-
-    @property
-    def date_str(self) -> str:
+    def date(self) -> str:
         """Message date"""
         return str(self.obj['Date'] or '')
 
@@ -302,8 +274,11 @@ class MailMessage(object):
                 return part.get_payload(decode=True).decode('utf-8', 'ignore')
         return None
 
-    def get_attachments(self) -> Iterable(str, bytes):
-        """Attachments of the mail message (generator)"""
+    def get_attachments(self) -> Iterator(str, bytes):
+        """
+        Attachments of the mail message (generator)
+        :return: Iterator(filename: str, payload: bytes)
+        """
         for part in self.obj.walk():
             # multipart/* are just containers
             if part.get_content_maintype() == 'multipart':
@@ -313,7 +288,7 @@ class MailMessage(object):
             filename = part.get_filename()
             if not part.get_filename():
                 continue  # this is what happens when Content-Disposition = inline
-            filename = self.decode_value(*decode_header(filename)[0])
+            filename = self._decode_value(*decode_header(filename)[0])
             payload = part.get_payload(decode=True)
             if not payload:
                 continue
@@ -321,9 +296,30 @@ class MailMessage(object):
 
 
 class MailFolderManager(object):
-    """operations with mail box folders"""
+    """Operations with mail box folders"""
 
-    # todo
+    folder_status_options = ['MESSAGES', 'RECENT', 'UIDNEXT', 'UIDVALIDITY', 'UNSEEN']
+
+    class MailBoxFolderSetError(BaseImapToolsError):
+        """Wrong folder name error"""
+
+    class MailBoxFolderWrongStatusError(BaseImapToolsError):
+        """Wrong folder name error"""
+
+    def __init__(self, box):
+        self.box = box
+
+    def _normalise_folder(self, folder):
+        """Normalise folder name"""
+        if isinstance(folder, bytes):
+            folder = folder.decode('ascii')
+        return _quote(imap_utf7.encode(folder))
+
+    def set(self, folder):
+        """Select current folder"""
+        result = self.box.select(folder)
+        if result[0] != 'OK':
+            raise self.MailBoxFolderSetError(result[1])
 
     def get(self):
         pass
@@ -334,14 +330,56 @@ class MailFolderManager(object):
     def rename(self):
         pass
 
-    def status(self):
-        pass
-
     def delete(self):
         pass
 
-    def get_list(self):
-        pass
+    def status(self, folder: str, options: [str] or None = None):
+        """
+        Get the status of a folder
+        :param folder: mailbox folder
+        :param options: [str] with values from MailFolderManager.folder_status_options or None,
+                by default - get all options
+            MESSAGES - The number of messages in the mailbox.
+            RECENT - The number of messages with the \Recent flag set.
+            UIDNEXT - The next unique identifier value of the mailbox.
+            UIDVALIDITY - The unique identifier validity value of the mailbox.
+            UNSEEN - The number of messages which do not have the \Seen flag set.
+        :return: dict with options keys
+        """
+        command = 'STATUS'
+        if not options:
+            options = self.folder_status_options
+        if not all([i in self.folder_status_options for i in options]):
+            raise self.MailBoxFolderWrongStatusError(str(options))
+        typ, data = self.box._simple_command(command, self._normalise_folder(folder), '({})'.format(' '.join(options)))
+        _check_ok_status(command, typ, data)
+        typ, data = self.box._untagged_response(typ, data, command)
+        _check_ok_status(command, typ, data)
+        values = data[0].decode().split('(')[1].split(')')[0].split(' ')
+        return _pairs_to_dict(values)
 
-    def get_sub_list(self):
-        pass
+    def list(self, folder: str = '""', search_args: str = '*', subscribed_only: bool = False):
+        """
+        Get a listing of folders on the server
+        :param folder: mailbox folder, if empty list shows all content from root
+        :param search_args: search argumets, is case-sensitive mailbox name with possible wildcards
+            * is a wildcard, and matches zero or more characters at this position
+            % is similar to * but it does not match a hierarchy delimiter
+        :param subscribed_only: bool - get only subscribed folders
+        :return: dict(
+            flags: str - folder flags,
+            delim: str - delimitor,
+            name: str - folder name,
+        )
+        """
+        folder_item_re = re.compile(r'\((?P<flags>[\S ]*)\) "(?P<delim>[\S ]+)" "(?P<name>[\S ]+)"')
+        command = 'LSUB' if subscribed_only else 'LIST'
+        typ, data = self.box._simple_command(command, self._normalise_folder(folder), search_args)
+        typ, data = self.box._untagged_response(typ, data, command)
+        result = list()
+        for folder_item in data:
+            if not folder_item:
+                continue
+            folder_match = re.search(folder_item_re, imap_utf7.decode(folder_item))
+            result.append(folder_match.groupdict())
+        return result
