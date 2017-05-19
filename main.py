@@ -1,7 +1,6 @@
 import re
 import email
 import imaplib
-from typing import Iterator, Iterable
 from email.header import decode_header
 import imap_utf7
 
@@ -9,130 +8,81 @@ import imap_utf7
 imaplib._MAXLINE = 4 * 1024 * 1024  # 4Mb
 
 
-class BaseImapToolsError(Exception):
+class ImapToolsError(Exception):
     """Base exception"""
-
-
-# todo
-def _check_ok_status(command, typ, data):
-    """
-    Check that command responses status equals expected status
-    If not, raises BaseImapToolsError
-    """
-    if typ != 'OK':
-        raise BaseImapToolsError(
-            'Response status for command "{command}" = "{typ}", "OK" expected, data: {data}'.format(
-                command=command, typ=typ, data=str(data)))
-
-
-def _quote(arg):
-    if isinstance(arg, str):
-        return '"' + arg.replace('\\', '\\\\').replace('"', '\\"') + '"'
-    else:
-        return b'"' + arg.replace(b'\\', b'\\\\').replace(b'"', b'\\"') + b'"'
-
-
-def _pairs_to_dict(items: list) -> dict:
-    """Example: ['MESSAGES', '3', 'UIDNEXT', '4'] -> {'MESSAGES': '3', 'UIDNEXT': '4'}"""
-    if len(items) % 2 != 0:
-        raise ValueError('An even-length array is expected')
-    return dict((items[i * 2], items[i * 2 + 1]) for i in range(len(items) // 2))
 
 
 class MailBox(object):
     """Working with the email box throught IMAP"""
 
-    # UID parse rules
-    pattern_uid_re_set = [
-        re.compile('\(UID (?P<uid>\d+) RFC822'),  # zimbra, yandex, gmail
-        re.compile('(?P<uid>\d+) \(RFC822'),  # icewarp
-    ]
-
     # standard mail message flags
     standard_rw_flags = ('SEEN', 'ANSWERED', 'FLAGGED', 'DELETED', 'DRAFT')
 
-    class MailBoxSearchError(BaseImapToolsError):
-        """Search error"""
-
-    class MailBoxWrongFlagError(BaseImapToolsError):
+    class MailBoxWrongFlagError(ImapToolsError):
         """Wrong flag for "flag" method"""
 
-    class MailBoxUidParamError(BaseImapToolsError):
+    class MailBoxUidParamError(ImapToolsError):
         """Wrong uid param"""
 
     def __init__(self, *args):
         self.box = imaplib.IMAP4_SSL(*args)
+        self._username = None
+        self._password = None
+        self._initial_folder = None
+        self.folder = None
+
+    @staticmethod
+    def check_ok_status(command, command_result):
+        """
+        Check that command responses status equals OK status
+        If not, raises ImapToolsError
+        """
+        typ, data = command_result[0], command_result[1]
+        if typ != 'OK':
+            raise ImapToolsError(
+                'Response status for command "{command}" = "{typ}", "OK" expected, data: {data}'.format(
+                    command=command, typ=typ, data=str(data)))
 
     def login(self, username: str, password: str, initial_folder: str = 'INBOX'):
         self._username = username
         self._password = password
         self._initial_folder = initial_folder
         self.box.login(self._username, self._password)
-        self.folder = MailFolderManager(self.box)
+        self.folder = MailFolderManager(self)
         self.folder.set(self._initial_folder)
 
     def logout(self):
         self.box.logout()
 
-    @staticmethod
-    def _parse_uid(data: bytes) -> str or None:
-        """Parse email uid"""
-        for pattern_uid_re in MailBox.pattern_uid_re_set:
-            uid_match = pattern_uid_re.search(data.decode())
-            if uid_match:
-                return uid_match.group('uid')
-        return None
-
-    @staticmethod
-    def _clean_message_data(data):
-        """
-        :param data: Message object model
-        Get message data and uid data
-        *Elements may contain byte strings in any order, like: b'4517 (FLAGS (\\Recent NonJunk))'
-        """
-        message_data = b''
-        uid_data = b''
-        for i in range(len(data)):
-            # miss trash
-            if type(data[i]) is bytes and b'(FLAGS' in data[i]:
-                continue
-            # data, uid
-            if type(data[i]) is tuple:
-                message_data = data[i][1]
-                uid_data = data[i][0]
-
-        return message_data, uid_data
-
-    def fetch(self, search_criteria: str = 'ALL', limit: int = None, miss_defect=True) -> Iterator[object]:
+    def fetch(self, search_criteria: str = 'ALL', limit: int = None, miss_defect=True) -> iter:
         """
         Mail message generator in current folder by search criteria
         :param search_criteria: Message search criteria (see examples at ./doc/imap_search_criteria.txt)
         :param limit: limit on the number of read emails
         :param miss_defect: miss defect emails
+        :return generator: MailMessage
         """
-        typ, data = self.box.search(None, search_criteria)
-        if typ != 'OK':
-            raise self.MailBoxSearchError('{0}: {1}'.format(typ, str(data)))
+        search_result = self.box.search(None, search_criteria)
+        self.check_ok_status('search', search_result)
         # first element is string with email numbers through the gap
-        for i, message_id in enumerate(data[0].decode().split(' ') if data[0] else ()):
+        for i, message_id in enumerate(search_result[1][0].decode().split(' ') if search_result[1][0] else ()):
             if limit and i >= limit:
                 break
             # get message by id
-            typ, data = self.box.fetch(message_id, "(RFC822 UID)")  # *RFC-822 - format of the mail message
-            message_data, uid_data = self._clean_message_data(data)
-            message_obj = email.message_from_bytes(message_data)
-            if message_obj:
-                if miss_defect and message_obj.defects:
-                    continue
-                yield MailMessage(message_id, self._parse_uid(uid_data), message_obj)
+            fetch_result = self.box.fetch(message_id, "(RFC822 UID)")  # *RFC-822 - format of the mail message
+            self.check_ok_status('box.fetch', fetch_result)
+            mail_message = MailMessage(message_id, fetch_result[1])
+            if miss_defect and mail_message.obj.defects:
+                continue
+            yield mail_message
 
     @staticmethod
-    def _uid_str(uid_list: Iterable[str]) -> str:
+    def _uid_str(uid_list: [str]) -> str:
         """Prepare list of uid for use in commands: delete/copy/move/seen"""
         if not uid_list:
             raise MailBox.MailBoxUidParamError('uid_list should be not empty')
-        if type(uid_list) is str:
-            raise MailBox.MailBoxUidParamError('uid_list can not be str')
+        if type(uid_list) not in (list, tuple, set):
+            raise MailBox.MailBoxUidParamError('uid_list must be list|tuple|set of strings')
         return ','.join(uid_list)
 
     def expunge(self) -> tuple:
@@ -180,10 +130,46 @@ class MailBox(object):
 class MailMessage(object):
     """The email message"""
 
-    def __init__(self, msg_id: str, msg_uid: str, msg_obj: 'email.message.Message'):
-        self.id = msg_id
-        self.uid = msg_uid
-        self.obj = msg_obj
+    # UID parse rules
+    pattern_uid_re_set = [
+        re.compile('\(UID (?P<uid>\d+) RFC822'),  # zimbra, yandex, gmail
+        re.compile('(?P<uid>\d+) \(RFC822'),  # icewarp
+    ]
+
+    def __init__(self, message_id: str, fetch_data):
+        message_data, uid_data = self._clean_message_data(fetch_data)
+        self.id = message_id
+        self.uid = self._parse_uid(uid_data)
+        self.obj = email.message_from_bytes(message_data)
+
+    @staticmethod
+    def _parse_uid(uid_data: bytes) -> str or None:
+        """Parse email uid"""
+        for pattern_uid_re in MailMessage.pattern_uid_re_set:
+            uid_match = pattern_uid_re.search(uid_data.decode())
+            if uid_match:
+                return uid_match.group('uid')
+        return None
+
+    @staticmethod
+    def _clean_message_data(fetch_data):
+        """
+        :param fetch_data: Message object model
+        Get message data and uid data
+        *Elements may contain byte strings in any order, like: b'4517 (FLAGS (\\Recent NonJunk))'
+        """
+        message_data = b''
+        uid_data = b''
+        for i in range(len(fetch_data)):
+            # miss trash
+            if type(fetch_data[i]) is bytes and b'(FLAGS' in fetch_data[i]:
+                continue
+            # data, uid
+            if type(fetch_data[i]) is tuple:
+                message_data = fetch_data[i][1]
+                uid_data = fetch_data[i][0]
+
+        return message_data, uid_data
 
     @staticmethod
     def _decode_value(value, encoding):
@@ -274,10 +260,10 @@ class MailMessage(object):
                 return part.get_payload(decode=True).decode('utf-8', 'ignore')
         return None
 
-    def get_attachments(self) -> Iterator(str, bytes):
+    def get_attachments(self) -> iter:
         """
         Attachments of the mail message (generator)
-        :return: Iterator(filename: str, payload: bytes)
+        :return: generator of tuple(filename: str, payload: bytes)
         """
         for part in self.obj.walk():
             # multipart/* are just containers
@@ -300,38 +286,69 @@ class MailFolderManager(object):
 
     folder_status_options = ['MESSAGES', 'RECENT', 'UIDNEXT', 'UIDVALIDITY', 'UNSEEN']
 
-    class MailBoxFolderSetError(BaseImapToolsError):
+    class MailBoxFolderWrongStatusError(ImapToolsError):
         """Wrong folder name error"""
 
-    class MailBoxFolderWrongStatusError(BaseImapToolsError):
-        """Wrong folder name error"""
-
-    def __init__(self, box):
-        self.box = box
+    def __init__(self, mailbox):
+        self.mailbox = mailbox
+        self._current_folder = None
 
     def _normalise_folder(self, folder):
         """Normalise folder name"""
         if isinstance(folder, bytes):
             folder = folder.decode('ascii')
-        return _quote(imap_utf7.encode(folder))
+        return self._quote(imap_utf7.encode(folder))
+
+    @staticmethod
+    def _quote(arg):
+        if isinstance(arg, str):
+            return '"' + arg.replace('\\', '\\\\').replace('"', '\\"') + '"'
+        else:
+            return b'"' + arg.replace(b'\\', b'\\\\').replace(b'"', b'\\"') + b'"'
+
+    @staticmethod
+    def _pairs_to_dict(items: list) -> dict:
+        """Example: ['MESSAGES', '3', 'UIDNEXT', '4'] -> {'MESSAGES': '3', 'UIDNEXT': '4'}"""
+        if len(items) % 2 != 0:
+            raise ValueError('An even-length array is expected')
+        return dict((items[i * 2], items[i * 2 + 1]) for i in range(len(items) // 2))
 
     def set(self, folder):
         """Select current folder"""
-        result = self.box.select(folder)
-        if result[0] != 'OK':
-            raise self.MailBoxFolderSetError(result[1])
+        result = self.mailbox.box.select(folder)
+        self.mailbox.check_ok_status('box.select', result)
+        self._current_folder = folder
+        return result
+
+    def exists(self, folder: str) -> bool:
+        """Checks whether a folder exists on the server."""
+        return len(self.list('', folder)) > 0
+
+    def create(self, folder: str):
+        """
+        Create folder on the server. D
+        *Use email box delimitor to separate folders. Example for "|" delimitor: "folder|sub folder"
+        """
+        result = self.mailbox.box._simple_command('CREATE', self._normalise_folder(folder))
+        self.mailbox.check_ok_status('CREATE', result)
+        return result
 
     def get(self):
-        pass
+        """Get current folder"""
+        return self._current_folder
 
-    def create(self):
-        pass
+    def rename(self, old_name: str, new_name: str):
+        """Renemae folder from old_name to new_name"""
+        result = self.mailbox.box._simple_command(
+            'RENAME', self._normalise_folder(old_name), self._normalise_folder(new_name))
+        self.mailbox.check_ok_status('RENAME', result)
+        return result
 
-    def rename(self):
-        pass
-
-    def delete(self):
-        pass
+    def delete(self, folder: str):
+        """Delete folder"""
+        result = self.mailbox.box._simple_command('DELETE', self._normalise_folder(folder))
+        self.mailbox.check_ok_status('DELETE', result)
+        return result
 
     def status(self, folder: str, options: [str] or None = None):
         """
@@ -344,19 +361,20 @@ class MailFolderManager(object):
             UIDNEXT - The next unique identifier value of the mailbox.
             UIDVALIDITY - The unique identifier validity value of the mailbox.
             UNSEEN - The number of messages which do not have the \Seen flag set.
-        :return: dict with options keys
+        :return: dict with available options keys
         """
         command = 'STATUS'
         if not options:
             options = self.folder_status_options
         if not all([i in self.folder_status_options for i in options]):
             raise self.MailBoxFolderWrongStatusError(str(options))
-        typ, data = self.box._simple_command(command, self._normalise_folder(folder), '({})'.format(' '.join(options)))
-        _check_ok_status(command, typ, data)
-        typ, data = self.box._untagged_response(typ, data, command)
-        _check_ok_status(command, typ, data)
-        values = data[0].decode().split('(')[1].split(')')[0].split(' ')
-        return _pairs_to_dict(values)
+        status_result = self.mailbox.box._simple_command(
+            command, self._normalise_folder(folder), '({})'.format(' '.join(options)))
+        self.mailbox.check_ok_status(command, status_result)
+        result = self.mailbox.box._untagged_response(status_result[0], status_result[1], command)
+        self.mailbox.check_ok_status(command, result)
+        values = result[1][0].decode().split('(')[1].split(')')[0].split(' ')
+        return self._pairs_to_dict(values)
 
     def list(self, folder: str = '""', search_args: str = '*', subscribed_only: bool = False):
         """
@@ -372,14 +390,17 @@ class MailFolderManager(object):
             name: str - folder name,
         )
         """
-        folder_item_re = re.compile(r'\((?P<flags>[\S ]*)\) "(?P<delim>[\S ]+)" "(?P<name>[\S ]+)"')
+        folder_item_re = re.compile(r'\((?P<flags>[\S ]*)\) "(?P<delim>[\S ]+)" (?P<name>.+)')
         command = 'LSUB' if subscribed_only else 'LIST'
-        typ, data = self.box._simple_command(command, self._normalise_folder(folder), search_args)
-        typ, data = self.box._untagged_response(typ, data, command)
+        typ, data = self.mailbox.box._simple_command(command, self._normalise_folder(folder), search_args)
+        typ, data = self.mailbox.box._untagged_response(typ, data, command)
         result = list()
         for folder_item in data:
             if not folder_item:
                 continue
             folder_match = re.search(folder_item_re, imap_utf7.decode(folder_item))
-            result.append(folder_match.groupdict())
+            folder = folder_match.groupdict()
+            if folder['name'].startswith('"') and folder['name'].endswith('"'):
+                folder['name'] = folder['name'][1:len(folder['name']) - 1]
+            result.append(folder)
         return result
