@@ -42,6 +42,7 @@ Init:
 ^^^^^
 .. code-block:: python
 
+    from imap_tools import MailBox
     mailbox = MailBox('imap.mail.com')
     mailbox.login('test@mail.com', 'password')
 

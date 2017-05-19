@@ -2,7 +2,7 @@ import re
 import email
 import imaplib
 from email.header import decode_header
-import imap_utf7
+from . import imap_utf7
 
 # Maximal line length when calling readline(). This is to prevent reading arbitrary length lines.
 imaplib._MAXLINE = 4 * 1024 * 1024  # 4Mb
@@ -11,6 +11,8 @@ imaplib._MAXLINE = 4 * 1024 * 1024  # 4Mb
 class ImapToolsError(Exception):
     """Base exception"""
 
+
+# todo check_ok_status for (copy, delete, flag, move, seen)
 
 class MailBox(object):
     """Working with the email box throught IMAP"""

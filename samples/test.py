@@ -1,14 +1,13 @@
-from main import MailBox
+from imap_tools import MailBox
 import configparser
 
 # get config data
 config = configparser.ConfigParser()
-config.read('../passwords.ini')
+config.read('../credentials.ini')
 
 # get email box
-email = 'imap.tools@ya.ru'
-box = MailBox('imap.yandex.ru')
-box.login(email, config['PASSWORDS'][email])
+box = MailBox(config['MAILBOX']['host'])
+box.login(config['MAILBOX']['email'], config['MAILBOX']['password'])
 
 
 def email_data():
