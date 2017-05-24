@@ -1,15 +1,6 @@
-# Python not-source files
-__pycache__/
-
-# environment
-/.python-version
-
-# IDE files
-/.idea/
-*~
-
-# Git .orig
+credentials.ini
 *.orig
-
-# passwords
-passwords.ini
+__pycache__
+/examples/test.py
+/.python-version
+/.idea/

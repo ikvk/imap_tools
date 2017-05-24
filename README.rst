@@ -19,7 +19,7 @@ However, these libraries contain various shortcomings, such as:
 - lack of convenient tools for working with directories
 - lack of convenient tools for working with letters in directories
 
-This library takes into account the shortcomings of other libraries.
+imap_tools library takes into account the shortcomings of other libraries.
 Main features:
 
 - transparent work with letter attributes
@@ -29,11 +29,9 @@ Main features:
 
 Installation
 ------------
-
-Install from Python Package Index (PyPI), using ``pip``:
 ::
 
-    $ pip install -U imap_tools
+    $ pip install imap_tools
 
 Quick guide
 -----------
@@ -59,25 +57,31 @@ Message:
         message.date
         message.text
         message.html
+        for filename, payload in message.get_attachments():
+            filename, payload
 
 Mailbox:
 ^^^^^^^^
 .. code-block:: python
 
-    # COPY all messages from current dir to folder1, by one
+    # NOTE: You can use 2 approaches to perform these operations
+    # "by one" - Perform operation for each message separately per N commands
+    # "in bulk" - Perform operation for message set per 1 command
+
+    # COPY all messages from current dir to folder1, *by one
     for msg in mailbox.fetch():
         res = mailbox.copy(msg.uid, 'INBOX/folder1')
 
-    # DELETE all messages from current dir to folder1, in bulk
+    # DELETE all messages from current dir to folder1, *in bulk
     mailbox.delete([msg.uid for msg in mailbox.fetch()])
 
-    # FLAG unseen messages in current folder as Answered and Flagged, in bulk
+    # FLAG unseen messages in current folder as Answered and Flagged, *in bulk
     mailbox.flag([msg.uid for msg in mailbox.fetch('(UNSEEN)')], ['Answered', 'Flagged'], True)
 
-    # MOVE all messages from current dir to folder2, in bulk
+    # MOVE all messages from current dir to folder2, *in bulk
     mailbox.move([msg.uid for msg in mailbox.fetch()], 'INBOX/folder2')
 
-    # mark SEEN all messages sent at 05.03.2007 in current folder as unseen, in bulk
+    # mark SEEN all messages sent at 05.03.2007 in current folder as unseen, *in bulk
     mailbox.seen([msg.uid for msg in mailbox.fetch("SENTON 05-Mar-2007")], False)
 
 Folders:
