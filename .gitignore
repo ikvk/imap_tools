@@ -1,6 +1,6 @@
-credentials.ini
 *.orig
 __pycache__
+/tests/credentials.ini
 /examples/test.py
 /.python-version
 /.idea/

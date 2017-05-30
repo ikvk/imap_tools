@@ -6,8 +6,8 @@ config = configparser.ConfigParser()
 config.read('../credentials.ini')
 
 # get email box
-mailbox = MailBox(config['MAILBOX']['host'])
-mailbox.login(config['MAILBOX']['email'], config['MAILBOX']['password'])
+mailbox = MailBox(config['YANDEX']['host'])
+mailbox.login(config['YANDEX']['email'], config['YANDEX']['password'])
 
 # MESSAGES
 # --------
@@ -20,6 +20,7 @@ for message in mailbox.fetch():
     print(message.date)
     print(message.text)
     print(message.html)
+    print(message.flags)
     for filename, payload in message.get_attachments():
         print(filename, payload)
 

@@ -57,6 +57,7 @@ Message:
         message.date
         message.text
         message.html
+        message.flags
         for filename, payload in message.get_attachments():
             filename, payload
 
