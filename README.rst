@@ -6,7 +6,7 @@ Tool for work with e-mail messages and not with the imap protocol.
 ===================  ===============================================
 Python version       3.3+
 License              MIT
-PyPI                 #TODO https://pypi.python.org/pypi/imap_tools/
+PyPI                 https://pypi.python.org/pypi/imap_tools/
 ===================  ===============================================
 
 About

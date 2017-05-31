@@ -1,6 +1,9 @@
 *.orig
 __pycache__
+MANIFEST
+/dist/
 /tests/credentials.ini
 /examples/test.py
+/examples/notes.txt
 /.python-version
 /.idea/
