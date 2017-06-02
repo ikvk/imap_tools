@@ -89,6 +89,7 @@ class MailBox(object):
             if limit and i >= limit:
                 break
             # get message by id
+            # todo: fetching data implicitly set the \Seen flag. Make param for disable this behavior
             fetch_result = self.box.fetch(message_id, "(RFC822 UID FLAGS)")
             self.check_status('box.fetch', fetch_result)
             mail_message = used_email_message_class(message_id, fetch_result[1])
@@ -100,10 +101,12 @@ class MailBox(object):
     def _uid_str(uid_list: [str]) -> str:
         """Prepare list of uid for use in commands: delete/copy/move/seen"""
         if not uid_list:
-            raise MailBox.MailBoxUidParamError('uid_list should be not empty')
+            raise MailBox.MailBoxUidParamError('uid_list should not be empty')
         if type(uid_list) not in (list, tuple, set):
             raise MailBox.MailBoxUidParamError(
                 'uid_list must be list|tuple|set of strings, {} found: {}'.format(type(uid_list), uid_list))
+        if any([type(i) is not str for i in uid_list]):
+            raise MailBox.MailBoxUidParamError('uid must be string')
         return ','.join(uid_list)
 
     def expunge(self) -> tuple:
@@ -113,28 +116,38 @@ class MailBox(object):
 
     def delete(self, uid_list: [str]) -> tuple:
         """Delete email messages"""
+        if not uid_list:
+            return None, None
         store_result = self.box.uid('STORE', self._uid_str(uid_list), '+FLAGS', '(\Deleted)')
         self.check_status('box.delete', store_result)
         expunge_result = self.expunge()
         return store_result, expunge_result
 
-    def copy(self, uid_list: [str], destination_folder: str) -> tuple:
+    def copy(self, uid_list: [str], destination_folder: str) -> tuple or None:
         """Copy email messages into the specified folder"""
-        result = self.box.uid('COPY', self._uid_str(uid_list), destination_folder)
-        self.check_status('box.copy', result)
-        return result
+        if not uid_list:
+            return None
+        copy_result = self.box.uid('COPY', self._uid_str(uid_list), destination_folder)
+        self.check_status('box.copy', copy_result)
+        return copy_result
 
     def move(self, uid_list: [str], destination_folder: str) -> tuple:
         """Move email messages into the specified folder"""
+        if not uid_list:
+            return None, None
         copy_result = self.copy(uid_list, destination_folder)
         delete_result = self.delete(uid_list)
         return copy_result, delete_result
 
-    def flag(self, uid_list: [str], flag_set: [str], value: bool) -> tuple:
+    def flag(self, uid_list: [str], flag_set: [str] or str, value: bool) -> tuple:
         """
         Set email flags
-        Typical flags contains in MailBox.StandardMessageFlags.all
+        Standard flags contains in MailBox.StandardMessageFlags.all
         """
+        if not uid_list:
+            return None, None
+        if type(flag_set) is str:
+            flag_set = [flag_set]
         for flag_name in flag_set:
             if flag_name.upper() not in self.StandardMessageFlags.all:
                 raise self.MailBoxWrongFlagError('Unsupported flag: {}'.format(flag_name))

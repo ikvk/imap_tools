@@ -1,4 +1,5 @@
 import unittest
+from imap_tools import ImapToolsError
 from tests.utils import MailboxTestCase, test_mailbox_name_set, get_test_mailbox
 
 
@@ -9,17 +10,14 @@ class ActionTest(MailboxTestCase):
     test_msg_cnt = 6
 
     @classmethod
-    def tearDownClass(cls):
+    def setUpClass(cls):
         # clear temp folders
         for test_mailbox_name in test_mailbox_name_set:
             mailbox = get_test_mailbox(test_mailbox_name)
             mailbox.folder.set(ActionTest.temp1_folder)
-            temp1_uid_set = [msg.uid for msg in mailbox.fetch()]
-            if temp1_uid_set:
-                mailbox.delete(temp1_uid_set)
-            temp2_uid_set = [msg.uid for msg in mailbox.fetch()]
-            if temp2_uid_set:
-                mailbox.delete(temp2_uid_set)
+            mailbox.delete([msg.uid for msg in mailbox.fetch()])
+            mailbox.folder.set(ActionTest.temp2_folder)
+            mailbox.delete([msg.uid for msg in mailbox.fetch()])
 
     def test_action(self):
         for mailbox in self.mailbox_set.values():
@@ -41,17 +39,33 @@ class ActionTest(MailboxTestCase):
             mailbox.folder.set(self.temp2_folder)
             self.assertEqual(len(list(mailbox.fetch())), self.test_msg_cnt)
 
+            # FLAG
+            mailbox.folder.set(self.temp2_folder)
+            mailbox.flag([msg.uid for msg in mailbox.fetch()], mailbox.StandardMessageFlags.FLAGGED, True)
+            self.assertTrue(all([mailbox.StandardMessageFlags.FLAGGED in msg.flags for msg in mailbox.fetch()]))
+
+            # SEEN
+            mailbox.folder.set(self.temp2_folder)
+            mailbox.seen([msg.uid for msg in mailbox.fetch()], False)
+            # fetching data implicitly set the \Seen flag., waiting for improve fetch
+            # self.assertTrue(all([mailbox.StandardMessageFlags.SEEN not in msg.flags for msg in mailbox.fetch()]))
+
             # DELETE
             mailbox.folder.set(self.temp2_folder)
             mailbox.delete([msg.uid for msg in mailbox.fetch()])
             self.assertEqual(len(list(mailbox.fetch())), 0)
 
-            '''
-            # FLAG unseen messages in current folder as Answered and Flagged, *in bulk
-            mailbox.flag([msg.uid for msg in mailbox.fetch('(UNSEEN)')], ['Answered', 'Flagged'], True)
-            # mark SEEN all messages sent at 05.03.2007 in current folder as unseen, *in bulk
-            mailbox.seen([msg.uid for msg in mailbox.fetch("SENTON 05-Mar-2007")], False)
-            '''
+            # _uid_str
+            self.assertEqual(mailbox._uid_str(['1', '2', 'test_3']), '1,2,test_3')
+            with self.assertRaises(mailbox.MailBoxUidParamError):
+                mailbox._uid_str([])
+            with self.assertRaises(mailbox.MailBoxUidParamError):
+                mailbox._uid_str([1, 2, 3])
+
+            # check_status
+            self.assertIsNone(mailbox.check_status('test', ('EXP', 'test'), expected='EXP'))
+            with self.assertRaises(ImapToolsError):
+                self.assertFalse(mailbox.check_status('test', ('NOT_OK', 'test')))
 
 
 if __name__ == "__main__":
