@@ -3,11 +3,9 @@ from tests.utils import MailboxTestCase
 
 
 class MessageTest(MailboxTestCase):
-    base_folder = 'test|base'
-
     def test_attributes(self):
         for mailbox in self.mailbox_set.values():
-            mailbox.folder.set(self.base_folder)
+            mailbox.folder.set(mailbox.folder_test_base)
             for message in mailbox.fetch():
                 self.assertIs(type(message.id), str)
                 self.assertIn(type(message.uid), [str, type(None)])

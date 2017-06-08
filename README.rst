@@ -11,21 +11,19 @@ PyPI                 https://pypi.python.org/pypi/imap_tools/
 
 About
 -----
-There are many different libraries for working with e-mail via the imap protocol. Including the standard imaplib library.
+There are many different libraries for working with e-mail via the imap protocol. Including imaplib library.
 However, these libraries contain various shortcomings, such as:
 
 - excessive low level
 - returned results are not ready to work with them
-- lack of convenient tools for working with directories
-- lack of convenient tools for working with letters in directories
+- no convenient tools for working with: directories, letters in directories
 
-imap_tools library takes into account the shortcomings of other libraries.
-Main features:
+Main imap_tools features:
 
 - transparent work with letter attributes
 - work with letters in directories (copy, delete, flag, move, seen)
 - work with directories (list, set, get, create, exists, rename, delete, status)
-- absence of external dependencies
+- no external dependencies
 
 Installation
 ------------
@@ -44,8 +42,8 @@ Init:
     mailbox = MailBox('imap.mail.com')
     mailbox.login('test@mail.com', 'password')
 
-Message:
-^^^^^^^^
+Message attributes:
+^^^^^^^^^^^^^^^^^^^
 .. code-block:: python
 
     for message in mailbox.fetch():
@@ -61,8 +59,8 @@ Message:
         for filename, payload in message.get_attachments():
             filename, payload
 
-Mailbox:
-^^^^^^^^
+Actions with message:
+^^^^^^^^^^^^^^^^^^^^^
 .. code-block:: python
 
     # NOTE: You can use 2 approaches to perform these operations

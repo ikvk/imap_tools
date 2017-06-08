@@ -14,7 +14,7 @@ class ImapToolsError(Exception):
 
 
 class MailBox(object):
-    """Working with the email box throught IMAP"""
+    """Working with the email box through IMAP4"""
     # for specify custom class
     email_message_class = None
     folder_manager_class = None
@@ -37,9 +37,27 @@ class MailBox(object):
     class MailBoxUidParamError(ImapToolsError):
         """Wrong uid param"""
 
-    def __init__(self, *args):
-        self.box = imaplib.IMAP4_SSL(*args)
-        self._box_args = args
+    def __init__(self, host='', port=None, ssl=True, keyfile=None, certfile=None, ssl_context=None):
+        """
+        :param host: host's name (default: localhost)
+        :param port: port number (default: standard IMAP4 SSL port)
+        :param ssl: use client class over SSL connection (IMAP4_SSL) if True, else use IMAP4
+        :param keyfile: PEM formatted file that contains your private key (default: None)
+        :param certfile: PEM formatted certificate chain file (default: None)
+        :param ssl_context: SSLContext object that contains your certificate chain and private key (default: None)
+        Note: if ssl_context is provided, then parameters keyfile or
+              certfile should not be set otherwise ValueError is raised.
+        """
+        self._host = host
+        self._port = port
+        self._keyfile = keyfile
+        self._certfile = certfile
+        self._ssl_context = ssl_context
+        if ssl:
+            self.box = imaplib.IMAP4_SSL(
+                host, port or imaplib.IMAP4_SSL_PORT, keyfile, certfile, ssl_context)
+        else:
+            self.box = imaplib.IMAP4(host, port or imaplib.IMAP4_PORT)
         self._username = None
         self._password = None
         self._initial_folder = None
@@ -54,7 +72,7 @@ class MailBox(object):
         typ, data = command_result[0], command_result[1]
         if typ != expected:
             raise ImapToolsError(
-                'Response status for command "{command}" = "{typ}", "{exp}" expected, data: {data}'.format(
+                'Response status for command "{command}" == "{typ}", "{exp}" expected, data: {data}'.format(
                     command=command, typ=typ, data=str(data), exp=expected))
 
     def login(self, username: str, password: str, initial_folder: str = 'INBOX'):
@@ -90,7 +108,7 @@ class MailBox(object):
             if limit and i >= limit:
                 break
             # get message by id
-            # todo: fetching data implicitly set the \Seen flag. Make param for disable this behavior
+            # LATER: fetching data implicitly set the \Seen flag. Make param for disable this behavior
             fetch_result = self.box.fetch(message_id, "(RFC822 UID FLAGS)")
             self.check_status('box.fetch', fetch_result)
             mail_message = used_email_message_class(message_id, fetch_result[1])

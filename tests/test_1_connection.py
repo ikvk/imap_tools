@@ -10,9 +10,9 @@ class ConnectionTest(unittest.TestCase):
             mailbox = MailBox(config['host'])
             self.assertIs(type(mailbox), MailBox)
             login_result = mailbox.login(config['email'], config['password'])
-            self.assertEqual(login_result, ('OK', [b'LOGIN Completed.']))
+            self.assertEqual(login_result[0], 'OK')
             logout_result = mailbox.logout()
-            self.assertEqual(logout_result, ('BYE', [b'IMAP4rev1 Server logging out']))
+            self.assertEqual(logout_result[0], 'BYE')
 
 
 if __name__ == "__main__":
