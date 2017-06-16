@@ -1,7 +1,7 @@
 imap_tools
 ==========
 
-Tool for work with e-mail messages and not with the imap protocol.
+Effective working with email messages using IMAP protocol.
 
 ===================  ===============================================
 Python version       3.3+
@@ -9,17 +9,8 @@ License              MIT
 PyPI                 https://pypi.python.org/pypi/imap_tools/
 ===================  ===============================================
 
-About
------
-There are many different libraries for working with e-mail via the imap protocol. Including imaplib library.
-However, these libraries contain various shortcomings, such as:
-
-- excessive low level
-- returned results are not ready to work with them
-- no convenient tools for working with: directories, letters in directories
-
-Main imap_tools features:
-
+Features
+--------
 - transparent work with letter attributes
 - work with letters in directories (copy, delete, flag, move, seen)
 - work with directories (list, set, get, create, exists, rename, delete, status)
@@ -59,8 +50,8 @@ Message attributes:
         for filename, payload in message.get_attachments():
             filename, payload
 
-Actions with message:
-^^^^^^^^^^^^^^^^^^^^^
+Actions with messages in folder:
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 .. code-block:: python
 
     # NOTE: You can use 2 approaches to perform these operations
@@ -83,8 +74,8 @@ Actions with message:
     # mark SEEN all messages sent at 05.03.2007 in current folder as unseen, *in bulk
     mailbox.seen([msg.uid for msg in mailbox.fetch("SENTON 05-Mar-2007")], False)
 
-Folders:
-^^^^^^^^
+Actions with folders:
+^^^^^^^^^^^^^^^^^^^^^
 .. code-block:: python
 
     # LIST
@@ -106,3 +97,12 @@ Folders:
     for status_key, status_val in mailbox.folder.status('some_folder').items():
         print(status_key, status_val)
 
+
+Reasons
+-------
+There are many different libraries for working with e-mail via the imap protocol. Including imaplib library.
+However, these libraries contain various shortcomings, such as:
+
+- excessive low level
+- returned results are not ready to work with them
+- no convenient tools for working with: directories, letters in directories
