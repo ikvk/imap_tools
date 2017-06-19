@@ -3,9 +3,11 @@ imap_tools
 
 Effective working with email messages using IMAP protocol.
 
-:Python version: 3.3+
-:License: MIT
-:PyPI: https://pypi.python.org/pypi/imap_tools/
+===================  ===============================================
+Python version       3.3+
+License              MIT
+PyPI                 https://pypi.python.org/pypi/imap_tools/
+===================  ===============================================
 
 Features
 --------
