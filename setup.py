@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(
     name='imap_tools',
-    version='0.2.0',
+    version='0.2.1',
     packages=['imap_tools'],
     url='https://github.com/ikvk/imap_tools',
     license='MIT',

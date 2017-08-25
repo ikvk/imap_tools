@@ -106,3 +106,8 @@ However, these libraries contain various shortcomings, such as:
 - excessive low level
 - returned results are not ready to work with them
 - no convenient tools for working with: directories, letters in directories
+
+
+Thanks to
+---------
+`shilkazx <https://github.com/shilkazx>`_

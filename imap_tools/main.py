@@ -264,6 +264,7 @@ class MailMessage(object):
         Parse email address str, example: "Ivan Petrov" <ivan@mail.ru>
         @:return dict(name: str, email: str, full: str)
         """
+        address = ''.join(char for char in address if char.isprintable())
         result = dict(email='', name='', full='')
         if '<' in address and '>' in address:
             match = re.match('(?P<name>.*)?(?P<email><.*>)', address, re.UNICODE)
