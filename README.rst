@@ -1,3 +1,5 @@
+.. http://docutils.sourceforge.net/docs/user/rst/quickref.html
+
 imap_tools
 ==========
 
@@ -14,7 +16,7 @@ Features
 - transparent work with letter attributes
 - work with letters in directories (copy, delete, flag, move, seen)
 - work with directories (list, set, get, create, exists, rename, delete, status)
-- no external dependencies
+- dependencies: typing
 
 Installation
 ------------
@@ -66,13 +68,13 @@ Actions with messages in folder:
     mailbox.delete([msg.uid for msg in mailbox.fetch()])
 
     # FLAG unseen messages in current folder as Answered and Flagged, *in bulk
-    mailbox.flag([msg.uid for msg in mailbox.fetch('(UNSEEN)')], ['Answered', 'Flagged'], True)
+    mailbox.flag(mailbox.fetch('(UNSEEN)'), ['Answered', 'Flagged'], True)
 
     # MOVE all messages from current dir to folder2, *in bulk
-    mailbox.move([msg.uid for msg in mailbox.fetch()], 'INBOX/folder2')
+    mailbox.move(mailbox.fetch(), 'INBOX/folder2')
 
     # mark SEEN all messages sent at 05.03.2007 in current folder as unseen, *in bulk
-    mailbox.seen([msg.uid for msg in mailbox.fetch("SENTON 05-Mar-2007")], False)
+    mailbox.seen(mailbox.fetch("SENTON 05-Mar-2007"), False)
 
 Actions with folders:
 ^^^^^^^^^^^^^^^^^^^^^

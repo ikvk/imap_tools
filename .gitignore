@@ -2,6 +2,7 @@
 __pycache__
 MANIFEST
 /dist/
+/samples/
 /tests/credentials.ini
 /examples/test.py
 /examples/notes.txt

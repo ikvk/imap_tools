@@ -3,6 +3,9 @@ import re
 import email
 import imaplib
 from email.header import decode_header
+import inspect
+from typing import Generator
+
 from . import imap_utf7
 
 # Maximal line length when calling readline(). This is to prevent reading arbitrary length lines.
@@ -13,13 +16,13 @@ class ImapToolsError(Exception):
     """Base exception"""
 
 
-class MailBox(object):
+class MailBox:
     """Working with the email box through IMAP4"""
     # for specify custom class
     email_message_class = None
     folder_manager_class = None
 
-    class StandardMessageFlags(object):
+    class StandardMessageFlags:
         """Standard email message flags"""
         SEEN = 'SEEN'
         ANSWERED = 'ANSWERED'
@@ -91,7 +94,7 @@ class MailBox(object):
         self.check_status('box.logout', result, expected='BYE')
         return result
 
-    def fetch(self, search_criteria: str = 'ALL', limit: int = None, miss_defect=True, miss_no_uid=True) -> iter:
+    def fetch(self, search_criteria: str = 'ALL', limit: int = None, miss_defect=True, miss_no_uid=True) -> Generator:
         """
         Mail message generator in current folder by search criteria
         :param search_criteria: Message search criteria (see examples at ./doc/imap_search_criteria.txt)
@@ -119,67 +122,73 @@ class MailBox(object):
             yield mail_message
 
     @staticmethod
-    def _uid_str(uid_list: [str]) -> str:
-        """Prepare list of uid for use in commands: delete/copy/move/seen"""
+    def _uid_str(uid_list: str or [str] or Generator) -> str:
+        """
+        Prepare list of uid for use in commands: delete/copy/move/seen
+        uid_list can be: str, list, tuple, set, fetch generator
+        """
         if not uid_list:
             raise MailBox.MailBoxUidParamError('uid_list should not be empty')
+        if type(uid_list) is str:
+            uid_list = uid_list.split(',')
+        if inspect.isgenerator(uid_list):
+            uid_list = [msg.uid for msg in uid_list if msg.uid]
         if type(uid_list) not in (list, tuple, set):
-            raise MailBox.MailBoxUidParamError(
-                'uid_list must be list|tuple|set of strings, {} found: {}'.format(type(uid_list), uid_list))
-        if any([type(i) is not str for i in uid_list]):
-            raise MailBox.MailBoxUidParamError('uid must be string')
-        return ','.join(uid_list)
+            raise MailBox.MailBoxUidParamError('Wrong uid_list type: {}'.format(type(uid_list)))
+        for uid in uid_list:
+            if type(uid) is not str:
+                raise MailBox.MailBoxUidParamError('uid {} is not string'.format(str(uid)))
+            if not uid.strip().isdigit():
+                raise MailBox.MailBoxUidParamError('Wrong uid: {}'.format(uid))
+        return ','.join((i.strip() for i in uid_list))
 
     def expunge(self) -> tuple:
         result = self.box.expunge()
         self.check_status('box.expunge', result)
         return result
 
-    def delete(self, uid_list: [str]) -> tuple:
+    def delete(self, uid_list) -> tuple:
         """Delete email messages"""
-        if not uid_list:
-            return None, None
-        store_result = self.box.uid('STORE', self._uid_str(uid_list), '+FLAGS', '(\Deleted)')
+        uid_str = self._uid_str(uid_list)
+        store_result = self.box.uid('STORE', uid_str, '+FLAGS', '(\Deleted)')
         self.check_status('box.delete', store_result)
         expunge_result = self.expunge()
         return store_result, expunge_result
 
-    def copy(self, uid_list: [str], destination_folder: str) -> tuple or None:
+    def copy(self, uid_list, destination_folder: str) -> tuple or None:
         """Copy email messages into the specified folder"""
-        if not uid_list:
-            return None
-        copy_result = self.box.uid('COPY', self._uid_str(uid_list), destination_folder)
+        uid_str = self._uid_str(uid_list)
+        copy_result = self.box.uid('COPY', uid_str, destination_folder)
         self.check_status('box.copy', copy_result)
         return copy_result
 
-    def move(self, uid_list: [str], destination_folder: str) -> tuple:
+    def move(self, uid_list, destination_folder: str) -> tuple:
         """Move email messages into the specified folder"""
-        if not uid_list:
-            return None, None
-        copy_result = self.copy(uid_list, destination_folder)
-        delete_result = self.delete(uid_list)
+        # here for avoid double fetch in _uid_str
+        uid_str = self._uid_str(uid_list)
+        copy_result = self.copy(uid_str, destination_folder)
+        delete_result = self.delete(uid_str)
         return copy_result, delete_result
 
-    def flag(self, uid_list: [str], flag_set: [str] or str, value: bool) -> tuple:
+    def flag(self, uid_list, flag_set: [str] or str, value: bool) -> tuple:
         """
         Set email flags
         Standard flags contains in MailBox.StandardMessageFlags.all
         """
-        if not uid_list:
-            return None, None
+        uid_str = self._uid_str(uid_list)
         if type(flag_set) is str:
             flag_set = [flag_set]
         for flag_name in flag_set:
             if flag_name.upper() not in self.StandardMessageFlags.all:
                 raise self.MailBoxWrongFlagError('Unsupported flag: {}'.format(flag_name))
         store_result = self.box.uid(
-            'STORE', self._uid_str(uid_list), ('+' if value else '-') + 'FLAGS',
+            'STORE', uid_str, ('+' if value else '-') + 'FLAGS',
             '({})'.format(' '.join(('\\' + i for i in flag_set))))
         self.check_status('box.flag', store_result)
         expunge_result = self.expunge()
         return store_result, expunge_result
 
-    def seen(self, uid_list: [str], seen_val: bool) -> tuple:
+    def seen(self, uid_list, seen_val: bool) -> tuple:
         """
         Mark email as read/unread
         This is shortcut for flag method
@@ -187,7 +196,7 @@ class MailBox(object):
         return self.flag(uid_list, self.StandardMessageFlags.SEEN, seen_val)
 
 
-class MailMessage(object):
+class MailMessage:
     """The email message"""
 
     # UID parse rules
@@ -330,7 +339,7 @@ class MailMessage(object):
                 return part.get_payload(decode=True).decode('utf-8', 'ignore')
         return None
 
-    def get_attachments(self) -> iter:
+    def get_attachments(self) -> Generator:
         """
         Attachments of the mail message (generator)
         :return: generator of tuple(filename: str, payload: bytes)
@@ -351,7 +360,7 @@ class MailMessage(object):
             yield filename, payload
 
 
-class MailFolderManager(object):
+class MailFolderManager:
     """Operations with mail box folders"""
 
     folder_status_options = ['MESSAGES', 'RECENT', 'UIDNEXT', 'UIDVALIDITY', 'UNSEEN']
