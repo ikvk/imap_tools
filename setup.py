@@ -10,4 +10,5 @@ setup(
     author='v.kaukin',
     author_email='workkvk@gmail.com',
     description='Effective working with email messages using IMAP protocol.',
+    install_requires=['typing>=3.6.2'],
 )
