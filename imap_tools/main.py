@@ -239,7 +239,10 @@ class MailMessage:
             if encoding in ['utf-8', None]:
                 return value.decode('utf-8', 'ignore')
             else:
-                return value.decode(encoding)
+                try:
+                    return value.decode(encoding)
+                except LookupError:  # unknown encoding
+                    return value.decode('utf-8', 'ignore')
         return value
 
     @property
@@ -274,6 +277,7 @@ class MailMessage:
         @:return dict(name: str, email: str, full: str)
         """
         address = ''.join(char for char in address if char.isprintable())
+        address = re.sub('[\n\r\t]+', ' ', address)
         result = dict(email='', name='', full='')
         if '<' in address and '>' in address:
             match = re.match('(?P<name>.*)?(?P<email><.*>)', address, re.UNICODE)
@@ -288,8 +292,7 @@ class MailMessage:
     @property
     def from_values(self) -> dict:
         """The address of the sender (all data)"""
-        from_header_cleaned = re.sub('[\n\r\t]+', ' ', self.obj['from'])
-        msg_from = decode_header(from_header_cleaned)
+        msg_from = decode_header(self.obj['from'])
         msg_txt = ''.join(self._decode_value(part[0], part[1]) for part in msg_from)
         return self._parse_email_address(msg_txt)
 
