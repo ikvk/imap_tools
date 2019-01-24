@@ -2,9 +2,10 @@
 import re
 import email
 import imaplib
-from email.header import decode_header
 import inspect
 from typing import Generator
+from functools import lru_cache
+from email.header import decode_header
 
 from . import imap_utf7
 
@@ -18,7 +19,7 @@ class ImapToolsError(Exception):
 
 class MailBox:
     """Working with the email box through IMAP4"""
-    # for specify custom class
+    # for specify custom classes
     email_message_class = None
     folder_manager_class = None
 
@@ -150,7 +151,7 @@ class MailBox:
     def delete(self, uid_list) -> tuple:
         """Delete email messages"""
         uid_str = self._uid_str(uid_list)
-        store_result = self.box.uid('STORE', uid_str, '+FLAGS', '(\Deleted)')
+        store_result = self.box.uid('STORE', uid_str, '+FLAGS', r'(\Deleted)')
         self.check_status('box.delete', store_result)
         expunge_result = self.expunge()
         return store_result, expunge_result
@@ -199,38 +200,32 @@ class MailBox:
 class MailMessage:
     """The email message"""
 
-    # UID parse rules
-    pattern_uid_re_set = [
-        re.compile('\(UID (?P<uid>\d+) RFC822'),  # zimbra, yandex, gmail
-        re.compile('(?P<uid>\d+) \(RFC822'),  # icewarp
-    ]
-
     def __init__(self, message_id: str, fetch_data):
-        message_data, uid_data, flag_data = self._clean_message_data(fetch_data)
+        raw_message_data, raw_uid_data, raw_flag_data = self._get_message_data_parts(fetch_data)
+        self._raw_uid_data = raw_uid_data
+        self._raw_flag_data = raw_flag_data
         self.id = message_id
-        self.obj = email.message_from_bytes(message_data)
-        self._uid_data = uid_data
-        self._flag_data = flag_data
+        self.obj = email.message_from_bytes(raw_message_data)
 
     @staticmethod
-    def _clean_message_data(fetch_data):
+    def _get_message_data_parts(fetch_data) -> (bytes, bytes, [bytes]):
         """
         :param fetch_data: Message object model
-        :returns [message_data: bytes, uid_data: bytes, flag_data: list]
+        :returns (raw_message_data: bytes, raw_uid_data: bytes, raw_flag_data: [bytes])
         *Elements may contain byte strings in any order, like: b'4517 (FLAGS (\\Recent NonJunk))'
         """
-        message_data = b''
-        uid_data = b''
-        flag_data = []
+        raw_message_data = b''
+        raw_uid_data = b''
+        raw_flag_data = []
         for fetch_item in fetch_data:
             # flags
             if type(fetch_item) is bytes and imaplib.ParseFlags(fetch_item):
-                flag_data.extend(imaplib.ParseFlags(fetch_item))
+                raw_flag_data.append(fetch_item)
             # data, uid
             if type(fetch_item) is tuple:
-                uid_data = fetch_item[0]
-                message_data = fetch_item[1]
-        return message_data, uid_data, flag_data
+                raw_uid_data = fetch_item[0]
+                raw_message_data = fetch_item[1]
+        return raw_message_data, raw_uid_data, raw_flag_data
 
     @staticmethod
     def _decode_value(value, encoding):
@@ -246,23 +241,34 @@ class MailMessage:
         return value
 
     @property
+    @lru_cache()
     def uid(self) -> str or None:
         """Message UID"""
-        for pattern_uid_re in MailMessage.pattern_uid_re_set:
-            uid_match = pattern_uid_re.search(self._uid_data.decode())
-            if uid_match:
-                return uid_match.group('uid')
+        # zimbra, yandex, gmail
+        uid_match = re.search(r'\(UID (?P<uid>\d+) RFC822', self._raw_uid_data.decode())
+        if uid_match:
+            return uid_match.group('uid')
+        # mail.ru, ms exchange server
+        for raw_flag_item in self._raw_flag_data:
+            uid_flag_match = re.search(r'(^|\s+)UID\s+(?P<uid>\d+)($|\s+)', raw_flag_item.decode())
+            if uid_flag_match:
+                return uid_flag_match.group('uid')
         return None
 
     @property
-    def flags(self) -> list:
+    @lru_cache()
+    def flags(self) -> [str]:
         """
         Message flags
         *This attribute will not be changed after actions: flag, seen
         """
-        return [i.decode().strip().replace('\\', '').upper() for i in self._flag_data]
+        result = []
+        for raw_flag_item in self._raw_flag_data:
+            result.extend(imaplib.ParseFlags(raw_flag_item))
+        return [i.decode().strip().replace('\\', '').upper() for i in result]
 
     @property
+    @lru_cache()
     def subject(self) -> str:
         """Message subject"""
         if 'subject' in self.obj:
@@ -290,6 +296,7 @@ class MailMessage:
         return result
 
     @property
+    @lru_cache()
     def from_values(self) -> dict:
         """The address of the sender (all data)"""
         msg_from = decode_header(self.obj['from'])
@@ -297,12 +304,14 @@ class MailMessage:
         return self._parse_email_address(msg_txt)
 
     @property
+    @lru_cache()
     def from_(self) -> str:
         """The address of the sender"""
         return self.from_values['email']
 
     @property
-    def to_values(self) -> list:
+    @lru_cache()
+    def to_values(self) -> [dict]:
         """The addresses of the recipients (all data)"""
         if 'to' in self.obj:
             msg_to = decode_header(self.obj['to'])
@@ -311,16 +320,19 @@ class MailMessage:
         return []
 
     @property
-    def to(self) -> list:
+    @lru_cache()
+    def to(self) -> [str]:
         """The addresses of the recipients"""
         return [i['email'] for i in self.to_values]
 
     @property
+    @lru_cache()
     def date(self) -> str:
         """Message date"""
         return str(self.obj['Date'] or '')
 
     @property
+    @lru_cache()
     def text(self) -> str or None:
         """The text of the mail message"""
         for part in self.obj.walk():
@@ -332,6 +344,7 @@ class MailMessage:
         return None
 
     @property
+    @lru_cache()
     def html(self) -> str or None:
         """HTML text of the mail message"""
         for part in self.obj.walk():
@@ -342,11 +355,14 @@ class MailMessage:
                 return part.get_payload(decode=True).decode('utf-8', 'ignore')
         return None
 
-    def get_attachments(self) -> Generator:
+    @property
+    @lru_cache()
+    def attachments(self) -> [(str, bytes)]:
         """
         Attachments of the mail message (generator)
-        :return: generator of tuple(filename: str, payload: bytes)
+        :return: [(filename: str, payload: bytes)]
         """
+        result = []
         for part in self.obj.walk():
             # multipart/* are just containers
             if part.get_content_maintype() == 'multipart':
@@ -360,7 +376,8 @@ class MailMessage:
             payload = part.get_payload(decode=True)
             if not payload:
                 continue
-            yield filename, payload
+            result.append((filename, payload))
+        return result
 
 
 class MailFolderManager:

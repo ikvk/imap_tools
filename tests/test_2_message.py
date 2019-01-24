@@ -18,7 +18,7 @@ class MessageTest(MailboxTestCase):
                 self.assertIn(type(message.text), [str, type(None)])
                 self.assertIn(type(message.html), [str, type(None)])
                 self.assertIs(type(message.flags), list)
-                for filename, payload in message.get_attachments():
+                for filename, payload in message.attachments:
                     self.assertIs(type(filename), str)
                     self.assertIs(type(payload), bytes)
 

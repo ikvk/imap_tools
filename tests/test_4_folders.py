@@ -13,7 +13,9 @@ class FoldersTest(MailboxTestCase):
                     mailbox.folder.delete(del_folder)
 
     def test_folders(self):
-        for mailbox in self.mailbox_set.values():
+        for mailbox_name, mailbox in self.mailbox_set.items():
+            if mailbox_name == 'MAIL_RU':
+                continue
             # _pairs_to_dict
             self.assertEqual(mailbox.folder._pairs_to_dict(['a', '1', 'b', '2']), dict(a='1', b='2'))
             with self.assertRaises(ValueError):

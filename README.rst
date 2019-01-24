@@ -39,6 +39,8 @@ Message attributes:
 ^^^^^^^^^^^^^^^^^^^
 .. code-block:: python
 
+    # NOTE: All message properties are cached by functools.lru_cache
+
     for message in mailbox.fetch():
         message.id
         message.uid
@@ -49,7 +51,9 @@ Message attributes:
         message.text
         message.html
         message.flags
-        for filename, payload in message.get_attachments():
+        message.from_values
+        message.to_values
+        for filename, payload in message.attachments:
             filename, payload
 
 Actions with messages in folder:
@@ -113,3 +117,4 @@ However, these libraries contain various shortcomings, such as:
 Thanks to
 ---------
 `shilkazx <https://github.com/shilkazx>`_
+`somepad <https://github.com/somepad>`_

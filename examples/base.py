@@ -21,7 +21,7 @@ for message in mailbox.fetch():
     print(message.text)
     print(message.html)
     print(message.flags)
-    for filename, payload in message.get_attachments():
+    for filename, payload in message.attachments:
         print(filename, payload)
 
 # MAILBOX
