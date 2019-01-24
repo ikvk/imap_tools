@@ -116,5 +116,5 @@ However, these libraries contain various shortcomings, such as:
 
 Thanks to
 ---------
-`shilkazx <https://github.com/shilkazx>`_
-`somepad <https://github.com/somepad>`_
+ | `shilkazx <https://github.com/shilkazx>`_
+ | `somepad <https://github.com/somepad>`_
