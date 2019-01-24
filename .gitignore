@@ -1,7 +1,9 @@
 *.orig
 __pycache__
 MANIFEST
+/build/
 /dist/
+/imap_tools.egg-info/
 /samples/
 /tests/credentials.ini
 /examples/test.py
