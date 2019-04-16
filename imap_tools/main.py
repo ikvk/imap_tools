@@ -244,8 +244,8 @@ class MailMessage:
     @lru_cache()
     def uid(self) -> str or None:
         """Message UID"""
-        # zimbra, yandex, gmail
-        uid_match = re.search(r'\(UID (?P<uid>\d+) RFC822', self._raw_uid_data.decode())
+        # zimbra, yandex, gmail, gmx
+        uid_match = re.search(r'\(UID (?P<uid>\d+) (RFC822|FLAGS)', self._raw_uid_data.decode())
         if uid_match:
             return uid_match.group('uid')
         # mail.ru, ms exchange server
