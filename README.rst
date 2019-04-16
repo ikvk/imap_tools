@@ -55,6 +55,7 @@ Message attributes:
         message.to_values
         for filename, payload in message.attachments:
             filename, payload
+        # any message attribute: message.obj['Message-ID'], message.obj['X-Google-Smtp-Source'] ...
 
 Actions with messages in folder:
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -118,3 +119,4 @@ Thanks to
 ---------
  | `shilkazx <https://github.com/shilkazx>`_
  | `somepad <https://github.com/somepad>`_
+ | `thiebautdotdev <https://github.com/thiebautdotdev>`_

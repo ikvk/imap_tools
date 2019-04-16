@@ -138,7 +138,7 @@ class MailBox:
             raise MailBox.MailBoxUidParamError('Wrong uid_list type: {}'.format(type(uid_list)))
         for uid in uid_list:
             if type(uid) is not str:
-                raise MailBox.MailBoxUidParamError('uid {} is not string'.format(str(uid)))
+                raise MailBox.MailBoxUidParamError('uid "{}" is not string'.format(str(uid)))
             if not uid.strip().isdigit():
                 raise MailBox.MailBoxUidParamError('Wrong uid: {}'.format(uid))
         return ','.join((i.strip() for i in uid_list))
@@ -245,7 +245,7 @@ class MailMessage:
     def uid(self) -> str or None:
         """Message UID"""
         # zimbra, yandex, gmail, gmx
-        uid_match = re.search(r'\(UID (?P<uid>\d+) (RFC822|FLAGS)', self._raw_uid_data.decode())
+        uid_match = re.search(r'\(UID\s+(?P<uid>\d+)', self._raw_uid_data.decode())
         if uid_match:
             return uid_match.group('uid')
         # mail.ru, ms exchange server
