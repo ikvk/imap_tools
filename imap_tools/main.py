@@ -1,6 +1,7 @@
 # INTERNET MESSAGE ACCESS PROTOCOL - VERSION 4rev1 - https://tools.ietf.org/html/rfc3501
 import re
 import email
+import codecs
 import imaplib
 import inspect
 from typing import Generator
@@ -333,7 +334,7 @@ class MailMessage:
 
     @property
     @lru_cache()
-    def text(self) -> str or None:
+    def text(self) -> str:
         """The text of the mail message"""
         for part in self.obj.walk():
             # multipart/* are just containers
@@ -341,11 +342,11 @@ class MailMessage:
                 continue
             if part.get_content_type() in ('text/plain', 'text/'):
                 return part.get_payload(decode=True).decode('utf-8', 'ignore')
-        return None
+        return ''
 
     @property
     @lru_cache()
-    def html(self) -> str or None:
+    def html(self) -> str:
         """HTML text of the mail message"""
         for part in self.obj.walk():
             # multipart/* are just containers
@@ -353,7 +354,7 @@ class MailMessage:
                 continue
             if part.get_content_type() == 'text/html':
                 return part.get_payload(decode=True).decode('utf-8', 'ignore')
-        return None
+        return ''
 
     @property
     @lru_cache()
@@ -364,8 +365,8 @@ class MailMessage:
         """
         result = []
         for part in self.obj.walk():
-            # multipart/* are just containers
             if part.get_content_maintype() == 'multipart':
+                # multipart/* are just containers
                 continue
             if part.get('Content-Disposition') is None:
                 continue
@@ -374,9 +375,18 @@ class MailMessage:
                 continue  # this is what happens when Content-Disposition = inline
             filename = self._decode_value(*decode_header(filename)[0])
             payload = part.get_payload(decode=True)
-            if not payload:
-                continue
-            result.append((filename, payload))
+            if payload:
+                result.append((filename, payload))
+            else:
+                # multipart payload, such as .eml (see get_payload)
+                multipart_payload = part.get_payload()
+                if isinstance(multipart_payload, list):
+                    for payload_item in multipart_payload:
+                        if hasattr(payload_item, 'as_bytes'):
+                            payload_item_bytes = payload_item.as_bytes()
+                            cte = str(part.get('content-transfer-encoding', '')).lower()
+                            if payload_item_bytes and cte:
+                                result.append((filename, codecs.decode(payload_item_bytes, cte)))
         return result
 
 

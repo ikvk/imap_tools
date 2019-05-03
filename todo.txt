@@ -1,0 +1,3 @@
+query builder
+decompose
+parse more message attrs (cc, bcc, cc_values ...)
