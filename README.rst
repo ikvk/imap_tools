@@ -120,3 +120,4 @@ Thanks to
  | `shilkazx <https://github.com/shilkazx>`_
  | `somepad <https://github.com/somepad>`_
  | `thiebautdotdev <https://github.com/thiebautdotdev>`_
+ | `TpyoKnig <https://github.com/TpyoKnig>`_

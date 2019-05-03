@@ -1,12 +1,15 @@
 https://packaging.python.org/tutorials/packaging-projects/
-C:\Users\v.kaukin\.pypirc
 
-1. Install/update:
+1. Create .pypirc
+    C:\Users\v.kaukin\.pypirc
+    https://docs.python.org/3/distutils/packageindex.html#pypirc
+
+2. Install/update:
     setuptools, wheel, pip, twine
 
-2. Generating distribution archives
+3. Generating distribution archives
     cd C:\kvk\develop\Python\imap_tools\
     C:\python\venv\imap_tools\Scripts\python.exe C:\kvk\develop\Python\imap_tools\setup.py sdist bdist_wheel
 
-3. Uploading the distribution archives:
+4. Uploading the distribution archives:
     C:\python\venv\imap_tools\Scripts\python.exe -m twine upload dist/*
