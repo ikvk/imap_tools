@@ -1,4 +1,5 @@
 import unittest
+
 from tests.utils import MailboxTestCase
 
 
@@ -15,8 +16,8 @@ class MessageTest(MailboxTestCase):
                 self.assertIs(type(message.to), list)
                 self.assertIs(type(message.to_values), list)
                 self.assertIs(type(message.date), str)
-                self.assertIn(type(message.text), [str, type(None)])
-                self.assertIn(type(message.html), [str, type(None)])
+                self.assertIs(type(message.text), str)
+                self.assertIs(type(message.html), str)
                 self.assertIs(type(message.flags), list)
                 for filename, payload in message.attachments:
                     self.assertIs(type(filename), str)

@@ -1,3 +1,5 @@
 query builder
 decompose
 parse more message attrs (cc, bcc, cc_values ...)
+# for specify custom classes email_message_class = None указать класс сразу
+isinstance ABC in _uid_str

@@ -1,4 +1,5 @@
 import unittest
+
 from imap_tools import MailBox
 from tests.utils import get_test_mailbox_config, test_mailbox_name_set
 
