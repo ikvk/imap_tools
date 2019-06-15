@@ -96,13 +96,14 @@ class MailBox:
         self.check_status('box.logout', result, expected='BYE')
         return result
 
-    def fetch(self, search_criteria: str = 'ALL', limit: int = None, miss_defect=True, miss_no_uid=True) -> Generator:
+    def fetch(self, search_criteria: str = 'ALL', limit: int = None, miss_defect=True, miss_no_uid=True, peek=False) -> Generator:
         """
         Mail message generator in current folder by search criteria
         :param search_criteria: Message search criteria (see examples at ./doc/imap_search_criteria.txt)
         :param limit: limit on the number of read emails
         :param miss_defect: miss defect emails
         :param miss_no_uid: miss emails witout uid
+        :param peek: don't set the seen flag
         :return generator: MailMessage
         """
         search_result = self.box.search(None, search_criteria)
@@ -113,8 +114,10 @@ class MailBox:
             if limit and i >= limit:
                 break
             # get message by id
-            # LATER: fetching data implicitly set the \Seen flag. Make param for disable this behavior
-            fetch_result = self.box.fetch(message_id, "(RFC822 UID FLAGS)")
+            if peek:
+                fetch_result = self.box.fetch(message_id, "(BODY.PEEK[] UID FLAGS)")
+            else:
+                fetch_result = self.box.fetch(message_id, "(BODY[] UID FLAGS)")
             self.check_status('box.fetch', fetch_result)
             mail_message = used_email_message_class(message_id, fetch_result[1])
             if miss_defect and mail_message.obj.defects:
