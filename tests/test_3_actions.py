@@ -1,6 +1,6 @@
 import unittest
 
-from imap_tools import ImapToolsError
+import imap_tools
 from tests.utils import MailboxTestCase, test_mailbox_name_set, get_test_mailbox
 
 
@@ -43,14 +43,14 @@ class ActionTest(MailboxTestCase):
 
             # FLAG
             mailbox.folder.set(mailbox.folder_test_temp2)
-            mailbox.flag([msg.uid for msg in mailbox.fetch()], mailbox.StandardMessageFlags.FLAGGED, True)
-            self.assertTrue(all([mailbox.StandardMessageFlags.FLAGGED in msg.flags for msg in mailbox.fetch()]))
+            mailbox.flag([msg.uid for msg in mailbox.fetch()], imap_tools.StandardMessageFlags.FLAGGED, True)
+            self.assertTrue(all([imap_tools.StandardMessageFlags.FLAGGED in msg.flags for msg in mailbox.fetch()]))
 
             # SEEN
             mailbox.folder.set(mailbox.folder_test_temp2)
             mailbox.seen([msg.uid for msg in mailbox.fetch()], False)
-            # fetching data implicitly set the \Seen flag., waiting for improve fetch
-            # self.assertTrue(all([mailbox.StandardMessageFlags.SEEN not in msg.flags for msg in mailbox.fetch()]))
+            self.assertTrue(all([imap_tools.StandardMessageFlags.SEEN not in msg.flags
+                                 for msg in mailbox.fetch(mark_seen=False)]))
 
             # DELETE
             mailbox.folder.set(mailbox.folder_test_temp2)
@@ -60,13 +60,16 @@ class ActionTest(MailboxTestCase):
             # _uid_str
             for i in [' 1, 2, 3 ', ['1', '2', '3'], (' 1 ', '2', '3')]:
                 self.assertEqual(mailbox._uid_str(i), '1,2,3')
-            for i in ['', [], (), set(), dict, [1, '2'], ('1', '2', 'test_3')]:
-                with self.assertRaises(mailbox.MailBoxUidParamError):
+            for i in ['', [], (), set(), [1, '2'], ('1', '2', 'test_3')]:
+                with self.assertRaises(imap_tools.MailBoxUidParamError):
+                    mailbox._uid_str(i)
+            for i in [dict, int, 1, ..., MailboxTestCase]:
+                with self.assertRaises(TypeError):
                     mailbox._uid_str(i)
 
             # check_status
             self.assertIsNone(mailbox.check_status('test', ('EXP', 'test'), expected='EXP'))
-            with self.assertRaises(ImapToolsError):
+            with self.assertRaises(imap_tools.ImapToolsError):
                 self.assertFalse(mailbox.check_status('test', ('NOT_OK', 'test')))
 
 

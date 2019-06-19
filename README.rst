@@ -5,18 +5,19 @@ imap_tools
 
 Effective working with email messages using IMAP protocol.
 
-===================  ===============================================
+===================  ====================================================
 Python version       3.3+
 License              MIT
 PyPI                 https://pypi.python.org/pypi/imap_tools/
-===================  ===============================================
+IMAP                 VERSION 4rev1 - https://tools.ietf.org/html/rfc3501
+===================  ====================================================
 
 Features
 --------
 - transparent work with letter attributes
 - work with letters in directories (copy, delete, flag, move, seen)
 - work with directories (list, set, get, create, exists, rename, delete, status)
-- dependencies: typing
+- no dependencies
 
 Installation
 ------------
@@ -47,12 +48,16 @@ Message attributes:
         message.subject
         message.from_
         message.to
+        message.cc
+        message.bcc
         message.date
         message.text
         message.html
         message.flags
         message.from_values
         message.to_values
+        message.cc_values
+        message.bcc_values
         for filename, payload in message.attachments:
             filename, payload
         # any message attribute: message.obj['Message-ID'], message.obj['X-Google-Smtp-Source'] ...
@@ -121,3 +126,4 @@ Thanks to
  | `somepad <https://github.com/somepad>`_
  | `thiebautdotdev <https://github.com/thiebautdotdev>`_
  | `TpyoKnig <https://github.com/TpyoKnig>`_
+ | `parchd-1 <https://github.com/parchd-1>`_
