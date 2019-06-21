@@ -97,10 +97,10 @@ class MailBox:
               miss_defect=True, miss_no_uid=True, mark_seen=True) -> iter:
         """
         Mail message generator in current folder by search criteria
-        :param search_criteria: Message search criteria (see examples at ./doc/imap_search_criteria.txt)
-        :param limit: limit on the number of read emails
-        :param miss_defect: miss defect emails
-        :param miss_no_uid: miss emails witout uid
+        :param search_criteria: message search criteria (see examples at ./doc/imap_search_criteria.txt)
+        :param limit: limit number of read emails, useful for actions with a large number of messages, like "move"
+        :param miss_defect: miss emails with defects
+        :param miss_no_uid: miss emails without uid
         :param mark_seen: mark emails as seen on fetch
         :return generator: MailMessage
         """

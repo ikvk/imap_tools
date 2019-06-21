@@ -109,6 +109,16 @@ Actions with folders:
     for status_key, status_val in mailbox.folder.status('some_folder').items():
         print(status_key, status_val)
 
+Fetch params
+^^^^^^^^^^^^
+
+MailBox.fetch - Mail message generator
+
+* *search_criteria*: message search criteria (see examples at ./doc/imap_search_criteria.txt)
+* *limit*: limit on the number of read emails, useful for actions with a large number of messages, like "move"
+* *miss_defect*: miss emails with defects
+* *miss_no_uid*: miss emails without uid
+* *mark_seen*: mark emails as seen on fetch
 
 Reasons
 -------
@@ -119,6 +129,9 @@ However, these libraries contain various shortcomings, such as:
 - returned results are not ready to work with them
 - no convenient tools for working with: directories, letters in directories
 
+Release notes
+-------------
+ `release_notes.rst <https://github.com/ikvk/imap_tools/blob/master/release_notes.rst>`_
 
 Thanks to
 ---------

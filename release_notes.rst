@@ -16,3 +16,19 @@
 * functools.lru_cache for MailMessage properties
 * MailMessage.get_attachments() -> MailMessage.attachments
 * fix setuptools
+
+0.4.0
+=====
+* fix _decode_value for unknown encoding
+* fix _parse_email_address
+
+0.3.0
+=====
+* install_requires
+* fix manifest
+* add typing lib
+* _uid_str works with generator
+
+0.1.1
+=====
+* first version: May 31, 2017
