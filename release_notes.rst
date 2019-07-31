@@ -1,3 +1,7 @@
+0.7.0
+=====
+* decode MailMessage text and html using encoding, specified in email
+
 0.6.0
 =====
 

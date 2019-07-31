@@ -178,7 +178,7 @@ class MailMessage:
             if part.get_content_maintype() == 'multipart':
                 continue
             if part.get_content_type() in ('text/plain', 'text/'):
-                return part.get_payload(decode=True).decode('utf-8', 'ignore')
+                return part.get_payload(decode=True).decode(part.get_content_charset(failobj='utf-8'), 'ignore')
         return ''
 
     @property
@@ -190,7 +190,7 @@ class MailMessage:
             if part.get_content_maintype() == 'multipart':
                 continue
             if part.get_content_type() == 'text/html':
-                return part.get_payload(decode=True).decode('utf-8', 'ignore')
+                return part.get_payload(decode=True).decode(part.get_content_charset(failobj='utf-8'), 'ignore')
         return ''
 
     @property

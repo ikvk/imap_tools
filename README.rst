@@ -140,3 +140,4 @@ Thanks to
  | `thiebautdotdev <https://github.com/thiebautdotdev>`_
  | `TpyoKnig <https://github.com/TpyoKnig>`_
  | `parchd-1 <https://github.com/parchd-1>`_
+ | `dojasoncom <https://github.com/dojasoncom>`_
