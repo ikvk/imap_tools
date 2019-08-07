@@ -114,7 +114,7 @@ Fetch params
 
 MailBox.fetch - Mail message generator
 
-* *search_criteria*: message search criteria (see examples at ./doc/imap_search_criteria.txt)
+* *search_criteria*: message search criteria, `examples <https://github.com/ikvk/imap_tools/tree/master/examples>`_
 * *limit*: limit on the number of read emails, useful for actions with a large number of messages, like "move"
 * *miss_defect*: miss emails with defects
 * *miss_no_uid*: miss emails without uid
