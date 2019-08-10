@@ -86,6 +86,10 @@ class MailMessage:
         uid_match = re.search(r'\(UID\s+(?P<uid>\d+)', self._raw_uid_data.decode())
         if uid_match:
             return uid_match.group('uid')
+        #zoho
+        uid_match = re.search(r'UID\s+(?P<uid>\d+)', self._raw_uid_data.decode())
+        if uid_match:
+            return uid_match.group('uid')
         # mail.ru, ms exchange server
         for raw_flag_item in self._raw_flag_data:
             uid_flag_match = re.search(r'(^|\s+)UID\s+(?P<uid>\d+)($|\s+)', raw_flag_item.decode())
