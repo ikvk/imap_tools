@@ -83,10 +83,6 @@ class MailMessage:
     def uid(self) -> str or None:
         """Message UID"""
         # zimbra, yandex, gmail, gmx
-        uid_match = re.search(r'\(UID\s+(?P<uid>\d+)', self._raw_uid_data.decode())
-        if uid_match:
-            return uid_match.group('uid')
-        #zoho
         uid_match = re.search(r'UID\s+(?P<uid>\d+)', self._raw_uid_data.decode())
         if uid_match:
             return uid_match.group('uid')

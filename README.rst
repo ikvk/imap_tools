@@ -3,7 +3,7 @@
 imap_tools
 ==========
 
-Effective working with email messages using IMAP protocol.
+Effective working with email using IMAP protocol.
 
 ===================  ====================================================
 Python version       3.3+
@@ -141,3 +141,4 @@ Thanks to
  | `TpyoKnig <https://github.com/TpyoKnig>`_
  | `parchd-1 <https://github.com/parchd-1>`_
  | `dojasoncom <https://github.com/dojasoncom>`_
+ | `RandomStrangerOnTheInternet <https://github.com/RandomStrangerOnTheInternet>`_

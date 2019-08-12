@@ -1,3 +1,7 @@
+0.7.1
+=====
+Less strict regexp for parse uid
+
 0.7.0
 =====
 * decode MailMessage text and html using encoding, specified in email
