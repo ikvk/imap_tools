@@ -70,14 +70,17 @@ Actions with messages in folder:
     # "by one" - Perform operation for each message separately per N commands
     # "in bulk" - Perform operation for message set per 1 command
 
+    # init
+    mailbox.login('test@mail.com', 'pwd', initial_folder='INBOX')
+
     # COPY all messages from current dir to folder1, *by one
     for msg in mailbox.fetch():
         res = mailbox.copy(msg.uid, 'INBOX/folder1')
 
-    # DELETE all messages from current dir to folder1, *in bulk
+    # DELETE all messages from current dir, *in bulk
     mailbox.delete([msg.uid for msg in mailbox.fetch()])
 
-    # FLAG unseen messages in current folder as Answered and Flagged, *in bulk
+    # FLAG unseen messages in current folder as Answered and Flagged, *in bulk. (see imap_tools.StandardMessageFlags)
     mailbox.flag(mailbox.fetch('(UNSEEN)'), ['Answered', 'Flagged'], True)
 
     # MOVE all messages from current dir to folder2, *in bulk
