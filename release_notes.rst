@@ -1,3 +1,7 @@
+0.7.2
+=====
+MailBox._uid_str - get uid attrs for MailBox.fetch generator only
+
 0.7.1
 =====
 Less strict regexp for parse uid

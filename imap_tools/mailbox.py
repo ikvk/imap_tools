@@ -130,7 +130,7 @@ class MailBox:
             raise MailBoxUidParamError('uid_list should not be empty')
         if type(uid_list) is str:
             uid_list = uid_list.split(',')
-        if inspect.isgenerator(uid_list):
+        if inspect.isgenerator(uid_list) and getattr(uid_list, '__name__', None) == MailBox.fetch.__name__:
             uid_list = tuple(msg.uid for msg in uid_list if msg.uid)
         for uid in iter(uid_list):
             if type(uid) is not str:
