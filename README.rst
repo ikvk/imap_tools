@@ -80,8 +80,9 @@ Actions with messages in folder:
     # DELETE all messages from current dir, *in bulk
     mailbox.delete([msg.uid for msg in mailbox.fetch()])
 
-    # FLAG unseen messages in current folder as Answered and Flagged, *in bulk. (see imap_tools.StandardMessageFlags)
-    mailbox.flag(mailbox.fetch('(UNSEEN)'), ['Answered', 'Flagged'], True)
+    # FLAG unseen messages in current folder as Answered and Flagged, *in bulk.
+    flags = (imap_tools.StandardMessageFlags.ANSWERED, imap_tools.StandardMessageFlags.FLAGGED)
+    mailbox.flag(mailbox.fetch('(UNSEEN)'), flags, True)
 
     # MOVE all messages from current dir to folder2, *in bulk
     mailbox.move(mailbox.fetch(), 'INBOX/folder2')
