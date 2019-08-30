@@ -1,3 +1,7 @@
+0.8.0
+=====
+Add context manager
+
 0.7.2
 =====
 MailBox._uid_str - get uid attrs for MailBox.fetch generator only

@@ -1,4 +1,4 @@
 
-add SOCKS proxy support - without new dependencies (maybe by including SocksiPy in project)
+SOCKS proxy support - without new dependencies (maybe by including SocksiPy in project)
 
 query builder

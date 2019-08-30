@@ -28,13 +28,27 @@ Installation
 Quick guide
 -----------
 
-Init:
+Base:
 ^^^^^
 .. code-block:: python
 
     from imap_tools import MailBox
+
     mailbox = MailBox('imap.mail.com')
     mailbox.login('test@mail.com', 'password')
+    subjects = [msg.subject for msg in mailbox.fetch()]
+    mailbox.logout()
+    # OR
+    with MailBox('imap.mail.com').login('test@mail.com', 'password') as mailbox:
+        subjects = [msg.subject for msg in mailbox.fetch()]
+
+MailBox.fetch - email message generator, params:
+
+* *search_criteria*: message search criteria, `examples <https://github.com/ikvk/imap_tools/tree/master/examples>`_
+* *limit*: limit on the number of read emails, useful for actions with a large number of messages, like "move"
+* *miss_defect*: miss emails with defects
+* *miss_no_uid*: miss emails without uid
+* *mark_seen*: mark emails as seen on fetch
 
 Message attributes:
 ^^^^^^^^^^^^^^^^^^^
@@ -60,7 +74,7 @@ Message attributes:
         message.bcc_values
         for filename, payload in message.attachments:
             filename, payload
-        # any message attribute: message.obj['Message-ID'], message.obj['X-Google-Smtp-Source'] ...
+        # Any message attribute: message.obj['Message-ID'], message.obj['X-Google-Smtp-Source'] ...
 
 Actions with messages in folder:
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -70,29 +84,30 @@ Actions with messages in folder:
     # "by one" - Perform operation for each message separately per N commands
     # "in bulk" - Perform operation for message set per 1 command
 
-    # init
-    mailbox.login('test@mail.com', 'pwd', initial_folder='INBOX')
+    with MailBox('imap.mail.com').login('test@mail.com', 'pwd', initial_folder='INBOX') as mailbox:
 
-    # COPY all messages from current dir to folder1, *by one
-    for msg in mailbox.fetch():
-        res = mailbox.copy(msg.uid, 'INBOX/folder1')
+        # COPY all messages from current dir to folder1, *by one
+        for msg in mailbox.fetch():
+            res = mailbox.copy(msg.uid, 'INBOX/folder1')
 
-    # DELETE all messages from current dir, *in bulk
-    mailbox.delete([msg.uid for msg in mailbox.fetch()])
+        # DELETE all messages from current dir, *in bulk
+        mailbox.delete([msg.uid for msg in mailbox.fetch()])
 
-    # FLAG unseen messages in current folder as Answered and Flagged, *in bulk.
-    flags = (imap_tools.StandardMessageFlags.ANSWERED, imap_tools.StandardMessageFlags.FLAGGED)
-    mailbox.flag(mailbox.fetch('(UNSEEN)'), flags, True)
+        # FLAG unseen messages in current folder as Answered and Flagged, *in bulk.
+        flags = (imap_tools.StandardMessageFlags.ANSWERED, imap_tools.StandardMessageFlags.FLAGGED)
+        mailbox.flag(mailbox.fetch('(UNSEEN)'), flags, True)
 
-    # MOVE all messages from current dir to folder2, *in bulk
-    mailbox.move(mailbox.fetch(), 'INBOX/folder2')
+        # MOVE all messages from current dir to folder2, *in bulk
+        mailbox.move(mailbox.fetch(), 'INBOX/folder2')
 
-    # mark SEEN all messages sent at 05.03.2007 in current folder as unseen, *in bulk
-    mailbox.seen(mailbox.fetch("SENTON 05-Mar-2007"), False)
+        # SEEN: mark all messages sent at 05.03.2007 in current folder as unseen, *in bulk
+        mailbox.seen(mailbox.fetch("SENTON 05-Mar-2007"), False)
 
 Actions with folders:
 ^^^^^^^^^^^^^^^^^^^^^
 .. code-block:: python
+
+    mailbox.login('test@mail.com', 'pwd')
 
     # LIST
     for folder in mailbox.folder.list('INBOX'):
@@ -113,16 +128,7 @@ Actions with folders:
     for status_key, status_val in mailbox.folder.status('some_folder').items():
         print(status_key, status_val)
 
-Fetch params
-^^^^^^^^^^^^
-
-MailBox.fetch - Mail message generator
-
-* *search_criteria*: message search criteria, `examples <https://github.com/ikvk/imap_tools/tree/master/examples>`_
-* *limit*: limit on the number of read emails, useful for actions with a large number of messages, like "move"
-* *miss_defect*: miss emails with defects
-* *miss_no_uid*: miss emails without uid
-* *mark_seen*: mark emails as seen on fetch
+    mailbox.logout()
 
 Reasons
 -------

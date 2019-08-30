@@ -5,7 +5,7 @@ with open("README.rst", "r") as fh:
 
 setuptools.setup(
     name='imap_tools',
-    version='0.7.2',
+    version='0.8.0',
     packages=setuptools.find_packages(),
     url='https://github.com/ikvk/imap_tools',
     license='MIT',

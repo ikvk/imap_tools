@@ -65,6 +65,7 @@ class MailBox:
         self._password = None
         self._initial_folder = None
         self.folder = None
+        self.login_result = None
 
     @staticmethod
     def check_status(command, command_result, expected='OK'):
@@ -86,7 +87,8 @@ class MailBox:
         self.check_status('box.login', result)
         self.folder = self.folder_manager_class(self)
         self.folder.set(self._initial_folder)
-        return result
+        self.login_result = result
+        return self  # return self in favor of context manager
 
     def logout(self):
         result = self.box.logout()
@@ -191,3 +193,9 @@ class MailBox:
         This is shortcut for flag method
         """
         return self.flag(uid_list, StandardMessageFlags.SEEN, seen_val)
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_value, exc_traceback):
+        self.logout()
