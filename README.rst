@@ -81,8 +81,8 @@ Actions with messages in folder:
 .. code-block:: python
 
     # NOTE: You can use 2 approaches to perform these operations
-    # "by one" - Perform operation for each message separately per N commands
-    # "in bulk" - Perform operation for message set per 1 command
+    # "by one" - Perform IMAP operation for each message separately per N commands
+    # "in bulk" - Perform IMAP operation for message set per 1 command
 
     with MailBox('imap.mail.com').login('test@mail.com', 'pwd', initial_folder='INBOX') as mailbox:
 
@@ -90,10 +90,10 @@ Actions with messages in folder:
         for msg in mailbox.fetch():
             res = mailbox.copy(msg.uid, 'INBOX/folder1')
 
-        # DELETE all messages from current dir, *in bulk
+        # DELETE all messages from current dir, *in bulk (explicit creation of uid list)
         mailbox.delete([msg.uid for msg in mailbox.fetch()])
 
-        # FLAG unseen messages in current folder as Answered and Flagged, *in bulk.
+        # FLAG unseen messages in current folder as Answered and Flagged, *in bulk. (implicit creation of uid list)
         flags = (imap_tools.StandardMessageFlags.ANSWERED, imap_tools.StandardMessageFlags.FLAGGED)
         mailbox.flag(mailbox.fetch('(UNSEEN)'), flags, True)
 
