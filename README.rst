@@ -90,15 +90,15 @@ Actions with messages in folder:
         for msg in mailbox.fetch():
             res = mailbox.copy(msg.uid, 'INBOX/folder1')
 
+        # MOVE all messages from current dir to folder2, *in bulk (implicit creation of uid list)
+        mailbox.move(mailbox.fetch(), 'INBOX/folder2')
+
         # DELETE all messages from current dir, *in bulk (explicit creation of uid list)
         mailbox.delete([msg.uid for msg in mailbox.fetch()])
 
-        # FLAG unseen messages in current folder as Answered and Flagged, *in bulk. (implicit creation of uid list)
+        # FLAG unseen messages in current folder as Answered and Flagged, *in bulk.
         flags = (imap_tools.StandardMessageFlags.ANSWERED, imap_tools.StandardMessageFlags.FLAGGED)
         mailbox.flag(mailbox.fetch('(UNSEEN)'), flags, True)
-
-        # MOVE all messages from current dir to folder2, *in bulk
-        mailbox.move(mailbox.fetch(), 'INBOX/folder2')
 
         # SEEN: mark all messages sent at 05.03.2007 in current folder as unseen, *in bulk
         mailbox.seen(mailbox.fetch("SENTON 05-Mar-2007"), False)
