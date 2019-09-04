@@ -12,12 +12,14 @@ PyPI                 https://pypi.python.org/pypi/imap_tools/
 IMAP                 VERSION 4rev1 - https://tools.ietf.org/html/rfc3501
 ===================  ====================================================
 
+.. contents::
+
 Features
 --------
-- transparent work with letter attributes
-- work with letters in directories (copy, delete, flag, move, seen)
-- work with directories (list, set, get, create, exists, rename, delete, status)
-- no dependencies
+- Transparent work with email message attributes
+- Work with emails in directories (copy, delete, flag, move, seen)
+- Work with mailbox folders (list, set, get, create, exists, rename, delete, status)
+- No dependencies
 
 Installation
 ------------
@@ -25,20 +27,20 @@ Installation
 
     $ pip install imap_tools
 
-Quick guide
------------
+Guide
+-----
 
-Base:
+Basic
 ^^^^^
 .. code-block:: python
 
     from imap_tools import MailBox
 
     mailbox = MailBox('imap.mail.com')
-    mailbox.login('test@mail.com', 'password')
-    subjects = [msg.subject for msg in mailbox.fetch()]
+    mailbox.login('test@mail.com', 'password', initial_folder='INBOX')
+    subjects = [msg.subject for msg in mailbox.fetch()]  # get list of email subjects from INBOX folder
     mailbox.logout()
-    # OR
+    # OR the same otherwise
     with MailBox('imap.mail.com').login('test@mail.com', 'password') as mailbox:
         subjects = [msg.subject for msg in mailbox.fetch()]
 
@@ -50,8 +52,8 @@ MailBox.fetch - email message generator, params:
 * *miss_no_uid*: miss emails without uid
 * *mark_seen*: mark emails as seen on fetch
 
-Message attributes:
-^^^^^^^^^^^^^^^^^^^
+Email attributes
+^^^^^^^^^^^^^^^^
 .. code-block:: python
 
     # NOTE: All message properties are cached by functools.lru_cache
@@ -76,8 +78,8 @@ Message attributes:
             filename, payload
         # Any message attribute: message.obj['Message-ID'], message.obj['X-Google-Smtp-Source'] ...
 
-Actions with messages in folder:
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Actions with emails in folder
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 .. code-block:: python
 
     # NOTE: You can use 2 approaches to perform these operations
@@ -103,8 +105,8 @@ Actions with messages in folder:
         # SEEN: mark all messages sent at 05.03.2007 in current folder as unseen, *in bulk
         mailbox.seen(mailbox.fetch("SENTON 05-Mar-2007"), False)
 
-Actions with folders:
-^^^^^^^^^^^^^^^^^^^^^
+Actions with mailbox folders
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 .. code-block:: python
 
     mailbox.login('test@mail.com', 'pwd')
