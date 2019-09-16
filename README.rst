@@ -149,7 +149,7 @@ Thanks to
 ---------
  | `shilkazx <https://github.com/shilkazx>`_
  | `somepad <https://github.com/somepad>`_
- | `thiebautdotdev <https://github.com/thiebautdotdev>`_
+ | `0xThiebaut <https://github.com/0xThiebaut>`_
  | `TpyoKnig <https://github.com/TpyoKnig>`_
  | `parchd-1 <https://github.com/parchd-1>`_
  | `dojasoncom <https://github.com/dojasoncom>`_

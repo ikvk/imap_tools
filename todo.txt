@@ -4,3 +4,14 @@ SOCKS proxy support - without new dependencies (maybe by including SocksiPy in p
 query builder
 
 console mode
+
+readme - add fetch default vals
+
+fetch - charset parameter
+
+SINCE <date> Messages whose internal date
+SENTON <date> Messages whose [RFC-2822] Date:
+
+message attributes strong tests
+
+Технические заголовки (RFC-заголовки) писем https://helpdesk.infobox.ru/Knowledgebase/Article/View/624/121/
