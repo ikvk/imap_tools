@@ -1,16 +1,6 @@
-
-SOCKS proxy support - without new dependencies (maybe by including SocksiPy in project)
-
-query builder
-
 console mode
 
 readme - add fetch default vals
-
-fetch - charset parameter
-
-SINCE <date> Messages whose internal date
-SENTON <date> Messages whose [RFC-2822] Date:
 
 message attributes strong tests
 
@@ -20,4 +10,9 @@ try to imitate long poll by noop
 
 примеры значений аттрибутов письма
 
-del MailBoxWrongFlagError('Unsupported flag: {}'.format(flag_name)) ?
+=
+query builder
+-SOCKS proxy support - without new dependencies (maybe by including SocksiPy in project)
+ImapToolsError
+fetch - charset parameter
+del class MailBoxWrongFlagError(Exception):

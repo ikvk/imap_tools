@@ -1,23 +1,14 @@
 import imaplib
-import inspect
 
 from .message import MailMessage
 from .folder import MailBoxFolderManager
-from .utils import ImapToolsError
+from .utils import cleaned_uid_set
 
 # Maximal line length when calling readline(). This is to prevent reading arbitrary length lines.
 imaplib._MAXLINE = 4 * 1024 * 1024  # 4Mb
 
 
-class MailBoxWrongFlagError(ImapToolsError):
-    """Wrong flag for "flag" method"""
-
-
-class MailBoxUidParamError(ImapToolsError):
-    """Wrong uid param"""
-
-
-class MailBoxUnexpectedStatusError(ImapToolsError):
+class MailBoxUnexpectedStatusError(Exception):
     """Unexpected status in response"""
 
 
@@ -123,25 +114,6 @@ class MailBox:
                 continue
             yield mail_message
 
-    @staticmethod
-    def _uid_str(uid_list: str or [str] or iter) -> str:
-        """
-        Prepare list of uid for use in commands: delete/copy/move/seen
-        uid_list can be: str, list, tuple, set, fetch generator
-        """
-        if not uid_list:
-            raise MailBoxUidParamError('uid_list should not be empty')
-        if type(uid_list) is str:
-            uid_list = uid_list.split(',')
-        if inspect.isgenerator(uid_list) and getattr(uid_list, '__name__', None) == MailBox.fetch.__name__:
-            uid_list = tuple(msg.uid for msg in uid_list if msg.uid)
-        for uid in iter(uid_list):
-            if type(uid) is not str:
-                raise MailBoxUidParamError('uid "{}" is not string'.format(str(uid)))
-            if not uid.strip().isdigit():
-                raise MailBoxUidParamError('Wrong uid: {}'.format(uid))
-        return ','.join((i.strip() for i in uid_list))
-
     def expunge(self) -> tuple:
         result = self.box.expunge()
         self.check_status('box.expunge', result)
@@ -149,7 +121,7 @@ class MailBox:
 
     def delete(self, uid_list) -> tuple:
         """Delete email messages"""
-        uid_str = self._uid_str(uid_list)
+        uid_str = cleaned_uid_set(uid_list)
         store_result = self.box.uid('STORE', uid_str, '+FLAGS', r'(\Deleted)')
         self.check_status('box.delete', store_result)
         expunge_result = self.expunge()
@@ -157,30 +129,27 @@ class MailBox:
 
     def copy(self, uid_list, destination_folder: str) -> tuple or None:
         """Copy email messages into the specified folder"""
-        uid_str = self._uid_str(uid_list)
+        uid_str = cleaned_uid_set(uid_list)
         copy_result = self.box.uid('COPY', uid_str, destination_folder)
         self.check_status('box.copy', copy_result)
         return copy_result
 
     def move(self, uid_list, destination_folder: str) -> tuple:
         """Move email messages into the specified folder"""
-        # here for avoid double fetch in _uid_str
-        uid_str = self._uid_str(uid_list)
+        # here for avoid double fetch in uid_set
+        uid_str = cleaned_uid_set(uid_list)
         copy_result = self.copy(uid_str, destination_folder)
         delete_result = self.delete(uid_str)
         return copy_result, delete_result
 
     def flag(self, uid_list, flag_set: [str] or str, value: bool) -> tuple:
         """
-        Set email flags
+        Set/unset email flags
         Standard flags contains in StandardMessageFlags.all
         """
-        uid_str = self._uid_str(uid_list)
+        uid_str = cleaned_uid_set(uid_list)
         if type(flag_set) is str:
             flag_set = [flag_set]
-        for flag_name in flag_set:
-            if flag_name.upper() not in StandardMessageFlags.all:
-                raise MailBoxWrongFlagError('Unsupported flag: {}'.format(flag_name))
         store_result = self.box.uid(
             'STORE', uid_str, ('+' if value else '-') + 'FLAGS',
             '({})'.format(' '.join(('\\' + i for i in flag_set))))

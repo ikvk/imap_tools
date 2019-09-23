@@ -1,10 +1,9 @@
 import re
 
 from . import imap_utf7
-from .utils import ImapToolsError
 
 
-class MailBoxFolderWrongStatusError(ImapToolsError):
+class MailBoxFolderWrongStatusError(Exception):
     """Wrong folder name error"""
 
 

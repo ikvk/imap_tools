@@ -2,6 +2,8 @@
 import datetime
 import collections
 
+from .utils import cleaned_uid_set
+
 
 class LogicOperator(collections.UserString):
     def __init__(self, *args, **kwargs):
@@ -92,6 +94,14 @@ class ParamConverter:
         if type(value) is not int:
             raise ValueError('"{}" expected int value, "{}" received'.format(key, type(value)))
         return int(value)
+
+    @staticmethod
+    def cleaned_uid(key, value) -> str:
+        try:
+            uid_set = cleaned_uid_set(value)
+        except ValueError as e:
+            raise ValueError('{} parse error: {}'.format(key, str(e)))
+        return uid_set
 
     def convert_answered(self, key, value):
         """Messages [with/without] the Answered flag set. (ANSWERED, UNANSWERED)"""
@@ -232,9 +242,12 @@ class ParamConverter:
             self.cleaned_str('{} field-name'.format(key), value),
             self.cleaned_str('{} field-value'.format(key), value))
 
+    def convert_uid(self, key, value):
+        """Messages with unique identifiers corresponding to the specified unique identifier set."""
+        return 'UID {}'.format(self.cleaned_uid(key, value))
+
 
 """
-
 # Messages [with/without] the \Answered flag set. (ANSWERED, UNANSWERED)
 ANSWERED=bool
 # Messages that [have/do not have] the \Seen flag set. (SEEN, UNSEEN)
