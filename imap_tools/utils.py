@@ -5,9 +5,9 @@ def cleaned_uid_set(uid_set: str or [str] or iter) -> str:
     """
     Prepare set of uid for use in commands: delete/copy/move/seen
     uid_set can be:
-        str, that is space separated uids
+        str, that is comma separated uids
         Iterable, that contains str uids
-        Generator with "fetch" name, implicitly get all uids
+        Generator with "fetch" name, implicitly gets all uids
     """
     if not uid_set:
         raise ValueError('uid_set should not be empty')

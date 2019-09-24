@@ -58,7 +58,7 @@ class ParamConverter:
         for key, val in self.params.items():
             convert_func = getattr(self, 'convert_{}'.format(key), None)
             if not convert_func:
-                raise ValueError('"{}" parameter not found.')
+                raise ValueError('"{}" parameter not found.'.format(key))
             converted.append(convert_func(key, val))
         return ' '.join(converted)
 
@@ -131,7 +131,7 @@ class ParamConverter:
         """Messages that do not have the specified keyword flag set. (UNKEYWORD)"""
         return 'UNKEYWORD {}'.format(self.cleaned_str(key, value))
 
-    def convert_from(self, key, value):
+    def convert_from_(self, key, value):
         """Messages that contain the specified string in the envelope structure's FROM field."""
         return 'FROM {}'.format(self.cleaned_str(key, value))
 
