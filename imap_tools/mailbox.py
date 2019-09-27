@@ -86,19 +86,26 @@ class MailBox:
         self.check_status('box.logout', result, expected='BYE')
         return result
 
-    def fetch(self, search_criteria: str = 'ALL', charset: str = 'US-ASCII', limit: int = None,
-              miss_defect=True, miss_no_uid=True, mark_seen=True) -> iter:
+    @staticmethod
+    def _default_criteria_encoder(criteria, charset) -> str or bytes:
+        """logic for encoding search criteria by default"""
+        return criteria if type(criteria) is bytes else str(criteria).encode(charset)
+
+    def fetch(self, criteria: str or bytes = 'ALL', charset: str = 'US-ASCII', limit: int = None,
+              miss_defect=True, miss_no_uid=True, mark_seen=True, criteria_encoder=None) -> iter:
         """
         Mail message generator in current folder by search criteria
-        :param search_criteria: message search criteria (see examples at ./doc/imap_search_criteria.txt)
+        :param criteria: message search criteria (see examples at ./doc/imap_search_criteria.txt)
         :param charset: IANA charset, indicates charset of the strings that appear in the search criteria. See rfc2978
         :param limit: limit number of read emails, useful for actions with a large number of messages, like "move"
         :param miss_defect: miss emails with defects
         :param miss_no_uid: miss emails without uid
         :param mark_seen: mark emails as seen on fetch
+        :param criteria_encoder: function for encode criteria value, self._default_criteria_encoder by default
         :return generator: MailMessage
         """
-        search_result = self.box.search(charset, search_criteria)
+        criteria_encoder_fn = criteria_encoder or self._default_criteria_encoder
+        search_result = self.box.search(charset, criteria_encoder_fn(criteria, charset))
         self.check_status('box.search', search_result)
         # first element is string with email numbers through the gap
         for i, message_id in enumerate(search_result[1][0].decode().split(' ') if search_result[1][0] else ()):

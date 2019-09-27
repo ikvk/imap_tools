@@ -7,7 +7,7 @@ def cleaned_uid_set(uid_set: str or [str] or iter) -> str:
     uid_set can be:
         str, that is comma separated uids
         Iterable, that contains str uids
-        Generator with "fetch" name, implicitly gets all uids
+        Generator with "fetch" name, implicitly gets all non-empty uids
     """
     if not uid_set:
         raise ValueError('uid_set should not be empty')
@@ -15,7 +15,11 @@ def cleaned_uid_set(uid_set: str or [str] or iter) -> str:
         uid_set = uid_set.split(',')
     if inspect.isgenerator(uid_set) and getattr(uid_set, '__name__', None) == 'fetch':
         uid_set = tuple(msg.uid for msg in uid_set if msg.uid)
-    for uid in iter(uid_set):
+    try:
+        uid_set_iter = iter(uid_set)
+    except TypeError:
+        raise ValueError('Wrong uid type: "{}"'.format(type(uid_set)))
+    for uid in uid_set_iter:
         if type(uid) is not str:
             raise ValueError('uid "{}" is not string'.format(str(uid)))
         if not uid.strip().isdigit():

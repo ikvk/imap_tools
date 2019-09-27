@@ -90,9 +90,9 @@ class ParamConverter:
         return True
 
     @staticmethod
-    def cleaned_int(key, value) -> int:
-        if type(value) is not int:
-            raise ValueError('"{}" expected int value, "{}" received'.format(key, type(value)))
+    def cleaned_uint(key, value) -> int:
+        if type(value) is not int or int(value) < 0:
+            raise ValueError('"{}" expected int value >= 0, "{}" received'.format(key, type(value)))
         return int(value)
 
     @staticmethod
@@ -203,11 +203,11 @@ class ParamConverter:
 
     def convert_size_gt(self, key, value):
         """Messages with an [RFC-2822] size larger than the specified number of octets. (LARGER)"""
-        return 'LARGER {}'.format(self.cleaned_int(key, value))
+        return 'LARGER {}'.format(self.cleaned_uint(key, value))
 
     def convert_size_lt(self, key, value):
         """Messages with an [RFC-2822] size smaller than the specified number of octets. (SMALLER)"""
-        return 'SMALLER {}'.format(self.cleaned_int(key, value))
+        return 'SMALLER {}'.format(self.cleaned_uint(key, value))
 
     def convert_new(self, key, value):
         """
