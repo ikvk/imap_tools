@@ -63,7 +63,6 @@ class QueryTest(unittest.TestCase):
     UID=<uid_list>: list
 
     """
-
     def test_converters(self):
         for key, case_set in (
                 ('answered', [(True, 'ANSWERED'), (False, 'UNANSWERED')]),
@@ -71,12 +70,12 @@ class QueryTest(unittest.TestCase):
                 ('flagged', [(True, 'FLAGGED'), (False, 'UNFLAGGED')]),
                 ('draft', [(True, 'DRAFT'), (False, 'UNDRAFT')]),
                 ('deleted', [(True, 'DELETED'), (False, 'UNDELETED')]),
-                ('keyword', [(1, ''), (2, '')]),
-                ('no_keyword', [(1, ''), (2, '')]),
-                ('from_', [(1, ''), (2, '')]),
-                ('to', [(1, ''), (2, '')]),
-                ('subject', [(1, ''), (2, '')]),
-                ('body', [(1, ''), (2, '')]),
+                ('keyword', [('KEY', 'KEYWORD KEY'), ('Some', 'KEYWORD Some')]),
+                ('no_keyword', [('KEY', 'UNKEYWORD'), ('Some', 'UNKEYWORD Some')]),
+                ('from_', [('iam@ya.ru', 'FROM iam@ya.ru')]),
+                ('to', [('iam@ya.ru', 'TO iam@ya.ru')]),
+                ('subject', [('hello', 'SUBJECT hello')]),
+                ('body', [('body text', 'BODY body text'), (2, '')]),
                 ('text', [(1, ''), (2, '')]),
                 ('bcc', [(1, ''), (2, '')]),
                 ('cc', [(1, ''), (2, '')]),
@@ -88,10 +87,10 @@ class QueryTest(unittest.TestCase):
                 ('sent_date_lt', [(1, ''), (2, '')]),
                 ('size_gt', [(1, ''), (2, '')]),
                 ('size_lt', [(1, ''), (2, '')]),
-                ('new', [(1, ''), (2, '')]),
-                ('old', [(1, ''), (2, '')]),
-                ('recent', [(1, ''), (2, '')]),
-                ('all', [(1, ''), (2, '')]),
+                ('new', [(True, 'NEW')]),
+                ('old', [(True, 'OLD')]),
+                ('recent', [(True, 'RECENT')]),
+                ('all', [(True, 'ALL')]),
                 ('header', [(1, ''), (2, '')]),
                 ('uid', '')):
             for value, result in case_set:

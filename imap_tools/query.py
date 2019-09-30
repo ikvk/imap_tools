@@ -45,6 +45,8 @@ class NOT(LogicOperator):
 Q = AND  # Short alias for AND
 
 
+# todo lists for TO ...
+# todo str not empty
 class ParamConverter:
     """Convert search params to IMAP format"""
 
@@ -63,6 +65,7 @@ class ParamConverter:
         return ' '.join(converted)
 
     def format_date(self, value: datetime.date) -> str:
+        """To avoid locale affects"""
         return '{}-{}-{}'.format(value.day, self.short_month_names[value.month - 1], value.year)
 
     @staticmethod

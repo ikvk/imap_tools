@@ -1,6 +1,7 @@
 import re
 
 from . import imap_utf7
+from .utils import check_command_status
 
 
 class MailBoxFolderWrongStatusError(Exception):
@@ -39,7 +40,7 @@ class MailBoxFolderManager:
     def set(self, folder):
         """Select current folder"""
         result = self.mailbox.box.select(folder)
-        self.mailbox.check_status('box.select', result)
+        check_command_status('box.select', result)
         self._current_folder = folder
         return result
 
@@ -53,7 +54,7 @@ class MailBoxFolderManager:
         *Use email box delimitor to separate folders. Example for "|" delimitor: "folder|sub folder"
         """
         result = self.mailbox.box._simple_command('CREATE', self._normalise_folder(folder))
-        self.mailbox.check_status('CREATE', result)
+        check_command_status('CREATE', result)
         return result
 
     def get(self):
@@ -64,13 +65,13 @@ class MailBoxFolderManager:
         """Renemae folder from old_name to new_name"""
         result = self.mailbox.box._simple_command(
             'RENAME', self._normalise_folder(old_name), self._normalise_folder(new_name))
-        self.mailbox.check_status('RENAME', result)
+        check_command_status('RENAME', result)
         return result
 
     def delete(self, folder: str):
         """Delete folder"""
         result = self.mailbox.box._simple_command('DELETE', self._normalise_folder(folder))
-        self.mailbox.check_status('DELETE', result)
+        check_command_status('DELETE', result)
         return result
 
     def status(self, folder: str, options: [str] or None = None) -> dict:
@@ -93,9 +94,9 @@ class MailBoxFolderManager:
             raise MailBoxFolderWrongStatusError(str(options))
         status_result = self.mailbox.box._simple_command(
             command, self._normalise_folder(folder), '({})'.format(' '.join(options)))
-        self.mailbox.check_status(command, status_result)
+        check_command_status(command, status_result)
         result = self.mailbox.box._untagged_response(status_result[0], status_result[1], command)
-        self.mailbox.check_status(command, result)
+        check_command_status(command, result)
         values = result[1][0].decode().split('(')[1].split(')')[0].split(' ')
         return self._pairs_to_dict(values)
 

@@ -16,3 +16,4 @@ query builder
 ImapToolsError
 fetch - charset parameter
 del class MailBoxWrongFlagError(Exception):
+check_command_status

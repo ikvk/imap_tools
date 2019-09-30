@@ -25,3 +25,19 @@ def cleaned_uid_set(uid_set: str or [str] or iter) -> str:
         if not uid.strip().isdigit():
             raise ValueError('Wrong uid: {}'.format(uid))
     return ','.join((i.strip() for i in uid_set))
+
+
+class UnexpectedCommandStatusError(Exception):
+    """Unexpected status in response"""
+
+
+def check_command_status(command, command_result, expected='OK'):
+    """
+    Check that command responses status equals <expected> status
+    If not, raises UnexpectedCommandStatusError
+    """
+    typ, data = command_result[0], command_result[1]
+    if typ != expected:
+        raise UnexpectedCommandStatusError(
+            'Response status for command "{command}" == "{typ}", "{exp}" expected, data: {data}'.format(
+                command=command, typ=typ, data=str(data), exp=expected))
