@@ -46,7 +46,7 @@ Q = AND  # Short alias for AND
 
 
 # todo lists for TO ...
-# todo str not empty
+# todo str not empty ?
 class ParamConverter:
     """Convert search params to IMAP format"""
 
@@ -64,9 +64,10 @@ class ParamConverter:
             converted.append(convert_func(key, val))
         return ' '.join(converted)
 
-    def format_date(self, value: datetime.date) -> str:
+    @classmethod
+    def format_date(cls, value: datetime.date) -> str:
         """To avoid locale affects"""
-        return '{}-{}-{}'.format(value.day, self.short_month_names[value.month - 1], value.year)
+        return '{}-{}-{}'.format(value.day, cls.short_month_names[value.month - 1], value.year)
 
     @staticmethod
     def cleaned_str(key, value) -> str:
@@ -105,6 +106,20 @@ class ParamConverter:
         except ValueError as e:
             raise ValueError('{} parse error: {}'.format(key, str(e)))
         return uid_set
+
+    @staticmethod
+    def cleaned_header(key, value) -> (str, str):
+        if type(value) is str or type(value) is bytes:
+            raise ValueError('"{}" expected (str, str) value, "{}" received'.format(key, type(value)))
+        try:
+            val1, val2 = value[0], value[1]
+        except IndexError:
+            raise ValueError('"{}" expected (str, str) value, "{}" received'.format(key, type(value)))
+        if type(val1) is not str:
+            raise ValueError('"{}" field-name expected str value, "{}" received'.format(key, type(value)))
+        if type(val2) is not str:
+            raise ValueError('"{}" field-value expected str value, "{}" received'.format(key, type(value)))
+        return val1, val2
 
     def convert_answered(self, key, value):
         """Messages [with/without] the Answered flag set. (ANSWERED, UNANSWERED)"""
@@ -241,9 +256,7 @@ class ParamConverter:
         If the string to search is zero-length, this matches all messages that have a header line
         with the specified field-name regardless of the contents.
         """
-        return 'HEADER {} {}'.format(
-            self.cleaned_str('{} field-name'.format(key), value),
-            self.cleaned_str('{} field-value'.format(key), value))
+        return 'HEADER {} {}'.format(*self.cleaned_header(key, value))
 
     def convert_uid(self, key, value):
         """Messages with unique identifiers corresponding to the specified unique identifier set."""

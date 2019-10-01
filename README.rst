@@ -36,9 +36,10 @@ Basic
 
     from imap_tools import MailBox
 
+    # get list of email subjects from INBOX folder
     mailbox = MailBox('imap.mail.com')
     mailbox.login('test@mail.com', 'password', initial_folder='INBOX')
-    subjects = [msg.subject for msg in mailbox.fetch()]  # get list of email subjects from INBOX folder
+    subjects = [msg.subject for msg in mailbox.fetch()]
     mailbox.logout()
     # OR the same otherwise
     with MailBox('imap.mail.com').login('test@mail.com', 'password') as mailbox:
@@ -109,8 +110,6 @@ Actions with mailbox folders
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 .. code-block:: python
 
-    mailbox.login('test@mail.com', 'pwd')
-
     # LIST
     for folder in mailbox.folder.list('INBOX'):
         print(folder['flags'], folder['delim'], folder['name'])
@@ -130,16 +129,12 @@ Actions with mailbox folders
     for status_key, status_val in mailbox.folder.status('some_folder').items():
         print(status_key, status_val)
 
-    mailbox.logout()
-
 Reasons
 -------
-There are many different libraries for working with e-mail via the imap protocol. Including imaplib library.
-However, these libraries contain various shortcomings, such as:
 
-- excessive low level
-- returned results are not ready to work with them
-- no convenient tools for working with: directories, letters in directories
+- Excessive low level of imaplib library
+- Other libraries contain various shortcomings or not convenient
+- Open source projects makes world better
 
 Release notes
 -------------

@@ -5,96 +5,6 @@ from imap_tools import query
 
 
 class QueryTest(unittest.TestCase):
-    """
-    # Messages with the specified keyword flag set. (KEYWORD)
-    KEYWORD=str <flag> 
-    # Messages that do not have the specified keyword flag set. (UNKEYWORD)
-    NO_KEYWORD=str <flag>
-    
-    # Messages that contain the specified string in the envelope structure's FROM field.
-    FROM=str
-    # Messages that contain the specified string in the envelope structure's TO field.
-    TO=str
-    # Messages that contain the specified string in the envelope structure's SUBJECT field.
-    SUBJECT=str
-    # Messages that contain the specified string in the body of the message.
-    BODY=str
-    # Messages that contain the specified string in the header or body of the message.
-    TEXT=str
-    # Messages that contain the specified string in the envelope structure's BCC field.
-    BCC=str
-    # Messages that contain the specified string in the envelope structure's CC field.
-    CC=str
-    
-    # Messages whose internal date (disregarding time and timezone) is within the specified date. (ON)
-    DATE=date
-    # Messages whose internal date (disregarding time and timezone) is within or later than the specified date. (SINCE)
-    DATE_GT=date
-    # Messages whose internal date (disregarding time and timezone) is earlier than the specified date. (BEFORE)
-    DATE_LT=date
-    # Messages whose [RFC-2822] Date: header (disregarding time and timezone) is within the specified date. (SENTON)
-    SENT_DATE=date
-    # Messages whose [RFC-2822] Date: header (disregarding time and timezone) is within or later than the specified date. (SENTSINCE)
-    SENT_DATE_GT=date
-    # Messages whose [RFC-2822] Date: header (disregarding time and timezone) is earlier than the specified date. (SENTBEFORE)
-    SENT_DATE_LT=date
-    
-    # Messages with an [RFC-2822] size larger than the specified number of octets. (LARGER)
-    SIZE_GT=int
-    # Messages with an [RFC-2822] size smaller than the specified number of octets. (SMALLER)
-    SIZE_LT=int
-    
-    # Messages that have the \Recent flag set but not the \Seen flag. This is functionally equivalent to "(RECENT UNSEEN)".
-    NEW=True
-    # Messages that do not have the \Recent flag set. This is functionally equivalent to "NOT RECENT" (as opposed to "NOT NEW").
-    OLD=True
-    # Messages that have the \Recent flag set.
-    RECENT=True
-    # by default ALL 
-    ALL=True
-    
-    # Messages that have a header with the specified field-name (as defined in [RFC-2822]) 
-    # and that contains the specified string in the text of the header (what comes after the colon).  
-    # If the string to search is zero-length, this matches all messages that have a header line 
-    # with the specified field-name regardless of the contents.
-    HEADER=(<field-name>:str, str)
-    
-    Messages with unique identifiers corresponding to the specified unique identifier set. Sequence set ranges are permitted.
-    UID=<uid_list>: list
-
-    """
-    def test_converters(self):
-        for key, case_set in (
-                ('answered', [(True, 'ANSWERED'), (False, 'UNANSWERED')]),
-                ('seen', [(True, 'SEEN'), (False, 'UNSEEN')]),
-                ('flagged', [(True, 'FLAGGED'), (False, 'UNFLAGGED')]),
-                ('draft', [(True, 'DRAFT'), (False, 'UNDRAFT')]),
-                ('deleted', [(True, 'DELETED'), (False, 'UNDELETED')]),
-                ('keyword', [('KEY', 'KEYWORD KEY'), ('Some', 'KEYWORD Some')]),
-                ('no_keyword', [('KEY', 'UNKEYWORD'), ('Some', 'UNKEYWORD Some')]),
-                ('from_', [('iam@ya.ru', 'FROM iam@ya.ru')]),
-                ('to', [('iam@ya.ru', 'TO iam@ya.ru')]),
-                ('subject', [('hello', 'SUBJECT hello')]),
-                ('body', [('body text', 'BODY body text'), (2, '')]),
-                ('text', [(1, ''), (2, '')]),
-                ('bcc', [(1, ''), (2, '')]),
-                ('cc', [(1, ''), (2, '')]),
-                ('date', [(1, ''), (2, '')]),
-                ('date_gt', [(1, ''), (2, '')]),
-                ('date_lt', [(1, ''), (2, '')]),
-                ('sent_date', [(1, ''), (2, '')]),
-                ('sent_date_gt', [(1, ''), (2, '')]),
-                ('sent_date_lt', [(1, ''), (2, '')]),
-                ('size_gt', [(1, ''), (2, '')]),
-                ('size_lt', [(1, ''), (2, '')]),
-                ('new', [(True, 'NEW')]),
-                ('old', [(True, 'OLD')]),
-                ('recent', [(True, 'RECENT')]),
-                ('all', [(True, 'ALL')]),
-                ('header', [(1, ''), (2, '')]),
-                ('uid', '')):
-            for value, result in case_set:
-                self.assertEqual(1, 1) # todo stop
 
     def test_cleaners(self):
         def fetch():
@@ -112,7 +22,9 @@ class QueryTest(unittest.TestCase):
                 ('cleaned_uint', (0, 1, 145), (-1, 'str', [], {}, type, True, b'1')),
                 ('cleaned_str', ('', 'good', 'я 你好'), (1, [], {}, type, True, b'1')),
                 ('cleaned_true', (True,), (1, 'str', [], {}, type, False, b'1')),
-                ('cleaned_uid', ('1', '1,2', ['1', '2'], fetch()), (1, [], {}, type, True, b'1', not_fetch())),):
+                ('cleaned_uid', ('1', '1,2', ['1', '2'], fetch()), (1, [], {}, type, True, b'1', not_fetch())),
+                ('cleaned_header', (('X-Google-Smtp', '123'), ['a', '1']), (1, 's', ['s', 1], {}, type, False, b'1')),
+        ):
             cleaned_fn = getattr(query.ParamConverter, cleaned_fn_name)
             for good in good_vals:
                 self.assertIsNotNone(cleaned_fn('key_does_not_matter', good))
@@ -120,40 +32,44 @@ class QueryTest(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     cleaned_fn('key_does_not_matter', bad)
 
+    def test_converters(self):
+        for key, case_set in (
+                ('answered', [(True, 'ANSWERED'), (False, 'UNANSWERED')]),
+                ('seen', [(True, 'SEEN'), (False, 'UNSEEN')]),
+                ('flagged', [(True, 'FLAGGED'), (False, 'UNFLAGGED')]),
+                ('draft', [(True, 'DRAFT'), (False, 'UNDRAFT')]),
+                ('deleted', [(True, 'DELETED'), (False, 'UNDELETED')]),
+                ('keyword', [('KEY', 'KEYWORD KEY'), ('Some', 'KEYWORD Some')]),
+                ('no_keyword', [('noo', 'UNKEYWORD noo'), ('Some', 'UNKEYWORD Some')]),
+                ('from_', [('from@ya.ru', 'FROM from@ya.ru')]),
+                ('to', [('to@ya.ru', 'TO to@ya.ru')]),
+                ('subject', [('hello', 'SUBJECT hello')]),
+                ('body', [('"body text"', 'BODY "body text"'), ('hi', 'BODY hi')]),
+                ('text', [('"wow text"', 'TEXT "wow text"'), ('hi', 'TEXT hi')]),
+                ('bcc', [('bcc@ya.ru', 'BCC bcc@ya.ru')]),
+                ('cc', [('cc@ya.ru', 'CC cc@ya.ru')]),
+                ('date', [(datetime.date(2000, 3, 15), 'ON 15-Mar-2000')]),
+                ('date_gt', [(datetime.date(2000, 3, 15), 'SINCE 15-Mar-2000')]),
+                ('date_lt', [(datetime.date(2000, 3, 15), 'BEFORE 15-Mar-2000')]),
+                ('sent_date', [(datetime.date(2000, 3, 15), 'SENTON 15-Mar-2000')]),
+                ('sent_date_gt', [(datetime.date(2000, 3, 15), 'SENTSINCE 15-Mar-2000')]),
+                ('sent_date_lt', [(datetime.date(2000, 3, 15), 'SENTBEFORE 15-Mar-2000')]),
+                ('size_gt', [(1024, 'LARGER 1024')]),
+                ('size_lt', [(512, 'SMALLER 512')]),
+                ('new', [(True, 'NEW')]),
+                ('old', [(True, 'OLD')]),
+                ('recent', [(True, 'RECENT')]),
+                ('all', [(True, 'ALL')]),
+                ('header', [(('X-Google-Smtp-Source', '123'), 'HEADER X-Google-Smtp-Source 123')]),
+                ('uid', [('1,2', 'UID 1,2'), (['3', '4'], 'UID 3,4')]),
+        ):
+            for value, result in case_set:
+                self.assertEqual(query.AND(key=value), result)
+
     def test_format_date(self):
-        self.assertEqual(1, 1)
+        self.assertEqual(query.ParamConverter.format_date(datetime.date(2000, 3, 15)), '15-Mar-2000')
 
-
-'''
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-format_date
-to_str
-'''
+    def test_logic_operators(self):
+        pass
+        # to_str
+        # todo stop here
