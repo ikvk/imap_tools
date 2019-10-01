@@ -60,7 +60,7 @@ class ParamConverter:
         for key, val in self.params.items():
             convert_func = getattr(self, 'convert_{}'.format(key), None)
             if not convert_func:
-                raise ValueError('"{}" parameter not found.'.format(key))
+                raise KeyError('"{}" is an invalid parameter.'.format(key))
             converted.append(convert_func(key, val))
         return ' '.join(converted)
 
