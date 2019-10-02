@@ -195,6 +195,12 @@ class MailMessage:
 
     @property
     @lru_cache()
+    def headers(self) -> list:
+        """message headers"""
+        return getattr(self.obj, '_headers', [])
+
+    @property
+    @lru_cache()
     def attachments(self) -> [(str, bytes)]:
         """
         Attachments of the mail message (generator)

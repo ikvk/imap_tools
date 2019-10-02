@@ -45,8 +45,6 @@ class NOT(LogicOperator):
 Q = AND  # Short alias for AND
 
 
-# todo lists for TO ...
-# todo str not empty ?
 class ParamConverter:
     """Convert search params to IMAP format"""
 
@@ -113,7 +111,7 @@ class ParamConverter:
             raise ValueError('"{}" expected (str, str) value, "{}" received'.format(key, type(value)))
         try:
             val1, val2 = value[0], value[1]
-        except IndexError:
+        except Exception:
             raise ValueError('"{}" expected (str, str) value, "{}" received'.format(key, type(value)))
         if type(val1) is not str:
             raise ValueError('"{}" field-name expected str value, "{}" received'.format(key, type(value)))
@@ -182,7 +180,7 @@ class ParamConverter:
         Messages whose internal date (disregarding time and timezone)
         is within the specified date. (ON)
         """
-        return 'DATE {}'.format(self.format_date(self.cleaned_date(key, value)))
+        return 'ON {}'.format(self.format_date(self.cleaned_date(key, value)))
 
     def convert_date_gt(self, key, value):
         """
@@ -232,22 +230,26 @@ class ParamConverter:
         Messages that have the Recent flag set but not the Seen flag.
         This is functionally equivalent to "(RECENT UNSEEN)".
         """
-        return 'NEW {}'.format(self.cleaned_true(key, value))
+        self.cleaned_true(key, value)
+        return 'NEW'
 
     def convert_old(self, key, value):
         """
         Messages that do not have the Recent flag set.
         This is functionally equivalent to "NOT RECENT" (as opposed to "NOT NEW").
         """
-        return 'OLD {}'.format(self.cleaned_true(key, value))
+        self.cleaned_true(key, value)
+        return 'OLD'
 
     def convert_recent(self, key, value):
         """Messages that have the Recent flag set."""
-        return 'RECENT {}'.format(self.cleaned_true(key, value))
+        self.cleaned_true(key, value)
+        return 'RECENT'
 
     def convert_all(self, key, value):
         """All messages in the mailbox; the default initial key for ANDing."""
-        return 'ALL {}'.format(self.cleaned_true(key, value))
+        self.cleaned_true(key, value)
+        return 'ALL'
 
     def convert_header(self, key, value):
         """

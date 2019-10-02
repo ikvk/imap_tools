@@ -1,7 +1,7 @@
 import unittest
 import datetime
 
-from imap_tools import query
+from imap_tools.query import ParamConverter, Q, AND, OR, NOT
 
 
 class QueryTest(unittest.TestCase):
@@ -25,7 +25,7 @@ class QueryTest(unittest.TestCase):
                 ('cleaned_uid', ('1', '1,2', ['1', '2'], fetch()), (1, [], {}, type, True, b'1', not_fetch())),
                 ('cleaned_header', (('X-Google-Smtp', '123'), ['a', '1']), (1, 's', ['s', 1], {}, type, False, b'1')),
         ):
-            cleaned_fn = getattr(query.ParamConverter, cleaned_fn_name)
+            cleaned_fn = getattr(ParamConverter, cleaned_fn_name)
             for good in good_vals:
                 self.assertIsNotNone(cleaned_fn('key_does_not_matter', good))
             for bad in bad_vals:
@@ -64,12 +64,15 @@ class QueryTest(unittest.TestCase):
                 ('uid', [('1,2', 'UID 1,2'), (['3', '4'], 'UID 3,4')]),
         ):
             for value, result in case_set:
-                self.assertEqual(query.AND(key=value), result)
+                self.assertEqual(AND(**{key: value}), result)
 
     def test_format_date(self):
-        self.assertEqual(query.ParamConverter.format_date(datetime.date(2000, 3, 15)), '15-Mar-2000')
+        self.assertEqual(ParamConverter.format_date(datetime.date(2000, 3, 15)), '15-Mar-2000')
 
     def test_logic_operators(self):
-        pass
-        # to_str
-        # todo stop here
+        self.assertEqual(AND(text='hello', new=True), 'TEXT hello NEW')
+        self.assertEqual(OR(text='hello', new=True), '(OR TEXT hello NEW)')
+        self.assertEqual(NOT(text='hello', new=True), '(NOT TEXT hello NEW)')
+        self.assertEqual(
+            Q(OR(from_='from@ya.ru', text='"the text"'), NOT(OR(Q(answered=False), Q(new=True))), to='to@ya.ru'),
+            'TO to@ya.ru (OR FROM from@ya.ru TEXT "the text") (NOT (OR UNANSWERED NEW))')

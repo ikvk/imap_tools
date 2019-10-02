@@ -45,9 +45,9 @@ Basic
     with MailBox('imap.mail.com').login('test@mail.com', 'password') as mailbox:
         subjects = [msg.subject for msg in mailbox.fetch()]
 
-MailBox.fetch - email message generator, params:
+MailBox.fetch - email message generator, first searches email uids by criteria, then fetch and yields emails by one:
 
-* *criteria*: message search criteria, `examples <https://github.com/ikvk/imap_tools/tree/master/examples>`_
+* *criteria*: message search criteria, `docs <https://tools.ietf.org/html/rfc3501#section-6.4.4>`_
 * *limit*: limit on the number of read emails, useful for actions with a large number of messages, like "move"
 * *miss_defect*: miss emails with defects
 * *miss_no_uid*: miss emails without uid
@@ -71,13 +71,14 @@ Email attributes
         message.text
         message.html
         message.flags
+        message.headers
+        for filename, payload in message.attachments:
+            filename, payload
+        message.obj  # original email.message.Message object
         message.from_values
         message.to_values
         message.cc_values
         message.bcc_values
-        for filename, payload in message.attachments:
-            filename, payload
-        # Any message attribute: message.obj['Message-ID'], message.obj['X-Google-Smtp-Source'] ...
 
 Actions with emails in folder
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

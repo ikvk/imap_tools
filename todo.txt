@@ -17,3 +17,4 @@ ImapToolsError
 fetch - charset parameter
 del class MailBoxWrongFlagError(Exception):
 check_command_status
+headers - from django.utils.datastructures import MultiValueDict?
