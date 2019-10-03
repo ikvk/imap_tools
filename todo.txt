@@ -1,24 +1,19 @@
 console mode
 
-readme - add fetch default vals
-
-message attributes strong tests
-
-Технические заголовки (RFC-заголовки) писем https://helpdesk.infobox.ru/Knowledgebase/Article/View/624/121/
-
 try to imitate long poll by noop
 
-примеры значений аттрибутов письма
-
-fetch INTERNALDATE The internal date of the message. - sent_date?
-
-(UID) - fetch uid_only param
-
 =
-query builder
++query builder
 -SOCKS proxy support - without new dependencies (maybe by including SocksiPy in project)
-ImapToolsError
-fetch - charset parameter
-del class MailBoxWrongFlagError(Exception):
-check_command_status
-headers - from django.utils.datastructures import MultiValueDict? = dict(a=[],)
++del ImapToolsError
++fetch - charset parameter
++del class MailBoxWrongFlagError(Exception): 'Unsupported flag: {}'.format(flag_name)
++check_command_status to utils module
+headers - dict(a=[],)
+(UID) - fetch uid_only param
+fetch INTERNALDATE The internal date of the message. - sent_date?
+примеры значений аттрибутов письма
+readme - add fetch default vals
+message attributes strong tests
+m.date parser
+Технические заголовки (RFC-заголовки) писем https://helpdesk.infobox.ru/Knowledgebase/Article/View/624/121/
