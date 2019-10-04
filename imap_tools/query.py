@@ -2,7 +2,7 @@
 import datetime
 import collections
 
-from .utils import cleaned_uid_set
+from .utils import cleaned_uid_set, short_month_names
 
 
 class LogicOperator(collections.UserString):
@@ -48,8 +48,6 @@ Q = AND  # Short alias for AND
 class ParamConverter:
     """Convert search params to IMAP format"""
 
-    short_month_names = ('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov')
-
     def __init__(self, params):
         self.params = params
 
@@ -65,7 +63,7 @@ class ParamConverter:
     @classmethod
     def format_date(cls, value: datetime.date) -> str:
         """To avoid locale affects"""
-        return '{}-{}-{}'.format(value.day, cls.short_month_names[value.month - 1], value.year)
+        return '{}-{}-{}'.format(value.day, short_month_names[value.month - 1], value.year)
 
     @staticmethod
     def cleaned_str(key, value) -> str:

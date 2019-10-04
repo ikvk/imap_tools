@@ -1,14 +1,9 @@
 import unittest
 
-from imap_tools import parse_email_address
 from tests.utils import MailboxTestCase
 
 
 class MessageTest(MailboxTestCase):
-
-    def test_parse_email_address(self):
-        exp = {'email': 'ivan@mail.ru', 'name': '"Ivan Petrov"', 'full': '"Ivan Petrov" <ivan@mail.ru>'}
-        self.assertEqual(parse_email_address('"Ivan Petrov" <ivan@mail.ru>'), exp)
 
     def test_attributes(self):
         none_type = type(None)

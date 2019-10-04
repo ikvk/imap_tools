@@ -60,7 +60,6 @@ Email attributes
     # NOTE: All message properties are cached by functools.lru_cache
 
     for message in mailbox.fetch():
-        message.id
         message.uid
         message.subject
         message.from_
@@ -79,6 +78,7 @@ Email attributes
         message.to_values
         message.cc_values
         message.bcc_values
+        message.date_str
 
 Actions with emails in folder
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

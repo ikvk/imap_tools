@@ -2,13 +2,17 @@ console mode
 
 try to imitate long poll by noop
 
-=
+===
+
 +query builder
 -SOCKS proxy support - without new dependencies (maybe by including SocksiPy in project)
 +del ImapToolsError
 +fetch - charset parameter
 +del class MailBoxWrongFlagError(Exception): 'Unsupported flag: {}'.format(flag_name)
 +check_command_status to utils module
++date - datetime.datetime
++id - _id
++date_str - original str
 headers - dict(a=[],)
 (UID) - fetch uid_only param
 fetch INTERNALDATE The internal date of the message. - sent_date?
@@ -17,3 +21,4 @@ readme - add fetch default vals
 message attributes strong tests
 m.date parser
 Технические заголовки (RFC-заголовки) писем https://helpdesk.infobox.ru/Knowledgebase/Article/View/624/121/
+mark live tests
