@@ -151,7 +151,7 @@ class MailMessage:
     @property
     @lru_cache()
     def text(self) -> str:
-        """The text of the mail message"""
+        """Plain text of the mail message"""
         for part in self.obj.walk():
             # multipart/* are just containers
             if part.get_content_maintype() == 'multipart':
@@ -174,11 +174,10 @@ class MailMessage:
 
     @property
     @lru_cache()
-    def headers(self) -> dict:
+    def headers(self) -> {str: (str,)}:
         """Message headers"""
-        result = {}
-        return result
-        return getattr(self.obj, '_headers', {})
+        raw_headers = getattr(self.obj, '_headers', ())
+        return {key: tuple(v for k, v in raw_headers if k == key) for key in set(i[0] for i in raw_headers)}
 
     @property
     @lru_cache()
