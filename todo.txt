@@ -2,6 +2,8 @@ console mode
 
 try to imitate long poll by noop
 
+fetch INTERNALDATE The internal date of the message. - sent_date?
+
 ===
 
 +query builder
@@ -13,12 +15,10 @@ try to imitate long poll by noop
 +date - datetime.datetime
 +id - _id
 +date_str - original str
-headers - {str: (str,)}
++headers - {str: (str,)}
++примеры значений аттрибутов письма
++readme - add fetch default vals
 (UID) - fetch uid_only param
-fetch INTERNALDATE The internal date of the message. - sent_date?
-примеры значений аттрибутов письма
-readme - add fetch default vals
 message attributes strong tests
-m.date parser
 Технические заголовки (RFC-заголовки) писем https://helpdesk.infobox.ru/Knowledgebase/Article/View/624/121/
 mark live tests
