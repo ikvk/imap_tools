@@ -11,11 +11,10 @@ from .utils import decode_value, parse_email_address, parse_email_date
 class MailMessage:
     """The email message"""
 
-    def __init__(self, message_id: str, fetch_data):
+    def __init__(self, fetch_data):
         raw_message_data, raw_uid_data, raw_flag_data = self._get_message_data_parts(fetch_data)
         self._raw_uid_data = raw_uid_data
         self._raw_flag_data = raw_flag_data
-        self._id = message_id
         self.obj = email.message_from_bytes(raw_message_data)
 
     @staticmethod

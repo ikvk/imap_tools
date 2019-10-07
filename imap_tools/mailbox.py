@@ -96,7 +96,7 @@ class MailBox:
             # get message by id
             fetch_result = self.box.fetch(message_id, "(BODY[] UID FLAGS)" if mark_seen else "(BODY.PEEK[] UID FLAGS)")
             check_command_status('box.fetch', fetch_result)
-            mail_message = self.email_message_class(message_id, fetch_result[1])
+            mail_message = self.email_message_class(fetch_result[1])
             if miss_defect and mail_message.obj.defects:
                 continue
             if miss_no_uid and not mail_message.uid:

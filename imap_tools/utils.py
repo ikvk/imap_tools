@@ -47,10 +47,12 @@ def check_command_status(command, command_result, expected='OK'):
                 command=command, typ=typ, data=str(data), exp=expected))
 
 
-def decode_value(value, encoding) -> str:
+def decode_value(value, encoding=None) -> str:
     """Converts value to utf-8 encoding"""
+    if type(encoding) is str:
+        encoding = encoding.lower()
     if isinstance(value, bytes):
-        if encoding in ['utf-8', None]:
+        if encoding in ('utf-8', 'utf8', None):
             return value.decode('utf-8', 'ignore')
         else:
             try:

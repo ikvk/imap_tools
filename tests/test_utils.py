@@ -9,18 +9,11 @@ class UtilsTest(unittest.TestCase):
     # *cleaned_uid_set tested enough in test_query
 
     def test_decode_value(self):
-        # todo
-        def1 decode_value(value, encoding) -> str:
-            """Converts value to utf-8 encoding"""
-            if isinstance(value, bytes):
-                if encoding in ['utf-8', None]:
-                    return value.decode('utf-8', 'ignore')
-                else:
-                    try:
-                        return value.decode(encoding)
-                    except LookupError:  # unknown encoding
-                        return value.decode('utf-8', 'ignore')
-            return value
+        self.assertEqual(utils.decode_value('str привет 你好', 'not matter'), 'str привет 你好')
+        self.assertEqual(utils.decode_value(b'str \xd0\xb4\xd0\xb0 \xe4\xbd\xa0'), 'str да 你')
+        self.assertEqual(utils.decode_value(b'str \xd0\xb4\xd0\xb0 \xe4\xbd\xa0', 'utf8'), 'str да 你')
+        self.assertEqual(utils.decode_value(b'\xef\xf0\xe8\xe2\xe5\xf2', 'cp1251'), 'привет')
+        self.assertEqual(utils.decode_value(b'str \xd0\xb4\xd0\xb0 \xe4\xbd\xa0', 'wat?'), 'str да 你')
 
     def test_check_command_status(self):
         self.assertIsNone(utils.check_command_status('box.fetch', ('EXP', 'command_result_data'), expected='EXP'))
