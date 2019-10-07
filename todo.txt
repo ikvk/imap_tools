@@ -21,6 +21,7 @@ fetch INTERNALDATE The internal date of the message. - sent_date?
 -fetch uid_only param
 +pairs_to_dict quote
 +fixed folder.set enc dug
+query help
 message attributes strong tests
 Технические заголовки (RFC-заголовки) писем https://helpdesk.infobox.ru/Knowledgebase/Article/View/624/121/
 mark live tests

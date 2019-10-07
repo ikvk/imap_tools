@@ -81,6 +81,45 @@ Email attributes
         message.bcc_values  # tuple, ({'email': '', 'name': '', 'full': ''},)
         message.date_str  # original date str
 
+Search criteria
+^^^^^^^^^^^^^^^
+
+TODO STOP HERE
+Add desc col
+
+=============  =============  ===============================
+Key name       Values         Results
+=============  =============  ===============================
+answered       bool           ANSWERED | UNANSWERED
+seen           bool           SEEN | UNSEEN
+flagged        bool           FLAGGED | UNFLAGGED
+draft          bool           DRAFT | UNDRAFT
+deleted        bool           DELETED | UNDELETED
+keyword        str            KEYWORD KEY
+no_keyword     str            UNKEYWORD KEY
+`from_`        str            FROM `"from@ya.ru"`
+to             str            TO `"to@ya.ru"`
+subject        str            SUBJECT "hello"
+body           str            BODY "some_key"
+text           str            TEXT "some_key"
+bcc            str            BCC `"bcc@ya.ru"`
+cc             str            CC `"cc@ya.ru"`
+date           datetime.date  ON 15-Mar-2000
+date_gte       datetime.date  SINCE 15-Mar-2000
+date_lt        datetime.date  BEFORE 15-Mar-2000
+sent_date      datetime.date  SENTON 15-Mar-2000
+sent_date_gte  datetime.date  SENTSINCE 15-Mar-2000
+sent_date_lt   datetime.date  SENTBEFORE 15-Mar-2000
+size_gt        int >= 0       LARGER 1024
+size_lt        int >= 0       SMALLER 512
+new            True           NEW
+old            True           OLD
+recent         True           RECENT
+all            True           ALL
+uid            iter|str       UID 1,2,17
+header         (str, str)     HEADER "AntiSpam-Version" "5.8"
+=============  =============  ===============================
+
 Actions with emails in folder
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 .. code-block:: python

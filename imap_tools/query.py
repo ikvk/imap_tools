@@ -2,7 +2,7 @@
 import datetime
 import collections
 
-from .utils import cleaned_uid_set, short_month_names
+from .utils import cleaned_uid_set, short_month_names, quote
 
 
 class LogicOperator(collections.UserString):
@@ -115,7 +115,7 @@ class ParamConverter:
             raise ValueError('"{}" field-name expected str value, "{}" received'.format(key, type(value)))
         if type(val2) is not str:
             raise ValueError('"{}" field-value expected str value, "{}" received'.format(key, type(value)))
-        return val1, val2
+        return quote(val1), quote(val2)
 
     def convert_answered(self, key, value):
         """Messages [with/without] the Answered flag set. (ANSWERED, UNANSWERED)"""
@@ -147,31 +147,31 @@ class ParamConverter:
 
     def convert_from_(self, key, value):
         """Messages that contain the specified string in the envelope structure's FROM field."""
-        return 'FROM {}'.format(self.cleaned_str(key, value))
+        return 'FROM {}'.format(quote(self.cleaned_str(key, value)))
 
     def convert_to(self, key, value):
         """Messages that contain the specified string in the envelope structure's TO field."""
-        return 'TO {}'.format(self.cleaned_str(key, value))
+        return 'TO {}'.format(quote(self.cleaned_str(key, value)))
 
     def convert_subject(self, key, value):
         """Messages that contain the specified string in the envelope structure's SUBJECT field."""
-        return 'SUBJECT {}'.format(self.cleaned_str(key, value))
+        return 'SUBJECT {}'.format(quote(self.cleaned_str(key, value)))
 
     def convert_body(self, key, value):
         """Messages that contain the specified string in the body of the message."""
-        return 'BODY {}'.format(self.cleaned_str(key, value))
+        return 'BODY {}'.format(quote(self.cleaned_str(key, value)))
 
     def convert_text(self, key, value):
         """Messages that contain the specified string in the header or body of the message."""
-        return 'TEXT {}'.format(self.cleaned_str(key, value))
+        return 'TEXT {}'.format(quote(self.cleaned_str(key, value)))
 
     def convert_bcc(self, key, value):
         """Messages that contain the specified string in the envelope structure's BCC field."""
-        return 'BCC {}'.format(self.cleaned_str(key, value))
+        return 'BCC {}'.format(quote(self.cleaned_str(key, value)))
 
     def convert_cc(self, key, value):
         """Messages that contain the specified string in the envelope structure's CC field."""
-        return 'CC {}'.format(self.cleaned_str(key, value))
+        return 'CC {}'.format(quote(self.cleaned_str(key, value)))
 
     def convert_date(self, key, value):
         """
@@ -180,7 +180,7 @@ class ParamConverter:
         """
         return 'ON {}'.format(self.format_date(self.cleaned_date(key, value)))
 
-    def convert_date_gt(self, key, value):
+    def convert_date_gte(self, key, value):
         """
         Messages whose internal date (disregarding time and timezone)
         is within or later than the specified date. (SINCE)
@@ -201,7 +201,7 @@ class ParamConverter:
         """
         return 'SENTON {}'.format(self.format_date(self.cleaned_date(key, value)))
 
-    def convert_sent_date_gt(self, key, value):
+    def convert_sent_date_gte(self, key, value):
         """
         Messages whose [RFC-2822] Date: header (disregarding time and timezone)
         is within or later than the specified date. (SENTSINCE)
@@ -297,13 +297,13 @@ CC=str
 # Messages whose internal date (disregarding time and timezone) is within the specified date. (ON)
 DATE=date
 # Messages whose internal date (disregarding time and timezone) is within or later than the specified date. (SINCE)
-DATE_GT=date
+DATE_GTE=date
 # Messages whose internal date (disregarding time and timezone) is earlier than the specified date. (BEFORE)
 DATE_LT=date
 # Messages whose [RFC-2822] Date: header (disregarding time and timezone) is within the specified date. (SENTON)
 SENT_DATE=date
 # Messages whose [RFC-2822] Date: header (disregarding time and timezone) is within or later than the specified date. (SENTSINCE)
-SENT_DATE_GT=date
+SENT_DATE_GTE=date
 # Messages whose [RFC-2822] Date: header (disregarding time and timezone) is earlier than the specified date. (SENTBEFORE)
 SENT_DATE_LT=date
 
