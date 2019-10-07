@@ -34,12 +34,12 @@ Basic
 ^^^^^
 .. code-block:: python
 
-    from imap_tools import MailBox
+    from imap_tools import MailBox, Q
 
     # get list of email subjects from INBOX folder
     mailbox = MailBox('imap.mail.com')
     mailbox.login('test@mail.com', 'password', initial_folder='INBOX')
-    subjects = [msg.subject for msg in mailbox.fetch()]
+    subjects = [msg.subject for msg in mailbox.fetch(Q(all=True))]
     mailbox.logout()
     # OR the same otherwise
     with MailBox('imap.mail.com').login('test@mail.com', 'password') as mailbox:

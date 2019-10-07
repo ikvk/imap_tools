@@ -13,12 +13,15 @@ fetch INTERNALDATE The internal date of the message. - sent_date?
 +del class MailBoxWrongFlagError(Exception): 'Unsupported flag: {}'.format(flag_name)
 +check_command_status to utils module
 +date - datetime.datetime
-+id - _id
++id - del
 +date_str - original str
 +headers - {str: (str,)}
 +примеры значений аттрибутов письма
 +readme - add fetch default vals
 -fetch uid_only param
++pairs_to_dict quote
++fixed folder.set enc dug
 message attributes strong tests
 Технические заголовки (RFC-заголовки) писем https://helpdesk.infobox.ru/Knowledgebase/Article/View/624/121/
 mark live tests
+type -> isinstance() check

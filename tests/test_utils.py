@@ -8,6 +8,17 @@ class UtilsTest(unittest.TestCase):
 
     # *cleaned_uid_set tested enough in test_query
 
+    def test_quote(self):
+        self.assertEqual(utils.quote('str привет'), '"str привет"')
+        self.assertEqual(utils.quote('str \\'), '"str \\\\"')
+        self.assertEqual(utils.quote(b'\xd1\x8f'), b'"\xd1\x8f"')
+        self.assertEqual(utils.quote(b'\\ \xd1\x8f  \\'), b'"\\\\ \xd1\x8f  \\\\"')
+
+    def test_pairs_to_dict(self):
+        self.assertEqual(utils.pairs_to_dict(['MESSAGES', '3', 'UIDNEXT', '4']), {'MESSAGES': '3', 'UIDNEXT': '4'})
+        with self.assertRaises(ValueError):
+            utils.pairs_to_dict(['1', '2', '3'])
+
     def test_decode_value(self):
         self.assertEqual(utils.decode_value('str привет 你好', 'not matter'), 'str привет 你好')
         self.assertEqual(utils.decode_value(b'str \xd0\xb4\xd0\xb0 \xe4\xbd\xa0'), 'str да 你')

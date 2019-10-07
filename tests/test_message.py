@@ -1,5 +1,5 @@
 import unittest
-
+import datetime
 from tests.utils import MailboxTestCase
 
 
@@ -10,14 +10,15 @@ class MessageTest(MailboxTestCase):
         for mailbox in self.mailbox_set.values():
             mailbox.folder.set(mailbox.folder_test_base)
             for message in mailbox.fetch():
-                self.assertIs(type(message.id), str)
                 self.assertIn(type(message.uid), (str, none_type))
                 self.assertIs(type(message.subject), str)
                 self.assertIs(type(message.from_), str)
                 self.assertIn(type(message.from_values), (dict, none_type))
-                self.assertIs(type(message.date), str)
+                self.assertIs(type(message.date), datetime.datetime)
+                self.assertIs(type(message.date_str), str)
                 self.assertIs(type(message.text), str)
                 self.assertIs(type(message.html), str)
+                self.assertIs(type(message.headers), dict)
 
                 self.assertIs(type(message.to), tuple)
                 for i in message.to:

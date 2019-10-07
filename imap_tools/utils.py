@@ -106,3 +106,17 @@ def parse_email_date(value: str) -> datetime.datetime:
         )
     else:
         return datetime.datetime(1900, 1, 1)
+
+
+def quote(value: str or bytes):
+    if isinstance(value, str):
+        return '"' + value.replace('\\', '\\\\').replace('"', '\\"') + '"'
+    else:
+        return b'"' + value.replace(b'\\', b'\\\\').replace(b'"', b'\\"') + b'"'
+
+
+def pairs_to_dict(items: list) -> dict:
+    """Example: ['MESSAGES', '3', 'UIDNEXT', '4'] -> {'MESSAGES': '3', 'UIDNEXT': '4'}"""
+    if len(items) % 2 != 0:
+        raise ValueError('An even-length array is expected')
+    return dict((items[i * 2], items[i * 2 + 1]) for i in range(len(items) // 2))
