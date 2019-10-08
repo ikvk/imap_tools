@@ -24,3 +24,4 @@ message attributes strong tests
 +query help
 Технические заголовки (RFC-заголовки) писем https://helpdesk.infobox.ru/Knowledgebase/Article/View/624/121/
 type -> isinstance() check
+check doc

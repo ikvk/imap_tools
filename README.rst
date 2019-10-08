@@ -84,7 +84,7 @@ Search criteria
 ^^^^^^^^^^^^^^^
 
 | Implemented the search logic described in rfc3501.
-| Search keys are combined by the logical condition "and", class AND or Q.
+| Search keys are combined by the logical condition "and", class AND and its alias Q.
 | The OR class is used to combine keys with the logical "or" condition.
 | To invert the result of a logical expression, use the NOT class.
 | If the charset parameter is specified in MailBox.fetch, the search string will be encoded to this format.
@@ -93,6 +93,10 @@ Search criteria
 .. code-block:: python
 
     from imap_tools import Q, AND, OR, NOT
+    # base
+    mailbox.fetch('TEXT "hello"')  # str
+    mailbox.fetch(b'TEXT "\xd1\x8f"')  # bytes
+    mailbox.fetch(Q(subject='weather'))  # query, the str-like object
     # AND
     Q(text='hello', new=True)  # 'TEXT "hello" NEW'
     # OR
@@ -111,8 +115,8 @@ Python syntax limitations:
 
     # you can't do: Q(to='one@mail.ru', to='two@mail.ru'), instead you can:
     Q(AND(to='one@mail.ru'), AND(to='two@mail.ru'))  # 'TO "one@mail.ru" TO "two@mail.ru"'
-    # you can't do: Q(to='two@mail.ru', NOT(to='one@mail.ru')), use kwargs after args (after logic classes):
-    Q(NOT(to='one@mail.ru'), to='two@mail.ru')
+    # you can't do: Q(subject='two', NOT(subject='one')), use kwargs after args (after logic classes):
+    Q(NOT(subject='one'), subject='two')
 
 =============  =============  =======================  =================================================================
 Key            Types          Results                  Description
