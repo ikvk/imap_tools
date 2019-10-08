@@ -63,9 +63,10 @@ Search criteria
 | To invert the result of a logical expression, use the NOT class.
 | If the charset parameter is specified in MailBox.fetch, the search string will be encoded to this format.
 | You can change this behavior by overriding MailBox._criteria_encoder or pass criteria as bytes in desired encoding.
-
+|
 .. code-block:: python
 
+    from imap_tools import Q, AND, OR, NOT
     # AND
     Q(text='hello', new=True)  # 'TEXT "hello" NEW'
     # OR
