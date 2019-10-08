@@ -86,39 +86,40 @@ Search criteria
 
 TODO STOP HERE
 Add desc col
+(disregarding time and timezone)
 
-=============  =============  ===============================
-Key name       Values         Results
-=============  =============  ===============================
-answered       bool           ANSWERED | UNANSWERED
-seen           bool           SEEN | UNSEEN
-flagged        bool           FLAGGED | UNFLAGGED
-draft          bool           DRAFT | UNDRAFT
-deleted        bool           DELETED | UNDELETED
-keyword        str            KEYWORD KEY
-no_keyword     str            UNKEYWORD KEY
-`from_`        str            FROM `"from@ya.ru"`
-to             str            TO `"to@ya.ru"`
-subject        str            SUBJECT "hello"
-body           str            BODY "some_key"
-text           str            TEXT "some_key"
-bcc            str            BCC `"bcc@ya.ru"`
-cc             str            CC `"cc@ya.ru"`
-date           datetime.date  ON 15-Mar-2000
-date_gte       datetime.date  SINCE 15-Mar-2000
-date_lt        datetime.date  BEFORE 15-Mar-2000
-sent_date      datetime.date  SENTON 15-Mar-2000
-sent_date_gte  datetime.date  SENTSINCE 15-Mar-2000
-sent_date_lt   datetime.date  SENTBEFORE 15-Mar-2000
-size_gt        int >= 0       LARGER 1024
-size_lt        int >= 0       SMALLER 512
-new            True           NEW
-old            True           OLD
-recent         True           RECENT
-all            True           ALL
-uid            iter|str       UID 1,2,17
-header         (str, str)     HEADER "AntiSpam-Version" "5.8"
-=============  =============  ===============================
+=============  =============  =======================  =================================================================
+Keys           Values         Results                  Description
+=============  =============  =======================  =================================================================
+answered       bool           ANSWERED | UNANSWERED    with|without the Answered flag
+seen           bool           SEEN | UNSEEN            with|without the Seen flag
+flagged        bool           FLAGGED | UNFLAGGED      with|without the Flagged flag
+draft          bool           DRAFT | UNDRAFT          with|without the Draft flag
+deleted        bool           DELETED | UNDELETED      with|without the Deleted flag
+keyword        str            KEYWORD KEY              with the specified keyword flag
+no_keyword     str            UNKEYWORD KEY            without the specified keyword flag
+`from_`        str            FROM `"from@ya.ru"`      contain specified str in the envelope structure's FROM field
+to             str            TO `"to@ya.ru"`          contain specified str in the envelope structure's TO field
+subject        str            SUBJECT "hello"          contain specified str in the envelope structure's SUBJECT field
+body           str            BODY "some_key"          contain specified str in the body of the message
+text           str            TEXT "some_key"          contain specified str in the header or body of the message.
+bcc            str            BCC `"bcc@ya.ru"`        contain specified str in the envelope structure's BCC field
+cc             str            CC `"cc@ya.ru"`          contain specified str in the envelope structure's CC field
+date           datetime.date  ON 15-Mar-2000           internal date is within the specified date
+date_gte       datetime.date  SINCE 15-Mar-2000        internal date is within or later than the specified date
+date_lt        datetime.date  BEFORE 15-Mar-2000       internal date is earlier than the specified date
+sent_date      datetime.date  SENTON 15-Mar-2000       RFC-2822 Date: header is within the specified date
+sent_date_gte  datetime.date  SENTSINCE 15-Mar-2000    RFC-2822 Date: header is within or later than the specified date
+sent_date_lt   datetime.date  SENTBEFORE 15-Mar-2000   RFC-2822 Date: header is earlier than the specified date
+size_gt        int >= 0       LARGER 1024              RFC-2822 size larger than the specified number of octets
+size_lt        int >= 0       SMALLER 512              RFC-2822 size smaller than the specified number of octets
+new            True           NEW                      have the Recent flag set but not the Seen flag
+old            True           OLD                      do not have the Recent flag set
+recent         True           RECENT                   have the Recent flag set
+all            True           ALL                      all
+uid            iter(str)|str  UID 1,2,17               corresponding to the specified unique identifier set
+header         (str, str)     HEADER "AntiSpam" "5.8"  have a header that contains the specified str in the text
+=============  =============  =======================  =================================================================
 
 Actions with emails in folder
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
