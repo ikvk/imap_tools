@@ -64,11 +64,11 @@ Add desc col
 =============  =============  =======================  =================================================================
 Key            Types          Results                  Description
 =============  =============  =======================  =================================================================
-answered       bool           ANSWERED`|`UNANSWERED    with|without the Answered flag
-seen           bool           SEEN`|`UNSEEN            with|without the Seen flag
-flagged        bool           FLAGGED`|`UNFLAGGED      with|without the Flagged flag
-draft          bool           DRAFT`|`UNDRAFT          with|without the Draft flag
-deleted        bool           DELETED`|`UNDELETED      with|without the Deleted flag
+answered       bool           `ANSWERED|UNANSWERED`    with|without the Answered flag
+seen           bool           `SEEN|UNSEEN`            with|without the Seen flag
+flagged        bool           `FLAGGED|UNFLAGGED`      with|without the Flagged flag
+draft          bool           `DRAFT|UNDRAFT`          with|without the Draft flag
+deleted        bool           `DELETED|UNDELETED`      with|without the Deleted flag
 keyword        str            KEYWORD KEY              with the specified keyword flag
 no_keyword     str            UNKEYWORD KEY            without the specified keyword flag
 `from_`        str            FROM `"from@ya.ru"`      contain specified str in the envelope structure's FROM field
