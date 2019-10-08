@@ -89,7 +89,7 @@ Add desc col
 (disregarding time and timezone)
 
 =============  =============  =======================  =================================================================
-Keys           Values         Results                  Description
+Key            Types          Results                  Description
 =============  =============  =======================  =================================================================
 answered       bool           ANSWERED | UNANSWERED    with|without the Answered flag
 seen           bool           SEEN | UNSEEN            with|without the Seen flag
