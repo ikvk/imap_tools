@@ -98,14 +98,14 @@ draft          bool           `DRAFT|UNDRAFT`          with|without the Draft fl
 deleted        bool           `DELETED|UNDELETED`      with|without the Deleted flag
 keyword        str            KEYWORD KEY              with the specified keyword flag
 no_keyword     str            UNKEYWORD KEY            without the specified keyword flag
-`from_`        str            FROM `"from@ya.ru"`      contain specified str in the envelope structure's FROM field
-to             str            TO `"to@ya.ru"`          contain specified str in the envelope structure's TO field
-subject        str            SUBJECT "hello"          contain specified str in the envelope structure's SUBJECT field
-body           str            BODY "some_key"          contain specified str in the body of the message
-text           str            TEXT "some_key"          contain specified str in the header or body of the message.
-bcc            str            BCC `"bcc@ya.ru"`        contain specified str in the envelope structure's BCC field
-cc             str            CC `"cc@ya.ru"`          contain specified str in the envelope structure's CC field
-date           datetime.date  ON 15-Mar-2000           internal date* is within the specified date
+`from_`        str            FROM `"from@ya.ru"`      contain specified str in envelope structure's FROM field
+to             str            TO `"to@ya.ru"`          contain specified str in envelope structure's TO field
+subject        str            SUBJECT "hello"          contain specified str in envelope structure's SUBJECT field
+body           str            BODY "some_key"          contain specified str in body of the message
+text           str            TEXT "some_key"          contain specified str in header or body of the message
+bcc            str            BCC `"bcc@ya.ru"`        contain specified str in envelope structure's BCC field
+cc             str            CC `"cc@ya.ru"`          contain specified str in envelope structure's CC field
+date           datetime.date  ON 15-Mar-2000           internal date* is within specified date
 date_gte       datetime.date  SINCE 15-Mar-2000        internal date* is within or later than the specified date
 date_lt        datetime.date  BEFORE 15-Mar-2000       internal date* is earlier than the specified date
 sent_date      datetime.date  SENTON 15-Mar-2000       rfc2822 Date: header* is within the specified date
@@ -121,7 +121,7 @@ uid            iter(str)|str  UID 1,2,17               corresponding to the spec
 header         (str, str)     HEADER "AntiSpam" "5.8"  have a header that contains the specified str in the text
 =============  =============  =======================  =================================================================
 
-*При поиске по датам time and timezone disregarding.
+*When searching by dates - time and timezone disregarding.
 
 Email attributes
 ^^^^^^^^^^^^^^^^
