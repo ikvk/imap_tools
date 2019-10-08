@@ -37,13 +37,13 @@ Basic
     from imap_tools import MailBox, Q
 
     # get list of email subjects from INBOX folder
+    with MailBox('imap.mail.com').login('test@mail.com', 'password') as mailbox:
+        subjects = [msg.subject for msg in mailbox.fetch()]
+    # OR the same otherwise
     mailbox = MailBox('imap.mail.com')
     mailbox.login('test@mail.com', 'password', initial_folder='INBOX')
     subjects = [msg.subject for msg in mailbox.fetch(Q(all=True))]
     mailbox.logout()
-    # OR the same otherwise
-    with MailBox('imap.mail.com').login('test@mail.com', 'password') as mailbox:
-        subjects = [msg.subject for msg in mailbox.fetch()]
 
 MailBox.fetch - email message generator, first searches email uids by criteria, then fetch and yields emails by one:
 
@@ -57,9 +57,13 @@ MailBox.fetch - email message generator, first searches email uids by criteria, 
 Search criteria
 ^^^^^^^^^^^^^^^
 
-TODO STOP HERE
-Add desc col
-(disregarding time and timezone)
+Релизована логика поиска, описанная в rfc3501.
+Ключи поиска объединяются логическим условием "and", класс AND или Q.
+Для объединения ключей логическим уловием "or" используется класс OR.
+Для инвертирования результата логического выражения используется класс NOT.
+примеры
+Синтаксис python накладывает ограничения на порядок следования блоков:
+примеры
 
 =============  =============  =======================  =================================================================
 Key            Types          Results                  Description
@@ -78,21 +82,23 @@ body           str            BODY "some_key"          contain specified str in 
 text           str            TEXT "some_key"          contain specified str in the header or body of the message.
 bcc            str            BCC `"bcc@ya.ru"`        contain specified str in the envelope structure's BCC field
 cc             str            CC `"cc@ya.ru"`          contain specified str in the envelope structure's CC field
-date           datetime.date  ON 15-Mar-2000           internal date is within the specified date
-date_gte       datetime.date  SINCE 15-Mar-2000        internal date is within or later than the specified date
-date_lt        datetime.date  BEFORE 15-Mar-2000       internal date is earlier than the specified date
-sent_date      datetime.date  SENTON 15-Mar-2000       RFC-2822 Date: header is within the specified date
-sent_date_gte  datetime.date  SENTSINCE 15-Mar-2000    RFC-2822 Date: header is within or later than the specified date
-sent_date_lt   datetime.date  SENTBEFORE 15-Mar-2000   RFC-2822 Date: header is earlier than the specified date
-size_gt        int >= 0       LARGER 1024              RFC-2822 size larger than the specified number of octets
-size_lt        int >= 0       SMALLER 512              RFC-2822 size smaller than the specified number of octets
+date           datetime.date  ON 15-Mar-2000           internal date* is within the specified date
+date_gte       datetime.date  SINCE 15-Mar-2000        internal date* is within or later than the specified date
+date_lt        datetime.date  BEFORE 15-Mar-2000       internal date* is earlier than the specified date
+sent_date      datetime.date  SENTON 15-Mar-2000       rfc2822 Date: header* is within the specified date
+sent_date_gte  datetime.date  SENTSINCE 15-Mar-2000    rfc2822 Date: header* is within or later than the specified date
+sent_date_lt   datetime.date  SENTBEFORE 15-Mar-2000   rfc2822 Date: header* is earlier than the specified date
+size_gt        int >= 0       LARGER 1024              rfc2822 size larger than the specified number of octets
+size_lt        int >= 0       SMALLER 512              rfc2822 size smaller than the specified number of octets
 new            True           NEW                      have the Recent flag set but not the Seen flag
 old            True           OLD                      do not have the Recent flag set
 recent         True           RECENT                   have the Recent flag set
-all            True           ALL                      all
+all            True           ALL                      all, criteria by default
 uid            iter(str)|str  UID 1,2,17               corresponding to the specified unique identifier set
 header         (str, str)     HEADER "AntiSpam" "5.8"  have a header that contains the specified str in the text
 =============  =============  =======================  =================================================================
+
+*При поиске по датам time and timezone disregarding.
 
 Email attributes
 ^^^^^^^^^^^^^^^^
