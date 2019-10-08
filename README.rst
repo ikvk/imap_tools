@@ -61,25 +61,24 @@ Email attributes
     # NOTE: All message properties are cached by functools.lru_cache
 
     for message in mailbox.fetch():
-        message.uid  # str or None, '123'
-        message.subject  # str, 'some subject'
-        message.from_  # str, 'sender@ya.ru'
-        message.to  # tuple, ('iam@goo.ru', 'friend@ya.ru', )
-        message.cc  # tuple, ('cc@mail.ru', )
-        message.bcc  # tuple, ('bcc@mail.ru', )
-        message.date  # datetime.datetime, 1900-1-1 for unparsed, may be naive or with tzinfo
-        message.text  # str, 'hi'
-        message.html  # str, '<b>hi</b>'
-        message.flags  # tuple, ('SEEN', 'FLAGGED', 'ENCRYPTED')
-        message.headers  # dict, {'Received': ('from 1.m.net', 'from 2.m.net'), 'Some-AntiVirus-Status': ('Clean',)}
-        for filename, payload in message.attachments:
-            filename, payload  # (str, bytes), 'cat.jpg', b'\xff\xd8\xff\xe0\'
-        message.obj  # original email.message.Message object
+        message.uid          # str or None, '123'
+        message.subject      # str, 'some subject'
+        message.from_        # str, 'sender@ya.ru'
+        message.to           # tuple, ('iam@goo.ru', 'friend@ya.ru', )
+        message.cc           # tuple, ('cc@mail.ru', )
+        message.bcc          # tuple, ('bcc@mail.ru', )
+        message.date         # datetime.datetime, 1900-1-1 for unparsed, may be naive or with tzinfo
+        message.text         # str, 'hi'
+        message.html         # str, '<b>hi</b>'
+        message.flags        # tuple, ('SEEN', 'FLAGGED', 'ENCRYPTED')
+        message.headers      # dict, {'Received': ('from 1.m.net', 'from 2.m.net'), 'Some-AntiVirus-Status': ('Clean',)}
+        message.attachments  # [(str, bytes)], 'cat.jpg', b'\xff\xd8\xff\xe0\'
+        message.obj          # original email.message.Message object
         message.from_values  # dict or None, {'email': 'sender@ya.ru', 'name': 'Ivan', 'full': 'Ivan <sender@ya.ru>'}
-        message.to_values  # tuple, ({'email': '', 'name': '', 'full': ''},)
-        message.cc_values  # tuple, ({'email': '', 'name': '', 'full': ''},)
-        message.bcc_values  # tuple, ({'email': '', 'name': '', 'full': ''},)
-        message.date_str  # original date str
+        message.to_values    # tuple, ({'email': '', 'name': '', 'full': ''},)
+        message.cc_values    # tuple, ({'email': '', 'name': '', 'full': ''},)
+        message.bcc_values   # tuple, ({'email': '', 'name': '', 'full': ''},)
+        message.date_str     # original date str
 
 Search criteria
 ^^^^^^^^^^^^^^^
