@@ -47,7 +47,7 @@ Basic
 
 MailBox.fetch - email message generator, first searches email uids by criteria, then fetch and yields emails by one:
 
-* *criteria*: message search criteria, `docs <https://tools.ietf.org/html/rfc3501#section-6.4.4>`_
+* *criteria*: message search criteria, `rfc3501 <https://tools.ietf.org/html/rfc3501#section-6.4.4>`_
 * *charset*: 'US-ASCII', indicates charset of the strings that appear in the search criteria. See rfc2978
 * *limit*: None, limit on the number of read emails, useful for actions with a large number of messages, like "move"
 * *miss_defect*: True, miss emails with defects
@@ -57,13 +57,38 @@ MailBox.fetch - email message generator, first searches email uids by criteria, 
 Search criteria
 ^^^^^^^^^^^^^^^
 
-Релизована логика поиска, описанная в rfc3501.
-Ключи поиска объединяются логическим условием "and", класс AND или Q.
-Для объединения ключей логическим уловием "or" используется класс OR.
-Для инвертирования результата логического выражения используется класс NOT.
-примеры
-Синтаксис python накладывает ограничения на порядок следования блоков:
-примеры
+| Реализована логика поиска, описанная в rfc3501.
+| Ключи поиска объединяются логическим условием "and", класс AND или Q.
+| Для объединения ключей логическим уловием "or" используется класс OR.
+| Для инвертирования результата логического выражения используется класс NOT.
+| Если в MailBox.fetch указан параметр charset, строка поиска будет закодирована в этом формате.
+| Вы можете изменить это поведение переопределив MailBox._criteria_encoder или передать bytes в нужной кодировке.
+
+| Implemented the search logic described in rfc3501.
+| Search keys are combined by the logical condition "and", class AND or Q.
+| The OR class is used to combine keys with the logical "or" condition.
+| To invert the result of a logical expression, use the NOT class.
+| If the charset parameter is specified in MailBox.fetch, the search string will be encoded to this format.
+| You can change this behavior by overriding MailBox._criteria_encoder or pass criteria as bytes in desired encoding.
+.. code-block:: python
+    # AND
+    Q(text='hello', new=True)  # 'TEXT "hello" NEW'
+    # OR
+    OR(text='hello', date=datetime.date(2000, 3, 15))  # '(OR TEXT "hello" ON 15-Mar-2000)'
+    # NOT
+    NOT(text='hello', new=True)  # '(NOT TEXT "hello" NEW)'
+    # complex:
+    # 'TO "to@ya.ru" (OR FROM "from@ya.ru" TEXT "\\"the text\\"") (NOT (OR UNANSWERED NEW))')
+    Q(OR(from_='from@ya.ru', text='"the text"'), NOT(OR(Q(answered=False), Q(new=True))), to='to@ya.ru')
+    # encoding
+    mailbox.fetch(Q(subject='привет'), charset='utf8')  # 'привет' will be encoded by MailBox._criteria_encoder
+
+Python syntax limitations:
+.. code-block:: python
+    # you can't do: Q(to='one@mail.ru', to='two@mail.ru'), instead you can:
+    Q(AND(to='one@mail.ru'), AND(to='two@mail.ru'))  # 'TO "one@mail.ru" TO "two@mail.ru"'
+    # you can't do: Q(to='two@mail.ru', NOT(to='one@mail.ru')), use kwargs after args (after logic classes):
+    Q(NOT(to='one@mail.ru'), to='two@mail.ru')
 
 =============  =============  =======================  =================================================================
 Key            Types          Results                  Description

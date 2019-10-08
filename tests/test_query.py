@@ -73,6 +73,7 @@ class QueryTest(unittest.TestCase):
         self.assertEqual(AND(text='hello', new=True), 'TEXT "hello" NEW')
         self.assertEqual(OR(text='hello', new=True), '(OR TEXT "hello" NEW)')
         self.assertEqual(NOT(text='hello', new=True), '(NOT TEXT "hello" NEW)')
+        self.assertEqual(Q(AND(to='one@mail.ru'), AND(to='two@mail.ru')) , 'TO "one@mail.ru" TO "two@mail.ru"')
         self.assertEqual(
             Q(OR(from_='from@ya.ru', text='"the text"'), NOT(OR(Q(answered=False), Q(new=True))), to='to@ya.ru'),
             'TO "to@ya.ru" (OR FROM "from@ya.ru" TEXT "\\"the text\\"") (NOT (OR UNANSWERED NEW))')
