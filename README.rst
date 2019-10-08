@@ -54,32 +54,6 @@ MailBox.fetch - email message generator, first searches email uids by criteria, 
 * *miss_no_uid*: True, miss emails without uid
 * *mark_seen*: True, mark emails as seen on fetch
 
-Email attributes
-^^^^^^^^^^^^^^^^
-.. code-block:: python
-
-    # NOTE: All message properties are cached by functools.lru_cache
-
-    for message in mailbox.fetch():
-        message.uid          # str or None, '123'
-        message.subject      # str, 'some subject'
-        message.from_        # str, 'sender@ya.ru'
-        message.to           # tuple, ('iam@goo.ru', 'friend@ya.ru', )
-        message.cc           # tuple, ('cc@mail.ru', )
-        message.bcc          # tuple, ('bcc@mail.ru', )
-        message.date         # datetime.datetime, 1900-1-1 for unparsed, may be naive or with tzinfo
-        message.text         # str, 'hi'
-        message.html         # str, '<b>hi</b>'
-        message.flags        # tuple, ('SEEN', 'FLAGGED', 'ENCRYPTED')
-        message.headers      # dict, {'Received': ('from 1.m.net', 'from 2.m.net'), 'Some-AntiVirus-Status': ('Clean',)}
-        message.attachments  # [(str, bytes)], 'cat.jpg', b'\xff\xd8\xff\xe0\'
-        message.obj          # original email.message.Message object
-        message.from_values  # dict or None, {'email': 'sender@ya.ru', 'name': 'Ivan', 'full': 'Ivan <sender@ya.ru>'}
-        message.to_values    # tuple, ({'email': '', 'name': '', 'full': ''},)
-        message.cc_values    # tuple, ({'email': '', 'name': '', 'full': ''},)
-        message.bcc_values   # tuple, ({'email': '', 'name': '', 'full': ''},)
-        message.date_str     # original date str
-
 Search criteria
 ^^^^^^^^^^^^^^^
 
@@ -90,11 +64,11 @@ Add desc col
 =============  =============  =======================  =================================================================
 Key            Types          Results                  Description
 =============  =============  =======================  =================================================================
-answered       bool           ANSWERED | UNANSWERED    with|without the Answered flag
-seen           bool           SEEN | UNSEEN            with|without the Seen flag
-flagged        bool           FLAGGED | UNFLAGGED      with|without the Flagged flag
-draft          bool           DRAFT | UNDRAFT          with|without the Draft flag
-deleted        bool           DELETED | UNDELETED      with|without the Deleted flag
+answered       bool           ANSWERED`|`UNANSWERED    with|without the Answered flag
+seen           bool           SEEN`|`UNSEEN            with|without the Seen flag
+flagged        bool           FLAGGED`|`UNFLAGGED      with|without the Flagged flag
+draft          bool           DRAFT`|`UNDRAFT          with|without the Draft flag
+deleted        bool           DELETED`|`UNDELETED      with|without the Deleted flag
 keyword        str            KEYWORD KEY              with the specified keyword flag
 no_keyword     str            UNKEYWORD KEY            without the specified keyword flag
 `from_`        str            FROM `"from@ya.ru"`      contain specified str in the envelope structure's FROM field
@@ -119,6 +93,32 @@ all            True           ALL                      all
 uid            iter(str)|str  UID 1,2,17               corresponding to the specified unique identifier set
 header         (str, str)     HEADER "AntiSpam" "5.8"  have a header that contains the specified str in the text
 =============  =============  =======================  =================================================================
+
+Email attributes
+^^^^^^^^^^^^^^^^
+.. code-block:: python
+
+    # NOTE: All message properties are cached by functools.lru_cache
+
+    for message in mailbox.fetch():
+        message.uid          # str or None, '123'
+        message.subject      # str, 'some subject'
+        message.from_        # str, 'sender@ya.ru'
+        message.to           # tuple, ('iam@goo.ru', 'friend@ya.ru', )
+        message.cc           # tuple, ('cc@mail.ru', )
+        message.bcc          # tuple, ('bcc@mail.ru', )
+        message.date         # datetime.datetime, 1900-1-1 for unparsed, may be naive or with tzinfo
+        message.text         # str, 'hi'
+        message.html         # str, '<b>hi</b>'
+        message.flags        # tuple, ('SEEN', 'FLAGGED', 'ENCRYPTED')
+        message.headers      # dict, {'Received': ('from 1.m.net', 'from 2.m.net'), 'AntiVirus-Status': ('Clean',)}
+        message.attachments  # [(str, bytes)], 'cat.jpg', b'\xff\xd8\xff\xe0\'
+        message.obj          # original email.message.Message object
+        message.from_values  # dict or None, {'email': 'sender@ya.ru', 'name': 'Ivan', 'full': 'Ivan <sender@ya.ru>'}
+        message.to_values    # tuple, ({'email': '', 'name': '', 'full': ''},)
+        message.cc_values    # tuple, ({'email': '', 'name': '', 'full': ''},)
+        message.bcc_values   # tuple, ({'email': '', 'name': '', 'full': ''},)
+        message.date_str     # original date str, 'Tue, 03 Jan 2017 22:26:59 +0500'
 
 Actions with emails in folder
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
