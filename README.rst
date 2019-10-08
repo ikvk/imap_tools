@@ -57,20 +57,15 @@ MailBox.fetch - email message generator, first searches email uids by criteria, 
 Search criteria
 ^^^^^^^^^^^^^^^
 
-| Реализована логика поиска, описанная в rfc3501.
-| Ключи поиска объединяются логическим условием "and", класс AND или Q.
-| Для объединения ключей логическим уловием "or" используется класс OR.
-| Для инвертирования результата логического выражения используется класс NOT.
-| Если в MailBox.fetch указан параметр charset, строка поиска будет закодирована в этом формате.
-| Вы можете изменить это поведение переопределив MailBox._criteria_encoder или передать bytes в нужной кодировке.
-
 | Implemented the search logic described in rfc3501.
 | Search keys are combined by the logical condition "and", class AND or Q.
 | The OR class is used to combine keys with the logical "or" condition.
 | To invert the result of a logical expression, use the NOT class.
 | If the charset parameter is specified in MailBox.fetch, the search string will be encoded to this format.
 | You can change this behavior by overriding MailBox._criteria_encoder or pass criteria as bytes in desired encoding.
+
 .. code-block:: python
+
     # AND
     Q(text='hello', new=True)  # 'TEXT "hello" NEW'
     # OR
@@ -84,7 +79,9 @@ Search criteria
     mailbox.fetch(Q(subject='привет'), charset='utf8')  # 'привет' will be encoded by MailBox._criteria_encoder
 
 Python syntax limitations:
+
 .. code-block:: python
+
     # you can't do: Q(to='one@mail.ru', to='two@mail.ru'), instead you can:
     Q(AND(to='one@mail.ru'), AND(to='two@mail.ru'))  # 'TO "one@mail.ru" TO "two@mail.ru"'
     # you can't do: Q(to='two@mail.ru', NOT(to='one@mail.ru')), use kwargs after args (after logic classes):
