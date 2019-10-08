@@ -2,6 +2,8 @@ try to imitate long poll by noop
 
 fetch INTERNALDATE The internal date of the message.
 
+message attributes strong tests
+
 ===
 
 +query builder
@@ -20,7 +22,5 @@ fetch INTERNALDATE The internal date of the message.
 +pairs_to_dict quote
 +fixed folder.set enc dug
 +query help
-message attributes strong tests
 Технические заголовки (RFC-заголовки) писем https://helpdesk.infobox.ru/Knowledgebase/Article/View/624/121/
-mark live tests
 type -> isinstance() check

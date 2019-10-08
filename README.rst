@@ -47,12 +47,38 @@ Basic
 
 MailBox.fetch - email message generator, first searches email uids by criteria, then fetch and yields emails by one:
 
-* *criteria*: message search criteria, `rfc3501 <https://tools.ietf.org/html/rfc3501#section-6.4.4>`_
+* *criteria*: message search criteria, `docs <#search-criteria>`_
 * *charset*: 'US-ASCII', indicates charset of the strings that appear in the search criteria. See rfc2978
 * *limit*: None, limit on the number of read emails, useful for actions with a large number of messages, like "move"
 * *miss_defect*: True, miss emails with defects
 * *miss_no_uid*: True, miss emails without uid
 * *mark_seen*: True, mark emails as seen on fetch
+
+Email attributes
+^^^^^^^^^^^^^^^^
+.. code-block:: python
+
+    # NOTE: All message properties are cached by functools.lru_cache
+
+    for message in mailbox.fetch():
+        message.uid          # str or None, '123'
+        message.subject      # str, 'some subject'
+        message.from_        # str, 'sender@ya.ru'
+        message.to           # tuple, ('iam@goo.ru', 'friend@ya.ru', )
+        message.cc           # tuple, ('cc@mail.ru', )
+        message.bcc          # tuple, ('bcc@mail.ru', )
+        message.date         # datetime.datetime, 1900-1-1 for unparsed, may be naive or with tzinfo
+        message.text         # str, 'hi'
+        message.html         # str, '<b>hi</b>'
+        message.flags        # tuple, ('SEEN', 'FLAGGED', 'ENCRYPTED')
+        message.headers      # dict, {'Received': ('from 1.m.net', 'from 2.m.net'), 'AntiVirus-Status': ('Clean',)}
+        message.attachments  # [(str, bytes)], 'cat.jpg', b'\xff\xd8\xff\xe0\'
+        message.obj          # original email.message.Message object
+        message.from_values  # dict or None, {'email': 'sender@ya.ru', 'name': 'Ivan', 'full': 'Ivan <sender@ya.ru>'}
+        message.to_values    # tuple, ({'email': '', 'name': '', 'full': ''},)
+        message.cc_values    # tuple, ({'email': '', 'name': '', 'full': ''},)
+        message.bcc_values   # tuple, ({'email': '', 'name': '', 'full': ''},)
+        message.date_str     # original date str, 'Tue, 03 Jan 2017 22:26:59 +0500'
 
 Search criteria
 ^^^^^^^^^^^^^^^
@@ -122,32 +148,6 @@ header         (str, str)     HEADER "AntiSpam" "5.8"  have a header that contai
 =============  =============  =======================  =================================================================
 
 *When searching by dates - time and timezone disregarding.
-
-Email attributes
-^^^^^^^^^^^^^^^^
-.. code-block:: python
-
-    # NOTE: All message properties are cached by functools.lru_cache
-
-    for message in mailbox.fetch():
-        message.uid          # str or None, '123'
-        message.subject      # str, 'some subject'
-        message.from_        # str, 'sender@ya.ru'
-        message.to           # tuple, ('iam@goo.ru', 'friend@ya.ru', )
-        message.cc           # tuple, ('cc@mail.ru', )
-        message.bcc          # tuple, ('bcc@mail.ru', )
-        message.date         # datetime.datetime, 1900-1-1 for unparsed, may be naive or with tzinfo
-        message.text         # str, 'hi'
-        message.html         # str, '<b>hi</b>'
-        message.flags        # tuple, ('SEEN', 'FLAGGED', 'ENCRYPTED')
-        message.headers      # dict, {'Received': ('from 1.m.net', 'from 2.m.net'), 'AntiVirus-Status': ('Clean',)}
-        message.attachments  # [(str, bytes)], 'cat.jpg', b'\xff\xd8\xff\xe0\'
-        message.obj          # original email.message.Message object
-        message.from_values  # dict or None, {'email': 'sender@ya.ru', 'name': 'Ivan', 'full': 'Ivan <sender@ya.ru>'}
-        message.to_values    # tuple, ({'email': '', 'name': '', 'full': ''},)
-        message.cc_values    # tuple, ({'email': '', 'name': '', 'full': ''},)
-        message.bcc_values   # tuple, ({'email': '', 'name': '', 'full': ''},)
-        message.date_str     # original date str, 'Tue, 03 Jan 2017 22:26:59 +0500'
 
 Actions with emails in folder
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
