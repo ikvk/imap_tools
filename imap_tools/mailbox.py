@@ -1,24 +1,11 @@
 import imaplib
-import inspect
 
 from .message import MailMessage
 from .folder import MailBoxFolderManager
-from .utils import ImapToolsError
+from .utils import cleaned_uid_set, check_command_status
 
 # Maximal line length when calling readline(). This is to prevent reading arbitrary length lines.
 imaplib._MAXLINE = 4 * 1024 * 1024  # 4Mb
-
-
-class MailBoxWrongFlagError(ImapToolsError):
-    """Wrong flag for "flag" method"""
-
-
-class MailBoxUidParamError(ImapToolsError):
-    """Wrong uid param"""
-
-
-class MailBoxUnexpectedStatusError(ImapToolsError):
-    """Unexpected status in response"""
 
 
 class StandardMessageFlags:
@@ -67,24 +54,12 @@ class MailBox:
         self.folder = None
         self.login_result = None
 
-    @staticmethod
-    def check_status(command, command_result, expected='OK'):
-        """
-        Check that command responses status equals <expected> status
-        If not, raises MailBoxUnexpectedStatusError
-        """
-        typ, data = command_result[0], command_result[1]
-        if typ != expected:
-            raise MailBoxUnexpectedStatusError(
-                'Response status for command "{command}" == "{typ}", "{exp}" expected, data: {data}'.format(
-                    command=command, typ=typ, data=str(data), exp=expected))
-
     def login(self, username: str, password: str, initial_folder: str = 'INBOX'):
         self._username = username
         self._password = password
         self._initial_folder = initial_folder
         result = self.box.login(self._username, self._password)
-        self.check_status('box.login', result)
+        check_command_status('box.login', result)
         self.folder = self.folder_manager_class(self)
         self.folder.set(self._initial_folder)
         self.login_result = result
@@ -92,98 +67,82 @@ class MailBox:
 
     def logout(self):
         result = self.box.logout()
-        self.check_status('box.logout', result, expected='BYE')
+        check_command_status('box.logout', result, expected='BYE')
         return result
 
-    def fetch(self, search_criteria: str = 'ALL', limit: int = None,
+    @staticmethod
+    def _criteria_encoder(criteria: str or bytes, charset: str) -> str or bytes:
+        """logic for encoding search criteria by default"""
+        return criteria if type(criteria) is bytes else str(criteria).encode(charset)
+
+    def fetch(self, criteria: str or bytes = 'ALL', charset: str = 'US-ASCII', limit: int = None,
               miss_defect=True, miss_no_uid=True, mark_seen=True) -> iter:
         """
         Mail message generator in current folder by search criteria
-        :param search_criteria: message search criteria (see examples at ./doc/imap_search_criteria.txt)
+        :param criteria: message search criteria (see examples at ./doc/imap_search_criteria.txt)
+        :param charset: IANA charset, indicates charset of the strings that appear in the search criteria. See rfc2978
         :param limit: limit number of read emails, useful for actions with a large number of messages, like "move"
         :param miss_defect: miss emails with defects
         :param miss_no_uid: miss emails without uid
         :param mark_seen: mark emails as seen on fetch
         :return generator: MailMessage
         """
-        search_result = self.box.search(None, search_criteria)
-        self.check_status('box.search', search_result)
+        search_result = self.box.search(charset, self._criteria_encoder(criteria, charset))
+        check_command_status('box.search', search_result)
         # first element is string with email numbers through the gap
         for i, message_id in enumerate(search_result[1][0].decode().split(' ') if search_result[1][0] else ()):
             if limit and i >= limit:
                 break
             # get message by id
             fetch_result = self.box.fetch(message_id, "(BODY[] UID FLAGS)" if mark_seen else "(BODY.PEEK[] UID FLAGS)")
-            self.check_status('box.fetch', fetch_result)
-            mail_message = self.email_message_class(message_id, fetch_result[1])
+            check_command_status('box.fetch', fetch_result)
+            mail_message = self.email_message_class(fetch_result[1])
             if miss_defect and mail_message.obj.defects:
                 continue
             if miss_no_uid and not mail_message.uid:
                 continue
             yield mail_message
 
-    @staticmethod
-    def _uid_str(uid_list: str or [str] or iter) -> str:
-        """
-        Prepare list of uid for use in commands: delete/copy/move/seen
-        uid_list can be: str, list, tuple, set, fetch generator
-        """
-        if not uid_list:
-            raise MailBoxUidParamError('uid_list should not be empty')
-        if type(uid_list) is str:
-            uid_list = uid_list.split(',')
-        if inspect.isgenerator(uid_list) and getattr(uid_list, '__name__', None) == MailBox.fetch.__name__:
-            uid_list = tuple(msg.uid for msg in uid_list if msg.uid)
-        for uid in iter(uid_list):
-            if type(uid) is not str:
-                raise MailBoxUidParamError('uid "{}" is not string'.format(str(uid)))
-            if not uid.strip().isdigit():
-                raise MailBoxUidParamError('Wrong uid: {}'.format(uid))
-        return ','.join((i.strip() for i in uid_list))
-
     def expunge(self) -> tuple:
         result = self.box.expunge()
-        self.check_status('box.expunge', result)
+        check_command_status('box.expunge', result)
         return result
 
     def delete(self, uid_list) -> tuple:
         """Delete email messages"""
-        uid_str = self._uid_str(uid_list)
+        uid_str = cleaned_uid_set(uid_list)
         store_result = self.box.uid('STORE', uid_str, '+FLAGS', r'(\Deleted)')
-        self.check_status('box.delete', store_result)
+        check_command_status('box.delete', store_result)
         expunge_result = self.expunge()
         return store_result, expunge_result
 
     def copy(self, uid_list, destination_folder: str) -> tuple or None:
         """Copy email messages into the specified folder"""
-        uid_str = self._uid_str(uid_list)
+        uid_str = cleaned_uid_set(uid_list)
         copy_result = self.box.uid('COPY', uid_str, destination_folder)
-        self.check_status('box.copy', copy_result)
+        check_command_status('box.copy', copy_result)
         return copy_result
 
     def move(self, uid_list, destination_folder: str) -> tuple:
         """Move email messages into the specified folder"""
-        # here for avoid double fetch in _uid_str
-        uid_str = self._uid_str(uid_list)
+        # here for avoid double fetch in uid_set
+        uid_str = cleaned_uid_set(uid_list)
         copy_result = self.copy(uid_str, destination_folder)
         delete_result = self.delete(uid_str)
         return copy_result, delete_result
 
     def flag(self, uid_list, flag_set: [str] or str, value: bool) -> tuple:
         """
-        Set email flags
+        Set/unset email flags
         Standard flags contains in StandardMessageFlags.all
         """
-        uid_str = self._uid_str(uid_list)
+        uid_str = cleaned_uid_set(uid_list)
         if type(flag_set) is str:
             flag_set = [flag_set]
-        for flag_name in flag_set:
-            if flag_name.upper() not in StandardMessageFlags.all:
-                raise MailBoxWrongFlagError('Unsupported flag: {}'.format(flag_name))
         store_result = self.box.uid(
             'STORE', uid_str, ('+' if value else '-') + 'FLAGS',
             '({})'.format(' '.join(('\\' + i for i in flag_set))))
-        self.check_status('box.flag', store_result)
+        check_command_status('box.flag', store_result)
         expunge_result = self.expunge()
         return store_result, expunge_result
 

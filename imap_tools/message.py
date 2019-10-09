@@ -5,47 +5,16 @@ import imaplib
 from functools import lru_cache
 from email.header import decode_header
 
-
-def decode_value(value, encoding) -> str:
-    """Converts value to utf-8 encoding"""
-    if isinstance(value, bytes):
-        if encoding in ['utf-8', None]:
-            return value.decode('utf-8', 'ignore')
-        else:
-            try:
-                return value.decode(encoding)
-            except LookupError:  # unknown encoding
-                return value.decode('utf-8', 'ignore')
-    return value
-
-
-def parse_email_address(value: str) -> dict:
-    """
-    Parse email address str, example: "Ivan Petrov" <ivan@mail.ru>
-    @:return dict(name: str, email: str, full: str)
-    """
-    address = ''.join(char for char in value if char.isprintable())
-    address = re.sub('[\n\r\t]+', ' ', address)
-    result = dict(email='', name='', full='')
-    if '<' in address and '>' in address:
-        match = re.match('(?P<name>.*)?(?P<email><.*>)', address, re.UNICODE)
-        result['name'] = match.group('name').strip()
-        result['email'] = match.group('email').strip('<>')
-        result['full'] = address
-    else:
-        result['name'] = ''
-        result['email'] = result['full'] = address.strip()
-    return result
+from .utils import decode_value, parse_email_address, parse_email_date
 
 
 class MailMessage:
     """The email message"""
 
-    def __init__(self, message_id: str, fetch_data):
+    def __init__(self, fetch_data):
         raw_message_data, raw_uid_data, raw_flag_data = self._get_message_data_parts(fetch_data)
         self._raw_uid_data = raw_uid_data
         self._raw_flag_data = raw_flag_data
-        self.id = message_id
         self.obj = email.message_from_bytes(raw_message_data)
 
     @staticmethod
@@ -165,14 +134,23 @@ class MailMessage:
 
     @property
     @lru_cache()
-    def date(self) -> str:
-        """Message date"""
+    def date_str(self) -> str:
+        """Message sent date"""
         return str(self.obj['Date'] or '')
 
     @property
     @lru_cache()
+    def date(self):
+        """
+        Message sent date
+        :rtype: datetime.datetime
+        """
+        return parse_email_date(self.date_str)
+
+    @property
+    @lru_cache()
     def text(self) -> str:
-        """The text of the mail message"""
+        """Plain text of the mail message"""
         for part in self.obj.walk():
             # multipart/* are just containers
             if part.get_content_maintype() == 'multipart':
@@ -192,6 +170,13 @@ class MailMessage:
             if part.get_content_type() == 'text/html':
                 return part.get_payload(decode=True).decode(part.get_content_charset(failobj='utf-8'), 'ignore')
         return ''
+
+    @property
+    @lru_cache()
+    def headers(self) -> {str: (str,)}:
+        """Message headers"""
+        raw_headers = getattr(self.obj, '_headers', ())
+        return {key: tuple(v for k, v in raw_headers if k == key) for key in set(i[0] for i in raw_headers)}
 
     @property
     @lru_cache()

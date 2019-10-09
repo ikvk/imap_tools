@@ -17,10 +17,6 @@ class FoldersTest(MailboxTestCase):
         for mailbox_name, mailbox in self.mailbox_set.items():
             if mailbox_name == 'MAIL_RU':
                 continue
-            # _pairs_to_dict
-            self.assertEqual(mailbox.folder._pairs_to_dict(['a', '1', 'b', '2']), dict(a='1', b='2'))
-            with self.assertRaises(ValueError):
-                mailbox.folder._pairs_to_dict(['1', '2', '3'])
             # LIST
             folder_list = mailbox.folder.list(mailbox.folder_test)
             self.assertEqual(

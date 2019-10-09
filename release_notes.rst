@@ -1,3 +1,19 @@
+0.9.0
+=====
+Added query builder - implemented the search logic described in rfc3501
+MailBox.fetch - added "charset" parameter
+    If the "charset" argument is specified in MailBox.fetch, the search string will be encoded to this encoding.
+MailMessage.date now returns datetime.date
+MailMessage.date_str attribute added
+MailMessage.headers attribute added
+MailMessage.id removed
+ImapToolsError base exception class removed
+MailBoxWrongFlagError exception class removed
+functions: (cleaned_uid_set,check_command_status,decode_value,parse_email_address,parse_email_date,quote,pairs_to_dict)
+    moved to utils module
+readme text improved
+fixed folder.set encoding dug
+
 0.8.0
 =====
 Add context manager
