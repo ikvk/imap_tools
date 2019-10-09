@@ -84,13 +84,18 @@ Email attributes
 Search criteria
 ^^^^^^^^^^^^^^^
 
-| Implemented the search logic described in `rfc3501 <https://tools.ietf.org/html/rfc3501#section-6.4.4>`_.
-| Class AND and its alias Q are used to combine keys by the logical "and" condition.
-| Class OR is used to combine keys by the logical "or" condition.
-| Class NOT is used to invert the result of a logical expression.
-| If the "charset" argument is specified in MailBox.fetch, the search string will be encoded to this encoding.
-| You can change this behaviour by overriding MailBox._criteria_encoder or pass criteria as bytes in desired encoding.
-|
+Implemented the search logic described in `rfc3501 <https://tools.ietf.org/html/rfc3501#section-6.4.4>`_.
+
+Class AND and its alias Q are used to combine keys by the logical "and" condition.
+
+Class OR is used to combine keys by the logical "or" condition.
+
+Class NOT is used to invert the result of a logical expression.
+
+If the "charset" argument is specified in MailBox.fetch, the search string will be encoded to this encoding.
+
+You can change this behaviour by overriding MailBox._criteria_encoder or pass criteria as bytes in desired encoding.
+
 .. code-block:: python
 
     from imap_tools import Q, AND, OR, NOT
@@ -157,11 +162,14 @@ header         (str, str)     HEADER "AntiSpam" "5.8"  have a header that contai
 Actions with emails in folder
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-| You can use 2 approaches to perform these operations:
-| "by one" - Perform IMAP operation for each message separately per N commands
-| "in bulk" - Perform IMAP operation for message set per 1 command
-| Result of MailBox.fetch generator will be implicitly converted to uid list
-|
+You can use 2 approaches to perform these operations:
+
+"by one" - Perform IMAP operation for each message separately per N commands
+
+"in bulk" - Perform IMAP operation for message set per 1 command
+
+Result of MailBox.fetch generator will be implicitly converted to uid list
+
 .. code-block:: python
 
     with MailBox('imap.mail.com').login('test@mail.com', 'pwd', initial_folder='INBOX') as mailbox:
