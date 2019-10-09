@@ -83,11 +83,11 @@ Email attributes
 Search criteria
 ^^^^^^^^^^^^^^^
 
-| Implemented the search logic described in rfc3501.
-| Search keys are combined by the logical condition "and", class AND and its alias Q.
-| The OR class is used to combine keys with the logical "or" condition.
-| To invert the result of a logical expression, use the NOT class.
-| If the charset parameter is specified in MailBox.fetch, the search string will be encoded to this format.
+| Implemented the search logic described in `rfc3501 <https://tools.ietf.org/html/rfc3501#section-6.4.4>`_.
+| Class AND and its alias Q are used to combine keys by the logical "and" condition.
+| Class OR is used to combine keys by the logical "or" condition.
+| Class NOT is used to invert the result of a logical expression.
+| If the "charset" argument is specified in MailBox.fetch, the search string will be encoded to this encoding.
 | You can change this behavior by overriding MailBox._criteria_encoder or pass criteria as bytes in desired encoding.
 |
 .. code-block:: python
