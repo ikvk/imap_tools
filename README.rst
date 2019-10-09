@@ -157,7 +157,7 @@ uid            iter(str)|str  UID 1,2,17               corresponding to the spec
 header         (str, str)     HEADER "AntiSpam" "5.8"  have a header that contains the specified str in the text
 =============  =============  =======================  =================================================================
 
-*When searching by dates - email's time and timezone are disregarding.
+`*` - When searching by dates - email's time and timezone are disregarding.
 
 Actions with emails in folder
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
