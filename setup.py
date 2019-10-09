@@ -1,11 +1,11 @@
 import setuptools
 
-with open("README.rst", "r") as fh:
+with open("README.rst", "r", encoding='utf-8') as fh:
     long_description = fh.read()
 
 setuptools.setup(
     name='imap_tools',
-    version='0.9.0',
+    version='0.9.1',
     packages=setuptools.find_packages(),
     url='https://github.com/ikvk/imap_tools',
     license='MIT',
@@ -14,6 +14,7 @@ setuptools.setup(
     author='v.kaukin',
     author_email='workkvk@gmail.com',
     description='Working with email and mailbox using IMAP protocol.',
+    keywords=['imap', 'imap-client', 'python3', 'email'],
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",

@@ -1,3 +1,7 @@
+0.9.1
+=====
+fix README.rst encoding in setup.py
+
 0.9.0
 =====
 Added query builder - implemented the search logic described in rfc3501
