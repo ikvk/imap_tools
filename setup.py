@@ -13,7 +13,7 @@ setuptools.setup(
     long_description_content_type="text/x-rst",
     author='v.kaukin',
     author_email='workkvk@gmail.com',
-    description='Effective working with email messages using IMAP protocol.',
+    description='Working with email and mailbox using IMAP protocol.',
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
