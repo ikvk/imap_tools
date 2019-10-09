@@ -4,6 +4,7 @@ fetch INTERNALDATE The internal date of the message.
 
 message attributes strong tests
 
+descriptors for: to, cc, bcc
 ===
 
 +query builder
@@ -22,6 +23,6 @@ message attributes strong tests
 +pairs_to_dict quote
 +fixed folder.set enc dug
 +query help
-Технические заголовки (RFC-заголовки) писем https://helpdesk.infobox.ru/Knowledgebase/Article/View/624/121/
++check doc
+RFC-заголовки писем https://helpdesk.infobox.ru/Knowledgebase/Article/View/624/121/
 type -> isinstance() check
-check doc

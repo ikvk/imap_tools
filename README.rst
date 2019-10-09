@@ -16,8 +16,9 @@ IMAP                 VERSION 4rev1 - https://tools.ietf.org/html/rfc3501
 
 Features
 --------
-- Transparent work with email message attributes
-- Work with emails in directories (copy, delete, flag, move, seen)
+- Parsed email message attributes
+- Query builder for searching emails
+- Work with emails in folders (copy, delete, flag, move, seen)
 - Work with mailbox folders (list, set, get, create, exists, rename, delete, status)
 - No dependencies
 
@@ -133,8 +134,8 @@ to             str            TO `"to@ya.ru"`          contain specified str in 
 subject        str            SUBJECT "hello"          contain specified str in envelope struct's SUBJECT field
 body           str            BODY "some_key"          contain specified str in body of the message
 text           str            TEXT "some_key"          contain specified str in header or body of the message
-bcc            str            BCC `"bcc@ya.ru"`        contain specified str in envelope structure's BCC field
-cc             str            CC `"cc@ya.ru"`          contain specified str in envelope structure's CC field
+bcc            str            BCC `"bcc@ya.ru"`        contain specified str in envelope struct's BCC field
+cc             str            CC `"cc@ya.ru"`          contain specified str in envelope struct's CC field
 date           datetime.date  ON 15-Mar-2000           internal date* is within specified date
 date_gte       datetime.date  SINCE 15-Mar-2000        internal date* is within or later than the specified date
 date_lt        datetime.date  BEFORE 15-Mar-2000       internal date* is earlier than the specified date
@@ -151,26 +152,28 @@ uid            iter(str)|str  UID 1,2,17               corresponding to the spec
 header         (str, str)     HEADER "AntiSpam" "5.8"  have a header that contains the specified str in the text
 =============  =============  =======================  =================================================================
 
-*When searching by dates - time and timezone disregarding.
+*When searching by dates - email's time and timezone are disregarding.
 
 Actions with emails in folder
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-.. code-block:: python
 
-    # NOTE: You can use 2 approaches to perform these operations
-    # "by one" - Perform IMAP operation for each message separately per N commands
-    # "in bulk" - Perform IMAP operation for message set per 1 command
+| You can use 2 approaches to perform these operations:
+| "by one" - Perform IMAP operation for each message separately per N commands
+| "in bulk" - Perform IMAP operation for message set per 1 command
+| Result of MailBox.fetch generator will be implicitly converted to uid list
+|
+.. code-block:: python
 
     with MailBox('imap.mail.com').login('test@mail.com', 'pwd', initial_folder='INBOX') as mailbox:
 
-        # COPY all messages from current dir to folder1, *by one
+        # COPY all messages from current folder to folder1, *by one
         for msg in mailbox.fetch():
             res = mailbox.copy(msg.uid, 'INBOX/folder1')
 
-        # MOVE all messages from current dir to folder2, *in bulk (implicit creation of uid list)
+        # MOVE all messages from current folder to folder2, *in bulk (implicit creation of uid list)
         mailbox.move(mailbox.fetch(), 'INBOX/folder2')
 
-        # DELETE all messages from current dir, *in bulk (explicit creation of uid list)
+        # DELETE all messages from current folder, *in bulk (explicit creation of uid list)
         mailbox.delete([msg.uid for msg in mailbox.fetch()])
 
         # FLAG unseen messages in current folder as Answered and Flagged, *in bulk.
