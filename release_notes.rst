@@ -4,31 +4,29 @@ fix README.rst encoding in setup.py
 
 0.9.0
 =====
-Added query builder - implemented the search logic described in rfc3501
-MailBox.fetch - added "charset" parameter
-    If the "charset" argument is specified in MailBox.fetch, the search string will be encoded to this encoding.
-MailMessage.date now returns datetime.date
-MailMessage.date_str attribute added
-MailMessage.headers attribute added
-MailMessage.id removed
-ImapToolsError base exception class removed
-MailBoxWrongFlagError exception class removed
-functions: (cleaned_uid_set,check_command_status,decode_value,parse_email_address,parse_email_date,quote,pairs_to_dict)
-    moved to utils module
-readme text improved
-fixed folder.set encoding dug
+* Added query builder - implemented the search logic described in rfc3501
+* MailBox.fetch - added "charset" parameter. If the "charset" argument is specified in MailBox.fetch, the search string will be encoded to this encoding.
+* MailMessage.date now returns datetime.date
+* MailMessage.date_str attribute added
+* MailMessage.headers attribute added
+* MailMessage.id removed
+* ImapToolsError base exception class removed
+* MailBoxWrongFlagError exception class removed
+* functions: (cleaned_uid_set,check_command_status,decode_value,parse_email_address,parse_email_date,quote,pairs_to_dict) moved to utils module
+* readme text improved
+* fixed folder.set encoding dug
 
 0.8.0
 =====
-Add context manager
+* Add context manager
 
 0.7.2
 =====
-MailBox._uid_str - get uid attrs for MailBox.fetch generator only
+* MailBox._uid_str - get uid attrs for MailBox.fetch generator only
 
 0.7.1
 =====
-Less strict regexp for parse uid
+* Less strict regexp for parse uid
 
 0.7.0
 =====
