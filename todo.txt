@@ -5,25 +5,3 @@ fetch INTERNALDATE The internal date of the message.
 message attributes strong tests
 
 descriptors for: to, cc, bcc
-===
-
-+query builder
--SOCKS proxy support - without new dependencies (maybe by including SocksiPy in project)
-+del ImapToolsError
-+fetch - charset parameter
-+del class MailBoxWrongFlagError(Exception): 'Unsupported flag: {}'.format(flag_name)
-+check_command_status to utils module
-+date - datetime.datetime
-+id - del
-+date_str - original str
-+headers - {str: (str,)}
-+примеры значений аттрибутов письма
-+readme - add fetch default vals
--fetch uid_only param
-+pairs_to_dict quote
-+fixed folder.set enc dug
-+query help
-+check doc
-RFC-заголовки писем https://helpdesk.infobox.ru/Knowledgebase/Article/View/624/121/
-type -> isinstance() check
-release notes
