@@ -89,7 +89,7 @@ Search criteria
 | Class OR is used to combine keys by the logical "or" condition.
 | Class NOT is used to invert the result of a logical expression.
 | If the "charset" argument is specified in MailBox.fetch, the search string will be encoded to this encoding.
-| You can change this behavior by overriding MailBox._criteria_encoder or pass criteria as bytes in desired encoding.
+| You can change this behaviour by overriding MailBox._criteria_encoder or pass criteria as bytes in desired encoding.
 |
 .. code-block:: python
 
