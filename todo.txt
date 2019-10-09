@@ -26,3 +26,4 @@ descriptors for: to, cc, bcc
 +check doc
 RFC-заголовки писем https://helpdesk.infobox.ru/Knowledgebase/Article/View/624/121/
 type -> isinstance() check
+release notes

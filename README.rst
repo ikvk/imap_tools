@@ -3,7 +3,7 @@
 imap_tools
 ==========
 
-Effective working with email using IMAP protocol.
+Working with email and mailbox using IMAP protocol.
 
 ===================  ====================================================
 Python version       3.3+
