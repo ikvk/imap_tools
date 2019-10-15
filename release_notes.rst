@@ -6,6 +6,7 @@ fix README.rst encoding in setup.py
 =====
 * Added query builder - implemented the search logic described in rfc3501
 * MailBox.fetch - added "charset" parameter. If the "charset" argument is specified in MailBox.fetch, the search string will be encoded to this encoding.
+* MailBox.fetch "search_criteria" parameter renamed to "criteria"
 * MailMessage.date now returns datetime.date
 * MailMessage.date_str attribute added
 * MailMessage.headers attribute added
