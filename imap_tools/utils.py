@@ -2,7 +2,7 @@ import re
 import inspect
 import datetime
 
-short_month_names = ('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov')
+short_month_names = ('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', "Dec")
 
 
 def cleaned_uid_set(uid_set: str or [str] or iter) -> str:
@@ -49,7 +49,7 @@ def check_command_status(command, command_result, expected='OK'):
 
 def decode_value(value, encoding=None) -> str:
     """Converts value to utf-8 encoding"""
-    if type(encoding) is str:
+    if isinstance(encoding, str):
         encoding = encoding.lower()
     if isinstance(value, bytes):
         if encoding in ('utf-8', 'utf8', None):
@@ -67,24 +67,23 @@ def parse_email_address(value: str) -> dict:
     Parse email address str, example: "Ivan Petrov" <ivan@mail.ru>
     @:return dict(name: str, email: str, full: str)
     """
-    address = ''.join(char for char in value if char.isprintable())
+    address = ''.join(char for char in value if char.isprintable()).strip()
     address = re.sub('[\n\r\t]+', ' ', address)
-    result = dict(email='', name='', full='')
-    if '<' in address and '>' in address:
-        match = re.match('(?P<name>.*)?(?P<email><.*>)', address, re.UNICODE)
-        result['name'] = match.group('name').strip()
-        result['email'] = match.group('email').strip('<>')
-        result['full'] = address
+    result = {'email': '', 'name': '', 'full': address}
+    match = re.match('(?P<name>.*)?<(?P<email>.*@.*)>', address, re.UNICODE)
+    if match:
+        group = match.groupdict()
+        result['name'] = group['name'].strip()
+        result['email'] = group['email'].strip()
     else:
-        result['name'] = ''
-        result['email'] = result['full'] = address.strip()
+        result['email' if '@' in address else 'name'] = address
     return result
 
 
 def parse_email_date(value: str) -> datetime.datetime:
     """Parsing the date described in rfc2822"""
-    match = re.search(r'(?P<date>\d{1,2}\s+\w{3}\s+\d{4})\s+'
-                      r'(?P<time>\d{1,2}:\d{1,2}(:\d{1,2})?)\s*'
+    match = re.search(r'(?P<date>\d{1,2}\s+(' + '|'.join(short_month_names) + r')\s+\d{4})\s+' +
+                      r'(?P<time>\d{1,2}:\d{1,2}(:\d{1,2})?)\s*' +
                       r'(?P<zone_sign>[+-])?(?P<zone>\d{4})?', value)
     if match:
         group = match.groupdict()

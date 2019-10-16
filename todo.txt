@@ -6,6 +6,4 @@ message attributes strong tests
 
 descriptors for: to, cc, bcc
 
-improve _parse_addresses - From and From: when no valid email in From:
-
-fix msg.text: part.get_content_charset(failobj='utf-8') on: charset="utf-8"Content-Transfer-Encoding: base64
+check MailMessage.attachment decoding

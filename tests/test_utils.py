@@ -36,6 +36,19 @@ class UtilsTest(unittest.TestCase):
 
     def test_parse_email_date(self):
         for val, exp in (
+                ('1 Jan 2000 00:00', datetime.datetime(2000, 1, 1, 0, 0)),
+                ('1 Feb 2000 00:00', datetime.datetime(2000, 2, 1, 0, 0)),
+                ('1 Mar 2000 00:00', datetime.datetime(2000, 3, 1, 0, 0)),
+                ('1 Apr 2000 00:00', datetime.datetime(2000, 4, 1, 0, 0)),
+                ('1 May 2000 00:00', datetime.datetime(2000, 5, 1, 0, 0)),
+                ('1 Jun 2000 00:00', datetime.datetime(2000, 6, 1, 0, 0)),
+                ('1 Jul 2000 00:00', datetime.datetime(2000, 7, 1, 0, 0)),
+                ('1 Aug 2000 00:00', datetime.datetime(2000, 8, 1, 0, 0)),
+                ('1 Sep 2000 00:00', datetime.datetime(2000, 9, 1, 0, 0)),
+                ('1 Oct 2000 00:00', datetime.datetime(2000, 10, 1, 0, 0)),
+                ('1 Nov 2000 00:00', datetime.datetime(2000, 11, 1, 0, 0)),
+                ('1 Dec 2000 00:00', datetime.datetime(2000, 12, 1, 0, 0)),
+
                 ('=) wat 7 Jun 2017 09:23!',
                  datetime.datetime(2017, 6, 7, 9, 23)),
                 ('7 Jun 2017 09:23',
@@ -60,6 +73,8 @@ class UtilsTest(unittest.TestCase):
                  datetime.datetime(2017, 6, 7, 9, 23, tzinfo=datetime.timezone(datetime.timedelta(-1, 60)))),
                 ('7 Jun 2017 09:23 +0530 (UTC) asd',
                  datetime.datetime(2017, 6, 7, 9, 23, tzinfo=datetime.timezone(datetime.timedelta(0, 19800)))),
+
+                ('7 Bad 2017 09:23', datetime.datetime(1900, 1, 1, 0, 0)),
         ):
             self.assertEqual(utils.parse_email_date(val), exp)
 
@@ -69,7 +84,14 @@ class UtilsTest(unittest.TestCase):
             {'email': 'ivan@mail.ru', 'name': '"Ivan Petrov"', 'full': '"Ivan Petrov" <ivan@mail.ru>'})
         self.assertEqual(
             utils.parse_email_address(' <ivan@mail.ru>'),
-            {'email': 'ivan@mail.ru', 'name': '', 'full': ' <ivan@mail.ru>'})
+            {'email': 'ivan@mail.ru', 'name': '', 'full': '<ivan@mail.ru>'})
         self.assertEqual(
             utils.parse_email_address('你好 <chan@mail.ru>'),
             {'email': 'chan@mail.ru', 'name': '你好', 'full': '你好 <chan@mail.ru>'})
+        self.assertEqual(
+            utils.parse_email_address(' "hi" <bad_mail.wow> '),
+            {'email': '', 'name': '"hi" <bad_mail.wow>', 'full': '"hi" <bad_mail.wow>'})
+        self.assertEqual(
+            utils.parse_email_address('=?utf-8?Q?ATO.RU?= <subscriptions@ato.ru>'),
+            {'email': 'subscriptions@ato.ru', 'name': '=?utf-8?Q?ATO.RU?=',
+             'full': '=?utf-8?Q?ATO.RU?= <subscriptions@ato.ru>'})

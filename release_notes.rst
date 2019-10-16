@@ -1,6 +1,14 @@
+0.9.2
+=====
+* improved MailMessage._parse_addresses
+* improved utils.parse_email_address
+* improved utils.parse_email_date
+* fixed utils.short_month_names +Dec
+* fixed MailMessage.text and MailMessage.html encoding bug on invalid headers
+
 0.9.1
 =====
-fix README.rst encoding in setup.py
+* fix README.rst encoding in setup.py
 
 0.9.0
 =====

@@ -44,8 +44,10 @@ class MailMessage:
         """
         if value not in self.obj:
             return ()
-        dh = decode_header(self.obj[value])
-        return tuple(parse_email_address(part) for part in decode_value(dh[0][0], dh[0][1]).split(','))
+        return tuple(
+            parse_email_address(''.join(decode_value(string, charset) for string, charset, in decode_header(address)))
+            for address in self.obj[value].split(',')
+        )
 
     @property
     @lru_cache()
@@ -87,8 +89,8 @@ class MailMessage:
     @lru_cache()
     def from_values(self) -> dict or None:
         """Sender (all data)"""
-        result = self._parse_addresses('from')
-        return result[0] if result else None
+        result_set = self._parse_addresses('from')
+        return result_set[0] if result_set else None
 
     @property
     @lru_cache()
@@ -152,11 +154,11 @@ class MailMessage:
     def text(self) -> str:
         """Plain text of the mail message"""
         for part in self.obj.walk():
-            # multipart/* are just containers
+            # multipart/* are containers
             if part.get_content_maintype() == 'multipart':
                 continue
             if part.get_content_type() in ('text/plain', 'text/'):
-                return part.get_payload(decode=True).decode(part.get_content_charset(failobj='utf-8'), 'ignore')
+                return decode_value(part.get_payload(decode=True), part.get_content_charset())
         return ''
 
     @property
@@ -164,11 +166,11 @@ class MailMessage:
     def html(self) -> str:
         """HTML text of the mail message"""
         for part in self.obj.walk():
-            # multipart/* are just containers
+            # multipart/* are containers
             if part.get_content_maintype() == 'multipart':
                 continue
             if part.get_content_type() == 'text/html':
-                return part.get_payload(decode=True).decode(part.get_content_charset(failobj='utf-8'), 'ignore')
+                return decode_value(part.get_payload(decode=True), part.get_content_charset())
         return ''
 
     @property
