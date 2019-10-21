@@ -59,7 +59,7 @@ class NOT(LogicOperator):
     """NOT <search-key> Messages that do not match the specified search key."""
 
     def combine_params(self) -> str:
-        return self.prefix_join('NOT ', itertools.chain(self.converted_strings, self.converted_params))
+        return 'NOT ({})'.format(self.prefix_join('', itertools.chain(self.converted_strings, self.converted_params)))
 
 
 Q = AND  # Short alias for AND
