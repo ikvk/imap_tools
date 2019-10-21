@@ -28,7 +28,7 @@ class LogicOperator(collections.UserString):
                 raise ValueError('Unexpected type "{}" for converted part, str like obj expected'.format(type(val)))
         self.converted_params = ParamConverter(unconverted_dicts).convert()
         if not any((self.converted_strings, self.converted_params)):
-            raise ValueError('LogicOperator params expected')
+            raise ValueError('{} params expected'.format(self.__class__.__name__))
         super().__init__(self.combine_params())
 
     def combine_params(self) -> str:
@@ -38,7 +38,7 @@ class LogicOperator(collections.UserString):
     @staticmethod
     def prefix_join(operator: str, params: iter) -> str:
         """Join params by prefix notation rules"""
-        return functools.reduce(lambda a, b: '{}{} {}'.format(operator, a, b), params)
+        return '({})'.format(functools.reduce(lambda a, b: '{}{} {}'.format(operator, a, b), params))
 
 
 class AND(LogicOperator):
@@ -52,14 +52,14 @@ class OR(LogicOperator):
     """OR <search-key1> <search-key2> Messages that match either search key."""
 
     def combine_params(self) -> str:
-        return '({})'.format(self.prefix_join('OR ', itertools.chain(self.converted_strings, self.converted_params)))
+        return self.prefix_join('OR ', itertools.chain(self.converted_strings, self.converted_params))
 
 
 class NOT(LogicOperator):
     """NOT <search-key> Messages that do not match the specified search key."""
 
     def combine_params(self) -> str:
-        return 'NOT ({})'.format(self.prefix_join('', itertools.chain(self.converted_strings, self.converted_params)))
+        return 'NOT {}'.format(self.prefix_join('', itertools.chain(self.converted_strings, self.converted_params)))
 
 
 Q = AND  # Short alias for AND
@@ -68,12 +68,12 @@ Q = AND  # Short alias for AND
 class ParamConverter:
     """Convert search params to IMAP format"""
 
-    def __init__(self, params):
+    def __init__(self, params: dict):
         self.params = params
 
     def convert(self) -> [str]:
         """
-        :return: list, params in IMAP format
+        :return: params in IMAP format
         """
         converted = []
         for key, val in self.params.items():

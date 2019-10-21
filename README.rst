@@ -86,19 +86,18 @@ Search criteria
 
 Implemented the search logic described in `rfc3501 <https://tools.ietf.org/html/rfc3501#section-6.4.4>`_.
 
-Class AND and its alias Q are used to combine keys by the logical "and" condition.
-
-Class OR is used to combine keys by the logical "or" condition.
-
-Class NOT is used to invert the result of a logical expression.
+* Class AND and its alias Q are used to combine keys by the logical "and" condition.
+* Class OR is used to combine keys by the logical "or" condition.
+* Class NOT is used to invert the result of a logical expression.
 
 If the "charset" argument is specified in MailBox.fetch, the search string will be encoded to this encoding.
-
 You can change this behaviour by overriding MailBox._criteria_encoder or pass criteria as bytes in desired encoding.
 
 For string search keys a message matches if the string is a substring of the field. The matching is case-insensitive.
 
 When searching by dates - email's time and timezone are disregarding.
+
+The key types are marked with `*` can accept a list of values.
 
 .. code-block:: python
 
