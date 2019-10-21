@@ -4,6 +4,11 @@ fetch INTERNALDATE The internal date of the message.
 
 message attributes strong tests
 
-descriptors for: to, cc, bcc
 
-check MailMessage.attachment decoding
+query builder - lists (sets)
+fix query builder - prefix notation
+
+==
+
+improve utils.decode_value
+improve MailMessage.attachment decoding

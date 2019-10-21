@@ -1,6 +1,6 @@
 import re
 import email
-import codecs
+import base64
 import imaplib
 from functools import lru_cache
 from email.header import decode_header
@@ -195,7 +195,7 @@ class MailMessage:
             if part.get('Content-Disposition') is None:
                 continue
             filename = part.get_filename()
-            if not part.get_filename():
+            if not filename:
                 continue  # this is what happens when Content-Disposition = inline
             filename = decode_value(*decode_header(filename)[0])
             payload = part.get_payload(decode=True)
@@ -208,7 +208,13 @@ class MailMessage:
                     for payload_item in multipart_payload:
                         if hasattr(payload_item, 'as_bytes'):
                             payload_item_bytes = payload_item.as_bytes()
-                            cte = str(part.get('content-transfer-encoding', '')).lower()
+                            cte = str(part.get('content-transfer-encoding', '')).lower().strip()
                             if payload_item_bytes and cte:
-                                result.append((filename, codecs.decode(payload_item_bytes, cte)))
+                                found_payload = b''
+                                if cte == 'base64':
+                                    found_payload = base64.b64decode(payload_item_bytes)
+                                elif cte in ('7bit', '8bit', 'quoted-printable', 'binary'):
+                                    found_payload = payload_item_bytes  # quopri.decodestring
+                                if found_payload:
+                                    result.append((filename, found_payload))
         return result

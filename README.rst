@@ -96,6 +96,10 @@ If the "charset" argument is specified in MailBox.fetch, the search string will 
 
 You can change this behaviour by overriding MailBox._criteria_encoder or pass criteria as bytes in desired encoding.
 
+For string search keys a message matches if the string is a substring of the field. The matching is case-insensitive.
+
+When searching by dates - email's time and timezone are disregarding.
+
 .. code-block:: python
 
     from imap_tools import Q, AND, OR, NOT
@@ -141,12 +145,12 @@ body           str            BODY "some_key"          contain specified str in 
 text           str            TEXT "some_key"          contain specified str in header or body of the message
 bcc            str            BCC `"bcc@ya.ru"`        contain specified str in envelope struct's BCC field
 cc             str            CC `"cc@ya.ru"`          contain specified str in envelope struct's CC field
-date           datetime.date  ON 15-Mar-2000           internal date* is within specified date
-date_gte       datetime.date  SINCE 15-Mar-2000        internal date* is within or later than the specified date
-date_lt        datetime.date  BEFORE 15-Mar-2000       internal date* is earlier than the specified date
-sent_date      datetime.date  SENTON 15-Mar-2000       rfc2822 Date: header* is within the specified date
-sent_date_gte  datetime.date  SENTSINCE 15-Mar-2000    rfc2822 Date: header* is within or later than the specified date
-sent_date_lt   datetime.date  SENTBEFORE 15-Mar-2000   rfc2822 Date: header* is earlier than the specified date
+date           datetime.date  ON 15-Mar-2000           internal date is within specified date
+date_gte       datetime.date  SINCE 15-Mar-2000        internal date is within or later than the specified date
+date_lt        datetime.date  BEFORE 15-Mar-2000       internal date is earlier than the specified date
+sent_date      datetime.date  SENTON 15-Mar-2000       rfc2822 Date: header is within the specified date
+sent_date_gte  datetime.date  SENTSINCE 15-Mar-2000    rfc2822 Date: header is within or later than the specified date
+sent_date_lt   datetime.date  SENTBEFORE 15-Mar-2000   rfc2822 Date: header is earlier than the specified date
 size_gt        int >= 0       LARGER 1024              rfc2822 size larger than specified number of octets
 size_lt        int >= 0       SMALLER 512              rfc2822 size smaller than specified number of octets
 new            True           NEW                      have the Recent flag set but not the Seen flag
@@ -156,8 +160,6 @@ all            True           ALL                      all, criteria by default
 uid            iter(str)|str  UID 1,2,17               corresponding to the specified unique identifier set
 header         (str, str)     HEADER "AntiSpam" "5.8"  have a header that contains the specified str in the text
 =============  =============  =======================  =================================================================
-
-`*` - When searching by dates - email's time and timezone are disregarding.
 
 Actions with emails in folder
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
