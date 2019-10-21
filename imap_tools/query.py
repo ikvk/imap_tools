@@ -1,45 +1,65 @@
 """IMAP Query builder"""
 import datetime
+import itertools
+import functools
 import collections
 
 from .utils import cleaned_uid_set, short_month_names, quote
 
+"""
+# infix
+NOT((1=11 OR 2=22 OR 3=33) AND 4=44)
+# prefix (imap, Polish notation)
+(NOT ((OR OR 1=11 2=22 3=33) 4=44 5=55))
+# python builder 
+NOT(AND(OR(1=11, 2=22, 3=33), 4=44, 5=55))
+
+1. OR(1=11, 2=22, 3=33) -> (OR OR 1=11 2=22 3=33)
+2. AND("(OR OR 1=11 2=22 3=33)", 4=44, 5=55) -> ((OR OR 1=11 2=22 3=33) 4=44 5=55)
+3. NOT("((OR OR 1=11 2=22 3=33) 4=44 5=55)") -> (NOT ((OR OR 1=11 2=22 3=33) 4=44 5=55))
+"""
+
 
 class LogicOperator(collections.UserString):
-    def __init__(self, *args, **kwargs):
-        self.converted = args
-        self.unconverted = kwargs
-        for val in self.converted:
+    def __init__(self, *converted_strings, **unconverted_dicts):
+        self.converted_strings = converted_strings
+        for val in converted_strings:
             if not any(isinstance(val, t) for t in (str, collections.UserString)):
                 raise ValueError('Unexpected type "{}" for converted part, str like obj expected'.format(type(val)))
-        converted_as_str = ' '.join((str(i) for i in self.converted))
-        unconverted_as_str = ParamConverter(self.unconverted).to_str()
-        self.full_str = ' '.join((unconverted_as_str, converted_as_str)).strip()
-        super().__init__(self._build_query())
+        self.converted_params = ParamConverter(unconverted_dicts).convert()
+        if not any((self.converted_strings, self.converted_params)):
+            raise ValueError('LogicOperator params expected')
+        super().__init__(self.combine_params())
 
-    def _build_query(self):
+    def combine_params(self) -> str:
+        """combine self.converted_strings and self.converted_params to IMAP search criteria format"""
         raise NotImplementedError
+
+    @staticmethod
+    def prefix_join(operator: str, params: iter) -> str:
+        """Join params by prefix notation rules"""
+        return functools.reduce(lambda a, b: '{}{} {}'.format(operator, a, b), params)
 
 
 class AND(LogicOperator):
     """When multiple keys are specified, the result is the intersection of all the messages that match those keys."""
 
-    def _build_query(self):
-        return self.full_str
+    def combine_params(self) -> str:
+        return self.prefix_join('', itertools.chain(self.converted_strings, self.converted_params))
 
 
 class OR(LogicOperator):
     """OR <search-key1> <search-key2> Messages that match either search key."""
 
-    def _build_query(self):
-        return '(OR {})'.format(self.full_str)
+    def combine_params(self) -> str:
+        return '({})'.format(self.prefix_join('OR ', itertools.chain(self.converted_strings, self.converted_params)))
 
 
 class NOT(LogicOperator):
     """NOT <search-key> Messages that do not match the specified search key."""
 
-    def _build_query(self):
-        return '(NOT {})'.format(self.full_str)
+    def combine_params(self) -> str:
+        return self.prefix_join('NOT ', itertools.chain(self.converted_strings, self.converted_params))
 
 
 Q = AND  # Short alias for AND
@@ -51,14 +71,17 @@ class ParamConverter:
     def __init__(self, params):
         self.params = params
 
-    def to_str(self) -> str:
+    def convert(self) -> [str]:
+        """
+        :return: list, params in IMAP format
+        """
         converted = []
         for key, val in self.params.items():
             convert_func = getattr(self, 'convert_{}'.format(key), None)
             if not convert_func:
                 raise KeyError('"{}" is an invalid parameter.'.format(key))
             converted.append(convert_func(key, val))
-        return ' '.join(converted)
+        return converted
 
     @classmethod
     def format_date(cls, value: datetime.date) -> str:
