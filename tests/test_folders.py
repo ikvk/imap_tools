@@ -48,7 +48,7 @@ class FoldersTest(MailboxTestCase):
             # STATUS
             for status_key, status_val in mailbox.folder.status(mailbox.folder_test_base).items():
                 self.assertIs(type(status_key), str)
-                self.assertIs(type(status_val), str)
+                self.assertIs(type(status_val), int)
 
 
 if __name__ == "__main__":

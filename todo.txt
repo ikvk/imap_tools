@@ -4,11 +4,12 @@ fetch INTERNALDATE The internal date of the message.
 
 message attributes strong tests
 
-
-query builder - lists (sets)
-fix query builder - prefix notation
-
 ==
+
+-write examples
 
 improve utils.decode_value
 improve MailMessage.attachment decoding
+MailBoxFolderManager.status int values in result
+fix query builder - imap prefix notation rules
+query builder: The key types are marked with `*` can accepts a sequence of values like list, tuple, set or generator.

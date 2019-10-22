@@ -6,19 +6,6 @@ import collections
 
 from .utils import cleaned_uid_set, short_month_names, quote
 
-"""
-# infix
-NOT((1=11 OR 2=22 OR 3=33) AND 4=44)
-# prefix (imap, Polish notation)
-(NOT ((OR OR 1=11 2=22 3=33) 4=44 5=55))
-# python builder 
-NOT(AND(OR(1=11, 2=22, 3=33), 4=44, 5=55))
-
-1. OR(1=11, 2=22, 3=33) -> (OR OR 1=11 2=22 3=33)
-2. AND("(OR OR 1=11 2=22 3=33)", 4=44, 5=55) -> ((OR OR 1=11 2=22 3=33) 4=44 5=55)
-3. NOT("((OR OR 1=11 2=22 3=33) 4=44 5=55)") -> (NOT ((OR OR 1=11 2=22 3=33) 4=44 5=55))
-"""
-
 
 class LogicOperator(collections.UserString):
     def __init__(self, *converted_strings, **unconverted_dicts):
@@ -28,7 +15,7 @@ class LogicOperator(collections.UserString):
                 raise ValueError('Unexpected type "{}" for converted part, str like obj expected'.format(type(val)))
         self.converted_params = ParamConverter(unconverted_dicts).convert()
         if not any((self.converted_strings, self.converted_params)):
-            raise ValueError('{} params expected'.format(self.__class__.__name__))
+            raise ValueError('{} expects params'.format(self.__class__.__name__))
         super().__init__(self.combine_params())
 
     def combine_params(self) -> str:
@@ -62,25 +49,64 @@ class NOT(LogicOperator):
         return 'NOT {}'.format(self.prefix_join('', itertools.chain(self.converted_strings, self.converted_params)))
 
 
-Q = AND  # Short alias for AND
+Q = AND  # Short alias
+
+
+class Header:
+    __slots__ = ('name', 'value')
+
+    def __init__(self, name: str, value: str):
+        if not isinstance(name, str):
+            raise ValueError('Header-name expected str value, "{}" received'.format(type(name)))
+        self.name = quote(name)
+        if not isinstance(value, str):
+            raise ValueError('Header-value expected str value, "{}" received'.format(type(value)))
+        self.value = quote(value)
+
+    def __str__(self):
+        return '{0.name}: {0.value}'.format(self)
+
+
+H = Header  # Short alias
 
 
 class ParamConverter:
     """Convert search params to IMAP format"""
 
+    multi_key_allowed = (
+        'keyword', 'no_keyword', 'from_', 'to', 'subject', 'body', 'text', 'bcc', 'cc',
+        'date', 'date_gte', 'date_lt', 'sent_date', 'sent_date_gte', 'sent_date_lt',
+        'header',
+    )
+
     def __init__(self, params: dict):
         self.params = params
+
+    def _gen_values(self, key, value) -> iter:
+        """Values generator"""
+        # single value
+        if key not in self.multi_key_allowed or isinstance(value, str):
+            yield value
+        else:
+            try:
+                # multiple values
+                for i in iter(value):
+                    yield i
+            except TypeError:
+                # single value
+                yield value
 
     def convert(self) -> [str]:
         """
         :return: params in IMAP format
         """
         converted = []
-        for key, val in self.params.items():
-            convert_func = getattr(self, 'convert_{}'.format(key), None)
-            if not convert_func:
-                raise KeyError('"{}" is an invalid parameter.'.format(key))
-            converted.append(convert_func(key, val))
+        for key, raw_val in self.params.items():
+            for val in self._gen_values(key, raw_val):
+                convert_func = getattr(self, 'convert_{}'.format(key), None)
+                if not convert_func:
+                    raise KeyError('"{}" is an invalid parameter.'.format(key))
+                converted.append(convert_func(key, val))
         return converted
 
     @classmethod
@@ -127,18 +153,10 @@ class ParamConverter:
         return uid_set
 
     @staticmethod
-    def cleaned_header(key, value) -> (str, str):
-        if type(value) is str or type(value) is bytes:
-            raise ValueError('"{}" expected (str, str) value, "{}" received'.format(key, type(value)))
-        try:
-            val1, val2 = value[0], value[1]
-        except Exception:
-            raise ValueError('"{}" expected (str, str) value, "{}" received'.format(key, type(value)))
-        if type(val1) is not str:
-            raise ValueError('"{}" field-name expected str value, "{}" received'.format(key, type(value)))
-        if type(val2) is not str:
-            raise ValueError('"{}" field-value expected str value, "{}" received'.format(key, type(value)))
-        return quote(val1), quote(val2)
+    def cleaned_header(key, value) -> H:
+        if not isinstance(value, H):
+            raise ValueError('"{}" expected Header (H) value, "{}" received'.format(key, type(value)))
+        return value
 
     def convert_answered(self, key, value):
         """Messages [with/without] the Answered flag set. (ANSWERED, UNANSWERED)"""
@@ -279,7 +297,7 @@ class ParamConverter:
         If the string to search is zero-length, this matches all messages that have a header line
         with the specified field-name regardless of the contents.
         """
-        return 'HEADER {} {}'.format(*self.cleaned_header(key, value))
+        return 'HEADER {0.name} {0.value}'.format(self.cleaned_header(key, value))
 
     def convert_uid(self, key, value):
         """Messages with unique identifiers corresponding to the specified unique identifier set."""

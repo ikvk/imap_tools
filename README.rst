@@ -40,6 +40,7 @@ Basic
     # get list of email subjects from INBOX folder
     with MailBox('imap.mail.com').login('test@mail.com', 'password') as mailbox:
         subjects = [msg.subject for msg in mailbox.fetch()]
+
     # OR the same otherwise
     mailbox = MailBox('imap.mail.com')
     mailbox.login('test@mail.com', 'password', initial_folder='INBOX')
@@ -89,6 +90,7 @@ Implemented the search logic described in `rfc3501 <https://tools.ietf.org/html/
 * Class AND and its alias Q are used to combine keys by the logical "and" condition.
 * Class OR is used to combine keys by the logical "or" condition.
 * Class NOT is used to invert the result of a logical expression.
+* Class H (Header) is used to search by headers.
 
 If the "charset" argument is specified in MailBox.fetch, the search string will be encoded to this encoding.
 You can change this behaviour by overriding MailBox._criteria_encoder or pass criteria as bytes in desired encoding.
@@ -97,7 +99,7 @@ For string search keys a message matches if the string is a substring of the fie
 
 When searching by dates - email's time and timezone are disregarding.
 
-The key types are marked with `*` can accept a list of values.
+The key types are marked with `*` can accepts a sequence of values like list, tuple, set or generator.
 
 .. code-block:: python
 
@@ -117,14 +119,8 @@ The key types are marked with `*` can accept a list of values.
     Q(OR(from_='from@ya.ru', text='"the text"'), NOT(OR(Q(answered=False), Q(new=True))), to='to@ya.ru')
     # encoding
     mailbox.fetch(Q(subject='привет'), charset='utf8')  # 'привет' will be encoded by MailBox._criteria_encoder
-
-Python syntax limitations:
-
-.. code-block:: python
-
-    # you can't do: Q(to='one@mail.ru', to='two@mail.ru'), instead you can:
-    Q(AND(to='one@mail.ru'), AND(to='two@mail.ru'))  # 'TO "one@mail.ru" TO "two@mail.ru"'
-    # you can't do: Q(subject='two', NOT(subject='one')), use kwargs after args (after logic classes):
+    # Python syntax notes, you can't do:
+    # Q(subject='two', NOT(subject='one')), use kwargs after args (kwargs after logic classes):
     Q(NOT(subject='one'), subject='two')
 
 =============  ==============  ======================  =================================================================
@@ -157,7 +153,7 @@ old            True            OLD                     do not have the Recent fl
 recent         True            RECENT                  have the Recent flag set
 all            True            ALL                     all, criteria by default
 uid            iter(str)|str   UID 1,2,17              corresponding to the specified unique identifier set
-header         (str, str)      HEADER "A-Spam" "5.8"   have a header that contains the specified str in the text
+header         H(str, str)*    HEADER "A-Spam" "5.8"   have a header that contains the specified str in the text
 =============  ==============  ======================  =================================================================
 
 Actions with emails in folder
@@ -212,8 +208,8 @@ Actions with mailbox folders
     # DELETE
     mailbox.folder.delete('folder2')
     # STATUS
-    for status_key, status_val in mailbox.folder.status('some_folder').items():
-        print(status_key, status_val)
+    status_result = mailbox.folder.status('some_folder')
+    print(status_result)  # {'MESSAGES': 41, 'RECENT': 0, 'UIDNEXT': 11996084, 'UIDVALIDITY': 1, 'UNSEEN': 5}
 
 Reasons
 -------

@@ -5,7 +5,7 @@ from .utils import check_command_status, quote, pairs_to_dict
 
 
 class MailBoxFolderWrongStatusError(Exception):
-    """Wrong folder name error"""
+    """Wrong folder status error"""
 
 
 class MailBoxFolderManager:
@@ -86,7 +86,7 @@ class MailBoxFolderManager:
         result = self.mailbox.box._untagged_response(status_result[0], status_result[1], command)
         check_command_status(command, result)
         values = result[1][0].decode().split('(')[1].split(')')[0].split(' ')
-        return pairs_to_dict(values)
+        return {k: int(v) for k, v in pairs_to_dict(values).items() if str(v).isdigit()}
 
     def list(self, folder: str or bytes = '', search_args: str = '*', subscribed_only: bool = False) -> list:
         """
