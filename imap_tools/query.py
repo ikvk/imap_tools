@@ -37,7 +37,7 @@ class LogicOperator(collections.UserString):
 
     @staticmethod
     def prefix_join(operator: str, params: iter) -> str:
-        """Join params by prefix notation rules"""
+        """Join params by prefix notation rules, enclose in parenthesis"""
         return '({})'.format(functools.reduce(lambda a, b: '{}{} {}'.format(operator, a, b), params))
 
 

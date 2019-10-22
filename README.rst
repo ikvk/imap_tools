@@ -127,38 +127,38 @@ Python syntax limitations:
     # you can't do: Q(subject='two', NOT(subject='one')), use kwargs after args (after logic classes):
     Q(NOT(subject='one'), subject='two')
 
-=============  =============  =======================  =================================================================
-Key            Types          Results                  Description
-=============  =============  =======================  =================================================================
-answered       bool           `ANSWERED|UNANSWERED`    with|without the Answered flag
-seen           bool           `SEEN|UNSEEN`            with|without the Seen flag
-flagged        bool           `FLAGGED|UNFLAGGED`      with|without the Flagged flag
-draft          bool           `DRAFT|UNDRAFT`          with|without the Draft flag
-deleted        bool           `DELETED|UNDELETED`      with|without the Deleted flag
-keyword        str            KEYWORD KEY              with the specified keyword flag
-no_keyword     str            UNKEYWORD KEY            without the specified keyword flag
-`from_`        str            FROM `"from@ya.ru"`      contain specified str in envelope struct's FROM field
-to             str            TO `"to@ya.ru"`          contain specified str in envelope struct's TO field
-subject        str            SUBJECT "hello"          contain specified str in envelope struct's SUBJECT field
-body           str            BODY "some_key"          contain specified str in body of the message
-text           str            TEXT "some_key"          contain specified str in header or body of the message
-bcc            str            BCC `"bcc@ya.ru"`        contain specified str in envelope struct's BCC field
-cc             str            CC `"cc@ya.ru"`          contain specified str in envelope struct's CC field
-date           datetime.date  ON 15-Mar-2000           internal date is within specified date
-date_gte       datetime.date  SINCE 15-Mar-2000        internal date is within or later than the specified date
-date_lt        datetime.date  BEFORE 15-Mar-2000       internal date is earlier than the specified date
-sent_date      datetime.date  SENTON 15-Mar-2000       rfc2822 Date: header is within the specified date
-sent_date_gte  datetime.date  SENTSINCE 15-Mar-2000    rfc2822 Date: header is within or later than the specified date
-sent_date_lt   datetime.date  SENTBEFORE 15-Mar-2000   rfc2822 Date: header is earlier than the specified date
-size_gt        int >= 0       LARGER 1024              rfc2822 size larger than specified number of octets
-size_lt        int >= 0       SMALLER 512              rfc2822 size smaller than specified number of octets
-new            True           NEW                      have the Recent flag set but not the Seen flag
-old            True           OLD                      do not have the Recent flag set
-recent         True           RECENT                   have the Recent flag set
-all            True           ALL                      all, criteria by default
-uid            iter(str)|str  UID 1,2,17               corresponding to the specified unique identifier set
-header         (str, str)     HEADER "AntiSpam" "5.8"  have a header that contains the specified str in the text
-=============  =============  =======================  =================================================================
+=============  ==============  ======================  =================================================================
+Key            Types           Results                 Description
+=============  ==============  ======================  =================================================================
+answered       bool            `ANSWERED|UNANSWERED`   with|without the Answered flag
+seen           bool            `SEEN|UNSEEN`           with|without the Seen flag
+flagged        bool            `FLAGGED|UNFLAGGED`     with|without the Flagged flag
+draft          bool            `DRAFT|UNDRAFT`         with|without the Draft flag
+deleted        bool            `DELETED|UNDELETED`     with|without the Deleted flag
+keyword        str*            KEYWORD KEY             with the specified keyword flag
+no_keyword     str*            UNKEYWORD KEY           without the specified keyword flag
+`from_`        str*            FROM `"from@ya.ru"`     contain specified str in envelope struct's FROM field
+to             str*            TO `"to@ya.ru"`         contain specified str in envelope struct's TO field
+subject        str*            SUBJECT "hello"         contain specified str in envelope struct's SUBJECT field
+body           str*            BODY "some_key"         contain specified str in body of the message
+text           str*            TEXT "some_key"         contain specified str in header or body of the message
+bcc            str*            BCC `"bcc@ya.ru"`       contain specified str in envelope struct's BCC field
+cc             str*            CC `"cc@ya.ru"`         contain specified str in envelope struct's CC field
+date           datetime.date*  ON 15-Mar-2000          internal date is within specified date
+date_gte       datetime.date*  SINCE 15-Mar-2000       internal date is within or later than the specified date
+date_lt        datetime.date*  BEFORE 15-Mar-2000      internal date is earlier than the specified date
+sent_date      datetime.date*  SENTON 15-Mar-2000      rfc2822 Date: header is within the specified date
+sent_date_gte  datetime.date*  SENTSINCE 15-Mar-2000   rfc2822 Date: header is within or later than the specified date
+sent_date_lt   datetime.date*  SENTBEFORE 1-Mar-2000   rfc2822 Date: header is earlier than the specified date
+size_gt        int >= 0        LARGER 1024             rfc2822 size larger than specified number of octets
+size_lt        int >= 0        SMALLER 512             rfc2822 size smaller than specified number of octets
+new            True            NEW                     have the Recent flag set but not the Seen flag
+old            True            OLD                     do not have the Recent flag set
+recent         True            RECENT                  have the Recent flag set
+all            True            ALL                     all, criteria by default
+uid            iter(str)|str   UID 1,2,17              corresponding to the specified unique identifier set
+header         (str, str)      HEADER "A-Spam" "5.8"   have a header that contains the specified str in the text
+=============  ==============  ======================  =================================================================
 
 Actions with emails in folder
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
