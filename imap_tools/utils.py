@@ -8,7 +8,7 @@ short_month_names = ('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Se
 def cleaned_uid_set(uid_set: str or [str] or iter) -> str:
     """
     Prepare set of uid for use in commands: delete/copy/move/seen
-    uid_set can be:
+    uid_set may be:
         str, that is comma separated uids
         Iterable, that contains str uids
         Generator with "fetch" name, implicitly gets all non-empty uids
