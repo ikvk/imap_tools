@@ -120,7 +120,7 @@ The key types are marked with `*` can accepts a sequence of values like list, tu
     Q(OR(from_='from@ya.ru', text='"the text"'), NOT(OR(Q(answered=False), Q(new=True))), to='to@ya.ru')
     # encoding
     mailbox.fetch(Q(subject='привет'), charset='utf8')  # 'привет' will be encoded by MailBox._criteria_encoder
-    # Python notes: you can't do: Q(subject='two', NOT(subject='one')), use kwargs after args (args - logic classes)
+    # Python notes: you can't do: Q(subject='two', NOT(subject='one')), use kwargs after logic classes
     Q(NOT(subject='one'), subject='two')
 
 =============  ==============  ======================  =================================================================
