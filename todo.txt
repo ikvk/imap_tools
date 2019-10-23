@@ -3,13 +3,3 @@ try to imitate long poll by noop
 fetch INTERNALDATE The internal date of the message.
 
 message attributes strong tests
-
-==
-
-change license: MIT -> Apache License, Version 2.0
-improve utils.decode_value
-improve MailMessage.attachment decoding
-MailBoxFolderManager.status int values in result
-fix query builder bugs - imap prefix notation rules
-query builder: The key types are marked with `*` can accepts a sequence of values like list, tuple, set or generator.
-add new examples

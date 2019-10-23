@@ -222,8 +222,13 @@ Release notes
 -------------
  `release_notes.rst <https://github.com/ikvk/imap_tools/blob/master/release_notes.rst>`_
 
-Thanks to
----------
+Contribute
+----------
+
+If you found a bug or have a question please let me know or make merge request.
+
+Thanks to:
+
 * `shilkazx <https://github.com/shilkazx>`_
 * `somepad <https://github.com/somepad>`_
 * `0xThiebaut <https://github.com/0xThiebaut>`_
