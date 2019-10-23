@@ -86,6 +86,7 @@ Search criteria
 ^^^^^^^^^^^^^^^
 
 Implemented the search logic described in `rfc3501 <https://tools.ietf.org/html/rfc3501#section-6.4.4>`_.
+Query builder `examples <https://github.com/ikvk/imap_tools/blob/master/examples/search.py>`_.
 
 * Class AND and its alias Q are used to combine keys by the logical "and" condition.
 * Class OR is used to combine keys by the logical "or" condition.
@@ -104,10 +105,10 @@ The key types are marked with `*` can accepts a sequence of values like list, tu
 .. code-block:: python
 
     from imap_tools import Q, AND, OR, NOT
-    # base
+    # allowed types
+    mailbox.fetch(Q(subject='weather'))  # query, the str-like object
     mailbox.fetch('TEXT "hello"')  # str
     mailbox.fetch(b'TEXT "\xd1\x8f"')  # bytes
-    mailbox.fetch(Q(subject='weather'))  # query, the str-like object
     # AND
     Q(text='hello', new=True)  # 'TEXT "hello" NEW'
     # OR
@@ -115,12 +116,11 @@ The key types are marked with `*` can accepts a sequence of values like list, tu
     # NOT
     NOT(text='hello', new=True)  # '(NOT TEXT "hello" NEW)'
     # complex:
-    # 'TO "to@ya.ru" (OR FROM "from@ya.ru" TEXT "\\"the text\\"") (NOT (OR UNANSWERED NEW))')
+    #   ((OR FROM "from@ya.ru" TEXT "\"the text\"") NOT ((OR (UNANSWERED) (NEW))) TO "to@ya.ru")
     Q(OR(from_='from@ya.ru', text='"the text"'), NOT(OR(Q(answered=False), Q(new=True))), to='to@ya.ru')
     # encoding
     mailbox.fetch(Q(subject='привет'), charset='utf8')  # 'привет' will be encoded by MailBox._criteria_encoder
-    # Python syntax notes, you can't do:
-    # Q(subject='two', NOT(subject='one')), use kwargs after args (kwargs after logic classes):
+    # Python notes: you can't do: Q(subject='two', NOT(subject='one')), use kwargs after args (args - logic classes)
     Q(NOT(subject='one'), subject='two')
 
 =============  ==============  ======================  =================================================================
