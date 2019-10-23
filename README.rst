@@ -73,10 +73,10 @@ Email attributes
         message.text         # str, 'hi'
         message.html         # str, '<b>hi</b>'
         message.flags        # tuple, ('SEEN', 'FLAGGED', 'ENCRYPTED')
-        message.headers      # dict, {'Received': ('from 1.m.net', 'from 2.m.net'), 'AntiVirus-Status': ('Clean',)}
+        message.headers      # dict, {'Received': ('from 1.m.net', 'from 2.m.net'), 'AntiVirus': ('Clean',)}
         message.attachments  # [(str, bytes)], 'cat.jpg', b'\xff\xd8\xff\xe0\'
         message.obj          # original email.message.Message object
-        message.from_values  # dict or None, {'email': 'sender@ya.ru', 'name': 'Ivan', 'full': 'Ivan <sender@ya.ru>'}
+        message.from_values  # dict or None, {'email': 'im@ya.ru', 'name': 'Ivan', 'full': 'Ivan <im@ya.ru>'}
         message.to_values    # tuple, ({'email': '', 'name': '', 'full': ''},)
         message.cc_values    # tuple, ({'email': '', 'name': '', 'full': ''},)
         message.bcc_values   # tuple, ({'email': '', 'name': '', 'full': ''},)
