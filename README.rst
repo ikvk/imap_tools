@@ -40,6 +40,7 @@ Basic
     # get list of email subjects from INBOX folder
     with MailBox('imap.mail.com').login('test@mail.com', 'password') as mailbox:
         subjects = [msg.subject for msg in mailbox.fetch()]
+
     # OR the same otherwise
     mailbox = MailBox('imap.mail.com')
     mailbox.login('test@mail.com', 'password', initial_folder='INBOX')
@@ -85,24 +86,29 @@ Search criteria
 ^^^^^^^^^^^^^^^
 
 Implemented the search logic described in `rfc3501 <https://tools.ietf.org/html/rfc3501#section-6.4.4>`_.
+Query builder `examples <https://github.com/ikvk/imap_tools/blob/master/examples/search.py>`_.
 
-Class AND and its alias Q are used to combine keys by the logical "and" condition.
-
-Class OR is used to combine keys by the logical "or" condition.
-
-Class NOT is used to invert the result of a logical expression.
+* Class AND and its alias Q are used to combine keys by the logical "and" condition.
+* Class OR is used to combine keys by the logical "or" condition.
+* Class NOT is used to invert the result of a logical expression.
+* Class H (Header) is used to search by headers.
 
 If the "charset" argument is specified in MailBox.fetch, the search string will be encoded to this encoding.
-
 You can change this behaviour by overriding MailBox._criteria_encoder or pass criteria as bytes in desired encoding.
+
+For string search keys a message matches if the string is a substring of the field. The matching is case-insensitive.
+
+When searching by dates - email's time and timezone are disregarding.
+
+The key types are marked with `*` can accepts a sequence of values like list, tuple, set or generator.
 
 .. code-block:: python
 
     from imap_tools import Q, AND, OR, NOT
-    # base
+    # allowed types
+    mailbox.fetch(Q(subject='weather'))  # query, the str-like object
     mailbox.fetch('TEXT "hello"')  # str
     mailbox.fetch(b'TEXT "\xd1\x8f"')  # bytes
-    mailbox.fetch(Q(subject='weather'))  # query, the str-like object
     # AND
     Q(text='hello', new=True)  # 'TEXT "hello" NEW'
     # OR
@@ -110,54 +116,45 @@ You can change this behaviour by overriding MailBox._criteria_encoder or pass cr
     # NOT
     NOT(text='hello', new=True)  # '(NOT TEXT "hello" NEW)'
     # complex:
-    # 'TO "to@ya.ru" (OR FROM "from@ya.ru" TEXT "\\"the text\\"") (NOT (OR UNANSWERED NEW))')
+    #   ((OR FROM "from@ya.ru" TEXT "\"the text\"") NOT ((OR (UNANSWERED) (NEW))) TO "to@ya.ru")
     Q(OR(from_='from@ya.ru', text='"the text"'), NOT(OR(Q(answered=False), Q(new=True))), to='to@ya.ru')
     # encoding
     mailbox.fetch(Q(subject='привет'), charset='utf8')  # 'привет' will be encoded by MailBox._criteria_encoder
-
-Python syntax limitations:
-
-.. code-block:: python
-
-    # you can't do: Q(to='one@mail.ru', to='two@mail.ru'), instead you can:
-    Q(AND(to='one@mail.ru'), AND(to='two@mail.ru'))  # 'TO "one@mail.ru" TO "two@mail.ru"'
-    # you can't do: Q(subject='two', NOT(subject='one')), use kwargs after args (after logic classes):
+    # Python notes: you can't do: Q(subject='two', NOT(subject='one')), use kwargs after args (args - logic classes)
     Q(NOT(subject='one'), subject='two')
 
-=============  =============  =======================  =================================================================
-Key            Types          Results                  Description
-=============  =============  =======================  =================================================================
-answered       bool           `ANSWERED|UNANSWERED`    with|without the Answered flag
-seen           bool           `SEEN|UNSEEN`            with|without the Seen flag
-flagged        bool           `FLAGGED|UNFLAGGED`      with|without the Flagged flag
-draft          bool           `DRAFT|UNDRAFT`          with|without the Draft flag
-deleted        bool           `DELETED|UNDELETED`      with|without the Deleted flag
-keyword        str            KEYWORD KEY              with the specified keyword flag
-no_keyword     str            UNKEYWORD KEY            without the specified keyword flag
-`from_`        str            FROM `"from@ya.ru"`      contain specified str in envelope struct's FROM field
-to             str            TO `"to@ya.ru"`          contain specified str in envelope struct's TO field
-subject        str            SUBJECT "hello"          contain specified str in envelope struct's SUBJECT field
-body           str            BODY "some_key"          contain specified str in body of the message
-text           str            TEXT "some_key"          contain specified str in header or body of the message
-bcc            str            BCC `"bcc@ya.ru"`        contain specified str in envelope struct's BCC field
-cc             str            CC `"cc@ya.ru"`          contain specified str in envelope struct's CC field
-date           datetime.date  ON 15-Mar-2000           internal date* is within specified date
-date_gte       datetime.date  SINCE 15-Mar-2000        internal date* is within or later than the specified date
-date_lt        datetime.date  BEFORE 15-Mar-2000       internal date* is earlier than the specified date
-sent_date      datetime.date  SENTON 15-Mar-2000       rfc2822 Date: header* is within the specified date
-sent_date_gte  datetime.date  SENTSINCE 15-Mar-2000    rfc2822 Date: header* is within or later than the specified date
-sent_date_lt   datetime.date  SENTBEFORE 15-Mar-2000   rfc2822 Date: header* is earlier than the specified date
-size_gt        int >= 0       LARGER 1024              rfc2822 size larger than specified number of octets
-size_lt        int >= 0       SMALLER 512              rfc2822 size smaller than specified number of octets
-new            True           NEW                      have the Recent flag set but not the Seen flag
-old            True           OLD                      do not have the Recent flag set
-recent         True           RECENT                   have the Recent flag set
-all            True           ALL                      all, criteria by default
-uid            iter(str)|str  UID 1,2,17               corresponding to the specified unique identifier set
-header         (str, str)     HEADER "AntiSpam" "5.8"  have a header that contains the specified str in the text
-=============  =============  =======================  =================================================================
-
-`*` - When searching by dates - email's time and timezone are disregarding.
+=============  ==============  ======================  =================================================================
+Key            Types           Results                 Description
+=============  ==============  ======================  =================================================================
+answered       bool            `ANSWERED|UNANSWERED`   with|without the Answered flag
+seen           bool            `SEEN|UNSEEN`           with|without the Seen flag
+flagged        bool            `FLAGGED|UNFLAGGED`     with|without the Flagged flag
+draft          bool            `DRAFT|UNDRAFT`         with|without the Draft flag
+deleted        bool            `DELETED|UNDELETED`     with|without the Deleted flag
+keyword        str*            KEYWORD KEY             with the specified keyword flag
+no_keyword     str*            UNKEYWORD KEY           without the specified keyword flag
+`from_`        str*            FROM `"from@ya.ru"`     contain specified str in envelope struct's FROM field
+to             str*            TO `"to@ya.ru"`         contain specified str in envelope struct's TO field
+subject        str*            SUBJECT "hello"         contain specified str in envelope struct's SUBJECT field
+body           str*            BODY "some_key"         contain specified str in body of the message
+text           str*            TEXT "some_key"         contain specified str in header or body of the message
+bcc            str*            BCC `"bcc@ya.ru"`       contain specified str in envelope struct's BCC field
+cc             str*            CC `"cc@ya.ru"`         contain specified str in envelope struct's CC field
+date           datetime.date*  ON 15-Mar-2000          internal date is within specified date
+date_gte       datetime.date*  SINCE 15-Mar-2000       internal date is within or later than the specified date
+date_lt        datetime.date*  BEFORE 15-Mar-2000      internal date is earlier than the specified date
+sent_date      datetime.date*  SENTON 15-Mar-2000      rfc2822 Date: header is within the specified date
+sent_date_gte  datetime.date*  SENTSINCE 15-Mar-2000   rfc2822 Date: header is within or later than the specified date
+sent_date_lt   datetime.date*  SENTBEFORE 1-Mar-2000   rfc2822 Date: header is earlier than the specified date
+size_gt        int >= 0        LARGER 1024             rfc2822 size larger than specified number of octets
+size_lt        int >= 0        SMALLER 512             rfc2822 size smaller than specified number of octets
+new            True            NEW                     have the Recent flag set but not the Seen flag
+old            True            OLD                     do not have the Recent flag set
+recent         True            RECENT                  have the Recent flag set
+all            True            ALL                     all, criteria by default
+uid            iter(str)|str   UID 1,2,17              corresponding to the specified unique identifier set
+header         H(str, str)*    HEADER "A-Spam" "5.8"   have a header that contains the specified str in the text
+=============  ==============  ======================  =================================================================
 
 Actions with emails in folder
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -211,8 +208,8 @@ Actions with mailbox folders
     # DELETE
     mailbox.folder.delete('folder2')
     # STATUS
-    for status_key, status_val in mailbox.folder.status('some_folder').items():
-        print(status_key, status_val)
+    status_result = mailbox.folder.status('some_folder')
+    print(status_result)  # {'MESSAGES': 41, 'RECENT': 0, 'UIDNEXT': 11996084, 'UIDVALIDITY': 1, 'UNSEEN': 5}
 
 Reasons
 -------
@@ -225,8 +222,13 @@ Release notes
 -------------
  `release_notes.rst <https://github.com/ikvk/imap_tools/blob/master/release_notes.rst>`_
 
-Thanks to
----------
+Contribute
+----------
+
+If you found a bug or have a question please let me know or make merge request.
+
+Thanks to:
+
 * `shilkazx <https://github.com/shilkazx>`_
 * `somepad <https://github.com/somepad>`_
 * `0xThiebaut <https://github.com/0xThiebaut>`_

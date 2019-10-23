@@ -1,64 +1,113 @@
 """IMAP Query builder"""
 import datetime
+import itertools
+import functools
 import collections
 
 from .utils import cleaned_uid_set, short_month_names, quote
 
 
 class LogicOperator(collections.UserString):
-    def __init__(self, *args, **kwargs):
-        self.converted = args
-        self.unconverted = kwargs
-        for val in self.converted:
+    def __init__(self, *converted_strings, **unconverted_dicts):
+        self.converted_strings = converted_strings
+        for val in converted_strings:
             if not any(isinstance(val, t) for t in (str, collections.UserString)):
                 raise ValueError('Unexpected type "{}" for converted part, str like obj expected'.format(type(val)))
-        converted_as_str = ' '.join((str(i) for i in self.converted))
-        unconverted_as_str = ParamConverter(self.unconverted).to_str()
-        self.full_str = ' '.join((unconverted_as_str, converted_as_str)).strip()
-        super().__init__(self._build_query())
+        self.converted_params = ParamConverter(unconverted_dicts).convert()
+        if not any((self.converted_strings, self.converted_params)):
+            raise ValueError('{} expects params'.format(self.__class__.__name__))
+        super().__init__(self.combine_params())
 
-    def _build_query(self):
+    def combine_params(self) -> str:
+        """combine self.converted_strings and self.converted_params to IMAP search criteria format"""
         raise NotImplementedError
+
+    @staticmethod
+    def prefix_join(operator: str, params: iter) -> str:
+        """Join params by prefix notation rules, enclose in parenthesis"""
+        return '({})'.format(functools.reduce(lambda a, b: '{}{} {}'.format(operator, a, b), params))
 
 
 class AND(LogicOperator):
     """When multiple keys are specified, the result is the intersection of all the messages that match those keys."""
 
-    def _build_query(self):
-        return self.full_str
+    def combine_params(self) -> str:
+        return self.prefix_join('', itertools.chain(self.converted_strings, self.converted_params))
 
 
 class OR(LogicOperator):
     """OR <search-key1> <search-key2> Messages that match either search key."""
 
-    def _build_query(self):
-        return '(OR {})'.format(self.full_str)
+    def combine_params(self) -> str:
+        return self.prefix_join('OR ', itertools.chain(self.converted_strings, self.converted_params))
 
 
 class NOT(LogicOperator):
     """NOT <search-key> Messages that do not match the specified search key."""
 
-    def _build_query(self):
-        return '(NOT {})'.format(self.full_str)
+    def combine_params(self) -> str:
+        return 'NOT {}'.format(self.prefix_join('', itertools.chain(self.converted_strings, self.converted_params)))
 
 
-Q = AND  # Short alias for AND
+Q = AND  # Short alias
+
+
+class Header:
+    __slots__ = ('name', 'value')
+
+    def __init__(self, name: str, value: str):
+        if not isinstance(name, str):
+            raise ValueError('Header-name expected str value, "{}" received'.format(type(name)))
+        self.name = quote(name)
+        if not isinstance(value, str):
+            raise ValueError('Header-value expected str value, "{}" received'.format(type(value)))
+        self.value = quote(value)
+
+    def __str__(self):
+        return '{0.name}: {0.value}'.format(self)
+
+
+H = Header  # Short alias
 
 
 class ParamConverter:
     """Convert search params to IMAP format"""
 
-    def __init__(self, params):
+    multi_key_allowed = (
+        'keyword', 'no_keyword', 'from_', 'to', 'subject', 'body', 'text', 'bcc', 'cc',
+        'date', 'date_gte', 'date_lt', 'sent_date', 'sent_date_gte', 'sent_date_lt',
+        'header',
+    )
+
+    def __init__(self, params: dict):
         self.params = params
 
-    def to_str(self) -> str:
+    def _gen_values(self, key, value) -> iter:
+        """Values generator"""
+        # single value
+        if key not in self.multi_key_allowed or isinstance(value, str):
+            yield value
+        else:
+            try:
+                # multiple values
+                for i in iter(value):
+                    yield i
+            except TypeError:
+                # single value
+                yield value
+
+    def convert(self) -> [str]:
+        """
+        :return: params in IMAP format
+        """
         converted = []
-        for key, val in self.params.items():
-            convert_func = getattr(self, 'convert_{}'.format(key), None)
-            if not convert_func:
-                raise KeyError('"{}" is an invalid parameter.'.format(key))
-            converted.append(convert_func(key, val))
-        return ' '.join(converted)
+        for key, raw_val in self.params.items():
+            for val in self._gen_values(key, raw_val):
+                convert_func = getattr(self, 'convert_{}'.format(key), None)
+                if not convert_func:
+                    raise KeyError('"{}" is an invalid parameter.'.format(key))
+                converted.append(convert_func(key, val))
+        return converted
 
     @classmethod
     def format_date(cls, value: datetime.date) -> str:
@@ -104,18 +153,10 @@ class ParamConverter:
         return uid_set
 
     @staticmethod
-    def cleaned_header(key, value) -> (str, str):
-        if type(value) is str or type(value) is bytes:
-            raise ValueError('"{}" expected (str, str) value, "{}" received'.format(key, type(value)))
-        try:
-            val1, val2 = value[0], value[1]
-        except Exception:
-            raise ValueError('"{}" expected (str, str) value, "{}" received'.format(key, type(value)))
-        if type(val1) is not str:
-            raise ValueError('"{}" field-name expected str value, "{}" received'.format(key, type(value)))
-        if type(val2) is not str:
-            raise ValueError('"{}" field-value expected str value, "{}" received'.format(key, type(value)))
-        return quote(val1), quote(val2)
+    def cleaned_header(key, value) -> H:
+        if not isinstance(value, H):
+            raise ValueError('"{}" expected Header (H) value, "{}" received'.format(key, type(value)))
+        return value
 
     def convert_answered(self, key, value):
         """Messages [with/without] the Answered flag set. (ANSWERED, UNANSWERED)"""
@@ -256,7 +297,7 @@ class ParamConverter:
         If the string to search is zero-length, this matches all messages that have a header line
         with the specified field-name regardless of the contents.
         """
-        return 'HEADER {} {}'.format(*self.cleaned_header(key, value))
+        return 'HEADER {0.name} {0.value}'.format(self.cleaned_header(key, value))
 
     def convert_uid(self, key, value):
         """Messages with unique identifiers corresponding to the specified unique identifier set."""

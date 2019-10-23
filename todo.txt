@@ -3,7 +3,3 @@ try to imitate long poll by noop
 fetch INTERNALDATE The internal date of the message.
 
 message attributes strong tests
-
-descriptors for: to, cc, bcc
-
-check MailMessage.attachment decoding

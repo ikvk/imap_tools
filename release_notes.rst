@@ -1,3 +1,13 @@
+0.9.3
+=====
+* change license: MIT -> Apache License, Version 2.0
+* improve utils.decode_value
+* improve MailMessage.attachment decoding
+* MailBoxFolderManager.status now returns int values in result
+* fix query builder bugs - imap prefix notation rules
+* query builder: The key types are marked with `*` can accepts a sequence of values like list, tuple, set or generator.
+* add new examples
+
 0.9.2
 =====
 * improved MailMessage._parse_addresses
