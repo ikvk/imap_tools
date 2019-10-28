@@ -3,3 +3,5 @@ try to imitate long poll by noop
 fetch INTERNALDATE The internal date of the message.
 
 message attributes strong tests
+
+MailMessage improve init params, _get_message_data_parts logic to MailBox
