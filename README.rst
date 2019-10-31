@@ -47,7 +47,7 @@ Basic
     subjects = [msg.subject for msg in mailbox.fetch(Q(all=True))]
     mailbox.logout()
 
-MailBox.fetch - email message generator, first searches email uids by criteria, then fetch and yields emails by one:
+MailBox.fetch - email message generator, first searches email ids by criteria, then fetch and yields emails by one:
 
 * *criteria*: message search criteria, `docs <#search-criteria>`_
 * *charset*: 'US-ASCII', indicates charset of the strings that appear in the search criteria. See rfc2978
@@ -85,8 +85,8 @@ Email attributes
 Search criteria
 ^^^^^^^^^^^^^^^
 
-Implemented the search logic described in `rfc3501 <https://tools.ietf.org/html/rfc3501#section-6.4.4>`_.
-Query builder `examples <https://github.com/ikvk/imap_tools/blob/master/examples/search.py>`_.
+Implemented query builder for search logic described in `rfc3501 <https://tools.ietf.org/html/rfc3501#section-6.4.4>`_.
+See `query examples <https://github.com/ikvk/imap_tools/blob/master/examples/search.py>`_.
 
 * Class AND and its alias Q are used to combine keys by the logical "and" condition.
 * Class OR is used to combine keys by the logical "or" condition.
@@ -94,13 +94,7 @@ Query builder `examples <https://github.com/ikvk/imap_tools/blob/master/examples
 * Class H (Header) is used to search by headers.
 
 If the "charset" argument is specified in MailBox.fetch, the search string will be encoded to this encoding.
-You can change this behaviour by overriding MailBox._criteria_encoder or pass criteria as bytes in desired encoding.
-
-For string search keys a message matches if the string is a substring of the field. The matching is case-insensitive.
-
-When searching by dates - email's time and timezone are disregarding.
-
-The key types are marked with `*` can accepts a sequence of values like list, tuple, set or generator.
+You can change this behavior by overriding MailBox._criteria_encoder or pass criteria as bytes in desired encoding.
 
 .. code-block:: python
 
@@ -110,18 +104,19 @@ The key types are marked with `*` can accepts a sequence of values like list, tu
     mailbox.fetch('TEXT "hello"')  # str
     mailbox.fetch(b'TEXT "\xd1\x8f"')  # bytes
     # AND
-    Q(text='hello', new=True)  # 'TEXT "hello" NEW'
+    Q(text='hello', new=True)  # '(TEXT "hello" NEW)'
     # OR
     OR(text='hello', date=datetime.date(2000, 3, 15))  # '(OR TEXT "hello" ON 15-Mar-2000)'
     # NOT
-    NOT(text='hello', new=True)  # '(NOT TEXT "hello" NEW)'
-    # complex:
-    #   ((OR FROM "from@ya.ru" TEXT "\"the text\"") NOT ((OR (UNANSWERED) (NEW))) TO "to@ya.ru")
+    NOT(text='hello', new=True)  # 'NOT (TEXT "hello" NEW)'
+    # complex
     Q(OR(from_='from@ya.ru', text='"the text"'), NOT(OR(Q(answered=False), Q(new=True))), to='to@ya.ru')
     # encoding
     mailbox.fetch(Q(subject='привет'), charset='utf8')  # 'привет' will be encoded by MailBox._criteria_encoder
-    # Python notes: you can't do: Q(subject='two', NOT(subject='one')), use kwargs after logic classes
-    Q(NOT(subject='one'), subject='two')
+    # python note: you can't do: Q(text='two', NOT(subject='one'))
+    Q(NOT(subject='one'), text='two')  # use kwargs after logic classes
+
+The search key types are marked with `*` can accepts a sequence of values like list, tuple, set or generator.
 
 =============  ==============  ======================  =================================================================
 Key            Types           Results                 Description
@@ -156,16 +151,20 @@ uid            iter(str)|str   UID 1,2,17              corresponding to the spec
 header         H(str, str)*    HEADER "A-Spam" "5.8"   have a header that contains the specified str in the text
 =============  ==============  ======================  =================================================================
 
+Server side search notes:
+
+* For string search keys a message matches if the string is a substring of the field. The matching is case-insensitive.
+* When searching by dates - email's time and timezone are disregarding.
+
 Actions with emails in folder
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 You can use 2 approaches to perform these operations:
 
-"by one" - Perform IMAP operation for each message separately per N commands
+* "in bulk" - Perform IMAP operation for message set per 1 command
+* "by one" - Perform IMAP operation for each message separately per N commands
 
-"in bulk" - Perform IMAP operation for message set per 1 command
-
-Result of MailBox.fetch generator will be implicitly converted to uid list
+Result of MailBox.fetch generator will be implicitly converted to uid list.
 
 .. code-block:: python
 
@@ -192,31 +191,32 @@ Actions with mailbox folders
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 .. code-block:: python
 
-    # LIST
-    for folder in mailbox.folder.list('INBOX'):
-        print(folder['flags'], folder['delim'], folder['name'])
-    # SET
-    mailbox.folder.set('INBOX')
-    # GET
-    current_folder = mailbox.folder.get()
-    # CREATE
-    mailbox.folder.create('folder1')
-    # EXISTS
-    is_exists = mailbox.folder.exists('folder1')
-    # RENAME
-    mailbox.folder.rename('folder1', 'folder2')
-    # DELETE
-    mailbox.folder.delete('folder2')
-    # STATUS
-    status_result = mailbox.folder.status('some_folder')
-    print(status_result)  # {'MESSAGES': 41, 'RECENT': 0, 'UIDNEXT': 11996084, 'UIDVALIDITY': 1, 'UNSEEN': 5}
+    with MailBox('imap.mail.com').login('test@mail.com', 'pwd') as mailbox:
+        # LIST
+        for folder in mailbox.folder.list('INBOX'):
+            print(folder['flags'], folder['delim'], folder['name'])
+        # SET
+        mailbox.folder.set('INBOX')
+        # GET
+        current_folder = mailbox.folder.get()
+        # CREATE
+        mailbox.folder.create('folder1')
+        # EXISTS
+        is_exists = mailbox.folder.exists('folder1')
+        # RENAME
+        mailbox.folder.rename('folder1', 'folder2')
+        # DELETE
+        mailbox.folder.delete('folder2')
+        # STATUS
+        folder_status = mailbox.folder.status('some_folder')
+        print(folder_status)  # {'MESSAGES': 41, 'RECENT': 0, 'UIDNEXT': 11996084, 'UIDVALIDITY': 1, 'UNSEEN': 5}
 
 Reasons
 -------
 
-- Excessive low level of imaplib library
-- Other libraries contain various shortcomings or not convenient
-- Open source projects makes world better
+- Excessive low level of `imaplib` library.
+- Other libraries contain various shortcomings or not convenient.
+- Open source projects makes world better.
 
 Release notes
 -------------
@@ -225,7 +225,7 @@ Release notes
 Contribute
 ----------
 
-If you found a bug or have a question please let me know or make merge request.
+If you found a bug or have a question, please let me know - create merge request or issue.
 
 Thanks to:
 

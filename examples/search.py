@@ -1,11 +1,11 @@
 """
 Explanation:
 
-# infix notation
+# Infix notation (natural to humans)
 NOT ((FROM='11' OR TO="22" OR TEXT="33") AND CC="44" AND BCC="55")
-# prefix notation (Polish notation, IMAP version)
+# Prefix notation (Polish notation, IMAP version)
 NOT (((OR OR FROM "11" TO "22" TEXT "33") CC "44" BCC "55"))
-# python builder
+# Python query builder
 NOT(AND(OR(from_='11', to='22', text='33'), cc='44', bcc='55'))
 
 # python to prefix steps
@@ -51,3 +51,7 @@ q7 = OR(OR(text='tag15', subject='tag15'), OR(text='tag10', subject='tag10'))
 # header IsSpam contains '++' AND header CheckAntivirus contains '-'
 q8 = Q(header=[H('IsSpam', '++'), H('CheckAntivirus', '-')])
 # "(HEADER "IsSpam" "++" HEADER "CheckAntivirus" "-")"
+
+# complex from README
+q9 = Q(OR(from_='from@ya.ru', text='"the text"'), NOT(OR(Q(answered=False), Q(new=True))), to='to@ya.ru')
+# "((OR FROM "from@ya.ru" TEXT "\\"the text\\"") NOT ((OR (UNANSWERED) (NEW))) TO "to@ya.ru")"
