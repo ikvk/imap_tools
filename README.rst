@@ -5,12 +5,12 @@ imap_tools
 
 Working with email and mailbox using IMAP protocol.
 
-===================  ====================================================
-Python version       3.3+
-License              MIT
-PyPI                 https://pypi.python.org/pypi/imap_tools/
-IMAP                 VERSION 4rev1 - https://tools.ietf.org/html/rfc3501
-===================  ====================================================
+===============  ====================================================
+Python version   3.3+
+License          Apache-2.0
+PyPI             https://pypi.python.org/pypi/imap_tools/
+IMAP             VERSION 4rev1 - https://tools.ietf.org/html/rfc3501
+===============  ====================================================
 
 .. contents::
 
