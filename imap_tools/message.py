@@ -17,6 +17,11 @@ class MailMessage:
         self._raw_flag_data = raw_flag_data
         self.obj = email.message_from_bytes(raw_message_data)
 
+    @classmethod
+    def from_bytes(cls, raw_message_data: bytes):
+        """Alternative constructor"""
+        return cls([(None, raw_message_data)])
+
     @staticmethod
     def _get_message_data_parts(fetch_data) -> (bytes, bytes, [bytes]):
         """

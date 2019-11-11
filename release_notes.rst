@@ -1,3 +1,7 @@
+0.9.4
+=====
+* MailMessage.from_bytes - Alternative constructor
+
 0.9.3
 =====
 * change license: MIT -> Apache License, Version 2.0
