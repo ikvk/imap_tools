@@ -209,7 +209,7 @@ Actions with mailbox folders
         mailbox.folder.delete('folder2')
         # STATUS
         folder_status = mailbox.folder.status('some_folder')
-        print(folder_status)  # {'MESSAGES': 41, 'RECENT': 0, 'UIDNEXT': 11996084, 'UIDVALIDITY': 1, 'UNSEEN': 5}
+        print(folder_status)  # {'MESSAGES': 41, 'RECENT': 0, 'UIDNEXT': 11996, 'UIDVALIDITY': 1, 'UNSEEN': 5}
 
 Reasons
 -------
