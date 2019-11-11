@@ -17,7 +17,6 @@ setuptools.setup(
     keywords=['imap', 'imap-client', 'python3', 'email'],
     classifiers=[
         "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: Apache Software License 2.0 (Apache-2.0)",
         "Operating System :: OS Independent",
     ],
     # install_requires=['typing>=3.6.2'],
