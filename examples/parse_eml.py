@@ -1,6 +1,6 @@
 from imap_tools import MailBox, MailMessage
 
-# parse attached .eml messages
+# parse .eml files attached to email messages
 with MailBox('imap.mail.com').login('test@mail.com', 'password') as mailbox:
     for message in mailbox.fetch():
         for filename, payload in message.attachments:

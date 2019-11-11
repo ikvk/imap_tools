@@ -1,5 +1,7 @@
 """
-Explanation:
+Query builder examples.
+
+Notes:
 
 # Infix notation (natural to humans)
 NOT ((FROM='11' OR TO="22" OR TEXT="33") AND CC="44" AND BCC="55")
