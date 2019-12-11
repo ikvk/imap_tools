@@ -108,35 +108,53 @@ class MailBox:
         check_command_status('box.expunge', result)
         return result
 
-    def delete(self, uid_list) -> tuple:
-        """Delete email messages"""
+    def delete(self, uid_list) -> (tuple, tuple) or None:
+        """
+        Delete email messages
+        Do nothing on empty uid_list
+        """
         uid_str = cleaned_uid_set(uid_list)
+        if not uid_str:
+            return None
         store_result = self.box.uid('STORE', uid_str, '+FLAGS', r'(\Deleted)')
         check_command_status('box.delete', store_result)
         expunge_result = self.expunge()
         return store_result, expunge_result
 
     def copy(self, uid_list, destination_folder: str) -> tuple or None:
-        """Copy email messages into the specified folder"""
+        """
+        Copy email messages into the specified folder
+        Do nothing on empty uid_list
+        """
         uid_str = cleaned_uid_set(uid_list)
+        if not uid_str:
+            return None
         copy_result = self.box.uid('COPY', uid_str, destination_folder)
         check_command_status('box.copy', copy_result)
         return copy_result
 
-    def move(self, uid_list, destination_folder: str) -> tuple:
-        """Move email messages into the specified folder"""
+    def move(self, uid_list, destination_folder: str) -> (tuple, tuple) or None:
+        """
+        Move email messages into the specified folder
+        Do nothing on empty uid_list
+        """
         # here for avoid double fetch in uid_set
         uid_str = cleaned_uid_set(uid_list)
+        if not uid_str:
+            return None
         copy_result = self.copy(uid_str, destination_folder)
         delete_result = self.delete(uid_str)
         return copy_result, delete_result
 
-    def flag(self, uid_list, flag_set: [str] or str, value: bool) -> tuple:
+    def flag(self, uid_list, flag_set: [str] or str, value: bool) -> (tuple, tuple) or None:
         """
         Set/unset email flags
+        Do nothing on empty uid_list
         Standard flags contains in StandardMessageFlags.all
         """
         uid_str = cleaned_uid_set(uid_list)
+        if not uid_str:
+            return None
         if type(flag_set) is str:
             flag_set = [flag_set]
         store_result = self.box.uid(
@@ -146,7 +164,7 @@ class MailBox:
         expunge_result = self.expunge()
         return store_result, expunge_result
 
-    def seen(self, uid_list, seen_val: bool) -> tuple:
+    def seen(self, uid_list, seen_val: bool) -> (tuple, tuple) or None:
         """
         Mark email as read/unread
         This is shortcut for flag method

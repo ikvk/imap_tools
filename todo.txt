@@ -3,3 +3,9 @@ try to imitate long poll by noop
 fetch INTERNALDATE The internal date of the message.
 
 message attributes strong tests
+
+--
+cleaned_uid_set not raise ValueError('uid_set should not be empty')
+MailBox delete,copy,move,flag,seen methods changed - now Do nothing on empty uid_list
+StandardMessageFlags renamed to MessageFlags
+fx readme
