@@ -1,3 +1,9 @@
+0.10.1
+======
+* utils.cleaned_uid_set now not raise ValueError('uid_set should not be empty')
+* mailbox.MailBox delete,copy,move,flag,seen methods changed: Do nothing on empty uid_list - return None
+* mailbox.StandardMessageFlags renamed to mailbox.MessageFlags
+
 0.9.4
 =====
 * MailMessage.from_bytes - Alternative constructor

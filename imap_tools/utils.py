@@ -25,7 +25,7 @@ def cleaned_uid_set(uid_set: str or [str] or iter) -> str:
         if type(uid) is not str:
             raise ValueError('uid "{}" is not string'.format(str(uid)))
         if not uid.strip().isdigit():
-            raise ValueError('Wrong uid: {}'.format(uid))
+            raise ValueError('Wrong uid: "{}"'.format(uid))
     return ','.join((i.strip() for i in uid_set))
 
 

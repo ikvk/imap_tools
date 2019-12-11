@@ -22,7 +22,7 @@ class QueryTest(unittest.TestCase):
                 ('cleaned_uint', (0, 1, 145), (-1, 'str', [], {}, type, True, b'1')),
                 ('cleaned_str', ('', 'good', 'я 你好'), (1, [], {}, type, True, b'1')),
                 ('cleaned_true', (True,), (1, 'str', [], {}, type, False, b'1')),
-                ('cleaned_uid', ('1', '1,2', ['1', '2'], fetch()), (1, [], {}, type, True, b'1', not_fetch())),
+                ('cleaned_uid', ('1', '1,2', ['1', '2'], [], {}, fetch()), (1, type, True, b'1', '', not_fetch())),
                 ('cleaned_header', (H('X-Google-Smtp', '123'), H('a', '1')), (1, 's', ['s', 1], {}, type, False, b'1')),
         ):
             cleaned_fn = getattr(ParamConverter, cleaned_fn_name)

@@ -8,7 +8,7 @@ from .utils import cleaned_uid_set, check_command_status
 imaplib._MAXLINE = 4 * 1024 * 1024  # 4Mb
 
 
-class StandardMessageFlags:
+class MessageFlags:
     """Standard email message flags"""
     SEEN = 'SEEN'
     ANSWERED = 'ANSWERED'
@@ -112,6 +112,7 @@ class MailBox:
         """
         Delete email messages
         Do nothing on empty uid_list
+        :return: None on empty uid_list, command results otherwise
         """
         uid_str = cleaned_uid_set(uid_list)
         if not uid_str:
@@ -125,6 +126,7 @@ class MailBox:
         """
         Copy email messages into the specified folder
         Do nothing on empty uid_list
+        :return: None on empty uid_list, command results otherwise
         """
         uid_str = cleaned_uid_set(uid_list)
         if not uid_str:
@@ -137,6 +139,7 @@ class MailBox:
         """
         Move email messages into the specified folder
         Do nothing on empty uid_list
+        :return: None on empty uid_list, command results otherwise
         """
         # here for avoid double fetch in uid_set
         uid_str = cleaned_uid_set(uid_list)
@@ -150,7 +153,8 @@ class MailBox:
         """
         Set/unset email flags
         Do nothing on empty uid_list
-        Standard flags contains in StandardMessageFlags.all
+        Standard flags contains in MessageFlags.all
+        :return: None on empty uid_list, command results otherwise
         """
         uid_str = cleaned_uid_set(uid_list)
         if not uid_str:
@@ -169,7 +173,7 @@ class MailBox:
         Mark email as read/unread
         This is shortcut for flag method
         """
-        return self.flag(uid_list, StandardMessageFlags.SEEN, seen_val)
+        return self.flag(uid_list, MessageFlags.SEEN, seen_val)
 
     def __enter__(self):
         return self
