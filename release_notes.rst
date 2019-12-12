@@ -1,4 +1,4 @@
-0.10.1
+0.10.0
 ======
 * utils.cleaned_uid_set now not raise ValueError('uid_set should not be empty')
 * mailbox.MailBox delete,copy,move,flag,seen methods changed: Do nothing on empty uid_list - return None
