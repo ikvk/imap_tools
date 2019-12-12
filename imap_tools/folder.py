@@ -91,7 +91,7 @@ class MailBoxFolderManager:
     def list(self, folder: str or bytes = '', search_args: str = '*', subscribed_only: bool = False) -> list:
         """
         Get a listing of folders on the server
-        :param folder: mailbox folder, if empty list shows all content from root
+        :param folder: mailbox folder, if empty - get from root
         :param search_args: search argumets, is case-sensitive mailbox name with possible wildcards
             * is a wildcard, and matches zero or more characters at this position
             % is similar to * but it does not match a hierarchy delimiter

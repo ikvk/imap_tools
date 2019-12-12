@@ -1,5 +1,3 @@
 try to imitate long poll by noop
 
-fetch INTERNALDATE The internal date of the message.
-
 message attributes strong tests

@@ -63,24 +63,24 @@ Email attributes
     # NOTE: All message properties are cached by functools.lru_cache
 
     for message in mailbox.fetch():
-        message.uid          # str or None, '123'
-        message.subject      # str, 'some subject'
-        message.from_        # str, 'sender@ya.ru'
-        message.to           # tuple, ('iam@goo.ru', 'friend@ya.ru', )
-        message.cc           # tuple, ('cc@mail.ru', )
-        message.bcc          # tuple, ('bcc@mail.ru', )
-        message.date         # datetime.datetime, 1900-1-1 for unparsed, may be naive or with tzinfo
-        message.text         # str, 'hi'
-        message.html         # str, '<b>hi</b>'
-        message.flags        # tuple, ('SEEN', 'FLAGGED', 'ENCRYPTED')
-        message.headers      # dict, {'Received': ('from 1.m.net', 'from 2.m.net'), 'AntiVirus': ('Clean',)}
-        message.attachments  # [(str, bytes)], 'cat.jpg', b'\xff\xd8\xff\xe0\'
-        message.obj          # original email.message.Message object
-        message.from_values  # dict or None, {'email': 'im@ya.ru', 'name': 'Ivan', 'full': 'Ivan <im@ya.ru>'}
-        message.to_values    # tuple, ({'email': '', 'name': '', 'full': ''},)
-        message.cc_values    # tuple, ({'email': '', 'name': '', 'full': ''},)
-        message.bcc_values   # tuple, ({'email': '', 'name': '', 'full': ''},)
-        message.date_str     # original date str, 'Tue, 03 Jan 2017 22:26:59 +0500'
+        message.uid          # str or None: '123'
+        message.subject      # str: 'some subject'
+        message.from_        # str: 'sender@ya.ru'
+        message.to           # tuple: ('iam@goo.ru', 'friend@ya.ru', )
+        message.cc           # tuple: ('cc@mail.ru', )
+        message.bcc          # tuple: ('bcc@mail.ru', )
+        message.date         # datetime.datetime: 1900-1-1 for unparsed, may be naive or with tzinfo
+        message.text         # str: 'hi'
+        message.html         # str: '<b>hi</b>'
+        message.flags        # tuple: ('SEEN', 'FLAGGED', 'ENCRYPTED')
+        message.headers      # dict: {'Received': ('from 1.m.net', 'from 2.m.net'), 'AntiVirus': ('Clean',)}
+        message.attachments  # [(str, bytes)]: 'cat.jpg', b'\xff\xd8\xff\xe0\'
+        message.obj          # email.message.Message: original object
+        message.from_values  # dict or None: {'email': 'im@ya.ru', 'name': 'Ivan', 'full': 'Ivan <im@ya.ru>'}
+        message.to_values    # tuple: ({'email': '', 'name': '', 'full': ''},)
+        message.cc_values    # tuple: ({'email': '', 'name': '', 'full': ''},)
+        message.bcc_values   # tuple: ({'email': '', 'name': '', 'full': ''},)
+        message.date_str     # str: original date - 'Tue, 03 Jan 2017 22:26:59 +0500'
 
 Search criteria
 ^^^^^^^^^^^^^^^
@@ -181,7 +181,7 @@ Result of MailBox.fetch generator will be implicitly converted to uid list.
         mailbox.delete([msg.uid for msg in mailbox.fetch()])
 
         # FLAG unseen messages in current folder as Answered and Flagged, *in bulk.
-        flags = (imap_tools.StandardMessageFlags.ANSWERED, imap_tools.StandardMessageFlags.FLAGGED)
+        flags = (imap_tools.MessageFlags.ANSWERED, imap_tools.MessageFlags.FLAGGED)
         mailbox.flag(mailbox.fetch('(UNSEEN)'), flags, True)
 
         # SEEN: mark all messages sent at 05.03.2007 in current folder as unseen, *in bulk
@@ -193,8 +193,8 @@ Actions with mailbox folders
 
     with MailBox('imap.mail.com').login('test@mail.com', 'pwd') as mailbox:
         # LIST
-        for folder in mailbox.folder.list('INBOX'):
-            print(folder['flags'], folder['delim'], folder['name'])
+        for f in mailbox.folder.list('INBOX'):
+            print((f['name'], f['flags'], f['delim']))  # ('INBOX|cats', '\\Unmarked \\HasChildren', '|')
         # SET
         mailbox.folder.set('INBOX')
         # GET

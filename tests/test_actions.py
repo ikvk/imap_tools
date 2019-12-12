@@ -43,13 +43,13 @@ class ActionTest(MailboxTestCase):
 
             # FLAG
             mailbox.folder.set(mailbox.folder_test_temp2)
-            mailbox.flag([msg.uid for msg in mailbox.fetch()], imap_tools.StandardMessageFlags.FLAGGED, True)
-            self.assertTrue(all([imap_tools.StandardMessageFlags.FLAGGED in msg.flags for msg in mailbox.fetch()]))
+            mailbox.flag([msg.uid for msg in mailbox.fetch()], imap_tools.MessageFlags.FLAGGED, True)
+            self.assertTrue(all([imap_tools.MessageFlags.FLAGGED in msg.flags for msg in mailbox.fetch()]))
 
             # SEEN
             mailbox.folder.set(mailbox.folder_test_temp2)
             mailbox.seen([msg.uid for msg in mailbox.fetch()], False)
-            self.assertTrue(all([imap_tools.StandardMessageFlags.SEEN not in msg.flags
+            self.assertTrue(all([imap_tools.MessageFlags.SEEN not in msg.flags
                                  for msg in mailbox.fetch(mark_seen=False)]))
 
             # DELETE
