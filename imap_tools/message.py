@@ -204,7 +204,7 @@ class MailMessage:
                 continue  # this is what happens when Content-Disposition = inline
 
             attachments.append(Attachment(part))
-        return [(attachment.filename, attachment.body) for attachment in attachments]
+        return attachments
 
 
 class Attachment:
@@ -217,6 +217,12 @@ class Attachment:
     def filename(self) -> str:
         filename = self._part.get_filename()
         return decode_value(*decode_header(filename)[0])
+
+    @property
+    @lru_cache()
+    def content_type(self) -> str:
+        content_type = self._part.get_content_type()
+        return decode_value(*decode_header(content_type)[0])
 
     @property
     @lru_cache()
