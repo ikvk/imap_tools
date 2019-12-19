@@ -1,3 +1,7 @@
+0.11.0
+======
+* message.MailMessage.attachments now return list of message.MailMessage.Attachment objects
+
 0.10.0
 ======
 * utils.cleaned_uid_set now not raise ValueError('uid_set should not be empty')

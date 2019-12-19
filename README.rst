@@ -70,20 +70,20 @@ Email attributes
         message.cc           # tuple: ('cc@mail.ru', )
         message.bcc          # tuple: ('bcc@mail.ru', )
         message.date         # datetime.datetime: 1900-1-1 for unparsed, may be naive or with tzinfo
+        message.date_str     # str: original date - 'Tue, 03 Jan 2017 22:26:59 +0500'
         message.text         # str: 'hi'
         message.html         # str: '<b>hi</b>'
         message.flags        # tuple: ('SEEN', 'FLAGGED', 'ENCRYPTED')
         message.headers      # dict: {'Received': ('from 1.m.net', 'from 2.m.net'), 'AntiVirus': ('Clean',)}
+        for att in message.attachments:  # list: [Attachment objects]
+            att.filename     # str: 'cat.jpg'
+            att.content_type # str: 'image/jpeg'
+            att.payload      # bytes: b'\xff\xd8\xff\xe0\'
         message.obj          # email.message.Message: original object
         message.from_values  # dict or None: {'email': 'im@ya.ru', 'name': 'Ivan', 'full': 'Ivan <im@ya.ru>'}
         message.to_values    # tuple: ({'email': '', 'name': '', 'full': ''},)
         message.cc_values    # tuple: ({'email': '', 'name': '', 'full': ''},)
         message.bcc_values   # tuple: ({'email': '', 'name': '', 'full': ''},)
-        message.date_str     # str: original date - 'Tue, 03 Jan 2017 22:26:59 +0500'
-        for attachment in message.attachments:  # list of Attachment objects
-            attachment.filename                 # 'cat.jpg'
-            attachment.content_type             # 'image/jpeg'
-            attachment.body                     # b'\xff\xd8\xff\xe0\'
 
 Search criteria
 ^^^^^^^^^^^^^^^
@@ -239,3 +239,4 @@ Thanks to:
 * `parchd-1 <https://github.com/parchd-1>`_
 * `dojasoncom <https://github.com/dojasoncom>`_
 * `RandomStrangerOnTheInternet <https://github.com/RandomStrangerOnTheInternet>`_
+* `jonnyarnold <https://github.com/jonnyarnold>`_

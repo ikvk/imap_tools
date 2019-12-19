@@ -45,10 +45,10 @@ class MessageTest(MailboxTestCase):
                 for i in message.flags:
                     self.assertIs(type(i), str)
 
-                for attachment in message.attachments:
-                    self.assertIs(type(attachment.filename), str)
-                    self.assertIs(type(attachment.content_type), str)
-                    self.assertIs(type(attachment.payload), bytes)
+                for att in message.attachments:
+                    self.assertIs(type(att.filename), str)
+                    self.assertIs(type(att.content_type), str)
+                    self.assertIs(type(att.payload), bytes)
 
 
 if __name__ == "__main__":

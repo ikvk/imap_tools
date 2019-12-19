@@ -187,12 +187,12 @@ class MailMessage:
 
     @property
     @lru_cache()
-    def attachments(self) -> [(str, bytes)]:
+    def attachments(self) -> ['Attachment']:
         """
-        Attachments of the mail message (generator)
-        :return: [(filename: str, payload: bytes)]
+        Mail message attachments list
+        :return: [Attachment]
         """
-        attachments = []
+        results = []
         for part in self.obj.walk():
             if part.get_content_maintype() == 'multipart':
                 # multipart/* are just containers
@@ -203,12 +203,13 @@ class MailMessage:
             if not filename:
                 continue  # this is what happens when Content-Disposition = inline
 
-            attachments.append(Attachment(part))
-        return attachments
+            results.append(Attachment(part))
+        return results
 
 
 class Attachment:
     """An attachment for a MailMessage"""
+
     def __init__(self, part):
         self._part = part
 
@@ -221,28 +222,27 @@ class Attachment:
     @property
     @lru_cache()
     def content_type(self) -> str:
-        content_type = self._part.get_content_type()
-        return decode_value(*decode_header(content_type)[0])
+        return self._part.get_content_type()
 
     @property
     @lru_cache()
-    def body(self) -> bytes:
-        body = self._part.get_body(decode=True)
-        if body:
-            return body
+    def payload(self) -> bytes:
+        payload = self._part.get_payload(decode=True)
+        if payload:
+            return payload
         else:
-            # multipart body, such as .eml (see get_body)
-            multipart_body = self._part.get_body()
-            if isinstance(multipart_body, list):
-                for body_item in multipart_body:
-                    if hasattr(body_item, 'as_bytes'):
-                        body_item_bytes = body_item.as_bytes()
+            # multipart payload, such as .eml (see get_payload)
+            multipart_payload = self._part.get_payload()
+            if isinstance(multipart_payload, list):
+                for payload_item in multipart_payload:
+                    if hasattr(payload_item, 'as_bytes'):
+                        payload_item_bytes = payload_item.as_bytes()
                         cte = str(self._part.get('content-transfer-encoding', '')).lower().strip()
-                        if body_item_bytes and cte:
-                            found_body = b''
+                        if payload_item_bytes and cte:
+                            found_payload = b''
                             if cte == 'base64':
-                                found_body = base64.b64decode(body_item_bytes)
+                                found_payload = base64.b64decode(payload_item_bytes)
                             elif cte in ('7bit', '8bit', 'quoted-printable', 'binary'):
-                                found_body = body_item_bytes  # quopri.decodestring
-                            if found_body:
-                                return found_body
+                                found_payload = payload_item_bytes  # quopri.decodestring
+                            if found_payload:
+                                return found_payload
