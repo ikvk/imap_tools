@@ -1,3 +1,7 @@
+0.11.1
+======
+* message.Attachment.payload - removed probability of return None
+
 0.11.0
 ======
 * message.MailMessage.attachments now return list of message.MailMessage.Attachment objects

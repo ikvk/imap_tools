@@ -230,19 +230,17 @@ class Attachment:
         payload = self._part.get_payload(decode=True)
         if payload:
             return payload
-        else:
-            # multipart payload, such as .eml (see get_payload)
-            multipart_payload = self._part.get_payload()
-            if isinstance(multipart_payload, list):
-                for payload_item in multipart_payload:
-                    if hasattr(payload_item, 'as_bytes'):
-                        payload_item_bytes = payload_item.as_bytes()
-                        cte = str(self._part.get('content-transfer-encoding', '')).lower().strip()
-                        if payload_item_bytes and cte:
-                            found_payload = b''
-                            if cte == 'base64':
-                                found_payload = base64.b64decode(payload_item_bytes)
-                            elif cte in ('7bit', '8bit', 'quoted-printable', 'binary'):
-                                found_payload = payload_item_bytes  # quopri.decodestring
-                            if found_payload:
-                                return found_payload
+        # multipart payload, such as .eml (see get_payload)
+        multipart_payload = self._part.get_payload()
+        if isinstance(multipart_payload, list):
+            for payload_item in multipart_payload:
+                if hasattr(payload_item, 'as_bytes'):
+                    payload_item_bytes = payload_item.as_bytes()
+                    cte = str(self._part.get('content-transfer-encoding', '')).lower().strip()
+                    if payload_item_bytes and cte:
+                        if cte == 'base64':
+                            return base64.b64decode(payload_item_bytes)
+                        elif cte in ('7bit', '8bit', 'quoted-printable', 'binary'):
+                            return payload_item_bytes  # quopri.decodestring
+        # could not find payload
+        return b''

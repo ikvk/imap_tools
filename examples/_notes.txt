@@ -1,3 +1,6 @@
+Packaging
+=========
+
 https://packaging.python.org/tutorials/packaging-projects/
 
 1. Create .pypirc
@@ -13,3 +16,18 @@ https://packaging.python.org/tutorials/packaging-projects/
 
 4. Uploading the distribution archives:
     C:\python\venv\imap_tools\Scripts\python.exe -m twine upload dist/*
+
+
+Attachments get_payload
+=======================
+
+decode  is_multipart  result
+------  ------------  ------------------------------
+True    True          +None
+True    False         +_payload decoded (bytes)
+False   True          +_payload (a list)
+False   False         _payload (*)
+
+* - some other encoding is used, or the header is missing,
+    or if the payload has bogus data (i.e. bogus base64 or uuencoded data),
+    the payload is returned as-is.
