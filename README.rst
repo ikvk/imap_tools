@@ -75,10 +75,12 @@ Email attributes
         message.html         # str: '<b>hi</b>'
         message.flags        # tuple: ('SEEN', 'FLAGGED', 'ENCRYPTED')
         message.headers      # dict: {'Received': ('from 1.m.net', 'from 2.m.net'), 'AntiVirus': ('Clean',)}
+
         for att in message.attachments:  # list: [Attachment objects]
             att.filename     # str: 'cat.jpg'
             att.content_type # str: 'image/jpeg'
             att.payload      # bytes: b'\xff\xd8\xff\xe0\'
+
         message.obj          # email.message.Message: original object
         message.from_values  # dict or None: {'email': 'im@ya.ru', 'name': 'Ivan', 'full': 'Ivan <im@ya.ru>'}
         message.to_values    # tuple: ({'email': '', 'name': '', 'full': ''},)
