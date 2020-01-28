@@ -8,7 +8,7 @@ test_mailbox_name_set = {'YANDEX', 'ZIMBRA', 'MAIL_RU'}  # YANDEX, MAIL_RU, GOOG
 
 def get_test_mailbox_config(mailbox_name: str) -> dict:
     config = configparser.ConfigParser()
-    for config_path in (r'..\tests\credentials.ini', r'tests\credentials.ini'):
+    for config_path in (r'../tests/credentials.ini', r'tests/credentials.ini'):
         if not os.path.exists(config_path):
             continue
         config.read(config_path)

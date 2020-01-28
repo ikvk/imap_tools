@@ -50,7 +50,7 @@ class MailMessage:
         if value not in self.obj:
             return ()
         return tuple(
-            parse_email_address(''.join(decode_value(string, charset) for string, charset, in decode_header(address)))
+            parse_email_address(''.join(decode_value(string, charset) for string, charset in decode_header(address)))
             for address in self.obj[value].split(',')
         )
 

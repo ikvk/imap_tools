@@ -1,0 +1,168 @@
+Return-Path: i.kor@company.ru
+Received: from m101.comp.ru (LHLO m101.comp.ru) (192.168.99.101) by m101.comp.ru
+ with LMTP; Thu, 12 Oct 2017 09:41:57 +0500 (YEKT)
+Received: from localhost (localhost [127.0.0.1])
+	by m101.comp.ru (Postfix) with ESMTP id 555275B43;
+	Thu, 12 Oct 2017 09:41:57 +0500 (YEKT)
+X-Spam-Flag: NO
+X-Spam-Score: -2.898
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.898 required=6.6 tests=[ALL_TRUSTED=-1,
+	BAYES_00=-1.9, HTML_MESSAGE=0.001, URIBL_BLOCKED=0.001]
+	autolearn=ham autolearn_force=no
+Received: from m101.comp.ru ([127.0.0.1])
+	by localhost (m101.comp.ru [127.0.0.1]) (amavisd-new, port 10032)
+	with ESMTP id rY6SAtl4piy1; Thu, 12 Oct 2017 09:41:56 +0500 (YEKT)
+Received: from localhost (localhost [127.0.0.1])
+	by m101.comp.ru (Postfix) with ESMTP id C8F0F5B4B;
+	Thu, 12 Oct 2017 09:41:56 +0500 (YEKT)
+X-Virus-Scanned: amavisd-new at m101.comp.ru
+Received: from m101.comp.ru ([127.0.0.1])
+	by localhost (m101.comp.ru [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id kq2wE_i9_8EK; Thu, 12 Oct 2017 09:41:56 +0500 (YEKT)
+Received: from [192.168.104.80] (notebook26.hades.company [192.168.104.80])
+	by m101.comp.ru (Postfix) with ESMTPSA id 9563A5B44
+	for <user@company.ru>; Thu, 12 Oct 2017 09:41:56 +0500 (YEKT)
+References: <20171011085432.15374.20485@web.hades.company>
+Subject: =?UTF-8?B?0YHRgtCw0YLRg9GB?=    
+To: user@company.ru
+From: i.kor@company.ru
+X-Forwarded-Message-Id: <20171011085432.15374.20485@web.hades.company>
+Message-ID: <2405271c-86ac-0a65-e50c-d1ebccfcc644@company.ru>
+Date: Thu, 12 Oct 2017 09:41:56 +0500
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:52.0) Gecko/20100101
+ Thunderbird/52.4.0
+MIME-Version: 1.0
+In-Reply-To: <20171011085432.15374.20485@web.hades.company>
+Content-Type: multipart/mixed;
+ boundary="------------BF90926EC9DF73443A6B8F28"
+Content-Language: ru
+
+This is a multi-part message in MIME format.
+--------------BF90926EC9DF73443A6B8F28
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+
+
+
+--------------BF90926EC9DF73443A6B8F28
+Content-Type: message/rfc822;
+ name="Message01.eml"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename="Message01.eml"
+
+Return-Path: group@company.ru
+Received: from m101.comp.ru (LHLO m101.comp.ru) (192.168.99.101) by m101.comp.ru
+ with LMTP; Wed, 11 Oct 2017 13:54:33 +0500 (YEKT)
+Received: from localhost (localhost [127.0.0.1])
+	by m101.comp.ru (Postfix) with ESMTP id 04BDE6E3;
+	Wed, 11 Oct 2017 13:54:33 +0500 (YEKT)
+X-Spam-Flag: NO
+X-Spam-Score: -2.899
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.899 required=6.6 tests=[ALL_TRUSTED=-1,
+	BAYES_00=-1.9, HTML_MESSAGE=0.001, RP_MATCHES_RCVD=-0.001,
+	URIBL_BLOCKED=0.001] autolearn=ham autolearn_force=no
+Received: from m101.comp.ru ([127.0.0.1])
+	by localhost (m101.comp.ru [127.0.0.1]) (amavisd-new, port 10032)
+	with ESMTP id 3N3XVuSw23lT; Wed, 11 Oct 2017 13:54:32 +0500 (YEKT)
+Received: from localhost (localhost [127.0.0.1])
+	by m101.comp.ru (Postfix) with ESMTP id 83DB56E6;
+	Wed, 11 Oct 2017 13:54:32 +0500 (YEKT)
+X-Virus-Scanned: amavisd-new at m101.comp.ru
+Received: from m101.comp.ru ([127.0.0.1])
+	by localhost (m101.comp.ru [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id ylUz-3bpEY_5; Wed, 11 Oct 2017 13:54:32 +0500 (YEKT)
+Received: from web.hades.company (s192-168-99-108.some.ru [192.168.99.108])
+	by m101.comp.ru (Postfix) with ESMTPSA id 5AE656E3;
+	Wed, 11 Oct 2017 13:54:32 +0500 (YEKT)
+Content-Type: multipart/alternative;
+ boundary="===============3693132879591888836=="
+MIME-Version: 1.0
+Subject: =?UTF-8?B?0YHRgtCw0YLRg9GB?=    
+From: group@company.ru
+To: group@company.ru
+Date: Wed, 11 Oct 2017 08:54:32 -0000
+Message-ID: <20171011085432.15374.20485@web.hades.company>
+
+--===============3693132879591888836==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+
+=D0=9D=D0=BE=D0=B2=D1=8B=D0=B9 =D0=B7=D0=B0=D0=BA=D0=B0=D0=B7 =E2=84=9628=
+922 http://group.company.ru/ru/order/28922/process/
+=D0=A1=D0=BE=D0=B7=D0=B4=D0=B0=D0=BB:=20
+=D0=9A=D0=BB=D0=B8=D0=B5=D0=BD=D1=82 =D0=9A=D0=BE=D0=B2=D1=87=D0=B5=D0=B3=
+ (=D0=93=D1=83=D1=81=D0=B5=D0=B2 =D0=94=D0=BC=D0=B8=D1=82=D1=80=D0=B8=D0=B9=
+)
+
+=D0=A1=D0=B5=D0=B3=D0=BC=D0=B5=D0=BD=D1=82=D1=8B:
+
+- =D0=9C=D0=BE=D1=81=D0=BA=D0=B2=D0=B0 - =D0=A2=D0=B5=D0=BB=D1=8C-=D0=90=D0=
+=B2=D0=B8=D0=B2, some-889, 15.03.2018, =D1=8D=D0=BA=D0=BE=D0=BD=D0=BE=D0=BC=
+: (15 =D0=B2=D0=B7=D1=80.)
+
+- =D0=A2=D0=B5=D0=BB=D1=8C-=D0=90=D0=B2=D0=B8=D0=B2 - =D0=9C=D0=BE=D1=81=D0=
+=BA=D0=B2=D0=B0, some-890, 22.03.2018, =D1=8D=D0=BA=D0=BE=D0=BD=D0=BE=D0=BC=
+: (15 =D0=B2=D0=B7=D1=80.)
+--===============3693132879591888836==
+Content-Type: text/html; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+
+
+
+    <!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Strict//EN' 'http://www.=
+w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd'>
+    <html xmlns=3D'http://www.w3.org/1999/xhtml' lang=3D'ru-ru'
+          xml:lang=3D'en-us'>
+    <head>
+        <meta content=3D"text/html; charset=3DUTF-8" http-equiv=3D"Conten=
+t-Type">
+       =20
+    </head>
+
+    <body id=3D'body'>
+   =20
+   =20
+       =20
+        <a href=3D"http://group.company.ru/ru/order/28922/process/">
+           =20
+            =D0=9D=D0=BE=D0=B2=D1=8B=D0=B9 =D0=B7=D0=B0=D0=BA=D0=B0=D0=B7=
+ =E2=84=9628922
+        </a><br>
+
+       =20
+        =D0=A1=D0=BE=D0=B7=D0=B4=D0=B0=D0=BB:
+       =20
+            =D0=9A=D0=BB=D0=B8=D0=B5=D0=BD=D1=82 =D0=9A=D0=BE=D0=B2=D1=87=
+=D0=B5=D0=B3
+            (=D0=93=D1=83=D1=81=D0=B5=D0=B2 =D0=94=D0=BC=D0=B8=D1=82=D1=80=
+=D0=B8=D0=B9)
+        <br><br>
+       =20
+        =D0=A1=D0=B5=D0=B3=D0=BC=D0=B5=D0=BD=D1=82=D1=8B: <br>
+        <ul>
+           =20
+                <li>=D0=9C=D0=BE=D1=81=D0=BA=D0=B2=D0=B0 - =D0=A2=D0=B5=D0=
+=BB=D1=8C-=D0=90=D0=B2=D0=B8=D0=B2, some-889, 15.03.2018, =D1=8D=D0=BA=D0=BE=
+=D0=BD=D0=BE=D0=BC: (15 =D0=B2=D0=B7=D1=80.)</li>
+           =20
+                <li>=D0=A2=D0=B5=D0=BB=D1=8C-=D0=90=D0=B2=D0=B8=D0=B2 - =D0=
+=9C=D0=BE=D1=81=D0=BA=D0=B2=D0=B0, some-890, 22.03.2018, =D1=8D=D0=BA=D0=BE=
+=D0=BD=D0=BE=D0=BC: (15 =D0=B2=D0=B7=D1=80.)</li>
+           =20
+        </ul><br>
+       =20
+       =20
+   =20
+
+    </body>
+    </html>
+
+
+--===============3693132879591888836==--
+
+--------------BF90926EC9DF73443A6B8F28--

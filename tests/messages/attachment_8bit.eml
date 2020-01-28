@@ -1,0 +1,229 @@
+Return-Path: e.sp@com.ru
+Received: from m101.com.ru (LHLO m101.com.ru) (92.233.222.111) by m101.com.ru
+ with LMTP; Thu, 7 Feb 2019 13:18:22 +0500 (YEKT)
+Received: from localhost (localhost [127.0.0.1])
+	by m101.com.ru (Postfix) with ESMTP id 9A9181170B7;
+	Thu,  7 Feb 2019 13:18:22 +0500 (YEKT)
+X-Virus-Scanned: amavisd-new at m101.com.ru
+Received: from m101.com.ru ([127.0.0.1])
+	by localhost (m101.com.ru [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id Q3OLc4gNDjjO; Thu,  7 Feb 2019 13:18:22 +0500 (YEKT)
+Received: from [192.168.104.100] (kom-420-1.hades.company [192.168.104.100])
+	by m101.com.ru (Postfix) with ESMTPSA id DC7BB1170A1;
+	Thu,  7 Feb 2019 13:18:21 +0500 (YEKT)
+Subject: S19 IZM A7-342
+References: <1333139463.20190207083243@com.ru>
+To: =?UTF-8?B?0KLQrtCc0JXQndCs?= <rasp@wat.aero>
+From: =?utf-8?B?0JrQsNGD0LrQuNC9INCS0LvQsNC00LjQvNC40YA=?= <k1@yandex.ru>
+Cc: aa@com.ru, mm@com.ru
+Bcc: =?utf-8?b?0JrQvtC80LDQvdC00LAg0K/QvdC00LXQutGBLtCf0L7Rh9GC0Ys=?=
+	<hello@yandex-team.ru>
+X-Forwarded-Message-Id: <1333139463.20190207083243@com.ru>
+Message-ID: <2ffd4cec-d312-60da-72f3-5b6e4406fddf@com.ru>
+Date: Thu, 7 Feb 2019 13:18:20 +0500
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.5.0
+MIME-Version: 1.0
+In-Reply-To: <1333139463.20190207083243@com.ru>
+Content-Type: multipart/mixed;
+ boundary="------------FFFBFD561B1FF33B4E5E7050"
+Content-Language: ru
+
+This is a multi-part message in MIME format.
+--------------FFFBFD561B1FF33B4E5E7050
+Content-Type: multipart/alternative;
+ boundary="------------47E107F9DD43433AD276AE10"
+
+
+--------------47E107F9DD43433AD276AE10
+Content-Type: text/plain; charset=windows-1251; format=flowed
+Content-Transfer-Encoding: 8bit
+
+SCR
+
+/
+S19
+07FEB
+wat
+
+-- 
+����� ����������
+���. (343) 072-00-00 (��.18-59)
+e-mail: e.sp@com.ru
+
+
+--------------47E107F9DD43433AD276AE10
+Content-Type: text/html; charset=windows-1251
+Content-Transfer-Encoding: 8bit
+
+<html>
+  <head>
+
+    <meta http-equiv="content-type" content="text/html; charset=windows-1251">
+  </head>
+  <body text="#000000" bgcolor="#FFFFFF">
+    <p>SCR<br>
+    </p>
+    <div class="moz-forward-container">/<br>
+      S19<br>
+      07FEB<br>
+      wat<br></div>
+    <pre class="moz-signature" cols="72">-- 
+����� ����������
+���. (343) 072-00-00 (��.18-59)
+e-mail: <a class="moz-txt-link-abbreviated" href="mailto:e.sp@com.ru">e.sp@com.ru</a></pre>
+  </body>
+</html>
+
+--------------47E107F9DD43433AD276AE10--
+
+--------------FFFBFD561B1FF33B4E5E7050
+Content-Type: message/rfc822;
+ name="Message01.eml"
+Content-Transfer-Encoding: 8bit
+Content-Disposition: attachment;
+ filename="Message01.eml"
+
+Return-Path: a.pl@com.ru
+Received: from m101.com.ru (LHLO m101.com.ru) (92.233.222.111) by m101.com.ru
+ with LMTP; Thu, 7 Feb 2019 08:29:46 +0500 (YEKT)
+Received: from localhost (localhost [127.0.0.1])
+	by m101.com.ru (Postfix) with ESMTP id 5C11A78A70;
+	Thu,  7 Feb 2019 08:29:46 +0500 (YEKT)
+X-Virus-Scanned: amavisd-new at m101.com.ru
+Received: from m101.com.ru ([127.0.0.1])
+	by localhost (m101.com.ru [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id qPDszqYc1_Us; Thu,  7 Feb 2019 08:29:46 +0500 (YEKT)
+Received: from [192.168.104.53] (kom-419-31.hades.company [192.168.104.53])
+	by m101.com.ru (Postfix) with ESMTPSA id 29D6C78A67
+	for <a.nov@company.ru>; Thu,  7 Feb 2019 08:29:46 +0500 (YEKT)
+Subject: S19 IZM A7-342
+References: <4a598974-6731-c4f3-0efa-2f1e2b044f08@com.ru>
+To: Alla Nov <a.nov@company.ru>
+From: =?utf-8?B?0JrQsNGD0LrQuNC9INCS0LvQsNC00LjQvNC40YA=?= <k1@yandex.ru>
+X-Forwarded-Message-Id: <4a598974-6731-c4f3-0efa-2f1e2b044f08@com.ru>
+Message-ID: <09ccd226-f9e9-77e0-e456-3490e024d16e@com.ru>
+Date: Thu, 7 Feb 2019 08:29:45 +0500
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.4.0
+MIME-Version: 1.0
+In-Reply-To: <4a598974-6731-c4f3-0efa-2f1e2b044f08@com.ru>
+Content-Type: multipart/alternative;
+ boundary="------------CC10C5F7DB2594C21A5E2BDB"
+Content-Language: ru
+
+--------------CC10C5F7DB2594C21A5E2BDB
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+
+Добрый день, уважаемые коллеги!
+
+
+
+
+-------- Перенаправленное сообщение --------
+Тема: 	Ввод рейсов ТЮМ, ЧЛБ, ОМС на Лето 2019
+Дата: 	Fri, 7 Dec 2018 08:23:21 +0500
+От: 	Плёткина <a.pl@com.ru>
+Кому: 	Белобородова О.Н. <schedule@com.ru>
+
+
+
+Добрый день, уважаемые коллеги!
+
+Прошу ввести рейс на период летней навигации
+
+*ДМД-ТЮМ-ДМД   У6-341/342*  тип ВС А320
+
+ВВ из ДМД 23:00 LT. ВВ из ТЮМ 06:45 LT
+
+исключение период с 25/05/19 по 13/10/19
+
+ВВ из ДМД в 00:50 LT
+
+ВВ из ТЮМ остается без изменения
+
+----------------------------------------
+
+*ДМД-ОМС-ДМД   У6-387/388*  тип ВС А321
+
+ВВ из ДМД в 23:15. ВВ из ОМС 06:30 LT
+
+----------------------------------------
+
+*ДМД-ЧЛБ-ДМД   У6-610/609*  тип ВС А320
+
+ВВ из ДМД в 23:30. ВВ из ЧЛБ 06:40 LT
+
+
+
+--------------CC10C5F7DB2594C21A5E2BDB
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: 8bit
+
+<html>
+  <head>
+
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  </head>
+  <body smarttemplateinserted="true">
+    <div id="smartTemplate4-template">Добрый день, уважаемые коллеги!
+      <p> </p>
+    </div>
+    <br>
+    <div class="moz-forward-container"><br>
+      <br>
+      -------- Перенаправленное сообщение --------
+      <table class="moz-email-headers-table" cellspacing="0"
+        cellpadding="0" border="0">
+        <tbody>
+          <tr>
+            <th valign="BASELINE" nowrap="nowrap" align="RIGHT">Тема: </th>
+            <td>Ввод рейсов ТЮМ, ЧЛБ, ОМС на Лето 2019</td>
+          </tr>
+          <tr>
+            <th valign="BASELINE" nowrap="nowrap" align="RIGHT">Дата: </th>
+            <td>Fri, 7 Dec 2018 08:23:21 +0500</td>
+          </tr>
+          <tr>
+            <th valign="BASELINE" nowrap="nowrap" align="RIGHT">От: </th>
+            <td>1 <a class="moz-txt-link-rfc2396E" href="mailto:a.pl@com.ru">&lt;a.pl@com.ru&gt;</a></td>
+          </tr>
+          <tr>
+            <th valign="BASELINE" nowrap="nowrap" align="RIGHT">Кому: </th>
+            <td>2 <a class="moz-txt-link-rfc2396E" href="mailto:schedule@com.ru">&lt;schedule@com.ru&gt;</a></td>
+          </tr>
+        </tbody>
+      </table>
+      <br>
+      <br>
+      <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+      <div id="smartTemplate4-template">Добрый день, уважаемые коллеги!
+        <p>Прошу ввести рейс на период летней навигации <br>
+        </p>
+        <p>  тип ВС А320<br>
+        </p>
+        <p>ВВ из ДМД 23:00 LT. ВВ из ТЮМ 06:45 LT</p>
+        <p>исключение период с 25/05/19 по 13/10/19 <br>
+        </p>
+        <p>ВВ из ДМД в 00:50 LT<br>
+        </p>
+        <p>ВВ из ТЮМ остается без изменения <br>
+        </p>
+        <p>----------------------------------------</p>
+        <p>  тип ВС А321</p>
+        <p>ВВ из ДМД в 23:15. ВВ из ОМС 06:30 LT <br>
+        </p>
+        <p>----------------------------------------</p>
+        <p>  тип ВС А320</p>
+        <p>ВВ из ДМД в 23:30. ВВ из ЧЛБ 06:40 LT </p>
+      </div>
+      <br>
+    </div>
+  </body>
+</html>
+
+--------------CC10C5F7DB2594C21A5E2BDB--
+
+
+--------------FFFBFD561B1FF33B4E5E7050--

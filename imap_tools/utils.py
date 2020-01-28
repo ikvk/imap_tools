@@ -1,6 +1,7 @@
 import re
 import inspect
 import datetime
+from email.utils import parseaddr
 
 short_month_names = ('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', "Dec")
 
@@ -63,16 +64,12 @@ def parse_email_address(value: str) -> dict:
     @:return dict(name: str, email: str, full: str)
     """
     address = ''.join(char for char in value if char.isprintable()).strip()
-    address = re.sub('[\n\r\t]+', ' ', address)
-    result = {'email': '', 'name': '', 'full': address}
-    match = re.match('(?P<name>.*)?<(?P<email>.*@.*)>', address, re.UNICODE)
-    if match:
-        group = match.groupdict()
-        result['name'] = group['name'].strip()
-        result['email'] = group['email'].strip()
-    else:
-        result['email' if '@' in address else 'name'] = address
-    return result
+    parsed = parseaddr(address)
+    return {
+        'email': parsed[1] if '@' in parsed[1] else '',
+        'name': parsed[0],
+        'full': address
+    }
 
 
 def parse_email_date(value: str) -> datetime.datetime:

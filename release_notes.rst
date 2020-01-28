@@ -1,3 +1,9 @@
+0.12.0
+======
+* MailBox.fetch - added "reverse" parameter
+* in utils.parse_email_address used email.utils.parseaddr
+* added tests for message attributes
+
 0.11.1
 ======
 * message.Attachment.payload - removed probability of return None

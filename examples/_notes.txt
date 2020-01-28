@@ -31,3 +31,8 @@ False   False         _payload (*)
 * - some other encoding is used, or the header is missing,
     or if the payload has bogus data (i.e. bogus base64 or uuencoded data),
     the payload is returned as-is.
+
+
+icons
+=====
+📨 📬 📪 📭 📫 ✉ 📧 🖂 🖃 🖅 📩

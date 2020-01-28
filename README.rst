@@ -55,6 +55,7 @@ MailBox.fetch - email message generator, first searches email ids by criteria, t
 * *miss_defect*: True, miss emails with defects
 * *miss_no_uid*: True, miss emails without uid
 * *mark_seen*: True, mark emails as seen on fetch
+* *reverse*: False, in order from the larger date to the smaller
 
 Email attributes
 ^^^^^^^^^^^^^^^^

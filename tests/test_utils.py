@@ -80,8 +80,8 @@ class UtilsTest(unittest.TestCase):
 
     def test_parse_email_address(self):
         self.assertEqual(
-            utils.parse_email_address('"Ivan Petrov" <ivan@mail.ru>'),
-            {'email': 'ivan@mail.ru', 'name': '"Ivan Petrov"', 'full': '"Ivan Petrov" <ivan@mail.ru>'})
+            utils.parse_email_address('"Ivan Petrov" \n\r\t<ivan@mail.ru>\f'),
+            {'email': 'ivan@mail.ru', 'name': 'Ivan Petrov', 'full': '"Ivan Petrov" <ivan@mail.ru>'})
         self.assertEqual(
             utils.parse_email_address(' <ivan@mail.ru>'),
             {'email': 'ivan@mail.ru', 'name': '', 'full': '<ivan@mail.ru>'})
@@ -90,7 +90,7 @@ class UtilsTest(unittest.TestCase):
             {'email': 'chan@mail.ru', 'name': '你好', 'full': '你好 <chan@mail.ru>'})
         self.assertEqual(
             utils.parse_email_address(' "hi" <bad_mail.wow> '),
-            {'email': '', 'name': '"hi" <bad_mail.wow>', 'full': '"hi" <bad_mail.wow>'})
+            {'email': '', 'name': 'hi', 'full': '"hi" <bad_mail.wow>'})
         self.assertEqual(
             utils.parse_email_address('=?utf-8?Q?ATO.RU?= <subscriptions@ato.ru>'),
             {'email': 'subscriptions@ato.ru', 'name': '=?utf-8?Q?ATO.RU?=',

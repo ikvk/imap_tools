@@ -76,7 +76,7 @@ class MailBox:
         return criteria if type(criteria) is bytes else str(criteria).encode(charset)
 
     def fetch(self, criteria: str or bytes = 'ALL', charset: str = 'US-ASCII', limit: int = None,
-              miss_defect=True, miss_no_uid=True, mark_seen=True) -> iter:
+              miss_defect=True, miss_no_uid=True, mark_seen=True, reverse=False) -> iter:
         """
         Mail message generator in current folder by search criteria
         :param criteria: message search criteria (see examples at ./doc/imap_search_criteria.txt)
@@ -85,12 +85,14 @@ class MailBox:
         :param miss_defect: miss emails with defects
         :param miss_no_uid: miss emails without uid
         :param mark_seen: mark emails as seen on fetch
+        :param reverse: in order from the larger date to the smaller
         :return generator: MailMessage
         """
         search_result = self.box.search(charset, self._criteria_encoder(criteria, charset))
         check_command_status('box.search', search_result)
+        message_id_set = search_result[1][0].decode().split(' ') if search_result[1][0] else ()
         # first element is string with email numbers through the gap
-        for i, message_id in enumerate(search_result[1][0].decode().split(' ') if search_result[1][0] else ()):
+        for i, message_id in enumerate((reversed if reverse else iter)(message_id_set)):
             if limit and i >= limit:
                 break
             # get message by id

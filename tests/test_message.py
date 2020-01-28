@@ -1,11 +1,15 @@
+import os
 import unittest
 import datetime
 from tests.utils import MailboxTestCase
 
+from tests.data import MESSAGE_ATTRIBUTES
+from imap_tools import MailMessage
+
 
 class MessageTest(MailboxTestCase):
 
-    def test_attributes(self):
+    def test_live(self):
         none_type = type(None)
         for mailbox in self.mailbox_set.values():
             mailbox.folder.set(mailbox.folder_test_base)
@@ -49,6 +53,24 @@ class MessageTest(MailboxTestCase):
                     self.assertIs(type(att.filename), str)
                     self.assertIs(type(att.content_type), str)
                     self.assertIs(type(att.payload), bytes)
+
+    def test_attributes(self):
+        msg_attr_set = {'subject', 'from_', 'to', 'cc', 'bcc', 'date', 'date_str', 'text', 'html',
+                        'headers', 'from_values', 'to_values', 'cc_values', 'bcc_values'}
+        att_attr_set = {'filename', 'content_type', 'payload'}
+        for file_name in MESSAGE_ATTRIBUTES.keys():
+            message_data = MESSAGE_ATTRIBUTES[file_name]
+            for msg_path in ('../tests/messages/{}.eml'.format(file_name), 'tests/messages/{}.eml'.format(file_name)):
+                if not os.path.exists(msg_path):
+                    continue
+                with open(msg_path, 'rb') as f:
+                    bytes_data = f.read()
+            message = MailMessage.from_bytes(bytes_data)
+            for msg_attr in msg_attr_set:
+                self.assertEqual(getattr(message, msg_attr), message_data[msg_attr])
+            for att_i, att in enumerate(message.attachments):
+                for att_attr in att_attr_set:
+                    self.assertEqual(getattr(att, att_attr), message_data['attachments'][att_i][att_attr])
 
 
 if __name__ == "__main__":

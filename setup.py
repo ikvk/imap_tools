@@ -5,14 +5,14 @@ with open("README.rst", "r", encoding='utf-8') as fh:
 
 setuptools.setup(
     name='imap_tools',
-    version='0.11.1',
+    version='0.12.0',
     packages=setuptools.find_packages(),
     url='https://github.com/ikvk/imap_tools',
     license='Apache-2.0',
     long_description=long_description,
     long_description_content_type="text/x-rst",
     author='v.kaukin',
-    author_email='workkvk@gmail.com',
+    author_email='KaukinVK@ya.com',
     description='Working with email and mailbox using IMAP protocol.',
     keywords=['imap', 'imap-client', 'python3', 'email'],
     classifiers=[
