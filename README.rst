@@ -243,3 +243,4 @@ Thanks to:
 * `dojasoncom <https://github.com/dojasoncom>`_
 * `RandomStrangerOnTheInternet <https://github.com/RandomStrangerOnTheInternet>`_
 * `jonnyarnold <https://github.com/jonnyarnold>`_
+* `Mitrich3000 <https://github.com/Mitrich3000>`_
