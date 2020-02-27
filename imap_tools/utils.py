@@ -1,7 +1,8 @@
 import re
 import inspect
 import datetime
-from email.utils import parseaddr
+from email.utils import getaddresses
+from email.header import decode_header
 
 short_month_names = ('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', "Dec")
 
@@ -58,18 +59,23 @@ def decode_value(value: bytes or str, encoding=None) -> str:
     return value
 
 
-def parse_email_address(value: str) -> dict:
+def parse_email_addresses(raw_header: str) -> (dict,):
     """
-    Parse email address str, example: "Ivan Petrov" <ivan@mail.ru>
-    @:return dict(name: str, email: str, full: str)
+    Parse email addresses from header
+    :param raw_header: example: '=?UTF-8?B?0J7Qu9C1=?= <name@company.ru>,\r\n "\'\\"z, z\\"\'" <imap.tools@ya.ru>'
+    :return: tuple(dict(name: str, email: str, full: str))
     """
-    address = ''.join(char for char in value if char.isprintable()).strip()
-    parsed = parseaddr(address)
-    return {
-        'email': parsed[1] if '@' in parsed[1] else '',
-        'name': parsed[0],
-        'full': address
-    }
+    result = []
+    for raw_name, email in getaddresses([raw_header]):
+        if '@' not in email:
+            continue
+        name = decode_value(*decode_header(raw_name)[0])
+        result.append({
+            'email': email,
+            'name': name,
+            'full': '{} <{}>'.format(name, email).strip()
+        })
+    return tuple(result)
 
 
 def parse_email_date(value: str) -> datetime.datetime:

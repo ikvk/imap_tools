@@ -20,6 +20,7 @@ MESSAGE_ATTRIBUTES = {
         to=(),
         cc=(),
         bcc=(),
+        reply_to=('foma@company.ru', 'petr@company.ru'),
         date=datetime.datetime(1900, 1, 1, 0, 0),
         date_str='',
         text='',
@@ -32,10 +33,11 @@ MESSAGE_ATTRIBUTES = {
 <a href="https://mail.yandex.ru/neo2/#setup/collectors">
 <font size="5">Настроить сбор почты</font></a></font></td></tr></tbody></table></font>
 </body></html>""",
-        headers={'From': ('=?utf-8?b?0K/QvdC00LXQutGB?= <hello@yandex.ru>',), 'Subject': (
-            '=?utf-8?b?0KHQvtCx0LXRgNC40YLQtSDQstGB0Y4g0L/QvtGH0YLRgyDQsiDRjdGC0L4=?=\r\n =?utf-8?b?0YIg0Y/RidC40Lo=?=',),
-                 'MIME-Version': ('1.0',), 'Message-Id': ('<20110815165837.A26162B2802A@yaback1.mail.yandex.net>',),
-                 'Content-Type': ('multipart/related; boundary="===============1696383123=="',)},
+        headers={'MIME-Version': ('1.0',), 'From': ('=?utf-8?b?0K/QvdC00LXQutGB?= <hello@yandex.ru>',),
+                 'Content-Type': ('multipart/related; boundary="===============1696383123=="',), 'Reply-To': (
+            '=?UTF-8?B?0L/RgNC40LLQtdGC?= <foma@company.ru>,\r\n =?UTF-8?B?0L/QvtC60LA=?= <petr@company.ru>',),
+                 'Message-Id': ('<20110815165837.A26162B2802A@yaback1.mail.yandex.net>',), 'Subject': (
+            '=?utf-8?b?0KHQvtCx0LXRgNC40YLQtSDQstGB0Y4g0L/QvtGH0YLRgyDQsiDRjdGC0L4=?=\r\n =?utf-8?b?0YIg0Y/RidC40Lo=?=',)},
         attachments=[
             dict(
                 filename='collector.jpg',
@@ -47,6 +49,8 @@ MESSAGE_ATTRIBUTES = {
         to_values=(),
         cc_values=(),
         bcc_values=(),
+        reply_to_values=({'email': 'foma@company.ru', 'full': 'привет <foma@company.ru>', 'name': 'привет'},
+                         {'email': 'petr@company.ru', 'full': 'пока <petr@company.ru>', 'name': 'пока'}),
     ),
 
     # ===
@@ -56,6 +60,7 @@ MESSAGE_ATTRIBUTES = {
         to=('rasp@wat.aero',),
         cc=('aa@com.ru', 'mm@com.ru'),
         bcc=('hello@yandex-team.ru',),
+        reply_to=(),
         date=datetime.datetime(2019, 2, 7, 13, 18, 20,
                                tzinfo=datetime.timezone(datetime.timedelta(hours=5, minutes=0))),
         date_str='Thu, 7 Feb 2019 13:18:20 +0500',
@@ -116,10 +121,11 @@ e-mail: <a class="moz-txt-link-abbreviated" href="mailto:e.sp@com.ru">e.sp@com.r
         ],
         from_values={'email': 'k1@yandex.ru', 'name': 'Каукин Владимир', 'full': 'Каукин Владимир <k1@yandex.ru>'},
         to_values=({'email': 'rasp@wat.aero', 'name': 'ТЮМЕНЬ', 'full': 'ТЮМЕНЬ <rasp@wat.aero>'},),
-        cc_values=({'email': 'aa@com.ru', 'name': '', 'full': 'aa@com.ru'},
-                   {'email': 'mm@com.ru', 'name': '', 'full': 'mm@com.ru'}),
+        cc_values=({'email': 'aa@com.ru', 'name': '', 'full': '<aa@com.ru>'},
+                   {'email': 'mm@com.ru', 'name': '', 'full': '<mm@com.ru>'}),
         bcc_values=({'email': 'hello@yandex-team.ru', 'name': 'Команда Яндекс.Почты',
-                     'full': 'Команда Яндекс.Почты<hello@yandex-team.ru>'},),
+                     'full': 'Команда Яндекс.Почты <hello@yandex-team.ru>'},),
+        reply_to_values=(),
     ),
 
     # ===
@@ -129,6 +135,7 @@ e-mail: <a class="moz-txt-link-abbreviated" href="mailto:e.sp@com.ru">e.sp@com.r
         to=('user@company.ru',),
         cc=(),
         bcc=(),
+        reply_to=(),
         date=datetime.datetime(2017, 10, 12, 9, 41, 56,
                                tzinfo=datetime.timezone(datetime.timedelta(hours=5, minutes=0))),
         date_str='Thu, 12 Oct 2017 09:41:56 +0500',
@@ -202,10 +209,11 @@ e-mail: <a class="moz-txt-link-abbreviated" href="mailto:e.sp@com.ru">e.sp@com.r
                 payload=b'Return-Path: group@company.ru\nReceived: from m101.comp.ru (LHLO m101.comp.ru) (192.168.99.101) by\n m101.comp.ru\n with LMTP; Wed, 11 Oct 2017 13:54:33 +0500 (YEKT)\nReceived: from localhost (localhost [127.0.0.1])\n\tby m101.comp.ru (Postfix) with ESMTP id 04BDE6E3;\n\tWed, 11 Oct 2017 13:54:33 +0500 (YEKT)\nX-Spam-Flag: NO\nX-Spam-Score: -2.899\nX-Spam-Level: \nX-Spam-Status: No, score=-2.899 required=6.6 tests=[ALL_TRUSTED=-1,\n\tBAYES_00=-1.9, HTML_MESSAGE=0.001, RP_MATCHES_RCVD=-0.001,\n\tURIBL_BLOCKED=0.001] autolearn=ham autolearn_force=no\nReceived: from m101.comp.ru ([127.0.0.1])\n\tby localhost (m101.comp.ru [127.0.0.1]) (amavisd-new, port 10032)\n\twith ESMTP id 3N3XVuSw23lT; Wed, 11 Oct 2017 13:54:32 +0500 (YEKT)\nReceived: from localhost (localhost [127.0.0.1])\n\tby m101.comp.ru (Postfix) with ESMTP id 83DB56E6;\n\tWed, 11 Oct 2017 13:54:32 +0500 (YEKT)\nX-Virus-Scanned: amavisd-new at m101.comp.ru\nReceived: from m101.comp.ru ([127.0.0.1])\n\tby localhost (m101.comp.ru [127.0.0.1]) (amavisd-new, port 10026)\n\twith ESMTP id ylUz-3bpEY_5; Wed, 11 Oct 2017 13:54:32 +0500 (YEKT)\nReceived: from web.hades.company (s192-168-99-108.some.ru [192.168.99.108])\n\tby m101.comp.ru (Postfix) with ESMTPSA id 5AE656E3;\n\tWed, 11 Oct 2017 13:54:32 +0500 (YEKT)\nContent-Type: multipart/alternative;\n boundary="===============3693132879591888836=="\nMIME-Version: 1.0\nSubject: =?UTF-8?B?0YHRgtCw0YLRg9GB?=    \nFrom: group@company.ru\nTo: group@company.ru\nDate: Wed, 11 Oct 2017 08:54:32 -0000\nMessage-ID: <20171011085432.15374.20485@web.hades.company>\n\n--===============3693132879591888836==\nContent-Type: text/plain; charset="utf-8"\nMIME-Version: 1.0\nContent-Transfer-Encoding: quoted-printable\n\n=D0=9D=D0=BE=D0=B2=D1=8B=D0=B9 =D0=B7=D0=B0=D0=BA=D0=B0=D0=B7 =E2=84=9628=\n922 http://group.company.ru/ru/order/28922/process/\n=D0=A1=D0=BE=D0=B7=D0=B4=D0=B0=D0=BB:=20\n=D0=9A=D0=BB=D0=B8=D0=B5=D0=BD=D1=82 =D0=9A=D0=BE=D0=B2=D1=87=D0=B5=D0=B3=\n (=D0=93=D1=83=D1=81=D0=B5=D0=B2 =D0=94=D0=BC=D0=B8=D1=82=D1=80=D0=B8=D0=B9=\n)\n\n=D0=A1=D0=B5=D0=B3=D0=BC=D0=B5=D0=BD=D1=82=D1=8B:\n\n- =D0=9C=D0=BE=D1=81=D0=BA=D0=B2=D0=B0 - =D0=A2=D0=B5=D0=BB=D1=8C-=D0=90=D0=\n=B2=D0=B8=D0=B2, some-889, 15.03.2018, =D1=8D=D0=BA=D0=BE=D0=BD=D0=BE=D0=BC=\n: (15 =D0=B2=D0=B7=D1=80.)\n\n- =D0=A2=D0=B5=D0=BB=D1=8C-=D0=90=D0=B2=D0=B8=D0=B2 - =D0=9C=D0=BE=D1=81=D0=\n=BA=D0=B2=D0=B0, some-890, 22.03.2018, =D1=8D=D0=BA=D0=BE=D0=BD=D0=BE=D0=BC=\n: (15 =D0=B2=D0=B7=D1=80.)\n--===============3693132879591888836==\nContent-Type: text/html; charset="utf-8"\nMIME-Version: 1.0\nContent-Transfer-Encoding: quoted-printable\n\n\n\n    <!DOCTYPE html PUBLIC \'-//W3C//DTD XHTML 1.0 Strict//EN\' \'http://www.=\nw3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\'>\n    <html xmlns=3D\'http://www.w3.org/1999/xhtml\' lang=3D\'ru-ru\'\n          xml:lang=3D\'en-us\'>\n    <head>\n        <meta content=3D"text/html; charset=3DUTF-8" http-equiv=3D"Conten=\nt-Type">\n       =20\n    </head>\n\n    <body id=3D\'body\'>\n   =20\n   =20\n       =20\n        <a href=3D"http://group.company.ru/ru/order/28922/process/">\n           =20\n            =D0=9D=D0=BE=D0=B2=D1=8B=D0=B9 =D0=B7=D0=B0=D0=BA=D0=B0=D0=B7=\n =E2=84=9628922\n        </a><br>\n\n       =20\n        =D0=A1=D0=BE=D0=B7=D0=B4=D0=B0=D0=BB:\n       =20\n            =D0=9A=D0=BB=D0=B8=D0=B5=D0=BD=D1=82 =D0=9A=D0=BE=D0=B2=D1=87=\n=D0=B5=D0=B3\n            (=D0=93=D1=83=D1=81=D0=B5=D0=B2 =D0=94=D0=BC=D0=B8=D1=82=D1=80=\n=D0=B8=D0=B9)\n        <br><br>\n       =20\n        =D0=A1=D0=B5=D0=B3=D0=BC=D0=B5=D0=BD=D1=82=D1=8B: <br>\n        <ul>\n           =20\n                <li>=D0=9C=D0=BE=D1=81=D0=BA=D0=B2=D0=B0 - =D0=A2=D0=B5=D0=\n=BB=D1=8C-=D0=90=D0=B2=D0=B8=D0=B2, some-889, 15.03.2018, =D1=8D=D0=BA=D0=BE=\n=D0=BD=D0=BE=D0=BC: (15 =D0=B2=D0=B7=D1=80.)</li>\n           =20\n                <li>=D0=A2=D0=B5=D0=BB=D1=8C-=D0=90=D0=B2=D0=B8=D0=B2 - =D0=\n=9C=D0=BE=D1=81=D0=BA=D0=B2=D0=B0, some-890, 22.03.2018, =D1=8D=D0=BA=D0=BE=\n=D0=BD=D0=BE=D0=BC: (15 =D0=B2=D0=B7=D1=80.)</li>\n           =20\n        </ul><br>\n       =20\n       =20\n   =20\n\n    </body>\n    </html>\n\n\n--===============3693132879591888836==--\n'
             ),
         ],
-        from_values={'email': 'i.kor@company.ru', 'name': '', 'full': 'i.kor@company.ru'},
-        to_values=({'email': 'user@company.ru', 'name': '', 'full': 'user@company.ru'},),
+        from_values={'email': 'i.kor@company.ru', 'name': '', 'full': '<i.kor@company.ru>'},
+        to_values=({'email': 'user@company.ru', 'name': '', 'full': '<user@company.ru>'},),
         cc_values=(),
         bcc_values=(),
+        reply_to_values=(),
     ),
 
     # ===
@@ -215,6 +223,7 @@ e-mail: <a class="moz-txt-link-abbreviated" href="mailto:e.sp@com.ru">e.sp@com.r
         to=('imap.tools@ya.ru',),
         cc=(),
         bcc=(),
+        reply_to=(),
         date=datetime.datetime(2019, 5, 1, 12, 20, 29,
                                tzinfo=datetime.timezone(datetime.timedelta(hours=5, minutes=0))),
         date_str='Wed, 01 May 2019 12:20:29 +0500',
@@ -368,8 +377,9 @@ YjNmYmE0MGNjZDk2MDMwODRiZS0tDQo=""".replace('\n', '\r\n'),
         ],
         from_values={'email': 'kaukinvk@yandex.ru', 'name': 'Каукин Владимир',
                      'full': 'Каукин Владимир <kaukinvk@yandex.ru>'},
-        to_values=({'email': 'imap.tools@ya.ru', 'name': '', 'full': 'imap.tools@ya.ru'},),
+        to_values=({'email': 'imap.tools@ya.ru', 'name': '', 'full': '<imap.tools@ya.ru>'},),
         cc_values=(),
         bcc_values=(),
+        reply_to_values=(),
     ),
 }

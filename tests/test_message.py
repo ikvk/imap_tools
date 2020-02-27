@@ -24,26 +24,13 @@ class MessageTest(MailboxTestCase):
                 self.assertIs(type(message.html), str)
                 self.assertIs(type(message.headers), dict)
 
-                self.assertIs(type(message.to), tuple)
-                for i in message.to:
-                    self.assertIs(type(i), str)
-                self.assertIs(type(message.to_values), tuple)
-                for i in message.to_values:
-                    self.assertIs(type(i), dict)
-
-                self.assertIs(type(message.cc), tuple)
-                for i in message.cc:
-                    self.assertIs(type(i), str)
-                self.assertIs(type(message.cc_values), tuple)
-                for i in message.cc_values:
-                    self.assertIs(type(i), dict)
-
-                self.assertIs(type(message.bcc), tuple)
-                for i in message.bcc:
-                    self.assertIs(type(i), str)
-                self.assertIs(type(message.bcc_values), tuple)
-                for i in message.bcc_values:
-                    self.assertIs(type(i), dict)
+                for addr_field in {'to', 'cc', 'bcc', 'reply_to'}:
+                    self.assertIs(type(getattr(message, addr_field)), tuple)
+                    for i in getattr(message, addr_field):
+                        self.assertIs(type(i), str)
+                    self.assertIs(type(getattr(message, '{}_values'.format(addr_field))), tuple)
+                    for i in getattr(message, '{}_values'.format(addr_field)):
+                        self.assertIs(type(i), dict)
 
                 self.assertIs(type(message.flags), tuple)
                 for i in message.flags:
@@ -55,8 +42,8 @@ class MessageTest(MailboxTestCase):
                     self.assertIs(type(att.payload), bytes)
 
     def test_attributes(self):
-        msg_attr_set = {'subject', 'from_', 'to', 'cc', 'bcc', 'date', 'date_str', 'text', 'html',
-                        'headers', 'from_values', 'to_values', 'cc_values', 'bcc_values'}
+        msg_attr_set = {'subject', 'from_', 'to', 'cc', 'bcc', 'reply_to', 'date', 'date_str', 'text', 'html',
+                        'headers', 'from_values', 'to_values', 'cc_values', 'bcc_values', 'reply_to_values'}
         att_attr_set = {'filename', 'content_type', 'payload'}
         for file_name in MESSAGE_ATTRIBUTES.keys():
             message_data = MESSAGE_ATTRIBUTES[file_name]

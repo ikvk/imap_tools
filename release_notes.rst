@@ -1,3 +1,9 @@
+0.13.0
+======
+* New parse logic for email addresses - utils.parse_email_addresses, using email.utils.getaddresses
+* Added message.MailMessage.reply_to, message.MailMessage.reply_to_values
+* Removed message.MailMessage._parse_addresses
+
 0.12.0
 ======
 * MailBox.fetch - added "reverse" parameter

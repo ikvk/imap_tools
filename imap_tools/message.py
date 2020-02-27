@@ -5,7 +5,7 @@ import imaplib
 from functools import lru_cache
 from email.header import decode_header
 
-from .utils import decode_value, parse_email_address, parse_email_date
+from .utils import decode_value, parse_email_addresses, parse_email_date
 
 
 class MailMessage:
@@ -41,18 +41,6 @@ class MailMessage:
                 raw_uid_data = fetch_item[0]
                 raw_message_data = fetch_item[1]
         return raw_message_data, raw_uid_data, raw_flag_data
-
-    def _parse_addresses(self, value: str) -> (dict,):
-        """
-        Parse email addresses from header (see decode_header)
-        @:return tuple(dict(name: str, email: str, full: str))
-        """
-        if value not in self.obj:
-            return ()
-        return tuple(
-            parse_email_address(''.join(decode_value(string, charset) for string, charset in decode_header(address)))
-            for address in self.obj[value].split(',')
-        )
 
     @property
     @lru_cache()
@@ -94,7 +82,7 @@ class MailMessage:
     @lru_cache()
     def from_values(self) -> dict or None:
         """Sender (all data)"""
-        result_set = self._parse_addresses('from')
+        result_set = parse_email_addresses(self.obj['From'] or '')
         return result_set[0] if result_set else None
 
     @property
@@ -107,7 +95,7 @@ class MailMessage:
     @lru_cache()
     def to_values(self) -> (dict,):
         """Recipients (all data)"""
-        return self._parse_addresses('to')
+        return parse_email_addresses(self.obj['To'] or '')
 
     @property
     @lru_cache()
@@ -119,7 +107,7 @@ class MailMessage:
     @lru_cache()
     def cc_values(self) -> (dict,):
         """Carbon copy (all data)"""
-        return self._parse_addresses('cc')
+        return parse_email_addresses(self.obj['Cc'] or '')
 
     @property
     @lru_cache()
@@ -131,13 +119,25 @@ class MailMessage:
     @lru_cache()
     def bcc_values(self) -> (dict,):
         """Blind carbon copy (all data)"""
-        return self._parse_addresses('bcc')
+        return parse_email_addresses(self.obj['Bcc'] or '')
 
     @property
     @lru_cache()
     def bcc(self) -> (str,):
         """Blind carbon copy emails"""
         return tuple(i['email'] for i in self.bcc_values)
+
+    @property
+    @lru_cache()
+    def reply_to_values(self) -> (dict,):
+        """Reply-to emails (all data)"""
+        return parse_email_addresses(self.obj['Reply-To'] or '')
+
+    @property
+    @lru_cache()
+    def reply_to(self) -> (str,):
+        """Reply-to emails"""
+        return tuple(i['email'] for i in self.reply_to_values)
 
     @property
     @lru_cache()

@@ -78,20 +78,20 @@ class UtilsTest(unittest.TestCase):
         ):
             self.assertEqual(utils.parse_email_date(val), exp)
 
-    def test_parse_email_address(self):
+    def test_parse_email_addresses(self):
         self.assertEqual(
-            utils.parse_email_address('"Ivan Petrov" \n\r\t<ivan@mail.ru>\f'),
-            {'email': 'ivan@mail.ru', 'name': 'Ivan Petrov', 'full': '"Ivan Petrov" <ivan@mail.ru>'})
+            utils.parse_email_addresses('=?UTF-8?B?0J7Qu9C1=?= <name@company.ru>,\r\n "\'\\"z, z\\"\'" <ya@ya.ru>\f'),
+            ({'email': 'name@company.ru', 'name': 'Оле', 'full': 'Оле <name@company.ru>'},
+             {'email': 'ya@ya.ru', 'name': '\'"z, z"\'', 'full': '\'"z, z"\' <ya@ya.ru>'}))
         self.assertEqual(
-            utils.parse_email_address(' <ivan@mail.ru>'),
-            {'email': 'ivan@mail.ru', 'name': '', 'full': '<ivan@mail.ru>'})
+            utils.parse_email_addresses(' <ivan@mail.ru>'),
+            ({'email': 'ivan@mail.ru', 'name': '', 'full': '<ivan@mail.ru>'},))
         self.assertEqual(
-            utils.parse_email_address('你好 <chan@mail.ru>'),
-            {'email': 'chan@mail.ru', 'name': '你好', 'full': '你好 <chan@mail.ru>'})
+            utils.parse_email_addresses('你好 <chan@mail.ru>'),
+            ({'email': 'chan@mail.ru', 'name': '你好', 'full': '你好 <chan@mail.ru>'},))
         self.assertEqual(
-            utils.parse_email_address(' "hi" <bad_mail.wow> '),
-            {'email': '', 'name': 'hi', 'full': '"hi" <bad_mail.wow>'})
+            utils.parse_email_addresses(' "hi" <bad_mail.wow> '),
+            tuple())
         self.assertEqual(
-            utils.parse_email_address('=?utf-8?Q?ATO.RU?= <subscriptions@ato.ru>'),
-            {'email': 'subscriptions@ato.ru', 'name': '=?utf-8?Q?ATO.RU?=',
-             'full': '=?utf-8?Q?ATO.RU?= <subscriptions@ato.ru>'})
+            utils.parse_email_addresses('=?utf-8?Q?ATO.RU?= <subscriptions@ato.ru>'),
+            ({'email': 'subscriptions@ato.ru', 'name': 'ATO.RU', 'full': 'ATO.RU <subscriptions@ato.ru>'},))

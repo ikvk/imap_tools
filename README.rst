@@ -64,32 +64,44 @@ Email attributes
     # NOTE: All message properties are cached by functools.lru_cache
 
     for message in mailbox.fetch():
-        message.uid          # str or None: '123'
-        message.subject      # str: 'some subject'
-        message.from_        # str: 'sender@ya.ru'
-        message.to           # tuple: ('iam@goo.ru', 'friend@ya.ru', )
-        message.cc           # tuple: ('cc@mail.ru', )
-        message.bcc          # tuple: ('bcc@mail.ru', )
-        message.date         # datetime.datetime: 1900-1-1 for unparsed, may be naive or with tzinfo
-        message.date_str     # str: original date - 'Tue, 03 Jan 2017 22:26:59 +0500'
-        message.text         # str: 'hi'
-        message.html         # str: '<b>hi</b>'
-        message.flags        # tuple: ('SEEN', 'FLAGGED', 'ENCRYPTED')
-        message.headers      # dict: {'Received': ('from 1.m.net', 'from 2.m.net'), 'AntiVirus': ('Clean',)}
+        message.uid              # str or None: '123'
+        message.subject          # str: 'some subject'
+        message.from_            # str: 'sender@ya.ru'
+        message.to               # tuple: ('iam@goo.ru', 'friend@ya.ru', )
+        message.cc               # tuple: ('cc@mail.ru', )
+        message.bcc              # tuple: ('bcc@mail.ru', )
+        message.reply_to         # tuple: ('reply_to@mail.ru', )
+        message.date             # datetime.datetime: 1900-1-1 for unparsed, may be naive or with tzinfo
+        message.date_str         # str: original date - 'Tue, 03 Jan 2017 22:26:59 +0500'
+        message.text             # str: 'hi'
+        message.html             # str: '<b>hi</b>'
+        message.flags            # tuple: ('SEEN', 'FLAGGED', 'ENCRYPTED')
+        message.headers          # dict: {'Received': ('from 1.m.ru', 'from 2.m.ru'), 'AntiVirus': ('Clean',)}
 
         for att in message.attachments:  # list: [Attachment objects]
-            att.filename     # str: 'cat.jpg'
-            att.content_type # str: 'image/jpeg'
-            att.payload      # bytes: b'\xff\xd8\xff\xe0\'
+            att.filename         # str: 'cat.jpg'
+            att.content_type     # str: 'image/jpeg'
+            att.payload          # bytes: b'\xff\xd8\xff\xe0\'
 
-        message.obj          # email.message.Message: original object
-        message.from_values  # dict or None: {'email': 'im@ya.ru', 'name': 'Ivan', 'full': 'Ivan <im@ya.ru>'}
-        message.to_values    # tuple: ({'email': '', 'name': '', 'full': ''},)
-        message.cc_values    # tuple: ({'email': '', 'name': '', 'full': ''},)
-        message.bcc_values   # tuple: ({'email': '', 'name': '', 'full': ''},)
+        message.obj              # email.message.Message: original object
+        message.from_values      # dict or None: {'email': 'im@ya.ru', 'name': 'Van', 'full': 'Van <im@ya.ru>'}
+        message.to_values        # tuple: ({'email': '', 'name': '', 'full': ''},)
+        message.cc_values        # tuple: ({'email': '', 'name': '', 'full': ''},)
+        message.bcc_values       # tuple: ({'email': '', 'name': '', 'full': ''},)
+        message.reply_to_values  # tuple: ({'email': '', 'name': '', 'full': ''},)
 
 Search criteria
 ^^^^^^^^^^^^^^^
+
+Possible search approaches:
+
+.. code-block:: python
+
+    from imap_tools import Q, AND, OR, NOT
+
+    mailbox.fetch(Q(subject='weather'))  # query, the str-like object - see below
+    mailbox.fetch('TEXT "hello"')  # str
+    mailbox.fetch(b'TEXT "\xd1\x8f"')  # bytes
 
 Implemented query builder for search logic described in `rfc3501 <https://tools.ietf.org/html/rfc3501#section-6.4.4>`_.
 See `query examples <https://github.com/ikvk/imap_tools/blob/master/examples/search.py>`_.
@@ -105,10 +117,6 @@ You can change this behavior by overriding MailBox._criteria_encoder or pass cri
 .. code-block:: python
 
     from imap_tools import Q, AND, OR, NOT
-    # allowed types
-    mailbox.fetch(Q(subject='weather'))  # query, the str-like object
-    mailbox.fetch('TEXT "hello"')  # str
-    mailbox.fetch(b'TEXT "\xd1\x8f"')  # bytes
     # AND
     Q(text='hello', new=True)  # '(TEXT "hello" NEW)'
     # OR
@@ -199,8 +207,8 @@ Actions with mailbox folders
 
     with MailBox('imap.mail.com').login('test@mail.com', 'pwd') as mailbox:
         # LIST
-        for f in mailbox.folder.list('INBOX'):
-            print((f['name'], f['flags'], f['delim']))  # ('INBOX|cats', '\\Unmarked \\HasChildren', '|')
+        for folder_info in mailbox.folder.list('INBOX'):
+            print(folder_info)  # {'name': 'INBOX|cats', 'delim': '|', 'flags': '\\Unmarked \\HasChildren'}
         # SET
         mailbox.folder.set('INBOX')
         # GET
@@ -244,3 +252,4 @@ Thanks to:
 * `RandomStrangerOnTheInternet <https://github.com/RandomStrangerOnTheInternet>`_
 * `jonnyarnold <https://github.com/jonnyarnold>`_
 * `Mitrich3000 <https://github.com/Mitrich3000>`_
+* `audemed44 <https://github.com/audemed44>`_
