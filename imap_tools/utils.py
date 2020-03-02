@@ -67,13 +67,14 @@ def parse_email_addresses(raw_header: str) -> (dict,):
     """
     result = []
     for raw_name, email in getaddresses([raw_header]):
-        if '@' not in email:
+        name = decode_value(*decode_header(raw_name)[0]).strip()
+        email = email.strip()
+        if not (name or email):
             continue
-        name = decode_value(*decode_header(raw_name)[0])
         result.append({
-            'email': email,
+            'email': email if '@' in email else '',
             'name': name,
-            'full': '{} <{}>'.format(name, email).strip()
+            'full': '{} <{}>'.format(name, email) if name and email else name or email
         })
     return tuple(result)
 

@@ -180,6 +180,9 @@ You can use 2 approaches to perform these operations:
 
 Result of MailBox.fetch generator will be implicitly converted to uid list.
 
+For actions with a large number of messages imap command may be too large and will throw an exception,
+use 'limit' argument for fetch in this case.
+
 .. code-block:: python
 
     with MailBox('imap.mail.com').login('test@mail.com', 'pwd', initial_folder='INBOX') as mailbox:

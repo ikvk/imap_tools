@@ -1,3 +1,7 @@
+0.13.1
+======
+* Improve utils.parse_email_addresses - full values for bad emails
+
 0.13.0
 ======
 * New parse logic for email addresses - utils.parse_email_addresses, using email.utils.getaddresses
