@@ -41,7 +41,7 @@ Basic
     with MailBox('imap.mail.com').login('test@mail.com', 'password') as mailbox:
         subjects = [msg.subject for msg in mailbox.fetch()]
 
-    # OR the same otherwise
+    # get list of email subjects from INBOX folder - verbose version
     mailbox = MailBox('imap.mail.com')
     mailbox.login('test@mail.com', 'password', initial_folder='INBOX')
     subjects = [msg.subject for msg in mailbox.fetch(Q(all=True))]
