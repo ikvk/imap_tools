@@ -59,9 +59,10 @@ MailBox.fetch - email message generator, first searches email ids by criteria, t
 
 Email attributes
 ^^^^^^^^^^^^^^^^
-.. code-block:: python
 
-    # NOTE: All message properties are cached by functools.lru_cache
+Message public attributes are cached by functools.lru_cache
+
+.. code-block:: python
 
     for message in mailbox.fetch():
         message.uid              # str or None: '123'
