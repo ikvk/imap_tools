@@ -101,8 +101,8 @@ Possible search approaches:
     from imap_tools import Q, AND, OR, NOT
 
     mailbox.fetch(Q(subject='weather'))  # query, the str-like object - see below
-    mailbox.fetch('TEXT "hello"')  # str
-    mailbox.fetch(b'TEXT "\xd1\x8f"')  # bytes
+    mailbox.fetch('TEXT "hello"')  # str, use charset arg for non US-ASCII chars
+    mailbox.fetch(b'TEXT "\xd1\x8f"')  # bytes, charset arg is ignored
 
 Implemented query builder for search logic described in `rfc3501 <https://tools.ietf.org/html/rfc3501#section-6.4.4>`_.
 See `query examples <https://github.com/ikvk/imap_tools/blob/master/examples/search.py>`_.
