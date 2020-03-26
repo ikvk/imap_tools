@@ -118,4 +118,4 @@
 
 0.1.1
 =====
-* first version: May 31, 2017
+* first version: 31 May 2017
