@@ -57,7 +57,7 @@ MailBox.fetch - email message generator, first searches email ids by criteria, t
 * *mark_seen*: True, mark emails as seen on fetch
 * *reverse*: False, in order from the larger date to the smaller
 
-MailBox.box - original IMAP4 client instance.
+MailBox.box - imaplib.IMAP4/IMAP4_SSL client instance.
 
 Email attributes
 ^^^^^^^^^^^^^^^^
