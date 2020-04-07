@@ -62,7 +62,7 @@ MailBox.box - imaplib.IMAP4/IMAP4_SSL client instance.
 Email attributes
 ^^^^^^^^^^^^^^^^
 
-Message public attributes are cached by functools.lru_cache
+Message and Attachment public attributes are cached by functools.lru_cache
 
 .. code-block:: python
 
