@@ -5,6 +5,12 @@ imap_tools
 
 Working with email and mailbox using IMAP protocol.
 
+- Parsed email message attributes
+- Query builder for searching emails
+- Work with emails in folders (copy, delete, flag, move, seen)
+- Work with mailbox folders (list, set, get, create, exists, rename, delete, status)
+- No dependencies
+
 ===============  ====================================================
 Python version   3.3+
 License          Apache-2.0
@@ -13,14 +19,6 @@ IMAP             VERSION 4rev1 - https://tools.ietf.org/html/rfc3501
 ===============  ====================================================
 
 .. contents::
-
-Features
---------
-- Parsed email message attributes
-- Query builder for searching emails
-- Work with emails in folders (copy, delete, flag, move, seen)
-- Work with mailbox folders (list, set, get, create, exists, rename, delete, status)
-- No dependencies
 
 Installation
 ------------
