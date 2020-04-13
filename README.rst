@@ -39,9 +39,9 @@ Basic
     with MailBox('imap.mail.com').login('test@mail.com', 'password') as mailbox:
         subjects = [msg.subject for msg in mailbox.fetch()]
 
-    # get list of email subjects from INBOX folder - verbose version
+    # get list of email subjects from INBOX folder - equivalent verbose version
     mailbox = MailBox('imap.mail.com')
-    mailbox.login('test@mail.com', 'password', initial_folder='INBOX')
+    mailbox.login('test@mail.com', 'password', initial_folder='INBOX')  # or mailbox.folder.set instead 3d arg
     subjects = [msg.subject for msg in mailbox.fetch(Q(all=True))]
     mailbox.logout()
 
@@ -85,7 +85,7 @@ Message and Attachment public attributes are cached by functools.lru_cache
             att.payload          # bytes: b'\xff\xd8\xff\xe0\'
 
         message.obj              # email.message.Message: original object
-        message.from_values      # dict or None: {'email': 'im@ya.ru', 'name': 'Van', 'full': 'Van <im@ya.ru>'}
+        message.from_values      # dict or None: {'email': 'im@ya.ru', 'name': 'Van 你', 'full': 'Van 你 <im@ya.ru>'}
         message.to_values        # tuple: ({'email': '', 'name': '', 'full': ''},)
         message.cc_values        # tuple: ({'email': '', 'name': '', 'full': ''},)
         message.bcc_values       # tuple: ({'email': '', 'name': '', 'full': ''},)
