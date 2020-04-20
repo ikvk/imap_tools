@@ -39,6 +39,7 @@ class MailMessage:
             # data, uid
             if type(fetch_item) is tuple:
                 raw_uid_data = fetch_item[0]
+                raw_flag_data=fetch_item[0]
                 raw_message_data = fetch_item[1]
         return raw_message_data, raw_uid_data, raw_flag_data
 
@@ -65,8 +66,11 @@ class MailMessage:
         *This attribute will not be changed after actions: flag, seen
         """
         result = []
-        for raw_flag_item in self._raw_flag_data:
-            result.extend(imaplib.ParseFlags(raw_flag_item))
+        if type(self._raw_flag_data) is bytes:
+            result=imaplib.ParseFlags(self._raw_flag_data)
+        else:
+            for raw_flag_item in self._raw_flag_data:
+                result.extend(imaplib.ParseFlags(raw_flag_item))
         return tuple(i.decode().strip().replace('\\', '').upper() for i in result)
 
     @property
