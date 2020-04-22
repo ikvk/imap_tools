@@ -3,7 +3,8 @@ import unittest
 import configparser
 from imap_tools import MailBox
 
-test_mailbox_name_set = {'YANDEX', 'ZIMBRA', 'MAIL_RU'}  # YANDEX, MAIL_RU, GOOGLE, ZIMBRA
+# YANDEX, MAIL_RU, GOOGLE, ZIMBRA, OUTLOOK
+TEST_MAILBOX_NAME_SET = {'YANDEX', 'ZIMBRA', 'MAIL_RU', 'OUTLOOK'}
 
 
 def get_test_mailbox_config(mailbox_name: str) -> dict:
@@ -17,6 +18,7 @@ def get_test_mailbox_config(mailbox_name: str) -> dict:
             email=config[mailbox_name]['email'],
             password=config[mailbox_name]['password'],
             path_separator=config[mailbox_name]['path_separator'],
+            test_folder=config[mailbox_name]['test_folder'],
         )
 
 
@@ -24,27 +26,23 @@ def get_test_mailbox(mailbox_name: str):
     # get config
     config = get_test_mailbox_config(mailbox_name)
 
-    # add class attributes for pycharm code analyzer
+    # add test attributes to MailBox
     class MailBoxTestEx(MailBox):
         def __init__(self, *args):
             super().__init__(*args)
-            self.folder_test = 'test'
-            self.folder_test_base = 'test{}base'
-            self.folder_test_temp1 = 'test{}temp1'
-            self.folder_test_temp2 = 'test{}temp2'
-            self.folder_test_new = 'test{}new'
-            self.folder_test_new1 = 'test{}new1'
+            test_folder = config['test_folder']
+            path_separator = config['path_separator']
+            self.folder_test = '{}'.format(test_folder)
+            self.folder_test_base = '{}{}base'.format(test_folder, path_separator)
+            self.folder_test_temp1 = '{}{}temp1'.format(test_folder, path_separator)
+            self.folder_test_temp2 = '{}{}temp2'.format(test_folder, path_separator)
+            self.folder_test_new = '{}{}new'.format(test_folder, path_separator)
+            self.folder_test_new1 = '{}{}new1'.format(test_folder, path_separator)
 
     # create mailbox instance
     mailbox = MailBoxTestEx(config['host'])
     # connect
     mailbox.login(config['email'], config['password'])
-    # set test folder paths
-    mailbox.folder_test_base = mailbox.folder_test_base.format(config['path_separator'])
-    mailbox.folder_test_temp1 = mailbox.folder_test_temp1.format(config['path_separator'])
-    mailbox.folder_test_temp2 = mailbox.folder_test_temp2.format(config['path_separator'])
-    mailbox.folder_test_new = mailbox.folder_test_new.format(config['path_separator'])
-    mailbox.folder_test_new1 = mailbox.folder_test_new1.format(config['path_separator'])
     # done
     return mailbox
 
@@ -52,7 +50,7 @@ def get_test_mailbox(mailbox_name: str):
 class MailboxTestCase(unittest.TestCase):
     def setUp(self):
         self.mailbox_set = dict()
-        for test_mailbox_name in test_mailbox_name_set:
+        for test_mailbox_name in TEST_MAILBOX_NAME_SET:
             self.mailbox_set[test_mailbox_name] = get_test_mailbox(test_mailbox_name)
 
     def tearDown(self):

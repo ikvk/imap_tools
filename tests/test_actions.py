@@ -1,7 +1,7 @@
 import unittest
 
 import imap_tools
-from tests.utils import MailboxTestCase, test_mailbox_name_set, get_test_mailbox
+from tests.utils import MailboxTestCase, TEST_MAILBOX_NAME_SET, get_test_mailbox
 
 
 class ActionTest(MailboxTestCase):
@@ -10,7 +10,7 @@ class ActionTest(MailboxTestCase):
     @classmethod
     def setUpClass(cls):
         # clear temp folders
-        for test_mailbox_name in test_mailbox_name_set:
+        for test_mailbox_name in TEST_MAILBOX_NAME_SET:
             mailbox = get_test_mailbox(test_mailbox_name)
             mailbox.folder.set(mailbox.folder_test_temp1)
             for_del_1 = [msg.uid for msg in mailbox.fetch()]

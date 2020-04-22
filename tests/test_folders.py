@@ -1,13 +1,13 @@
 import unittest
 
-from tests.utils import MailboxTestCase, test_mailbox_name_set, get_test_mailbox
+from tests.utils import MailboxTestCase, TEST_MAILBOX_NAME_SET, get_test_mailbox
 
 
 class FoldersTest(MailboxTestCase):
     @classmethod
     def setUpClass(cls):
         # delete temp new folders
-        for test_mailbox_name in test_mailbox_name_set:
+        for test_mailbox_name in TEST_MAILBOX_NAME_SET:
             mailbox = get_test_mailbox(test_mailbox_name)
             for del_folder in (mailbox.folder_test_new, mailbox.folder_test_new1):
                 if mailbox.folder.exists(del_folder):
@@ -15,14 +15,10 @@ class FoldersTest(MailboxTestCase):
 
     def test_folders(self):
         for mailbox_name, mailbox in self.mailbox_set.items():
-            if mailbox_name == 'MAIL_RU':
-                continue
             # LIST
             folder_list = mailbox.folder.list(mailbox.folder_test)
-            self.assertEqual(
-                set([i['name'] for i in folder_list]),
-                {mailbox.folder_test_base, mailbox.folder_test_temp1, mailbox.folder_test_temp2}
-            )
+            check_folder_set = {mailbox.folder_test_base, mailbox.folder_test_temp1, mailbox.folder_test_temp2}
+            self.assertTrue(check_folder_set.issubset(set([i['name'] for i in folder_list])))
             for folder in folder_list:
                 self.assertIs(type(folder['flags']), str)
                 self.assertIs(type(folder['delim']), str)

@@ -4,7 +4,7 @@ import datetime
 from tests.utils import MailboxTestCase
 
 from tests.data import MESSAGE_ATTRIBUTES
-from imap_tools import MailMessage
+from imap_tools import MailMessage, MessageFlags
 
 
 class MessageTest(MailboxTestCase):
@@ -13,6 +13,7 @@ class MessageTest(MailboxTestCase):
         none_type = type(None)
         for mailbox in self.mailbox_set.values():
             mailbox.folder.set(mailbox.folder_test_base)
+            answered_and_flagged_cnt = 0
             for message in mailbox.fetch():
                 self.assertIn(type(message.uid), (str, none_type))
                 self.assertIs(type(message.subject), str)
@@ -35,11 +36,15 @@ class MessageTest(MailboxTestCase):
                 self.assertIs(type(message.flags), tuple)
                 for i in message.flags:
                     self.assertIs(type(i), str)
+                if {MessageFlags.ANSWERED, MessageFlags.FLAGGED}.issubset(message.flags):
+                    answered_and_flagged_cnt += 1
 
                 for att in message.attachments:
                     self.assertIs(type(att.filename), str)
                     self.assertIs(type(att.content_type), str)
                     self.assertIs(type(att.payload), bytes)
+
+            self.assertTrue(answered_and_flagged_cnt >= 1)
 
     def test_attributes(self):
         msg_attr_set = {'subject', 'from_', 'to', 'cc', 'bcc', 'reply_to', 'date', 'date_str', 'text', 'html',
