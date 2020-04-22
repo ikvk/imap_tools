@@ -39,6 +39,7 @@ class MailMessage:
             # data, uid
             if type(fetch_item) is tuple:
                 raw_uid_data = fetch_item[0]
+                raw_flag_data.append(fetch_item[0])  # may contains flags (google, dovecot)
                 raw_message_data = fetch_item[1]
         return raw_message_data, raw_uid_data, raw_flag_data
 

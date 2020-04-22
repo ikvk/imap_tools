@@ -1,3 +1,7 @@
+0.14.0
+======
+* Improved parse logic for message.MailMessage.flags
+
 0.13.1
 ======
 * Improve utils.parse_email_addresses - full values for bad emails
