@@ -257,3 +257,4 @@ Thanks to:
 * `jonnyarnold <https://github.com/jonnyarnold>`_
 * `Mitrich3000 <https://github.com/Mitrich3000>`_
 * `audemed44 <https://github.com/audemed44>`_
+* `mkalioby <https://github.com/mkalioby>`_
