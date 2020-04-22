@@ -235,7 +235,7 @@ class Attachment:
         if isinstance(multipart_payload, list):
             for payload_item in multipart_payload:
                 if hasattr(payload_item, 'as_bytes'):
-                    payload_item_bytes = payload_item.as_bytes()
+                    payload_item_bytes = payload_item.as_bytes()  # noqa
                     cte = str(self._part.get('content-transfer-encoding', '')).lower().strip()
                     if payload_item_bytes and cte:
                         if cte == 'base64':
