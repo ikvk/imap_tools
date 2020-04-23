@@ -1,3 +1,7 @@
+0.14.2
+======
+* Fixed bug in folder.MailBoxFolderManager.exists/list on folder names with " and \ chars
+
 0.14.1
 ======
 * Fixed bug on folders names with space in folder.MailBoxFolderManager.exists/list
