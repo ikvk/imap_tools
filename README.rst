@@ -258,3 +258,4 @@ Thanks to:
 * `Mitrich3000 <https://github.com/Mitrich3000>`_
 * `audemed44 <https://github.com/audemed44>`_
 * `mkalioby <https://github.com/mkalioby>`_
+* `atlas0fd00m <https://github.com/atlas0fd00m>`_

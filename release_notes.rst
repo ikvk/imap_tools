@@ -1,3 +1,7 @@
+0.14.1
+======
+* Fixed bug on folders names with space in folder.MailBoxFolderManager.exists/list
+
 0.14.0
 ======
 * Improved parse logic for message.MailMessage.flags

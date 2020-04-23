@@ -104,15 +104,16 @@ class MailBoxFolderManager:
         """
         folder_item_re = re.compile(r'\((?P<flags>[\S ]*)\) "(?P<delim>[\S ]+)" (?P<name>.+)')
         command = 'LSUB' if subscribed_only else 'LIST'
-        typ, data = self.mailbox.box._simple_command(command, self._encode_folder(folder), search_args)
+        typ, data = self.mailbox.box._simple_command(
+            command, self._encode_folder(folder), self._encode_folder(search_args))
         typ, data = self.mailbox.box._untagged_response(typ, data, command)
         result = list()
         for folder_item in data:
             if not folder_item:
                 continue
             folder_match = re.search(folder_item_re, imap_utf7.decode(folder_item))
-            folder = folder_match.groupdict()
-            if folder['name'].startswith('"') and folder['name'].endswith('"'):
-                folder['name'] = folder['name'][1:len(folder['name']) - 1]
-            result.append(folder)
+            folder_dict = folder_match.groupdict()
+            if folder_dict['name'].startswith('"') and folder_dict['name'].endswith('"'):
+                folder_dict['name'] = folder_dict['name'][1:-1]
+            result.append(folder_dict)
         return result
