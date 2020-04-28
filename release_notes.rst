@@ -1,3 +1,7 @@
+0.14.3
+======
+* Fixed multiple encodings case for attachment name
+
 0.14.2
 ======
 * Fixed bug in folder.MailBoxFolderManager.exists/list on folder names with " and \ chars
