@@ -218,7 +218,7 @@ class Attachment:
     @lru_cache()
     def filename(self) -> str:
         filename = self._part.get_filename()
-        return decode_value(*decode_header(filename)[0])
+        return ''.join(decode_value(*part) for part in decode_header(filename))
 
     @property
     @lru_cache()
