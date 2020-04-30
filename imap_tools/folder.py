@@ -66,8 +66,7 @@ class MailBoxFolderManager:
         """
         Get the status of a folder
         :param folder: mailbox folder
-        :param options: [str] with values from MailBoxFolderManager.folder_status_options or None,
-                by default - get all options
+        :param options: [str] with values from MailBoxFolderManager.folder_status_options | None - for get all options
             MESSAGES - The number of messages in the mailbox.
             RECENT - The number of messages with the Recent flag set.
             UIDNEXT - The next unique identifier value of the mailbox.

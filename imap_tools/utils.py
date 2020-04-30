@@ -4,7 +4,7 @@ import datetime
 from email.utils import getaddresses
 from email.header import decode_header
 
-short_month_names = ('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', "Dec")
+short_month_names = ('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec')
 
 
 def cleaned_uid_set(uid_set: str or [str] or iter) -> str:

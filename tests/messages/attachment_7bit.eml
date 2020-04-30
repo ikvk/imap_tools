@@ -50,7 +50,7 @@ Content-Type: message/rfc822;
  name="Message01.eml"
 Content-Transfer-Encoding: 7bit
 Content-Disposition: attachment;
- filename="Message01.eml"
+ filename="=?utf-8?Q?Contract_?=25 04 2020.docx"
 
 Return-Path: group@company.ru
 Received: from m101.comp.ru (LHLO m101.comp.ru) (192.168.99.101) by m101.comp.ru

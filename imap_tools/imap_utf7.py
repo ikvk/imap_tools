@@ -12,11 +12,11 @@ import binascii
 
 # ENCODING
 # --------
-def _modified_base64(value: str):
+def _modified_base64(value: str) -> bytes:
     return binascii.b2a_base64(value.encode('utf-16be')).rstrip(b'\n=').replace(b'/', b',')
 
 
-def _do_b64(_in, r):
+def _do_b64(_in: [str], r: [bytes]):
     if _in:
         r.append(b'&' + _modified_base64(''.join(_in)) + b'-')
     del _in[:]
@@ -41,7 +41,7 @@ def encode(value: str) -> bytes:
 
 # DECODING
 # --------
-def _modified_unbase64(value: bytearray):
+def _modified_unbase64(value: bytearray) -> str:
     return binascii.a2b_base64(value.replace(b',', b'/') + b'===').decode('utf-16be')
 
 
