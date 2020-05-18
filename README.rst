@@ -179,7 +179,7 @@ You can use 2 approaches to perform these operations:
 * "in bulk" - Perform IMAP operation for message set per 1 command
 * "by one" - Perform IMAP operation for each message separately per N commands
 
-Result of MailBox.fetch generator will be implicitly converted to uid list.
+Result of MailBox.fetch generator in actions will be implicitly converted to uid list.
 
 For actions with a large number of messages imap command may be too large and will throw an exception,
 use 'limit' argument for fetch in this case.
