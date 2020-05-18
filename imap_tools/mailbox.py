@@ -2,66 +2,31 @@ import imaplib
 
 from .message import MailMessage
 from .folder import MailBoxFolderManager
-from .utils import cleaned_uid_set, check_command_status
+from .utils import cleaned_uid_set, check_command_status, MessageFlags
 
 # Maximal line length when calling readline(). This is to prevent reading arbitrary length lines.
 imaplib._MAXLINE = 4 * 1024 * 1024  # 4Mb
 
 
-class MessageFlags:
-    """Standard email message flags"""
-    SEEN = 'SEEN'
-    ANSWERED = 'ANSWERED'
-    FLAGGED = 'FLAGGED'
-    DELETED = 'DELETED'
-    DRAFT = 'DRAFT'
-    RECENT = 'RECENT'
-    all = (
-        SEEN, ANSWERED, FLAGGED, DELETED, DRAFT, RECENT
-    )
-
-
-class MailBox:
-    """Working with the email box through IMAP4"""
+class BaseMailBox:
+    """Working with the email box"""
 
     email_message_class = MailMessage
     folder_manager_class = MailBoxFolderManager
 
-    def __init__(self, host='', port=None, ssl=True, keyfile=None, certfile=None, ssl_context=None):
-        """
-        :param host: host's name (default: localhost)
-        :param port: port number (default: standard IMAP4 SSL port)
-        :param ssl: use client class over SSL connection (IMAP4_SSL) if True, else use IMAP4
-        :param keyfile: PEM formatted file that contains your private key (default: None)
-        :param certfile: PEM formatted certificate chain file (default: None)
-        :param ssl_context: SSLContext object that contains your certificate chain and private key (default: None)
-        Note: if ssl_context is provided, then parameters keyfile or
-              certfile should not be set otherwise ValueError is raised.
-        """
-        self._host = host
-        self._port = port
-        self._keyfile = keyfile
-        self._certfile = certfile
-        self._ssl_context = ssl_context
-        if ssl:
-            self.box = imaplib.IMAP4_SSL(
-                host, port or imaplib.IMAP4_SSL_PORT, keyfile, certfile, ssl_context)
-        else:
-            self.box = imaplib.IMAP4(host, port or imaplib.IMAP4_PORT)
-        self._username = None
-        self._password = None
-        self._initial_folder = None
-        self.folder = None
+    def __init__(self):
+        self.folder = None  # folder manager
         self.login_result = None
+        self.box = self._get_mailbox_client()
+
+    def _get_mailbox_client(self) -> imaplib.IMAP4:
+        raise NotImplementedError
 
     def login(self, username: str, password: str, initial_folder: str = 'INBOX'):
-        self._username = username
-        self._password = password
-        self._initial_folder = initial_folder
-        result = self.box.login(self._username, self._password)
+        result = self.box.login(username, password)
         check_command_status('box.login', result)
         self.folder = self.folder_manager_class(self)
-        self.folder.set(self._initial_folder)
+        self.folder.set(initial_folder)
         self.login_result = result
         return self  # return self in favor of context manager
 
@@ -182,3 +147,41 @@ class MailBox:
 
     def __exit__(self, exc_type, exc_value, exc_traceback):
         self.logout()
+
+
+class MailBoxUnencrypted(BaseMailBox):
+    """Working with the email box through IMAP4"""
+
+    def __init__(self, host='', port=143):
+        """
+        :param host: host's name (default: localhost)
+        :param port: port number
+        """
+        self._host = host
+        self._port = port
+        super().__init__()
+
+    def _get_mailbox_client(self):
+        return imaplib.IMAP4(self._host, self._port)
+
+
+class MailBox(BaseMailBox):
+    """Working with the email box through IMAP4 over SSL connection"""
+
+    def __init__(self, host='', port=993, keyfile=None, certfile=None, ssl_context=None):
+        """
+        :param host: host's name (default: localhost)
+        :param port: port number
+        :param keyfile: PEM formatted file that contains your private key (deprecated)
+        :param certfile: PEM formatted certificate chain file (deprecated)
+        :param ssl_context: SSLContext object that contains your certificate chain and private key
+        """
+        self._host = host
+        self._port = port
+        self._keyfile = keyfile
+        self._certfile = certfile
+        self._ssl_context = ssl_context
+        super().__init__()
+
+    def _get_mailbox_client(self):
+        return imaplib.IMAP4_SSL(self._host, self._port, self._keyfile, self._certfile, self._ssl_context)

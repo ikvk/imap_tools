@@ -1,3 +1,10 @@
+0.15.0
+======
+* mailbox.MailBox splitted to: BaseMailBox, MailBox, MailBoxUnencrypted
+* MailBox ssl argument deleted
+* mailbox.MessageFlags class moved to utils.MessageFlags
+* Add PySocks proxy examples
+
 0.14.3
 ======
 * Fixed multiple encodings case for attachment name

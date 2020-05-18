@@ -1,5 +1,3 @@
 try to imitate long poll by NOOP
 
 check https://docs.python.org/release/3.8.1/library/email.utils.html
-
-check possibility to implement SOCKS without/with dependencies

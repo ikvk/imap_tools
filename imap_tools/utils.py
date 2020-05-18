@@ -118,3 +118,16 @@ def pairs_to_dict(items: list) -> dict:
     if len(items) % 2 != 0:
         raise ValueError('An even-length array is expected')
     return dict((items[i * 2], items[i * 2 + 1]) for i in range(len(items) // 2))
+
+
+class MessageFlags:
+    """Standard email message flags"""
+    SEEN = 'SEEN'
+    ANSWERED = 'ANSWERED'
+    FLAGGED = 'FLAGGED'
+    DELETED = 'DELETED'
+    DRAFT = 'DRAFT'
+    RECENT = 'RECENT'
+    all = (
+        SEEN, ANSWERED, FLAGGED, DELETED, DRAFT, RECENT
+    )
