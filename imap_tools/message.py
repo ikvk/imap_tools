@@ -194,15 +194,21 @@ class MailMessage:
         :return: [Attachment]
         """
         results = []
+        i = 0
         for part in self.obj.walk():
+            content_type = part.get('Content-Disposition')
             if part.get_content_maintype() == 'multipart':
                 # multipart/* are just containers
                 continue
-            if part.get('Content-Disposition') is None:
+            if content_type is None:
                 continue
             filename = part.get_filename()
             if not filename:
-                continue  # this is what happens when Content-Disposition = inline
+                if content_type == 'message/rfc822':
+                    filename = f"unnamed_mail_attachment_{str(i)}"
+                    i += 1
+                else:
+                    continue  # this is what happens when Content-Disposition = inline
 
             results.append(Attachment(part))
         return results
