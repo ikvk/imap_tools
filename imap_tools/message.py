@@ -196,16 +196,15 @@ class MailMessage:
         results = []
         i = 0
         for part in self.obj.walk():
-            content_type = part.get('Content-Disposition')
             if part.get_content_maintype() == 'multipart':
                 # multipart/* are just containers
                 continue
-            if content_type is None:
+            if part.get('Content-Disposition') is None:
                 continue
             filename = part.get_filename()
             if not filename:
-                if content_type == 'message/rfc822':
-                    filename = f"unnamed_mail_attachment_{str(i)}"
+                if part.get('Content-Type') == 'message/rfc822':
+                    filename = f"mail_as_attachment{str(i)}"
                     i += 1
                 else:
                     continue  # this is what happens when Content-Disposition = inline
@@ -224,6 +223,8 @@ class Attachment:
     @lru_cache()
     def filename(self) -> str:
         filename = self._part.get_filename()
+        if not filename and self._part.get("Content-Type") == "message/rfc822":
+            filename = "mail_as_attachment"
         return ''.join(decode_value(*part) for part in decode_header(filename))
 
     @property
