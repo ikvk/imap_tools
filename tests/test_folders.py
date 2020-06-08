@@ -20,9 +20,11 @@ class FoldersTest(MailboxTestCase):
             check_folder_set = {mailbox.folder_test_base, mailbox.folder_test_temp1, mailbox.folder_test_temp2}
             self.assertTrue(check_folder_set.issubset(set([i['name'] for i in folder_list])))
             for folder in folder_list:
-                self.assertIs(type(folder['flags']), str)
                 self.assertIs(type(folder['delim']), str)
                 self.assertIs(type(folder['name']), str)
+                for flag in folder['flags']:
+                    self.assertIs(type(flag), str)
+
             # SET, GET
             mailbox.folder.set(mailbox.folder_test_base)
             self.assertEqual(mailbox.folder.get(), mailbox.folder_test_base)

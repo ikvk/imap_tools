@@ -51,7 +51,7 @@ class BaseMailBox:
         :param miss_no_uid: miss emails without uid
         :param mark_seen: mark emails as seen on fetch
         :param reverse: in order from the larger date to the smaller
-        :param headers_only: get only email headers
+        :param headers_only: get only email headers (without text, html, attachments)
         :return generator: MailMessage
         """
         search_result = self.box.search(charset, self._criteria_encoder(criteria, charset))

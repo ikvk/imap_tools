@@ -1,8 +1,8 @@
 0.16.0
 ======
 * added BaseMailBox.fetch headers_only argument - get only email headers
-* BaseMailBox.attachments now returns inline/forwarded nameless attachments
-
+* BaseMailBox.attachments now can returns nameless attachments (inline/forwarded)
+* MailBoxFolderManager.list result changed: item['flags'] now are tuple(str)
 
 0.15.0
 ======

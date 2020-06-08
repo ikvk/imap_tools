@@ -39,7 +39,7 @@ class MailBoxFolderManager:
     def create(self, folder: str or bytes):
         """
         Create folder on the server. D
-        *Use email box delimitor to separate folders. Example for "|" delimitor: "folder|sub folder"
+        *Use email box delimiter to separate folders. Example for "|" delimiter: "folder|sub folder"
         """
         result = self.mailbox.box._simple_command('CREATE', self._encode_folder(folder))
         check_command_status('CREATE', result)
@@ -96,9 +96,9 @@ class MailBoxFolderManager:
             % is similar to * but it does not match a hierarchy delimiter
         :param subscribed_only: bool - get only subscribed folders
         :return: [dict(
-            flags: str - folder flags,
-            delim: str - delimitor,
             name: str - folder name,
+            delim: str - delimiter,
+            flags: tuple(str) - folder flags,
         )]
         """
         folder_item_re = re.compile(r'\((?P<flags>[\S ]*)\) "(?P<delim>[\S ]+)" (?P<name>.+)')
@@ -122,5 +122,6 @@ class MailBoxFolderManager:
                 folder_dict['name'] = imap_utf7.decode(folder_item[1])
             else:
                 continue
+            folder_dict['flags'] = tuple(folder_dict['flags'].split())  # noqa
             result.append(folder_dict)
         return result

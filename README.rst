@@ -213,7 +213,7 @@ Actions with mailbox folders
     with MailBox('imap.mail.com').login('test@mail.com', 'pwd') as mailbox:
         # LIST
         for folder_info in mailbox.folder.list('INBOX'):
-            print(folder_info)  # {'name': 'INBOX|cats', 'delim': '|', 'flags': '\\Unmarked \\HasChildren'}
+            print(folder_info)  # {'name': 'INBOX|cats', 'delim': '|', 'flags': ('\\Unmarked', '\\HasChildren')}
         # SET
         mailbox.folder.set('INBOX')
         # GET
