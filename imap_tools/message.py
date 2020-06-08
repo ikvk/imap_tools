@@ -200,10 +200,6 @@ class MailMessage:
                 continue
             if part.get('Content-Disposition') is None:
                 continue
-            filename = part.get_filename()
-            if not filename:
-                continue  # this is what happens when Content-Disposition = inline
-
             results.append(Attachment(part))
         return results
 
@@ -217,7 +213,14 @@ class Attachment:
     @property
     @lru_cache()
     def filename(self) -> str:
-        filename = self._part.get_filename()
+        """
+        Attachment filename
+        nameless cases:
+            inline file (Content-Disposition = inline)
+            forwarded message (Content-Type = message/rfc822)
+        :return: filename
+        """
+        filename = self._part.get_filename() or ''
         return ''.join(decode_value(*part) for part in decode_header(filename))
 
     @property
@@ -238,10 +241,9 @@ class Attachment:
                 if hasattr(payload_item, 'as_bytes'):
                     payload_item_bytes = payload_item.as_bytes()  # noqa
                     cte = str(self._part.get('content-transfer-encoding', '')).lower().strip()
-                    if payload_item_bytes and cte:
-                        if cte == 'base64':
-                            return base64.b64decode(payload_item_bytes)
-                        elif cte in ('7bit', '8bit', 'quoted-printable', 'binary'):
-                            return payload_item_bytes  # quopri.decodestring
+                    if cte == 'base64':
+                        return base64.b64decode(payload_item_bytes)
+                    elif cte in ('7bit', '8bit', 'quoted-printable', 'binary', ''):
+                        return payload_item_bytes  # quopri.decodestring
         # could not find payload
         return b''

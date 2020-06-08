@@ -14,6 +14,12 @@ class MessageTest(MailboxTestCase):
         for mailbox in self.mailbox_set.values():
             mailbox.folder.set(mailbox.folder_test_base)
             answered_and_flagged_cnt = 0
+            # headers_only
+            for message in mailbox.fetch(headers_only=True):
+                self.assertEqual(message.text, '')
+                self.assertEqual(message.html, '')
+                self.assertEqual(len(message.attachments), 0)
+            # types
             for message in mailbox.fetch():
                 self.assertIn(type(message.uid), (str, none_type))
                 self.assertIs(type(message.subject), str)
@@ -43,7 +49,7 @@ class MessageTest(MailboxTestCase):
                     self.assertIs(type(att.filename), str)
                     self.assertIs(type(att.content_type), str)
                     self.assertIs(type(att.payload), bytes)
-
+            # flags
             self.assertTrue(answered_and_flagged_cnt >= 1)
 
     def test_attributes(self):

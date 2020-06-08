@@ -262,3 +262,4 @@ Thanks to:
 * `atlas0fd00m <https://github.com/atlas0fd00m>`_
 * `unqx <https://github.com/unqx>`_
 * `daitangio <https://github.com/daitangio>`_
+* `upils <https://github.com/upils>`_

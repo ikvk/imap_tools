@@ -1,6 +1,8 @@
 0.16.0
 ======
 * added BaseMailBox.fetch headers_only argument - get only email headers
+* BaseMailBox.attachments now returns inline/forwarded nameless attachments
+
 
 0.15.0
 ======

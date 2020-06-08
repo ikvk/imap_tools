@@ -1,6 +1,7 @@
 """
 MailBox traffic through proxy servers using https://github.com/Anorov/PySocks
-NOTE: examples NOT checked!
+THIS EXAMPLE ARE NOT CHECKED
+PLEASE, LET ME KNOW ABOUT TEST RESULTS!
 """
 import ssl
 import socks
