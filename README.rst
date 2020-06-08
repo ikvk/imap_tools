@@ -86,7 +86,7 @@ Message and Attachment public attributes are cached by functools.lru_cache
             att.payload          # bytes: b'\xff\xd8\xff\xe0\'
 
         message.obj              # email.message.Message: original object
-        message.from_values      # dict or None: {'email': 'im@ya.ru', 'name': 'Van 你', 'full': 'Van 你 <im@ya.ru>'}
+        message.from_values      # dict or None: {'email': 'im@ya.ru', 'name': 'Ya 你', 'full': 'Ya 你 <im@ya.ru>'}
         message.to_values        # tuple: ({'email': '', 'name': '', 'full': ''},)
         message.cc_values        # tuple: ({'email': '', 'name': '', 'full': ''},)
         message.bcc_values       # tuple: ({'email': '', 'name': '', 'full': ''},)
