@@ -1,3 +1,7 @@
+0.16.0
+======
+* added BaseMailBox.fetch headers_only argument - get only email headers
+
 0.15.0
 ======
 * mailbox.MailBox splitted to: BaseMailBox, MailBox, MailBoxUnencrypted
