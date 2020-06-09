@@ -47,14 +47,14 @@ Basic
 
 MailBox.fetch - email message generator, first searches email ids by criteria, then fetch and yields emails by one:
 
-* *criteria*: message search criteria, `docs <#search-criteria>`_
-* *charset*: 'US-ASCII', indicates charset of the strings that appear in the search criteria. See rfc2978
-* *limit*: None, limit on the number of read emails, useful for actions with a large number of messages, like "move"
-* *miss_defect*: True, miss emails with defects
-* *miss_no_uid*: True, miss emails without uid
-* *mark_seen*: True, mark emails as seen on fetch
-* *reverse*: False, in order from the larger date to the smaller
-* *headers_only*: get only email headers
+* *criteria*='ALL' message search criteria, `docs <#search-criteria>`_
+* *charset*='US-ASCII', indicates charset of the strings that appear in the search criteria. See rfc2978
+* *limit*=None, limit on the number of read emails, useful for actions with a large number of messages, like "move"
+* *miss_defect*=True, miss emails with defects
+* *miss_no_uid*=True, miss emails without uid
+* *mark_seen*=True, mark emails as seen on fetch
+* *reverse*=False, in order from the larger date to the smaller
+* *headers_only*=False, get only email headers
 
 MailBox.box - imaplib.IMAP4/IMAP4_SSL client instance.
 
