@@ -75,6 +75,8 @@ class QueryTest(unittest.TestCase):
         self.assertEqual(Q(uid='1,2'), '(UID 1,2)')
         self.assertEqual(Q(uid=['3', '4']), '(UID 3,4)')
 
+        self.assertEqual(Q(gmail_label="TestLabel"), '(X-GM-LABELS "TestLabel")')
+
     def test_format_date(self):
         self.assertEqual(ParamConverter.format_date(dt.date(2000, 1, 15)), '15-Jan-2000')
         self.assertEqual(ParamConverter.format_date(dt.date(2000, 12, 15)), '15-Dec-2000')
