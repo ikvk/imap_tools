@@ -1,3 +1,7 @@
+0.16.1
+======
+* Added X-GM-LABELS support to query builder (gmail_label)
+
 0.16.0
 ======
 * added BaseMailBox.fetch headers_only argument - get only email headers

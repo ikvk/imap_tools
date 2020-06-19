@@ -264,3 +264,4 @@ Thanks to:
 * `unqx <https://github.com/unqx>`_
 * `daitangio <https://github.com/daitangio>`_
 * `upils <https://github.com/upils>`_
+* `Foosec <https://github.com/Foosec>`_
