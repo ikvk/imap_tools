@@ -76,7 +76,7 @@ class ParamConverter:
     multi_key_allowed = (
         'keyword', 'no_keyword', 'from_', 'to', 'subject', 'body', 'text', 'bcc', 'cc',
         'date', 'date_gte', 'date_lt', 'sent_date', 'sent_date_gte', 'sent_date_lt',
-        'header', 'gmail_labels',
+        'header', 'gmail_label',
     )
 
     def __init__(self, params: dict):
@@ -303,5 +303,5 @@ class ParamConverter:
         """Messages with unique identifiers corresponding to the specified unique identifier set."""
         return 'UID {}'.format(self.cleaned_uid(key, value))
 
-    def convert_gmail_labels(self, key, value):
+    def convert_gmail_label(self, key, value):
         return 'X-GM-LABELS {}'.format(quote(self.cleaned_str(key, value)))

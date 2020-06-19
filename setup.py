@@ -16,7 +16,7 @@ setuptools.setup(
     name='imap_tools',
     version=get_version('imap_tools'),
     packages=setuptools.find_packages(),
-    url='https://github.com/Meditrade/imap_tools',
+    url='https://github.com/ikvk/imap_tools',
     license='Apache-2.0',
     long_description=long_description,
     long_description_content_type="text/x-rst",
