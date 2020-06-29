@@ -45,6 +45,10 @@ Basic
     subjects = [msg.subject for msg in mailbox.fetch(Q(all=True))]
     mailbox.logout()
 
+MailBox/MailBoxUnencrypted for create mailbox instance.
+
+MailBox.box - imaplib.IMAP4/IMAP4_SSL client instance.
+
 MailBox.fetch - email message generator, first searches email ids by criteria, then fetch and yields emails by one:
 
 * *criteria* = 'ALL' message search criteria, `docs <#search-criteria>`_
@@ -56,8 +60,6 @@ MailBox.fetch - email message generator, first searches email ids by criteria, t
 * *reverse* = False, in order from the larger date to the smaller
 * *headers_only* = False, get only email headers (without text, html, attachments)
 
-MailBox.box - imaplib.IMAP4/IMAP4_SSL client instance.
-
 Email attributes
 ^^^^^^^^^^^^^^^^
 
@@ -65,32 +67,32 @@ Message and Attachment public attributes are cached by functools.lru_cache
 
 .. code-block:: python
 
-    for message in mailbox.fetch():
-        message.uid              # str or None: '123'
-        message.subject          # str: 'some subject'
-        message.from_            # str: 'sender@ya.ru'
-        message.to               # tuple: ('iam@goo.ru', 'friend@ya.ru', )
-        message.cc               # tuple: ('cc@mail.ru', )
-        message.bcc              # tuple: ('bcc@mail.ru', )
-        message.reply_to         # tuple: ('reply_to@mail.ru', )
-        message.date             # datetime.datetime: 1900-1-1 for unparsed, may be naive or with tzinfo
-        message.date_str         # str: original date - 'Tue, 03 Jan 2017 22:26:59 +0500'
-        message.text             # str: 'hi'
-        message.html             # str: '<b>hi</b>'
-        message.flags            # tuple: ('SEEN', 'FLAGGED', 'ENCRYPTED')
-        message.headers          # dict: {'Received': ('from 1.m.ru', 'from 2.m.ru'), 'AntiVirus': ('Clean',)}
+    for msg in mailbox.fetch():
+        msg.uid              # str or None: '123'
+        msg.subject          # str: 'some subject'
+        msg.from_            # str: 'sender@ya.ru'
+        msg.to               # tuple: ('iam@goo.ru', 'friend@ya.ru', )
+        msg.cc               # tuple: ('cc@mail.ru', )
+        msg.bcc              # tuple: ('bcc@mail.ru', )
+        msg.reply_to         # tuple: ('reply_to@mail.ru', )
+        msg.date             # datetime.datetime: 1900-1-1 for unparsed, may be naive or with tzinfo
+        msg.date_str         # str: original date - 'Tue, 03 Jan 2017 22:26:59 +0500'
+        msg.text             # str: 'hi'
+        msg.html             # str: '<b>hi</b>'
+        msg.flags            # tuple: ('SEEN', 'FLAGGED', 'ENCRYPTED')
+        msg.headers          # dict: {'Received': ('from 1.m.ru', 'from 2.m.ru'), 'AntiVirus': ('Clean',)}
 
-        for att in message.attachments:  # list: [Attachment objects]
+        for att in msg.attachments:  # list: [Attachment]
             att.filename         # str: 'cat.jpg'
             att.content_type     # str: 'image/jpeg'
             att.payload          # bytes: b'\xff\xd8\xff\xe0\'
 
-        message.obj              # email.message.Message: original object
-        message.from_values      # dict or None: {'email': 'im@ya.ru', 'name': 'Ya 你', 'full': 'Ya 你 <im@ya.ru>'}
-        message.to_values        # tuple: ({'email': '', 'name': '', 'full': ''},)
-        message.cc_values        # tuple: ({'email': '', 'name': '', 'full': ''},)
-        message.bcc_values       # tuple: ({'email': '', 'name': '', 'full': ''},)
-        message.reply_to_values  # tuple: ({'email': '', 'name': '', 'full': ''},)
+        msg.obj              # email.message.Message: original object
+        msg.from_values      # dict or None: {'email': 'im@ya.ru', 'name': 'Ya 你', 'full': 'Ya 你 <im@ya.ru>'}
+        msg.to_values        # tuple: ({'email': '', 'name': '', 'full': ''},)
+        msg.cc_values        # tuple: ({'email': '', 'name': '', 'full': ''},)
+        msg.bcc_values       # tuple: ({'email': '', 'name': '', 'full': ''},)
+        msg.reply_to_values  # tuple: ({'email': '', 'name': '', 'full': ''},)
 
 Search criteria
 ^^^^^^^^^^^^^^^
