@@ -23,7 +23,7 @@ setuptools.setup(
     author='v.kaukin',
     author_email='KaukinVK@ya.com',
     description='Working with email and mailbox using IMAP protocol.',
-    keywords=['imap', 'imap-client', 'python3', 'email'],
+    keywords=['imap', 'imap-client', 'python3', 'python', 'email'],
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: Apache Software License",

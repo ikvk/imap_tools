@@ -1,3 +1,8 @@
+0.17.0
+======
+* Query builder: removed Q alias for AND
+* Query builder: added new aliases: A for AND, O for OR, N for NOT
+
 0.16.1
 ======
 * Added X-GM-LABELS support to query builder (gmail_label)

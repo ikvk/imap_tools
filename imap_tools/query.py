@@ -49,7 +49,17 @@ class NOT(LogicOperator):
         return 'NOT {}'.format(self.prefix_join('', itertools.chain(self.converted_strings, self.converted_params)))
 
 
-Q = AND  # Short alias
+# Short alias set:
+A = AND
+O = OR  # noqa
+N = NOT
+
+
+class Q(AND):
+    def __init__(self, *args, **kwargs):
+        import warnings
+        warnings.warn('alias Q are deprecated and will be removed soon, use A instead')
+        super().__init__(*args, **kwargs)
 
 
 class Header:

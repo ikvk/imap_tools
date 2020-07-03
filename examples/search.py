@@ -20,7 +20,7 @@ NOT(AND(OR(from_='11', to='22', text='33'), cc='44', bcc='55'))
 """
 
 import datetime as dt
-from imap_tools import AND, OR, NOT, Q, H
+from imap_tools import AND, OR, NOT, A, H
 
 # date in the date list (date=date1 OR date=date3 OR date=date2)
 q1 = OR(date=[dt.date(2019, 10, 1), dt.date(2019, 10, 10), dt.date(2019, 10, 15)])
@@ -31,7 +31,7 @@ q2 = NOT(OR(date=[dt.date(2019, 10, 1), dt.date(2019, 10, 10), dt.date(2019, 10,
 # "NOT ((OR OR ON 1-Oct-2019 ON 10-Oct-2019 ON 15-Oct-2019))"
 
 # subject contains "hello" AND date greater than or equal dt.date(2019, 10, 10)
-q3 = Q(subject='hello', date_gte=dt.date(2019, 10, 10))
+q3 = A(subject='hello', date_gte=dt.date(2019, 10, 10))
 # "(SUBJECT "hello" SINCE 10-Oct-2019)"
 
 # from contains one of the address parts
@@ -51,9 +51,9 @@ q7 = OR(OR(text='tag15', subject='tag15'), OR(text='tag10', subject='tag10'))
 # "(OR (OR TEXT "tag15" SUBJECT "tag15") (OR TEXT "tag10" SUBJECT "tag10"))"
 
 # header IsSpam contains '++' AND header CheckAntivirus contains '-'
-q8 = Q(header=[H('IsSpam', '++'), H('CheckAntivirus', '-')])
+q8 = A(header=[H('IsSpam', '++'), H('CheckAntivirus', '-')])
 # "(HEADER "IsSpam" "++" HEADER "CheckAntivirus" "-")"
 
 # complex from README
-q9 = Q(OR(from_='from@ya.ru', text='"the text"'), NOT(OR(Q(answered=False), Q(new=True))), to='to@ya.ru')
+q9 = A(OR(from_='from@ya.ru', text='"the text"'), NOT(OR(A(answered=False), A(new=True))), to='to@ya.ru')
 # "((OR FROM "from@ya.ru" TEXT "\\"the text\\"") NOT ((OR (UNANSWERED) (NEW))) TO "to@ya.ru")"

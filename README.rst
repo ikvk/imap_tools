@@ -33,7 +33,7 @@ Basic
 ^^^^^
 .. code-block:: python
 
-    from imap_tools import MailBox, Q
+    from imap_tools import MailBox, AND
 
     # get list of email subjects from INBOX folder
     with MailBox('imap.mail.com').login('test@mail.com', 'password') as mailbox:
@@ -42,7 +42,7 @@ Basic
     # get list of email subjects from INBOX folder - equivalent verbose version
     mailbox = MailBox('imap.mail.com')
     mailbox.login('test@mail.com', 'password', initial_folder='INBOX')  # or mailbox.folder.set instead 3d arg
-    subjects = [msg.subject for msg in mailbox.fetch(Q(all=True))]
+    subjects = [msg.subject for msg in mailbox.fetch(AND(all=True))]
     mailbox.logout()
 
 MailBox/MailBoxUnencrypted for create mailbox instance.
@@ -101,38 +101,42 @@ Possible search approaches:
 
 .. code-block:: python
 
-    from imap_tools import Q, AND, OR, NOT
+    from imap_tools import AND, OR, NOT
 
-    mailbox.fetch(Q(subject='weather'))  # query, the str-like object - see below
+    mailbox.fetch(AND(subject='weather'))  # query, the str-like object - see below
     mailbox.fetch('TEXT "hello"')  # str, use charset arg for non US-ASCII chars
     mailbox.fetch(b'TEXT "\xd1\x8f"')  # bytes, charset arg is ignored
 
 Implemented query builder for search logic described in `rfc3501 <https://tools.ietf.org/html/rfc3501#section-6.4.4>`_.
 See `query examples <https://github.com/ikvk/imap_tools/blob/master/examples/search.py>`_.
 
-* Class AND and its alias Q are used to combine keys by the logical "and" condition.
-* Class OR is used to combine keys by the logical "or" condition.
-* Class NOT is used to invert the result of a logical expression.
-* Class H (Header) is used to search by headers.
+======  =====  ========================================== ============================================================
+Class   Alias  Usage                                      Arguments
+======  =====  ========================================== ============================================================
+AND     A      combines keys by logical "AND" condition   Search keys (see below) | str
+OR      O      combines keys by logical "OR" condition    Search keys (see below) | str
+NOT     N      invert the result of a logical expression  AND/OR instances | str
+Header  H      for search by headers                      name: str, value: str
+======  =====  ========================================== ============================================================
 
 If the "charset" argument is specified in MailBox.fetch, the search string will be encoded to this encoding.
 You can change this behavior by overriding MailBox._criteria_encoder or pass criteria as bytes in desired encoding.
 
 .. code-block:: python
 
-    from imap_tools import Q, AND, OR, NOT
+    from imap_tools import A, AND, OR, NOT
     # AND
-    Q(text='hello', new=True)  # '(TEXT "hello" NEW)'
+    A(text='hello', new=True)  # '(TEXT "hello" NEW)'
     # OR
     OR(text='hello', date=datetime.date(2000, 3, 15))  # '(OR TEXT "hello" ON 15-Mar-2000)'
     # NOT
     NOT(text='hello', new=True)  # 'NOT (TEXT "hello" NEW)'
     # complex
-    Q(OR(from_='from@ya.ru', text='"the text"'), NOT(OR(Q(answered=False), Q(new=True))), to='to@ya.ru')
+    A(OR(from_='from@ya.ru', text='"the text"'), NOT(OR(A(answered=False), A(new=True))), to='to@ya.ru')
     # encoding
-    mailbox.fetch(Q(subject='привет'), charset='utf8')  # 'привет' will be encoded by MailBox._criteria_encoder
-    # python note: you can't do: Q(text='two', NOT(subject='one'))
-    Q(NOT(subject='one'), text='two')  # use kwargs after logic classes
+    mailbox.fetch(A(subject='привет'), charset='utf8')  # 'привет' will be encoded by MailBox._criteria_encoder
+    # python note: you can't do: A(text='two', NOT(subject='one'))
+    A(NOT(subject='one'), text='two')  # use kwargs after logic classes (args)
 
 The search key types are marked with `*` can accepts a sequence of values like list, tuple, set or generator.
 

@@ -1,7 +1,7 @@
 import unittest
 import datetime as dt
 
-from imap_tools.query import ParamConverter, Q, AND, OR, NOT, H
+from imap_tools.query import ParamConverter, A, AND, OR, NOT, H
 
 
 class QueryTest(unittest.TestCase):
@@ -33,49 +33,49 @@ class QueryTest(unittest.TestCase):
                     cleaned_fn('key_does_not_matter', bad)
 
     def test_converters(self):
-        self.assertEqual(Q(answered=True), '(ANSWERED)')
-        self.assertEqual(Q(answered=False), '(UNANSWERED)')
-        self.assertEqual(Q(seen=True), '(SEEN)')
-        self.assertEqual(Q(seen=False), '(UNSEEN)')
-        self.assertEqual(Q(flagged=True), '(FLAGGED)')
-        self.assertEqual(Q(flagged=False), '(UNFLAGGED)')
-        self.assertEqual(Q(draft=True), '(DRAFT)')
-        self.assertEqual(Q(draft=False), '(UNDRAFT)')
-        self.assertEqual(Q(deleted=True), '(DELETED)')
-        self.assertEqual(Q(deleted=False), '(UNDELETED)')
-        self.assertEqual(Q(keyword='KEY1'), '(KEYWORD KEY1)')
-        self.assertEqual(Q(no_keyword='KEY2'), '(UNKEYWORD KEY2)')
+        self.assertEqual(A(answered=True), '(ANSWERED)')
+        self.assertEqual(A(answered=False), '(UNANSWERED)')
+        self.assertEqual(A(seen=True), '(SEEN)')
+        self.assertEqual(A(seen=False), '(UNSEEN)')
+        self.assertEqual(A(flagged=True), '(FLAGGED)')
+        self.assertEqual(A(flagged=False), '(UNFLAGGED)')
+        self.assertEqual(A(draft=True), '(DRAFT)')
+        self.assertEqual(A(draft=False), '(UNDRAFT)')
+        self.assertEqual(A(deleted=True), '(DELETED)')
+        self.assertEqual(A(deleted=False), '(UNDELETED)')
+        self.assertEqual(A(keyword='KEY1'), '(KEYWORD KEY1)')
+        self.assertEqual(A(no_keyword='KEY2'), '(UNKEYWORD KEY2)')
 
-        self.assertEqual(Q(from_='from@ya.ru'), '(FROM "from@ya.ru")')
-        self.assertEqual(Q(to='to@ya.ru'), '(TO "to@ya.ru")')
-        self.assertEqual(Q(subject='hello'), '(SUBJECT "hello")')
-        self.assertEqual(Q(body='body text'), '(BODY "body text")')
-        self.assertEqual(Q(body='hi'), '(BODY "hi")')
-        self.assertEqual(Q(text='"quoted text"'), '(TEXT "\\"quoted text\\"")')
-        self.assertEqual(Q(text='hi'), '(TEXT "hi")')
-        self.assertEqual(Q(bcc='bcc@ya.ru'), '(BCC "bcc@ya.ru")')
-        self.assertEqual(Q(cc='cc@ya.ru'), '(CC "cc@ya.ru")')
+        self.assertEqual(A(from_='from@ya.ru'), '(FROM "from@ya.ru")')
+        self.assertEqual(A(to='to@ya.ru'), '(TO "to@ya.ru")')
+        self.assertEqual(A(subject='hello'), '(SUBJECT "hello")')
+        self.assertEqual(A(body='body text'), '(BODY "body text")')
+        self.assertEqual(A(body='hi'), '(BODY "hi")')
+        self.assertEqual(A(text='"quoted text"'), '(TEXT "\\"quoted text\\"")')
+        self.assertEqual(A(text='hi'), '(TEXT "hi")')
+        self.assertEqual(A(bcc='bcc@ya.ru'), '(BCC "bcc@ya.ru")')
+        self.assertEqual(A(cc='cc@ya.ru'), '(CC "cc@ya.ru")')
 
-        self.assertEqual(Q(date=dt.date(2000, 3, 15)), '(ON 15-Mar-2000)')
-        self.assertEqual(Q(date_gte=dt.date(2000, 3, 15)), '(SINCE 15-Mar-2000)')
-        self.assertEqual(Q(date_lt=dt.date(2000, 3, 15)), '(BEFORE 15-Mar-2000)')
-        self.assertEqual(Q(sent_date=dt.date(2000, 3, 15)), '(SENTON 15-Mar-2000)')
-        self.assertEqual(Q(sent_date_gte=dt.date(2000, 3, 15)), '(SENTSINCE 15-Mar-2000)')
-        self.assertEqual(Q(sent_date_lt=dt.date(2000, 3, 15)), '(SENTBEFORE 15-Mar-2000)')
+        self.assertEqual(A(date=dt.date(2000, 3, 15)), '(ON 15-Mar-2000)')
+        self.assertEqual(A(date_gte=dt.date(2000, 3, 15)), '(SINCE 15-Mar-2000)')
+        self.assertEqual(A(date_lt=dt.date(2000, 3, 15)), '(BEFORE 15-Mar-2000)')
+        self.assertEqual(A(sent_date=dt.date(2000, 3, 15)), '(SENTON 15-Mar-2000)')
+        self.assertEqual(A(sent_date_gte=dt.date(2000, 3, 15)), '(SENTSINCE 15-Mar-2000)')
+        self.assertEqual(A(sent_date_lt=dt.date(2000, 3, 15)), '(SENTBEFORE 15-Mar-2000)')
 
-        self.assertEqual(Q(size_gt=1024), '(LARGER 1024)')
-        self.assertEqual(Q(size_lt=512), '(SMALLER 512)')
+        self.assertEqual(A(size_gt=1024), '(LARGER 1024)')
+        self.assertEqual(A(size_lt=512), '(SMALLER 512)')
 
-        self.assertEqual(Q(new=True), '(NEW)')
-        self.assertEqual(Q(old=True), '(OLD)')
-        self.assertEqual(Q(recent=True), '(RECENT)')
-        self.assertEqual(Q(all=True), '(ALL)')
+        self.assertEqual(A(new=True), '(NEW)')
+        self.assertEqual(A(old=True), '(OLD)')
+        self.assertEqual(A(recent=True), '(RECENT)')
+        self.assertEqual(A(all=True), '(ALL)')
 
-        self.assertEqual(Q(header=H('X-Google-Smtp-Source', '123')), '(HEADER "X-Google-Smtp-Source" "123")')
-        self.assertEqual(Q(uid='1,2'), '(UID 1,2)')
-        self.assertEqual(Q(uid=['3', '4']), '(UID 3,4)')
+        self.assertEqual(A(header=H('X-Google-Smtp-Source', '123')), '(HEADER "X-Google-Smtp-Source" "123")')
+        self.assertEqual(A(uid='1,2'), '(UID 1,2)')
+        self.assertEqual(A(uid=['3', '4']), '(UID 3,4)')
 
-        self.assertEqual(Q(gmail_label="TestLabel"), '(X-GM-LABELS "TestLabel")')
+        self.assertEqual(A(gmail_label="TestLabel"), '(X-GM-LABELS "TestLabel")')
 
     def test_format_date(self):
         self.assertEqual(ParamConverter.format_date(dt.date(2000, 1, 15)), '15-Jan-2000')
@@ -85,12 +85,12 @@ class QueryTest(unittest.TestCase):
         self.assertEqual(AND(text='hello', new=True), '(TEXT "hello" NEW)')
         self.assertEqual(OR(text='hello', new=True), '(OR TEXT "hello" NEW)')
         self.assertEqual(NOT(text='hello', new=True), 'NOT (TEXT "hello" NEW)')
-        self.assertEqual(Q(AND(to='one@mail.ru'), AND(to='two@mail.ru')), '((TO "one@mail.ru") (TO "two@mail.ru"))')
+        self.assertEqual(A(AND(to='one@mail.ru'), AND(to='two@mail.ru')), '((TO "one@mail.ru") (TO "two@mail.ru"))')
         self.assertEqual(
             OR(date=[dt.date(2019, 10, 1), dt.date(2019, 10, 10), dt.date(2019, 10, 15), dt.date(2019, 10, 20)]),
             '(OR OR OR ON 1-Oct-2019 ON 10-Oct-2019 ON 15-Oct-2019 ON 20-Oct-2019)')
         self.assertEqual(
-            Q(OR(from_='from@ya.ru', text='"the text"'), NOT(OR(Q(answered=False), Q(new=True))), to='to@ya.ru'),
+            A(OR(from_='from@ya.ru', text='"the text"'), NOT(OR(A(answered=False), A(new=True))), to='to@ya.ru'),
             '((OR FROM "from@ya.ru" TEXT "\\"the text\\"") NOT ((OR (UNANSWERED) (NEW))) TO "to@ya.ru")')
 
     def test_header(self):
