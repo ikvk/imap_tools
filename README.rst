@@ -69,7 +69,7 @@ Message and Attachment public attributes are cached by functools.lru_cache
 
     for msg in mailbox.fetch():
         msg.uid              # str or None: '123'
-        msg.subject          # str: 'some subject'
+        msg.subject          # str: 'some subject 你 привет'
         msg.from_            # str: 'sender@ya.ru'
         msg.to               # tuple: ('iam@goo.ru', 'friend@ya.ru', )
         msg.cc               # tuple: ('cc@mail.ru', )
@@ -77,8 +77,8 @@ Message and Attachment public attributes are cached by functools.lru_cache
         msg.reply_to         # tuple: ('reply_to@mail.ru', )
         msg.date             # datetime.datetime: 1900-1-1 for unparsed, may be naive or with tzinfo
         msg.date_str         # str: original date - 'Tue, 03 Jan 2017 22:26:59 +0500'
-        msg.text             # str: 'hi'
-        msg.html             # str: '<b>hi</b>'
+        msg.text             # str: 'Hello 你 Привет'
+        msg.html             # str: '<b>Hello 你 Привет</b>'
         msg.flags            # tuple: ('SEEN', 'FLAGGED', 'ENCRYPTED')
         msg.headers          # dict: {'Received': ('from 1.m.ru', 'from 2.m.ru'), 'AntiVirus': ('Clean',)}
 
