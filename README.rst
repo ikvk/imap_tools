@@ -45,7 +45,7 @@ Basic
     subjects = [msg.subject for msg in mailbox.fetch(AND(all=True))]
     mailbox.logout()
 
-MailBox/MailBoxUnencrypted for create mailbox instance.
+MailBox/MailBoxUnencrypted - for create mailbox instance.
 
 MailBox.box - imaplib.IMAP4/IMAP4_SSL client instance.
 
@@ -207,7 +207,7 @@ use 'limit' argument for fetch in this case.
         mailbox.delete([msg.uid for msg in mailbox.fetch()])
 
         # FLAG unseen messages in current folder as Answered and Flagged, *in bulk.
-        flags = (imap_tools.MessageFlags.ANSWERED, imap_tools.MessageFlags.FLAGGED)
+        flags = (imap_tools.MailMessageFlags.ANSWERED, imap_tools.MailMessageFlags.FLAGGED)
         mailbox.flag(mailbox.fetch('(UNSEEN)'), flags, True)
 
         # SEEN: mark all messages sent at 05.03.2007 in current folder as unseen, *in bulk
@@ -236,6 +236,11 @@ Actions with mailbox folders
         # STATUS
         folder_status = mailbox.folder.status('some_folder')
         print(folder_status)  # {'MESSAGES': 41, 'RECENT': 0, 'UIDNEXT': 11996, 'UIDVALIDITY': 1, 'UNSEEN': 5}
+
+Exceptions
+^^^^^^^^^^
+
+Custom lib exceptions here: `errors.py <https://github.com/ikvk/imap_tools/blob/master/imap_tools/errors.py>`_.
 
 Reasons
 -------
@@ -271,3 +276,4 @@ Thanks to:
 * `daitangio <https://github.com/daitangio>`_
 * `upils <https://github.com/upils>`_
 * `Foosec <https://github.com/Foosec>`_
+* `frispete <https://github.com/frispete>`_

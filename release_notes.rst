@@ -1,3 +1,15 @@
+0.18.0
+======
+* Added 14 new custom lib exceptions (errors.py): MailboxCopyError, MailboxDeleteError, MailboxExpungeError, MailboxFetchError, MailboxFlagError, MailboxFolderCreateError, MailboxFolderDeleteError, MailboxFolderRenameError, MailboxFolderSelectError, MailboxFolderStatusError, MailboxFolderStatusValueError, MailboxLoginError, MailboxLogoutError, MailboxSearchError
+* UnexpectedCommandStatusError now not used directly.
+* Added folder.MailBoxFolderStatusOptions class instead MailBoxFolderManager.folder_status_options
+* utils.MessageFlags -> message.MailMessageFlags
+* query.py: ValueError replaced to TypeError in many places
+* utils.short_month_names renamed to utils.SHORT_MONTH_NAMES
+* utils.cleaned_uid_set - parsing optimized, raise TypeError instead ValueError
+* utils.check_command_status - new logic
+* BaseMailBox.fetch headers_only arg is disabled until fix
+
 0.17.0
 ======
 * Query builder: removed Q alias for AND

@@ -1,6 +1,7 @@
 import unittest
 
 from tests.utils import MailboxTestCase, TEST_MAILBOX_NAME_SET, get_test_mailbox
+from imap_tools.errors import MailboxFolderSelectError
 
 
 class FoldersTest(MailboxTestCase):
@@ -47,6 +48,9 @@ class FoldersTest(MailboxTestCase):
             for status_key, status_val in mailbox.folder.status(mailbox.folder_test_base).items():
                 self.assertIs(type(status_key), str)
                 self.assertIs(type(status_val), int)
+            # error
+            with self.assertRaises(MailboxFolderSelectError):
+                mailbox.folder.set('__nonexistent_folder__')
 
 
 if __name__ == "__main__":

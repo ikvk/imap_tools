@@ -4,7 +4,7 @@ import datetime
 from tests.utils import MailboxTestCase
 
 from tests.data import MESSAGE_ATTRIBUTES
-from imap_tools import MailMessage, MessageFlags
+from imap_tools import MailMessage, MailMessageFlags
 
 
 class MessageTest(MailboxTestCase):
@@ -13,14 +13,24 @@ class MessageTest(MailboxTestCase):
         none_type = type(None)
         for mailbox in self.mailbox_set.values():
             mailbox.folder.set(mailbox.folder_test_base)
-            answered_and_flagged_cnt = 0
             # headers_only
-            for message in mailbox.fetch(headers_only=True):
-                self.assertEqual(message.text, '')
-                self.assertEqual(message.html, '')
-                self.assertEqual(len(message.attachments), 0)
+            # cnt_fetch_head = 0
+            # cnt_fetch_head_answered_and_flagged = 0
+            # for message in mailbox.fetch(headers_only=True):
+            #     if {MailMessageFlags.ANSWERED, MailMessageFlags.FLAGGED}.issubset(message.flags):
+            #         cnt_fetch_head_answered_and_flagged += 1
+            #     cnt_fetch_head += 1
+            #     self.assertEqual(message.text, '')
+            #     self.assertEqual(message.html, '')
+            #     self.assertEqual(len(message.attachments), 0)
+
             # types
+            cnt_fetch_all = 0
+            cnt_fetch_all_answered_and_flagged = 0
             for message in mailbox.fetch():
+                if {MailMessageFlags.ANSWERED, MailMessageFlags.FLAGGED}.issubset(message.flags):
+                    cnt_fetch_all_answered_and_flagged += 1
+                cnt_fetch_all += 1
                 self.assertIn(type(message.uid), (str, none_type))
                 self.assertIs(type(message.subject), str)
                 self.assertIs(type(message.from_), str)
@@ -42,15 +52,17 @@ class MessageTest(MailboxTestCase):
                 self.assertIs(type(message.flags), tuple)
                 for i in message.flags:
                     self.assertIs(type(i), str)
-                if {MessageFlags.ANSWERED, MessageFlags.FLAGGED}.issubset(message.flags):
-                    answered_and_flagged_cnt += 1
 
                 for att in message.attachments:
                     self.assertIs(type(att.filename), str)
                     self.assertIs(type(att.content_type), str)
                     self.assertIs(type(att.payload), bytes)
-            # flags
-            self.assertTrue(answered_and_flagged_cnt >= 1)
+            # counts
+            self.assertTrue(cnt_fetch_all_answered_and_flagged >= 1)
+            self.assertEqual(cnt_fetch_all, 6)
+            # self.assertEqual(cnt_fetch_head, cnt_fetch_all)
+            # self.assertTrue(cnt_fetch_head_answered_and_flagged >= 1)
+            # self.assertEqual(cnt_fetch_head_answered_and_flagged, cnt_fetch_all_answered_and_flagged)
 
     def test_attributes(self):
         msg_attr_set = {'subject', 'from_', 'to', 'cc', 'bcc', 'reply_to', 'date', 'date_str', 'text', 'html',

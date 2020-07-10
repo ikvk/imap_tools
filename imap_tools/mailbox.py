@@ -1,8 +1,10 @@
 import imaplib
 
-from .message import MailMessage
+from .message import MailMessage, MailMessageFlags
 from .folder import MailBoxFolderManager
-from .utils import cleaned_uid_set, check_command_status, MessageFlags
+from .utils import cleaned_uid_set, check_command_status
+from .errors import MailboxLoginError, MailboxLogoutError, MailboxSearchError, MailboxFetchError, MailboxExpungeError, \
+    MailboxDeleteError, MailboxCopyError, MailboxFlagError
 
 # Maximal line length when calling readline(). This is to prevent reading arbitrary length lines.
 imaplib._MAXLINE = 4 * 1024 * 1024  # 4Mb
@@ -24,7 +26,7 @@ class BaseMailBox:
 
     def login(self, username: str, password: str, initial_folder: str = 'INBOX'):
         result = self.box.login(username, password)
-        check_command_status('box.login', result)
+        check_command_status(result, MailboxLoginError)
         self.folder = self.folder_manager_class(self)
         self.folder.set(initial_folder)
         self.login_result = result
@@ -32,7 +34,7 @@ class BaseMailBox:
 
     def logout(self):
         result = self.box.logout()
-        check_command_status('box.logout', result, expected='BYE')
+        check_command_status(result, MailboxLogoutError, expected='BYE')
         return result
 
     @staticmethod
@@ -54,8 +56,10 @@ class BaseMailBox:
         :param headers_only: get only email headers (without text, html, attachments)
         :return generator: MailMessage
         """
+        if headers_only:
+            raise NotImplementedError('headers_only does not work correctly and is disabled until fix, *you may help')
         search_result = self.box.search(charset, self._criteria_encoder(criteria, charset))
-        check_command_status('box.search', search_result)
+        check_command_status(search_result, MailboxSearchError)
         # first element is string with email numbers through the gap
         message_id_set = search_result[1][0].decode().split(' ') if search_result[1][0] else ()
         message_parts = "(BODY{}[{}] UID FLAGS)".format('' if mark_seen else '.PEEK', 'HEADER' if headers_only else '')
@@ -64,7 +68,7 @@ class BaseMailBox:
                 break
             # get message by id
             fetch_result = self.box.fetch(message_id, message_parts)
-            check_command_status('box.fetch', fetch_result)
+            check_command_status(fetch_result, MailboxFetchError)
             mail_message = self.email_message_class(fetch_result[1])
             if miss_defect and mail_message.obj.defects:
                 continue
@@ -74,7 +78,7 @@ class BaseMailBox:
 
     def expunge(self) -> tuple:
         result = self.box.expunge()
-        check_command_status('box.expunge', result)
+        check_command_status(result, MailboxExpungeError)
         return result
 
     def delete(self, uid_list) -> (tuple, tuple) or None:
@@ -87,7 +91,7 @@ class BaseMailBox:
         if not uid_str:
             return None
         store_result = self.box.uid('STORE', uid_str, '+FLAGS', r'(\Deleted)')
-        check_command_status('box.delete', store_result)
+        check_command_status(store_result, MailboxDeleteError)
         expunge_result = self.expunge()
         return store_result, expunge_result
 
@@ -101,7 +105,7 @@ class BaseMailBox:
         if not uid_str:
             return None
         copy_result = self.box.uid('COPY', uid_str, destination_folder)
-        check_command_status('box.copy', copy_result)
+        check_command_status(copy_result, MailboxCopyError)
         return copy_result
 
     def move(self, uid_list, destination_folder: str) -> (tuple, tuple) or None:
@@ -122,7 +126,7 @@ class BaseMailBox:
         """
         Set/unset email flags
         Do nothing on empty uid_list
-        Standard flags contains in MessageFlags.all
+        Standard flags contains in message.MailMessageFlags.all
         :return: None on empty uid_list, command results otherwise
         """
         uid_str = cleaned_uid_set(uid_list)
@@ -133,7 +137,7 @@ class BaseMailBox:
         store_result = self.box.uid(
             'STORE', uid_str, ('+' if value else '-') + 'FLAGS',
             '({})'.format(' '.join(('\\' + i for i in flag_set))))
-        check_command_status('box.flag', store_result)
+        check_command_status(store_result, MailboxFlagError)
         expunge_result = self.expunge()
         return store_result, expunge_result
 
@@ -142,7 +146,7 @@ class BaseMailBox:
         Mark email as read/unread
         This is shortcut for flag method
         """
-        return self.flag(uid_list, MessageFlags.SEEN, seen_val)
+        return self.flag(uid_list, MailMessageFlags.SEEN, seen_val)
 
     def __enter__(self):
         return self

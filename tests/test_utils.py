@@ -2,11 +2,14 @@ import unittest
 import datetime
 
 from imap_tools import utils
+from imap_tools.errors import ImapToolsError, UnexpectedCommandStatusError, MailboxCopyError
 
 
 class UtilsTest(unittest.TestCase):
 
-    # *cleaned_uid_set tested enough in test_query
+    def test_cleaned_uid_set(self):
+        # *cleaned_uid_set tested enough in test_query.py
+        pass
 
     def test_quote(self):
         self.assertEqual(utils.quote('str привет'), '"str привет"')
@@ -27,12 +30,12 @@ class UtilsTest(unittest.TestCase):
         self.assertEqual(utils.decode_value(b'str \xd0\xb4\xd0\xb0 \xe4\xbd\xa0', 'wat?'), 'str да 你')
 
     def test_check_command_status(self):
-        self.assertIsNone(utils.check_command_status('box.fetch', ('EXP', 'command_result_data'), expected='EXP'))
-        self.assertIsNone(utils.check_command_status('test', ('OK', 'res')))
-        with self.assertRaises(utils.UnexpectedCommandStatusError):
-            self.assertFalse(utils.check_command_status('test', ('NOT_OK', 'test')))
-        with self.assertRaises(utils.UnexpectedCommandStatusError):
-            self.assertFalse(utils.check_command_status('box.logout', ('BYE', ''), 'OK'))
+        self.assertIsNone(utils.check_command_status(('EXP', 'command_result_data'), MailboxCopyError, expected='EXP'))
+        self.assertIsNone(utils.check_command_status(('OK', 'res'), UnexpectedCommandStatusError))
+        with self.assertRaises(TypeError):
+            self.assertFalse(utils.check_command_status(('NOT_OK', 'test'), ImapToolsError))
+        with self.assertRaises(MailboxCopyError):
+            self.assertFalse(utils.check_command_status(('BYE', ''), MailboxCopyError, expected='OK'))
 
     def test_parse_email_date(self):
         for val, exp in (

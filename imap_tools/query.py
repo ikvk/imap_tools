@@ -4,7 +4,7 @@ import itertools
 import functools
 import collections
 
-from .utils import cleaned_uid_set, short_month_names, quote
+from .utils import cleaned_uid_set, SHORT_MONTH_NAMES, quote
 
 
 class LogicOperator(collections.UserString):
@@ -12,7 +12,7 @@ class LogicOperator(collections.UserString):
         self.converted_strings = converted_strings
         for val in converted_strings:
             if not any(isinstance(val, t) for t in (str, collections.UserString)):
-                raise ValueError('Unexpected type "{}" for converted part, str like obj expected'.format(type(val)))
+                raise TypeError('Unexpected type "{}" for converted part, str like obj expected'.format(type(val)))
         self.converted_params = ParamConverter(unconverted_dicts).convert()
         if not any((self.converted_strings, self.converted_params)):
             raise ValueError('{} expects params'.format(self.__class__.__name__))
@@ -67,10 +67,10 @@ class Header:
 
     def __init__(self, name: str, value: str):
         if not isinstance(name, str):
-            raise ValueError('Header-name expected str value, "{}" received'.format(type(name)))
+            raise TypeError('Header-name expected str value, "{}" received'.format(type(name)))
         self.name = quote(name)
         if not isinstance(value, str):
-            raise ValueError('Header-value expected str value, "{}" received'.format(type(value)))
+            raise TypeError('Header-value expected str value, "{}" received'.format(type(value)))
         self.value = quote(value)
 
     def __str__(self):
@@ -122,50 +122,50 @@ class ParamConverter:
     @classmethod
     def format_date(cls, value: datetime.date) -> str:
         """To avoid locale affects"""
-        return '{}-{}-{}'.format(value.day, short_month_names[value.month - 1], value.year)
+        return '{}-{}-{}'.format(value.day, SHORT_MONTH_NAMES[value.month - 1], value.year)
 
     @staticmethod
     def cleaned_str(key, value) -> str:
         if type(value) is not str:
-            raise ValueError('"{}" expected str value, "{}" received'.format(key, type(value)))
+            raise TypeError('"{}" expected str value, "{}" received'.format(key, type(value)))
         return str(value)
 
     @staticmethod
     def cleaned_date(key, value) -> datetime.date:
         if type(value) is not datetime.date:
-            raise ValueError('"{}" expected datetime.date value, "{}" received'.format(key, type(value)))
+            raise TypeError('"{}" expected datetime.date value, "{}" received'.format(key, type(value)))
         return value
 
     @staticmethod
     def cleaned_bool(key, value) -> bool:
         if type(value) is not bool:
-            raise ValueError('"{}" expected bool value, "{}" received'.format(key, type(value)))
+            raise TypeError('"{}" expected bool value, "{}" received'.format(key, type(value)))
         return bool(value)
 
     @staticmethod
     def cleaned_true(key, value) -> True:
         if value is not True:
-            raise ValueError('"{}" expected "True", "{}" received'.format(key, type(value)))
+            raise TypeError('"{}" expected "True", "{}" received'.format(key, type(value)))
         return True
 
     @staticmethod
     def cleaned_uint(key, value) -> int:
         if type(value) is not int or int(value) < 0:
-            raise ValueError('"{}" expected int value >= 0, "{}" received'.format(key, type(value)))
+            raise TypeError('"{}" expected int value >= 0, "{}" received'.format(key, type(value)))
         return int(value)
 
     @staticmethod
     def cleaned_uid(key, value) -> str:
         try:
             uid_set = cleaned_uid_set(value)
-        except ValueError as e:
-            raise ValueError('{} parse error: {}'.format(key, str(e)))
+        except TypeError as e:
+            raise TypeError('{} parse error: {}'.format(key, str(e)))
         return uid_set
 
     @staticmethod
     def cleaned_header(key, value) -> H:
         if not isinstance(value, H):
-            raise ValueError('"{}" expected Header (H) value, "{}" received'.format(key, type(value)))
+            raise TypeError('"{}" expected Header (H) value, "{}" received'.format(key, type(value)))
         return value
 
     def convert_answered(self, key, value):

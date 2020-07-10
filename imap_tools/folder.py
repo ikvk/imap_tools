@@ -2,16 +2,31 @@ import re
 
 from . import imap_utf7
 from .utils import check_command_status, quote, pairs_to_dict
+from .errors import MailboxFolderStatusValueError, MailboxFolderSelectError, MailboxFolderCreateError, \
+    MailboxFolderRenameError, MailboxFolderDeleteError, MailboxFolderStatusError
 
 
-class MailBoxFolderWrongStatusError(Exception):
-    """Wrong folder status error"""
+class MailBoxFolderStatusOptions:
+    """Valid mailbox folder status options"""
+    MESSAGES = 'MESSAGES'
+    RECENT = 'RECENT'
+    UIDNEXT = 'UIDNEXT'
+    UIDVALIDITY = 'UIDVALIDITY'
+    UNSEEN = 'UNSEEN'
+    all = (
+        MESSAGES, RECENT, UIDNEXT, UIDVALIDITY, UNSEEN
+    )
+    description = (
+        (MESSAGES, "The number of messages in the mailbox"),
+        (RECENT, "The number of messages with the Recent flag set"),
+        (UIDNEXT, "The next unique identifier value of the mailbox"),
+        (UIDVALIDITY, "The unique identifier validity value of the mailbox"),
+        (UNSEEN, "The number of messages which do not have the Seen flag set"),
+    )
 
 
 class MailBoxFolderManager:
     """Operations with mail box folders"""
-
-    folder_status_options = ('MESSAGES', 'RECENT', 'UIDNEXT', 'UIDVALIDITY', 'UNSEEN')
 
     def __init__(self, mailbox):
         self.mailbox = mailbox
@@ -28,7 +43,7 @@ class MailBoxFolderManager:
     def set(self, folder: str or bytes):
         """Select current folder"""
         result = self.mailbox.box.select(self._encode_folder(folder))
-        check_command_status('box.select', result)
+        check_command_status(result, MailboxFolderSelectError)
         self._current_folder = folder
         return result
 
@@ -42,7 +57,7 @@ class MailBoxFolderManager:
         *Use email box delimiter to separate folders. Example for "|" delimiter: "folder|sub folder"
         """
         result = self.mailbox.box._simple_command('CREATE', self._encode_folder(folder))
-        check_command_status('CREATE', result)
+        check_command_status(result, MailboxFolderCreateError)
         return result
 
     def get(self):
@@ -53,37 +68,33 @@ class MailBoxFolderManager:
         """Renemae folder from old_name to new_name"""
         result = self.mailbox.box._simple_command(
             'RENAME', self._encode_folder(old_name), self._encode_folder(new_name))
-        check_command_status('RENAME', result)
+        check_command_status(result, MailboxFolderRenameError)
         return result
 
     def delete(self, folder: str or bytes):
         """Delete folder"""
         result = self.mailbox.box._simple_command('DELETE', self._encode_folder(folder))
-        check_command_status('DELETE', result)
+        check_command_status(result, MailboxFolderDeleteError)
         return result
 
     def status(self, folder: str or bytes, options: [str] or None = None) -> dict:
         """
         Get the status of a folder
         :param folder: mailbox folder
-        :param options: [str] with values from MailBoxFolderManager.folder_status_options | None - for get all options
-            MESSAGES - The number of messages in the mailbox.
-            RECENT - The number of messages with the Recent flag set.
-            UIDNEXT - The next unique identifier value of the mailbox.
-            UIDVALIDITY - The unique identifier validity value of the mailbox.
-            UNSEEN - The number of messages which do not have the Seen flag set.
+        :param options: [str] with values from MailBoxFolderStatusOptions.all | None - for get all options
         :return: dict with available options keys
         """
         command = 'STATUS'
         if not options:
-            options = self.folder_status_options
-        if not all((i in self.folder_status_options for i in options)):
-            raise MailBoxFolderWrongStatusError(str(options))
+            options = tuple(MailBoxFolderStatusOptions.all)
+        for opt in options:
+            if opt not in MailBoxFolderStatusOptions.all:
+                raise MailboxFolderStatusValueError(str(opt))
         status_result = self.mailbox.box._simple_command(
             command, self._encode_folder(folder), '({})'.format(' '.join(options)))
-        check_command_status(command, status_result)
+        check_command_status(status_result, MailboxFolderStatusError)
         result = self.mailbox.box._untagged_response(status_result[0], status_result[1], command)
-        check_command_status(command, result)
+        check_command_status(result, MailboxFolderStatusError)
         values = result[1][0].decode().split('(')[1].split(')')[0].split(' ')
         return {k: int(v) for k, v in pairs_to_dict(values).items() if str(v).isdigit()}
 

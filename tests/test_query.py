@@ -8,10 +8,10 @@ class QueryTest(unittest.TestCase):
 
     def test_cleaners(self):
         def fetch():
-            class A:
+            class Msg:
                 uid = '1'
 
-            yield A()
+            yield Msg()
 
         def not_fetch():
             yield 1
@@ -29,7 +29,7 @@ class QueryTest(unittest.TestCase):
             for good in good_vals:
                 self.assertIsNotNone(cleaned_fn('key_does_not_matter', good))
             for bad in bad_vals:
-                with self.assertRaises(ValueError):
+                with self.assertRaises(TypeError):
                     cleaned_fn('key_does_not_matter', bad)
 
     def test_converters(self):
@@ -97,7 +97,7 @@ class QueryTest(unittest.TestCase):
         header = H('key1', 'val1')
         self.assertEqual(header.name, '"key1"')
         self.assertEqual(header.value, '"val1"')
-        with self.assertRaises(ValueError):
+        with self.assertRaises(TypeError):
             str(H('key1', eval('1')))
-        with self.assertRaises(ValueError):
+        with self.assertRaises(TypeError):
             str(H(eval('1'), 'val1'))

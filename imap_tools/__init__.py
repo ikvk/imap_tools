@@ -3,5 +3,6 @@ from .mailbox import *
 from .message import *
 from .folder import *
 from .utils import *
+from .errors import *
 
-__version__ = '0.17.0'
+__version__ = '0.18.0'

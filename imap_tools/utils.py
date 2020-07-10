@@ -4,47 +4,50 @@ import datetime
 from email.utils import getaddresses
 from email.header import decode_header
 
-short_month_names = ('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec')
+SHORT_MONTH_NAMES = ('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec')
 
 
 def cleaned_uid_set(uid_set: str or [str] or iter) -> str:
     """
-    Prepare set of uid for use in commands: delete/copy/move/seen
+    Prepare set of uid for use in IMAP commands
     uid_set may be:
         str, that is comma separated uids
         Iterable, that contains str uids
-        Generator with "fetch" name, implicitly gets all non-empty uids
+        Generator with "fetch" name, implicitly gets all uids
     """
+    # str
     if type(uid_set) is str:
+        if re.search(r'^(\d+,)*\d+$', uid_set):  # *optimization for already good str
+            return uid_set
         uid_set = uid_set.split(',')
+    # Generator
     if inspect.isgenerator(uid_set) and getattr(uid_set, '__name__', None) == 'fetch':
         uid_set = tuple(msg.uid for msg in uid_set if msg.uid)
+    # Iterable
     try:
         uid_set_iter = iter(uid_set)
     except TypeError:
-        raise ValueError('Wrong uid type: "{}"'.format(type(uid_set)))
+        raise TypeError('Wrong uid_set arg type: "{}"'.format(type(uid_set)))
+    # check uid types
     for uid in uid_set_iter:
         if type(uid) is not str:
-            raise ValueError('uid "{}" is not string'.format(str(uid)))
+            raise TypeError('uid "{}" is not string'.format(str(uid)))
         if not uid.strip().isdigit():
-            raise ValueError('Wrong uid: "{}"'.format(uid))
+            raise TypeError('Wrong uid: "{}"'.format(uid))
     return ','.join((i.strip() for i in uid_set))
 
 
-class UnexpectedCommandStatusError(Exception):
-    """Unexpected status in response"""
-
-
-def check_command_status(command, command_result, expected='OK'):
+def check_command_status(command_result: tuple, exception: type, expected='OK'):
     """
-    Check that command responses status equals <expected> status
-    If not, raises UnexpectedCommandStatusError
+    Check that IMAP command responses status equals <expected> status
+    If not, raise specified <exception>
+    :param command_result: imap command result
+    :param exception: exception subclass of UnexpectedCommandStatusError, that raises
+    :param expected: expected command status
     """
     typ, data = command_result[0], command_result[1]
     if typ != expected:
-        raise UnexpectedCommandStatusError(
-            'Response status for command "{command}" == "{typ}", "{exp}" expected, data: {data}'.format(
-                command=command, typ=typ, data=str(data), exp=expected))
+        raise exception(command_result=command_result, expected=expected)
 
 
 def decode_value(value: bytes or str, encoding=None) -> str:
@@ -81,7 +84,7 @@ def parse_email_addresses(raw_header: str) -> (dict,):
 
 def parse_email_date(value: str) -> datetime.datetime:
     """Parsing the date described in rfc2822"""
-    match = re.search(r'(?P<date>\d{1,2}\s+(' + '|'.join(short_month_names) + r')\s+\d{4})\s+' +
+    match = re.search(r'(?P<date>\d{1,2}\s+(' + '|'.join(SHORT_MONTH_NAMES) + r')\s+\d{4})\s+' +
                       r'(?P<time>\d{1,2}:\d{1,2}(:\d{1,2})?)\s*' +
                       r'(?P<zone_sign>[+-])?(?P<zone>\d{4})?', value)
     if match:
@@ -92,7 +95,7 @@ def parse_email_date(value: str) -> datetime.datetime:
         zone = group['zone']
         return datetime.datetime(
             year=int(year),
-            month=short_month_names.index(month) + 1,
+            month=SHORT_MONTH_NAMES.index(month) + 1,
             day=int(day),
             hour=int(time_values[0]),
             minute=int(time_values[1]),
@@ -118,16 +121,3 @@ def pairs_to_dict(items: list) -> dict:
     if len(items) % 2 != 0:
         raise ValueError('An even-length array is expected')
     return dict((items[i * 2], items[i * 2 + 1]) for i in range(len(items) // 2))
-
-
-class MessageFlags:
-    """Standard email message flags"""
-    SEEN = 'SEEN'
-    ANSWERED = 'ANSWERED'
-    FLAGGED = 'FLAGGED'
-    DELETED = 'DELETED'
-    DRAFT = 'DRAFT'
-    RECENT = 'RECENT'
-    all = (
-        SEEN, ANSWERED, FLAGGED, DELETED, DRAFT, RECENT
-    )

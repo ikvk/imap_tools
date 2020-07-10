@@ -8,6 +8,19 @@ from email.header import decode_header
 from .utils import decode_value, parse_email_addresses, parse_email_date
 
 
+class MailMessageFlags:
+    """Standard email message flags"""
+    SEEN = 'SEEN'
+    ANSWERED = 'ANSWERED'
+    FLAGGED = 'FLAGGED'
+    DELETED = 'DELETED'
+    DRAFT = 'DRAFT'
+    RECENT = 'RECENT'
+    all = (
+        SEEN, ANSWERED, FLAGGED, DELETED, DRAFT, RECENT
+    )
+
+
 class MailMessage:
     """The email message"""
 
