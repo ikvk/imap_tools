@@ -1,3 +1,7 @@
+0.18.1
+======
+* Add deprecated Q to default import, *forgot =)
+
 0.18.0
 ======
 * Added 14 new custom lib exceptions (errors.py): MailboxCopyError, MailboxDeleteError, MailboxExpungeError, MailboxFetchError, MailboxFlagError, MailboxFolderCreateError, MailboxFolderDeleteError, MailboxFolderRenameError, MailboxFolderSelectError, MailboxFolderStatusError, MailboxFolderStatusValueError, MailboxLoginError, MailboxLogoutError, MailboxSearchError
