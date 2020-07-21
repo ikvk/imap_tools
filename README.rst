@@ -260,21 +260,21 @@ If you found a bug or have a question, please let me know - create merge request
 
 Thanks to:
 
-* `shilkazx <https://github.com/shilkazx>`_
-* `somepad <https://github.com/somepad>`_
-* `0xThiebaut <https://github.com/0xThiebaut>`_
-* `TpyoKnig <https://github.com/TpyoKnig>`_
-* `parchd-1 <https://github.com/parchd-1>`_
-* `dojasoncom <https://github.com/dojasoncom>`_
-* `RandomStrangerOnTheInternet <https://github.com/RandomStrangerOnTheInternet>`_
-* `jonnyarnold <https://github.com/jonnyarnold>`_
-* `Mitrich3000 <https://github.com/Mitrich3000>`_
-* `audemed44 <https://github.com/audemed44>`_
-* `mkalioby <https://github.com/mkalioby>`_
-* `atlas0fd00m <https://github.com/atlas0fd00m>`_
-* `unqx <https://github.com/unqx>`_
-* `daitangio <https://github.com/daitangio>`_
-* `upils <https://github.com/upils>`_
-* `Foosec <https://github.com/Foosec>`_
-* `frispete <https://github.com/frispete>`_
-* `PH89 <https://github.com/PH89>`_
+`shilkazx <https://github.com/shilkazx>`_,
+`somepad <https://github.com/somepad>`_,
+`0xThiebaut <https://github.com/0xThiebaut>`_,
+`TpyoKnig <https://github.com/TpyoKnig>`_,
+`parchd-1 <https://github.com/parchd-1>`_,
+`dojasoncom <https://github.com/dojasoncom>`_,
+`RandomStrangerOnTheInternet <https://github.com/RandomStrangerOnTheInternet>`_,
+`jonnyarnold <https://github.com/jonnyarnold>`_,
+`Mitrich3000 <https://github.com/Mitrich3000>`_,
+`audemed44 <https://github.com/audemed44>`_,
+`mkalioby <https://github.com/mkalioby>`_,
+`atlas0fd00m <https://github.com/atlas0fd00m>`_,
+`unqx <https://github.com/unqx>`_,
+`daitangio <https://github.com/daitangio>`_,
+`upils <https://github.com/upils>`_,
+`Foosec <https://github.com/Foosec>`_,
+`frispete <https://github.com/frispete>`_,
+`PH89 <https://github.com/PH89>`_

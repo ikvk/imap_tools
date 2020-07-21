@@ -10,7 +10,7 @@
 * utils.MessageFlags -> message.MailMessageFlags
 * query.py: ValueError replaced to TypeError in many places
 * utils.short_month_names renamed to utils.SHORT_MONTH_NAMES
-* utils.cleaned_uid_set - parsing optimized, raise TypeError instead ValueError
+* utils.cleaned_uid_set - parsing optimized, raise TypeError instead ValueError, not ignore empty uid from generator
 * utils.check_command_status - new logic
 * BaseMailBox.fetch headers_only arg is disabled until fix
 
