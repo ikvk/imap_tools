@@ -36,3 +36,10 @@ False   False         _payload (*)
 icons
 =====
 📨 📬 📪 📭 📫 ✉ 📧 🖂 🖃 🖅 📩
+
+
+many uids command
+=================
+error example for 22000 uids in yandex:
+    imap_tools.errors.MailboxCopyError: Response status "OK" expected, but "NO" received.
+    Data: [b'command or literal size is too large']

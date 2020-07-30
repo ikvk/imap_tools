@@ -1,5 +1,5 @@
-try to imitate long poll by NOOP
-
 check https://docs.python.org/release/3.8.1/library/email.utils.html
 
 fix BaseMailBox.fetch headers_only
+
+__getitem__ -> https://docs.python.org/3/library/email.compat32-message.html#email.message.Message.get_all

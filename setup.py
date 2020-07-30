@@ -20,7 +20,7 @@ setuptools.setup(
     license='Apache-2.0',
     long_description=long_description,
     long_description_content_type="text/x-rst",
-    author='v.kaukin',
+    author='Vladimir Kaukin',
     author_email='KaukinVK@ya.com',
     description='Working with email and mailbox using IMAP protocol.',
     keywords=['imap', 'imap-client', 'python3', 'python', 'email'],
