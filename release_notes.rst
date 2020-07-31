@@ -1,6 +1,10 @@
+0.19.0
+======
+* Support international characters in email addresses
+
 0.18.1
 ======
-* Add deprecated Q to default import, *forgot =)
+* Add deprecated Q to default import, *forgot
 
 0.18.0
 ======

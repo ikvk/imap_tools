@@ -5,4 +5,4 @@ from .folder import *
 from .utils import *
 from .errors import *
 
-__version__ = '0.18.1'
+__version__ = '0.19.0'

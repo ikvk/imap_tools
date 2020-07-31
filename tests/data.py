@@ -35,9 +35,9 @@ MESSAGE_ATTRIBUTES = {
 </body></html>""",
         headers={'MIME-Version': ('1.0',), 'From': ('=?utf-8?b?0K/QvdC00LXQutGB?= <hello@yandex.ru>',),
                  'Content-Type': ('multipart/related; boundary="===============1696383123=="',), 'Reply-To': (
-            '=?UTF-8?B?0L/RgNC40LLQtdGC?= <foma@company.ru>,\r\n =?UTF-8?B?0L/QvtC60LA=?= <petr@company.ru>',),
+                '=?UTF-8?B?0L/RgNC40LLQtdGC?= <foma@company.ru>,\r\n =?UTF-8?B?0L/QvtC60LA=?= <petr@company.ru>',),
                  'Message-Id': ('<20110815165837.A26162B2802A@yaback1.mail.yandex.net>',), 'Subject': (
-            '=?utf-8?b?0KHQvtCx0LXRgNC40YLQtSDQstGB0Y4g0L/QvtGH0YLRgyDQsiDRjdGC0L4=?=\r\n =?utf-8?b?0YIg0Y/RidC40Lo=?=',)},
+                '=?utf-8?b?0KHQvtCx0LXRgNC40YLQtSDQstGB0Y4g0L/QvtGH0YLRgyDQsiDRjdGC0L4=?=\r\n =?utf-8?b?0YIg0Y/RidC40Lo=?=',)},
         attachments=[
             dict(
                 filename='collector.jpg',
@@ -132,7 +132,7 @@ e-mail: <a class="moz-txt-link-abbreviated" href="mailto:e.sp@com.ru">e.sp@com.r
     'attachment_7bit': dict(
         subject='статус',
         from_='i.kor@company.ru',
-        to=('user@company.ru',),
+        to=('jessica.schmidt@uni.de', 'я你Rabea.Bartölke@uni.de'),
         cc=(),
         bcc=(),
         reply_to=(),
@@ -183,25 +183,27 @@ e-mail: <a class="moz-txt-link-abbreviated" href="mailto:e.sp@com.ru">e.sp@com.r
     </html>
 
 """.replace('\n', '\r\n'),
-        headers={'From': ('i.kor@company.ru',), 'X-Spam-Level': ('',),
-                 'X-Virus-Scanned': ('amavisd-new at m101.comp.ru',),
-                 'Message-ID': ('<2405271c-86ac-0a65-e50c-d1ebccfcc644@company.ru>',),
-                 'Date': ('Thu, 12 Oct 2017 09:41:56 +0500',),
-                 'X-Forwarded-Message-Id': ('<20171011085432.15374.20485@web.hades.company>',), 'X-Spam-Flag': ('NO',),
+        headers={'Message-ID': ('<2405271c-86ac-0a65-e50c-d1ebccfcc644@company.ru>',),
+                 'References': ('<20171011085432.15374.20485@web.hades.company>',), 'To': (
+            'Jessica Schmidt <jessica.schmidt@uni.de>,\r\n\t=?iso-8859-1?Q?Rabea=2EBart=F6lke=40uni=2Ede?= <\udcd1\udc8f\udce4\udcbd\udca0Rabea.Bart\udcc3\udcb6lke@uni.de>',),
                  'Content-Type': ('multipart/mixed;\r\n boundary="------------BF90926EC9DF73443A6B8F28"',),
-                 'Return-Path': ('i.kor@company.ru',), 'MIME-Version': ('1.0',), 'X-Spam-Status': (
-                'No, score=-2.898 required=6.6 tests=[ALL_TRUSTED=-1,\r\n\tBAYES_00=-1.9, HTML_MESSAGE=0.001, URIBL_BLOCKED=0.001]\r\n\tautolearn=ham autolearn_force=no',),
+                 'X-Spam-Score': ('-2.898',), 'From': ('i.kor@company.ru',), 'Content-Language': ('ru',),
+                 'Date': ('Thu, 12 Oct 2017 09:41:56 +0500',),
+                 'In-Reply-To': ('<20171011085432.15374.20485@web.hades.company>',), 'X-Spam-Flag': ('NO',),
+                 'Return-Path': ('i.kor@company.ru',),
                  'User-Agent': ('Mozilla/5.0 (Windows NT 6.1; WOW64; rv:52.0) Gecko/20100101\r\n Thunderbird/52.4.0',),
-                 'In-Reply-To': ('<20171011085432.15374.20485@web.hades.company>',), 'X-Spam-Score': ('-2.898',),
-                 'References': ('<20171011085432.15374.20485@web.hades.company>',), 'Content-Language': ('ru',),
-                 'Received': (
-                     'from m101.comp.ru (LHLO m101.comp.ru) (192.168.99.101) by m101.comp.ru\r\n with LMTP; Thu, 12 Oct 2017 09:41:57 +0500 (YEKT)',
-                     'from localhost (localhost [127.0.0.1])\r\n\tby m101.comp.ru (Postfix) with ESMTP id 555275B43;\r\n\tThu, 12 Oct 2017 09:41:57 +0500 (YEKT)',
-                     'from m101.comp.ru ([127.0.0.1])\r\n\tby localhost (m101.comp.ru [127.0.0.1]) (amavisd-new, port 10032)\r\n\twith ESMTP id rY6SAtl4piy1; Thu, 12 Oct 2017 09:41:56 +0500 (YEKT)',
-                     'from localhost (localhost [127.0.0.1])\r\n\tby m101.comp.ru (Postfix) with ESMTP id C8F0F5B4B;\r\n\tThu, 12 Oct 2017 09:41:56 +0500 (YEKT)',
-                     'from m101.comp.ru ([127.0.0.1])\r\n\tby localhost (m101.comp.ru [127.0.0.1]) (amavisd-new, port 10026)\r\n\twith ESMTP id kq2wE_i9_8EK; Thu, 12 Oct 2017 09:41:56 +0500 (YEKT)',
-                     'from [192.168.104.80] (notebook26.hades.company [192.168.104.80])\r\n\tby m101.comp.ru (Postfix) with ESMTPSA id 9563A5B44\r\n\tfor <user@company.ru>; Thu, 12 Oct 2017 09:41:56 +0500 (YEKT)'),
-                 'Subject': ('=?UTF-8?B?0YHRgtCw0YLRg9GB?=    ',), 'To': ('user@company.ru',)},
+                 'X-Forwarded-Message-Id': ('<20171011085432.15374.20485@web.hades.company>',),
+                 'X-Virus-Scanned': ('amavisd-new at m101.comp.ru',), 'Subject': ('=?UTF-8?B?0YHRgtCw0YLRg9GB?=    ',),
+                 'MIME-Version': ('1.0',), 'Received': (
+            'from m101.comp.ru (LHLO m101.comp.ru) (192.168.99.101) by m101.comp.ru\r\n with LMTP; Thu, 12 Oct 2017 09:41:57 +0500 (YEKT)',
+            'from localhost (localhost [127.0.0.1])\r\n\tby m101.comp.ru (Postfix) with ESMTP id 555275B43;\r\n\tThu, 12 Oct 2017 09:41:57 +0500 (YEKT)',
+            'from m101.comp.ru ([127.0.0.1])\r\n\tby localhost (m101.comp.ru [127.0.0.1]) (amavisd-new, port 10032)\r\n\twith ESMTP id rY6SAtl4piy1; Thu, 12 Oct 2017 09:41:56 +0500 (YEKT)',
+            'from localhost (localhost [127.0.0.1])\r\n\tby m101.comp.ru (Postfix) with ESMTP id C8F0F5B4B;\r\n\tThu, 12 Oct 2017 09:41:56 +0500 (YEKT)',
+            'from m101.comp.ru ([127.0.0.1])\r\n\tby localhost (m101.comp.ru [127.0.0.1]) (amavisd-new, port 10026)\r\n\twith ESMTP id kq2wE_i9_8EK; Thu, 12 Oct 2017 09:41:56 +0500 (YEKT)',
+            'from [192.168.104.80] (notebook26.hades.company [192.168.104.80])\r\n\tby m101.comp.ru (Postfix) with ESMTPSA id 9563A5B44\r\n\tfor <user@company.ru>; Thu, 12 Oct 2017 09:41:56 +0500 (YEKT)'),
+                 'X-Spam-Status': (
+                 'No, score=-2.898 required=6.6 tests=[ALL_TRUSTED=-1,\r\n\tBAYES_00=-1.9, HTML_MESSAGE=0.001, URIBL_BLOCKED=0.001]\r\n\tautolearn=ham autolearn_force=no',),
+                 'X-Spam-Level': ('',)},
         attachments=[
             dict(
                 filename='Contract 25 04 2020.docx',
@@ -210,7 +212,10 @@ e-mail: <a class="moz-txt-link-abbreviated" href="mailto:e.sp@com.ru">e.sp@com.r
             ),
         ],
         from_values={'email': 'i.kor@company.ru', 'name': '', 'full': 'i.kor@company.ru'},
-        to_values=({'email': 'user@company.ru', 'name': '', 'full': 'user@company.ru'},),
+        to_values=({'email': 'jessica.schmidt@uni.de', 'name': 'Jessica Schmidt',
+                    'full': 'Jessica Schmidt <jessica.schmidt@uni.de>'},
+                   {'email': 'я你Rabea.Bartölke@uni.de', 'name': 'Rabea.Bartölke@uni.de',
+                    'full': 'Rabea.Bartölke@uni.de <я你Rabea.Bartölke@uni.de>'}),
         cc_values=(),
         bcc_values=(),
         reply_to_values=(),

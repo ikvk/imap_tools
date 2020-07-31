@@ -2,7 +2,7 @@ import re
 import inspect
 import datetime
 from email.utils import getaddresses
-from email.header import decode_header
+from email.header import decode_header, Header
 
 SHORT_MONTH_NAMES = ('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec')
 
@@ -69,6 +69,8 @@ def parse_email_addresses(raw_header: str) -> (dict,):
     :return: tuple(dict(name: str, email: str, full: str))
     """
     result = []
+    if type(raw_header) is Header:
+        raw_header = decode_value(*decode_header(raw_header)[0])
     for raw_name, email in getaddresses([raw_header]):
         name = decode_value(*decode_header(raw_name)[0]).strip()
         email = email.strip()
