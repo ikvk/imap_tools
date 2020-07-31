@@ -278,3 +278,5 @@ Thanks to:
 `Foosec <https://github.com/Foosec>`_,
 `frispete <https://github.com/frispete>`_,
 `PH89 <https://github.com/PH89>`_
+`amarkham09 <https://github.com/amarkham09>`_
+`nixCodeX <https://github.com/nixCodeX>`_
