@@ -62,7 +62,7 @@ def decode_value(value: bytes or str, encoding=None) -> str:
     return value
 
 
-def parse_email_addresses(raw_header: str) -> (dict,):
+def parse_email_addresses(raw_header: str or Header) -> (dict,):
     """
     Parse email addresses from header
     :param raw_header: example: '=?UTF-8?B?0J7Qu9C1=?= <name@company.ru>,\r\n "\'\\"z, z\\"\'" <imap.tools@ya.ru>'
