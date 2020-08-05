@@ -51,7 +51,7 @@ MailBox.box - imaplib.IMAP4/IMAP4_SSL client instance.
 
 MailBox.fetch - email message generator, first searches email ids by criteria, then fetch and yields emails by one:
 
-* *criteria* = 'ALL' message search criteria, `docs <#search-criteria>`_
+* *criteria* = 'ALL', message search criteria, `docs <#search-criteria>`_
 * *charset* = 'US-ASCII', indicates charset of the strings that appear in the search criteria. See rfc2978
 * *limit* = None, limit on the number of read emails, useful for actions with a large number of messages, like "move"
 * *miss_defect* = True, miss emails with defects
@@ -208,7 +208,7 @@ use 'limit' argument for fetch in this case.
 
         # FLAG unseen messages in current folder as Answered and Flagged, *in bulk.
         flags = (imap_tools.MailMessageFlags.ANSWERED, imap_tools.MailMessageFlags.FLAGGED)
-        mailbox.flag(mailbox.fetch('(UNSEEN)'), flags, True)
+        mailbox.flag(mailbox.fetch(AND(seen=False)), flags, True)
 
         # SEEN: mark all messages sent at 05.03.2007 in current folder as unseen, *in bulk
         mailbox.seen(mailbox.fetch("SENTON 05-Mar-2007"), False)
@@ -258,7 +258,10 @@ Contribute
 
 If you found a bug or have a question, please let me know - create merge request or issue.
 
-Thanks to:
+Thanks
+------
+
+Big thanks to people who helped develop this library:
 
 `shilkazx <https://github.com/shilkazx>`_,
 `somepad <https://github.com/somepad>`_,
@@ -280,3 +283,5 @@ Thanks to:
 `PH89 <https://github.com/PH89>`_,
 `amarkham09 <https://github.com/amarkham09>`_,
 `nixCodeX <https://github.com/nixCodeX>`_
+
+You may `thank me <https://github.com/ikvk/imap_tools/blob/master/docs/donate.rst>`_, if this library helped you.
