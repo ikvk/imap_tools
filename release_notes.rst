@@ -1,3 +1,7 @@
+0.19.1
+======
+* Importing all from utils module removed from the default package imports
+
 0.19.0
 ======
 * Support international characters in email addresses
