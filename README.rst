@@ -242,21 +242,22 @@ Exceptions
 
 Custom lib exceptions here: `errors.py <https://github.com/ikvk/imap_tools/blob/master/imap_tools/errors.py>`_.
 
+Release notes
+-------------
+
+History of important changes: `release_notes.rst <https://github.com/ikvk/imap_tools/blob/master/release_notes.rst>`_
+
+Contribute
+----------
+
+If you found a bug or have a question, please let me know - create merge request or issue.
+
 Reasons
 -------
 
 - Excessive low level of `imaplib` library.
 - Other libraries contain various shortcomings or not convenient.
 - Open source projects makes world better.
-
-Release notes
--------------
- `release_notes.rst <https://github.com/ikvk/imap_tools/blob/master/release_notes.rst>`_
-
-Contribute
-----------
-
-If you found a bug or have a question, please let me know - create merge request or issue.
 
 Thanks
 ------
