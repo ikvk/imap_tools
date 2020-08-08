@@ -285,4 +285,4 @@ Big thanks to people who helped develop this library:
 `amarkham09 <https://github.com/amarkham09>`_,
 `nixCodeX <https://github.com/nixCodeX>`_
 
-You may `thank me <https://github.com/ikvk/imap_tools/blob/master/docs/donate.rst>`_, if this library helped you.
+💰 You may `thank me <https://github.com/ikvk/imap_tools/blob/master/docs/donate.rst>`_, if this library helped you.
