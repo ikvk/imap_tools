@@ -45,9 +45,11 @@ Basic
     subjects = [msg.subject for msg in mailbox.fetch(AND(all=True))]
     mailbox.logout()
 
-MailBox/MailBoxUnencrypted - for create mailbox instance.
+MailBox, MailBoxUnencrypted - for create mailbox instance.
 
 MailBox.box - imaplib.IMAP4/IMAP4_SSL client instance.
+
+MailBox.login - authentication function
 
 MailBox.fetch - email message generator, first searches email ids by criteria, then fetch and yields emails by one:
 
@@ -58,7 +60,7 @@ MailBox.fetch - email message generator, first searches email ids by criteria, t
 * *miss_no_uid* = True, miss emails without uid
 * *mark_seen* = True, mark emails as seen on fetch
 * *reverse* = False, in order from the larger date to the smaller
-* *headers_only* = False, get only email headers (without text, html, attachments) !disabled until fix bug
+* *headers_only* = False, get only email headers (without text, html, attachments)
 
 Email attributes
 ^^^^^^^^^^^^^^^^
@@ -137,7 +139,7 @@ Header  H      for search by headers                      name: str, value: str
     # complex
     A(OR(from_='from@ya.ru', text='"the text"'), NOT(OR(A(answered=False), A(new=True))), to='to@ya.ru')
     # encoding
-    mailbox.fetch(A(subject='привет'), charset='utf8')  # 'привет' will be encoded by MailBox._criteria_encoder
+    mailbox.fetch(A(subject='привет'), charset='utf8')
     # python note: you can't do: A(text='two', NOT(subject='one'))
     A(NOT(subject='one'), text='two')  # use kwargs after logic classes (args)
 
@@ -248,7 +250,7 @@ Custom lib exceptions here: `errors.py <https://github.com/ikvk/imap_tools/blob/
 Release notes
 -------------
 
-History of important changes: `release_notes.rst <https://github.com/ikvk/imap_tools/blob/master/release_notes.rst>`_
+History of important changes: `release_notes.rst <https://github.com/ikvk/imap_tools/blob/master/docs/release_notes.rst>`_
 
 Contribute
 ----------

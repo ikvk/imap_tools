@@ -1,4 +1,5 @@
 import imaplib
+from email.errors import StartBoundaryNotFoundDefect, MultipartInvariantViolationDefect
 
 from .message import MailMessage, MailMessageFlags
 from .folder import MailBoxFolderManager
@@ -15,6 +16,7 @@ class BaseMailBox:
 
     email_message_class = MailMessage
     folder_manager_class = MailBoxFolderManager
+    with_headers_only_allowed_errors = (StartBoundaryNotFoundDefect, MultipartInvariantViolationDefect)
 
     def __init__(self):
         self.folder = None  # folder manager
@@ -56,8 +58,6 @@ class BaseMailBox:
         :param headers_only: get only email headers (without text, html, attachments)
         :return generator: MailMessage
         """
-        if headers_only:
-            raise NotImplementedError('headers_only does not work correctly and is disabled until fix, *you may help')
         search_result = self.box.search(charset, self._criteria_encoder(criteria, charset))
         check_command_status(search_result, MailboxSearchError)
         # first element is string with email numbers through the gap
@@ -71,7 +71,11 @@ class BaseMailBox:
             check_command_status(fetch_result, MailboxFetchError)
             mail_message = self.email_message_class(fetch_result[1])
             if miss_defect and mail_message.obj.defects:
-                continue
+                if headers_only:
+                    if not all(d.__class__ in self.with_headers_only_allowed_errors for d in mail_message.obj.defects):
+                        continue
+                else:
+                    continue
             if miss_no_uid and not mail_message.uid:
                 continue
             yield mail_message

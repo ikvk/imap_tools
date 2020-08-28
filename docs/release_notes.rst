@@ -1,3 +1,7 @@
+0.20.0
+======
+* BaseMailBox.fetch headers_only arg fixed
+
 0.19.1
 ======
 * Importing all from utils module removed from the default package imports
