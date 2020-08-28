@@ -288,6 +288,7 @@ Big thanks to people who helped develop this library:
 `frispete <https://github.com/frispete>`_,
 `PH89 <https://github.com/PH89>`_,
 `amarkham09 <https://github.com/amarkham09>`_,
-`nixCodeX <https://github.com/nixCodeX>`_
+`nixCodeX <https://github.com/nixCodeX>`_,
+`backelj <https://github.com/backelj>`_
 
 💰 You may `thank me <https://github.com/ikvk/imap_tools/blob/master/docs/donate.rst>`_, if this library helped you.
