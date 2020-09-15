@@ -13,16 +13,17 @@ class MessageTest(MailboxTestCase):
         none_type = type(None)
         for mailbox in self.mailbox_set.values():
             mailbox.folder.set(mailbox.folder_test_base)
+
             # headers_only
-            # cnt_fetch_head = 0
-            # cnt_fetch_head_answered_and_flagged = 0
-            # for message in mailbox.fetch(headers_only=True):
-            #     if {MailMessageFlags.ANSWERED, MailMessageFlags.FLAGGED}.issubset(message.flags):
-            #         cnt_fetch_head_answered_and_flagged += 1
-            #     cnt_fetch_head += 1
-            #     self.assertEqual(message.text, '')
-            #     self.assertEqual(message.html, '')
-            #     self.assertEqual(len(message.attachments), 0)
+            cnt_fetch_head = 0
+            cnt_fetch_head_answered_and_flagged = 0
+            for message in mailbox.fetch(headers_only=True):
+                if {MailMessageFlags.ANSWERED, MailMessageFlags.FLAGGED}.issubset(message.flags):
+                    cnt_fetch_head_answered_and_flagged += 1
+                cnt_fetch_head += 1
+                self.assertEqual(message.text, '')
+                self.assertEqual(message.html, '')
+                self.assertEqual(len(message.attachments), 0)
 
             # types
             cnt_fetch_all = 0
@@ -57,12 +58,16 @@ class MessageTest(MailboxTestCase):
                     self.assertIs(type(att.filename), str)
                     self.assertIs(type(att.content_type), str)
                     self.assertIs(type(att.payload), bytes)
+
             # counts
             self.assertTrue(cnt_fetch_all_answered_and_flagged >= 1)
             self.assertEqual(cnt_fetch_all, 6)
-            # self.assertEqual(cnt_fetch_head, cnt_fetch_all)
-            # self.assertTrue(cnt_fetch_head_answered_and_flagged >= 1)
-            # self.assertEqual(cnt_fetch_head_answered_and_flagged, cnt_fetch_all_answered_and_flagged)
+
+            self.assertTrue(cnt_fetch_head_answered_and_flagged >= 1)
+            self.assertEqual(cnt_fetch_head, 6)
+
+            self.assertEqual(cnt_fetch_head, cnt_fetch_all)
+            self.assertEqual(cnt_fetch_head_answered_and_flagged, cnt_fetch_all_answered_and_flagged)
 
     def test_attributes(self):
         msg_attr_set = {'subject', 'from_', 'to', 'cc', 'bcc', 'reply_to', 'date', 'date_str', 'text', 'html',
