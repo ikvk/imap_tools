@@ -4,4 +4,4 @@ from .message import *
 from .folder import *
 from .errors import *
 
-__version__ = '0.20.0'
+__version__ = '0.21.0'
