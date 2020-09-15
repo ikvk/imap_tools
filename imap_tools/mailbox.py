@@ -195,10 +195,11 @@ class MailBox(BaseMailBox):
 
     def _get_mailbox_client(self):
         return imaplib.IMAP4_SSL(self._host, self._port, self._keyfile, self._certfile, self._ssl_context)
-    
+
     def xoauth2(self, username: str, access_token: str, initial_folder: str = 'INBOX'):
-        auth_string = 'user=%s\1auth=Bearer %s\1\1' % (username, access_token)
-        result = self.box.authenticate('XOAUTH2', lambda x: auth_string)
+        """Authenticate to account using OAuth 2.0 mechanism"""
+        auth_string = 'user={}\1auth=Bearer {}\1\1'.format(username, access_token)
+        result = self.box.authenticate('XOAUTH2', lambda x: auth_string)  # noqa
         check_command_status(result, MailboxLoginError)
         self.folder = self.folder_manager_class(self)
         self.folder.set(initial_folder)

@@ -1,0 +1,27 @@
+To: aa@aa.ru
+To: bb@aa.ru
+To:
+Cc: cc@aa.ru
+Cc: dd@aa.ru
+Bcc: zz1@aa.ru
+Bcc: zz2@aa.ru
+Reply-To: =?UTF-8?B?0L/RgNC40LLQtdGC?= <foma1@company.ru>,
+ =?UTF-8?B?0L/QvtC60LA=?= <petr1@company.ru>
+Reply-To: =?UTF-8?B?0L/RgNC40LLQtdGC?= <foma2@company.ru>,
+ =?UTF-8?B?0L/QvtC60LA=?= <petr2@company.ru>
+From: =?utf-8?B?0JrQsNGD0LrQuNC9INCS0LvQsNC00LjQvNC40YA=?= <kaukinvk@yandex.ru>
+Envelope-From: kaukinvk@yandex.ru
+Subject: double_fields
+MIME-Version: 1.0
+Date: Wed, 01 May 2019 12:20
+Message-Id: <8872861556695229@myt5-262fb1897c00.qloud-c.yandex.net>
+Content-Type: multipart/mixed;
+	boundary="----==--bound.887287.myt5-262fb1897c00.qloud-c.yandex.net"
+Return-Path: kaukinvk@yandex.ru
+
+------==--bound.887287.myt5-262fb1897c00.qloud-c.yandex.net
+Content-Transfer-Encoding: 7bit
+Content-Type: text/html
+
+<div>double_fields</div>
+------==--bound.887287.myt5-262fb1897c00.qloud-c.yandex.net

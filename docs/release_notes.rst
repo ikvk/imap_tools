@@ -1,3 +1,8 @@
+0.21.0
+======
+* Added MailBox.xoauth2 - authentication using OAuth 2.0 mechanism
+* MailMessage (to, cc, bcc, reply_to) now works for fields specified multiple times (e.g. twice Cc: Cc:)
+
 0.20.0
 ======
 * BaseMailBox.fetch headers_only arg fixed

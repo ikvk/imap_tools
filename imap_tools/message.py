@@ -2,6 +2,7 @@ import re
 import email
 import base64
 import imaplib
+from itertools import chain
 from functools import lru_cache
 from email.header import decode_header
 
@@ -109,7 +110,7 @@ class MailMessage:
     @lru_cache()
     def to_values(self) -> (dict,):
         """Recipients (all data)"""
-        return parse_email_addresses(self.obj['To'] or '')
+        return tuple(chain(*(parse_email_addresses(i or '') for i in self.obj.get_all('To', []))))
 
     @property
     @lru_cache()
@@ -121,7 +122,7 @@ class MailMessage:
     @lru_cache()
     def cc_values(self) -> (dict,):
         """Carbon copy (all data)"""
-        return parse_email_addresses(self.obj['Cc'] or '')
+        return tuple(chain(*(parse_email_addresses(i or '') for i in self.obj.get_all('Cc', []))))
 
     @property
     @lru_cache()
@@ -133,7 +134,7 @@ class MailMessage:
     @lru_cache()
     def bcc_values(self) -> (dict,):
         """Blind carbon copy (all data)"""
-        return parse_email_addresses(self.obj['Bcc'] or '')
+        return tuple(chain(*(parse_email_addresses(i or '') for i in self.obj.get_all('Bcc', []))))
 
     @property
     @lru_cache()
@@ -145,7 +146,7 @@ class MailMessage:
     @lru_cache()
     def reply_to_values(self) -> (dict,):
         """Reply-to emails (all data)"""
-        return parse_email_addresses(self.obj['Reply-To'] or '')
+        return tuple(chain(*(parse_email_addresses(i or '') for i in self.obj.get_all('Reply-To', []))))
 
     @property
     @lru_cache()
@@ -156,7 +157,7 @@ class MailMessage:
     @property
     @lru_cache()
     def date_str(self) -> str:
-        """Message sent date"""
+        """Message sent date string as is"""
         return str(self.obj['Date'] or '')
 
     @property

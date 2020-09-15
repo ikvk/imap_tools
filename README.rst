@@ -11,12 +11,13 @@ Working with email and mailbox using IMAP protocol.
 - Work with mailbox folders (list, set, get, create, exists, rename, delete, status)
 - No dependencies
 
-===============  ====================================================
+===============  ===============================================================
 Python version   3.3+
 License          Apache-2.0
 PyPI             https://pypi.python.org/pypi/imap_tools/
-IMAP             VERSION 4rev1 - https://tools.ietf.org/html/rfc3501
-===============  ====================================================
+IMAP RFC         VERSION 4rev1 - https://tools.ietf.org/html/rfc3501
+EMAIL RFC        Internet Message Format - https://tools.ietf.org/html/rfc2822
+===============  ===============================================================
 
 .. contents::
 
@@ -49,7 +50,7 @@ MailBox, MailBoxUnencrypted - for create mailbox instance.
 
 MailBox.box - imaplib.IMAP4/IMAP4_SSL client instance.
 
-MailBox.login - authentication function
+MailBox.login, MailBox.xoauth2 - authentication functions
 
 MailBox.fetch - email message generator, first searches email ids by criteria, then fetch and yields emails by one:
 
@@ -289,6 +290,7 @@ Big thanks to people who helped develop this library:
 `PH89 <https://github.com/PH89>`_,
 `amarkham09 <https://github.com/amarkham09>`_,
 `nixCodeX <https://github.com/nixCodeX>`_,
-`backelj <https://github.com/backelj>`_
+`backelj <https://github.com/backelj>`_,
+`ohayak <https://github.com/ohayak>`_
 
 💰 You may `thank me <https://github.com/ikvk/imap_tools/blob/master/docs/donate.rst>`_, if this library helped you.
