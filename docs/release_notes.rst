@@ -1,3 +1,13 @@
+0.22.0
+======
+* Added Attachment.content_id
+* Added Attachment.content_disposition
+* Attachment._part -> Attachment.part
+* email.utils.parsedate_to_datetime used in utils.parse_email_addresses
+* BaseMailBox.fetch limit argument now can receive slice object
+* BaseMailBox instance now has attribute mailbox.last_search_ids, it fills after each fetch - msg ids from search command
+* __init__.py refined
+
 0.21.0
 ======
 * Added MailBox.xoauth2 - authentication using OAuth 2.0 mechanism

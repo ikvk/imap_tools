@@ -48,11 +48,11 @@ Basic
 
 MailBox, MailBoxUnencrypted - for create mailbox instance.
 
-MailBox.box - imaplib.IMAP4/IMAP4_SSL client instance.
+BaseMailBox.box - imaplib.IMAP4/IMAP4_SSL client instance.
 
-MailBox.login, MailBox.xoauth2 - authentication functions
+BaseMailBox.login, MailBox.xoauth2 - authentication functions
 
-MailBox.fetch - email message generator, first searches email ids by criteria, then fetch and yields emails by one:
+BaseMailBox.fetch - email message generator, first searches email ids by criteria, then fetch and yields emails by one:
 
 * *criteria* = 'ALL', message search criteria, `docs <#search-criteria>`_
 * *charset* = 'US-ASCII', indicates charset of the strings that appear in the search criteria. See rfc2978
@@ -62,6 +62,8 @@ MailBox.fetch - email message generator, first searches email ids by criteria, t
 * *mark_seen* = True, mark emails as seen on fetch
 * *reverse* = False, in order from the larger date to the smaller
 * *headers_only* = False, get only email headers (without text, html, attachments)
+
+BaseMailBox instance has attribute mailbox.last_search_ids, it fills after each fetch - msg ids from search command
 
 Email attributes
 ^^^^^^^^^^^^^^^^
@@ -86,9 +88,12 @@ Message and Attachment public attributes are cached by functools.lru_cache
         msg.headers          # dict: {'Received': ('from 1.m.ru', 'from 2.m.ru'), 'AntiVirus': ('Clean',)}
 
         for att in msg.attachments:  # list: [Attachment]
-            att.filename         # str: 'cat.jpg'
-            att.content_type     # str: 'image/jpeg'
-            att.payload          # bytes: b'\xff\xd8\xff\xe0\'
+            att.filename             # str: 'cat.jpg'
+            att.payload              # bytes: b'\xff\xd8\xff\xe0\'
+            att.content_id           # str: 'part45.06020801.00060008@mail.ru'
+            att.content_type         # str: 'image/jpeg'
+            att.content_disposition  # str: 'inline'
+            att.part                 # email.message.Message: original object
 
         msg.obj              # email.message.Message: original object
         msg.from_values      # dict or None: {'email': 'im@ya.ru', 'name': 'Ya 你', 'full': 'Ya 你 <im@ya.ru>'}
@@ -291,6 +296,8 @@ Big thanks to people who helped develop this library:
 `amarkham09 <https://github.com/amarkham09>`_,
 `nixCodeX <https://github.com/nixCodeX>`_,
 `backelj <https://github.com/backelj>`_,
-`ohayak <https://github.com/ohayak>`_
+`ohayak <https://github.com/ohayak>`_,
+`mwherman95926 <https://github.com/mwherman95926>`_,
+`andyfensham <https://github.com/andyfensham>`_
 
 💰 You may `thank me <https://github.com/ikvk/imap_tools/blob/master/docs/donate.rst>`_, if this library helped you.

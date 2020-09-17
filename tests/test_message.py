@@ -72,7 +72,7 @@ class MessageTest(MailboxTestCase):
     def test_attributes(self):
         msg_attr_set = {'subject', 'from_', 'to', 'cc', 'bcc', 'reply_to', 'date', 'date_str', 'text', 'html',
                         'headers', 'from_values', 'to_values', 'cc_values', 'bcc_values', 'reply_to_values'}
-        att_attr_set = {'filename', 'content_type', 'payload'}
+        att_attr_set = {'filename', 'content_id', 'content_type', 'content_disposition', 'payload'}
         for file_name in MESSAGE_ATTRIBUTES.keys():
             message_data = MESSAGE_ATTRIBUTES[file_name]
             for msg_path in ('../tests/messages/{}.eml'.format(file_name), 'tests/messages/{}.eml'.format(file_name)):

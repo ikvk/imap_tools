@@ -13,13 +13,20 @@ False   False         _payload (*)
     the payload is returned as-is.
 
 
-icons
-=====
-📨 📬 📪 📭 📫 ✉ 📧 🖂 🖃 🖅 📩
-
-
 many uids command
 =================
 error example for 22000 uids in yandex:
     imap_tools.errors.MailboxCopyError: Response status "OK" expected, but "NO" received.
     Data: [b'command or literal size is too large']
+
+
+email lib
+=========
+Доступен email.message.EmailMessage вместо Message, есть смысл туда заглядывать по логике разбора
+self.obj = email.message_from_bytes(raw_message_data, _class=EmailMessage) можно так, пока не вижу смысла
+утилиты https://docs.python.org/release/3.8.1/library/email.utils.html
+
+
+icons
+=====
+📨 📬 📪 📭 📫 ✉ 📧 🖂 🖃 🖅 📩

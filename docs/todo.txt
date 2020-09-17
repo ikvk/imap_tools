@@ -1,2 +1,0 @@
-
-check https://docs.python.org/release/3.8.1/library/email.utils.html

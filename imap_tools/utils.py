@@ -1,7 +1,7 @@
 import re
 import inspect
 import datetime
-from email.utils import getaddresses
+from email.utils import getaddresses, parsedate_to_datetime
 from email.header import decode_header, Header
 
 SHORT_MONTH_NAMES = ('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec')
@@ -85,7 +85,14 @@ def parse_email_addresses(raw_header: str or Header) -> (dict,):
 
 
 def parse_email_date(value: str) -> datetime.datetime:
-    """Parsing the date described in rfc2822"""
+    """
+    Parsing the date described in rfc2822
+    1900-1-1 for unparsed, may be naive or with tzinfo
+    """
+    try:
+        return parsedate_to_datetime(value)
+    except Exception:  # noqa
+        pass
     match = re.search(r'(?P<date>\d{1,2}\s+(' + '|'.join(SHORT_MONTH_NAMES) + r')\s+\d{4})\s+' +
                       r'(?P<time>\d{1,2}:\d{1,2}(:\d{1,2})?)\s*' +
                       r'(?P<zone_sign>[+-])?(?P<zone>\d{4})?', value)

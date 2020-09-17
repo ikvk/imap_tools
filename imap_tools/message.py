@@ -222,7 +222,7 @@ class Attachment:
     """An attachment for a MailMessage"""
 
     def __init__(self, part):
-        self._part = part
+        self.part = part
 
     @property
     @lru_cache()
@@ -234,27 +234,37 @@ class Attachment:
             forwarded message (Content-Type = message/rfc822)
         :return: filename
         """
-        filename = self._part.get_filename() or ''
-        return ''.join(decode_value(*part) for part in decode_header(filename))
+        filename = self.part.get_filename() or ''
+        return ''.join(decode_value(*head_part) for head_part in decode_header(filename))
+
+    @property
+    @lru_cache()
+    def content_id(self) -> str:
+        return self.part.get('Content-ID', '').lstrip('<').rstrip('>')
 
     @property
     @lru_cache()
     def content_type(self) -> str:
-        return self._part.get_content_type()
+        return self.part.get_content_type()
+
+    @property
+    @lru_cache()
+    def content_disposition(self) -> str:
+        return self.part.get_content_disposition() or ''
 
     @property
     @lru_cache()
     def payload(self) -> bytes:
-        payload = self._part.get_payload(decode=True)
+        payload = self.part.get_payload(decode=True)
         if payload:
             return payload
         # multipart payload, such as .eml (see get_payload)
-        multipart_payload = self._part.get_payload()
+        multipart_payload = self.part.get_payload()
         if isinstance(multipart_payload, list):
             for payload_item in multipart_payload:
                 if hasattr(payload_item, 'as_bytes'):
                     payload_item_bytes = payload_item.as_bytes()  # noqa
-                    cte = str(self._part.get('content-transfer-encoding', '')).lower().strip()
+                    cte = str(self.part.get('content-transfer-encoding', '')).lower().strip()
                     if cte == 'base64':
                         return base64.b64decode(payload_item_bytes)
                     elif cte in ('7bit', '8bit', 'quoted-printable', 'binary', ''):

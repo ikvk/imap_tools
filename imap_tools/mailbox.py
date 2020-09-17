@@ -21,6 +21,7 @@ class BaseMailBox:
     def __init__(self):
         self.folder = None  # folder manager
         self.login_result = None
+        self.last_search_ids = []
         self.box = self._get_mailbox_client()
 
     def _get_mailbox_client(self) -> imaplib.IMAP4:
@@ -44,13 +45,14 @@ class BaseMailBox:
         """logic for encoding search criteria by default"""
         return criteria if type(criteria) is bytes else str(criteria).encode(charset)
 
-    def fetch(self, criteria: str or bytes = 'ALL', charset: str = 'US-ASCII', limit: int = None,
+    def fetch(self, criteria: str or bytes = 'ALL', charset: str = 'US-ASCII', limit: int or slice = None,
               miss_defect=True, miss_no_uid=True, mark_seen=True, reverse=False, headers_only=False) -> iter:
         """
         Mail message generator in current folder by search criteria
         :param criteria: message search criteria (see examples at ./doc/imap_search_criteria.txt)
         :param charset: IANA charset, indicates charset of the strings that appear in the search criteria. See rfc2978
-        :param limit: limit number of read emails, useful for actions with a large number of messages, like "move"
+        :param limit: int | slice - limit number of read emails | slice emails range for read
+                      useful for actions with a large number of messages, like "move" | paging
         :param miss_defect: miss emails with defects
         :param miss_no_uid: miss emails without uid
         :param mark_seen: mark emails as seen on fetch
@@ -61,11 +63,11 @@ class BaseMailBox:
         search_result = self.box.search(charset, self._criteria_encoder(criteria, charset))
         check_command_status(search_result, MailboxSearchError)
         # first element is string with email numbers through the gap
-        message_id_set = search_result[1][0].decode().split(' ') if search_result[1][0] else ()
+        self.last_search_ids = search_result[1][0].decode().split(' ') if search_result[1][0] else []
         message_parts = "(BODY{}[{}] UID FLAGS)".format('' if mark_seen else '.PEEK', 'HEADER' if headers_only else '')
-        for i, message_id in enumerate((reversed if reverse else iter)(message_id_set)):
-            if limit and i >= limit:
-                break
+        limit_range = slice(0, limit) if type(limit) is int else limit or slice(None)
+        assert type(limit_range) is slice
+        for message_id in (reversed if reverse else iter)(self.last_search_ids[limit_range]):
             # get message by id
             fetch_result = self.box.fetch(message_id, message_parts)
             check_command_status(fetch_result, MailboxFetchError)
