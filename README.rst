@@ -62,8 +62,7 @@ BaseMailBox.fetch - email message generator, first searches email ids by criteri
 * *mark_seen* = True, mark emails as seen on fetch
 * *reverse* = False, in order from the larger date to the smaller
 * *headers_only* = False, get only email headers (without text, html, attachments)
-* *bulk* = False, False - fetch each message separately per N commands - low memory consumption, slow
-                  True - fetch all messages per 1 command - high memory consumption, fast
+* *bulk* = False, False - fetch each message separately per N commands - low memory consumption, slow; True - fetch all messages per 1 command - high memory consumption, fast
 
 BaseMailBox.search - search mailbox for matching message numbers
 
