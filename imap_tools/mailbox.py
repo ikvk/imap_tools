@@ -3,7 +3,7 @@ from email.errors import StartBoundaryNotFoundDefect, MultipartInvariantViolatio
 
 from .message import MailMessage, MailMessageFlags
 from .folder import MailBoxFolderManager
-from .utils import cleaned_uid_set, check_command_status
+from .utils import cleaned_uid_set, check_command_status, grouper
 from .errors import MailboxLoginError, MailboxLogoutError, MailboxSearchError, MailboxFetchError, MailboxExpungeError, \
     MailboxDeleteError, MailboxCopyError, MailboxFlagError
 
@@ -21,7 +21,6 @@ class BaseMailBox:
     def __init__(self):
         self.folder = None  # folder manager
         self.login_result = None
-        self.last_search_ids = []
         self.box = self._get_mailbox_client()
 
     def _get_mailbox_client(self) -> imaplib.IMAP4:
@@ -40,13 +39,33 @@ class BaseMailBox:
         check_command_status(result, MailboxLogoutError, expected='BYE')
         return result
 
-    @staticmethod
-    def _criteria_encoder(criteria: str or bytes, charset: str) -> str or bytes:
-        """logic for encoding search criteria by default"""
-        return criteria if type(criteria) is bytes else str(criteria).encode(charset)
+    def search(self, criteria: str or bytes = 'ALL', charset: str = 'US-ASCII') -> [str]:
+        """
+        Search mailbox for matching message numbers
+        :param criteria: message search criteria (see examples at ./doc/imap_search_criteria.txt)
+        :param charset: IANA charset, indicates charset of the strings that appear in the search criteria. See rfc2978
+        :return list of str
+        """
+        encoded_criteria = criteria if type(criteria) is bytes else str(criteria).encode(charset)
+        search_result = self.box.search(charset, encoded_criteria)
+        check_command_status(search_result, MailboxSearchError)
+        return search_result[1][0].decode().split(' ') if search_result[1][0] else []
+
+    def _fetch_by_one(self, message_nums: [str], message_parts: str) -> iter:
+        for message_num in message_nums:
+            fetch_result = self.box.fetch(message_num, message_parts)
+            check_command_status(fetch_result, MailboxFetchError)
+            yield fetch_result[1]
+
+    def _fetch_in_bulk(self, message_nums: [str], message_parts: str) -> iter:
+        fetch_result = self.box.fetch(','.join(message_nums), message_parts)
+        check_command_status(fetch_result, MailboxFetchError)
+        for built_fetch_item in grouper(fetch_result[1], 2):
+            yield built_fetch_item
 
     def fetch(self, criteria: str or bytes = 'ALL', charset: str = 'US-ASCII', limit: int or slice = None,
-              miss_defect=True, miss_no_uid=True, mark_seen=True, reverse=False, headers_only=False) -> iter:
+              miss_defect=True, miss_no_uid=True, mark_seen=True, reverse=False, headers_only=False,
+              bulk=False) -> iter:
         """
         Mail message generator in current folder by search criteria
         :param criteria: message search criteria (see examples at ./doc/imap_search_criteria.txt)
@@ -58,20 +77,16 @@ class BaseMailBox:
         :param mark_seen: mark emails as seen on fetch
         :param reverse: in order from the larger date to the smaller
         :param headers_only: get only email headers (without text, html, attachments)
+        :param bulk: False - fetch each message separately per N commands - low memory consumption, slow
+                     True  - fetch all messages per 1 command - high memory consumption, fast
         :return generator: MailMessage
         """
-        search_result = self.box.search(charset, self._criteria_encoder(criteria, charset))
-        check_command_status(search_result, MailboxSearchError)
-        # first element is string with email numbers through the gap
-        self.last_search_ids = search_result[1][0].decode().split(' ') if search_result[1][0] else []
         message_parts = "(BODY{}[{}] UID FLAGS)".format('' if mark_seen else '.PEEK', 'HEADER' if headers_only else '')
         limit_range = slice(0, limit) if type(limit) is int else limit or slice(None)
         assert type(limit_range) is slice
-        for message_id in (reversed if reverse else iter)(self.last_search_ids[limit_range]):
-            # get message by id
-            fetch_result = self.box.fetch(message_id, message_parts)
-            check_command_status(fetch_result, MailboxFetchError)
-            mail_message = self.email_message_class(fetch_result[1])
+        message_nums = (reversed if reverse else iter)(self.search(criteria, charset)[limit_range])
+        for fetch_item in (self._fetch_in_bulk if bulk else self._fetch_by_one)(message_nums, message_parts):  # noqa
+            mail_message = self.email_message_class(fetch_item)
             if miss_defect and mail_message.obj.defects:
                 if headers_only:
                     if not all(d.__class__ in self.with_headers_only_allowed_errors for d in mail_message.obj.defects):

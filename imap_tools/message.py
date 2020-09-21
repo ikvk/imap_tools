@@ -25,7 +25,7 @@ class MailMessageFlags:
 class MailMessage:
     """The email message"""
 
-    def __init__(self, fetch_data):
+    def __init__(self, fetch_data: list):
         raw_message_data, raw_uid_data, raw_flag_data = self._get_message_data_parts(fetch_data)
         self._raw_uid_data = raw_uid_data
         self._raw_flag_data = raw_flag_data

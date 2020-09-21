@@ -1,6 +1,7 @@
 import re
 import inspect
 import datetime
+from itertools import zip_longest
 from email.utils import getaddresses, parsedate_to_datetime
 from email.header import decode_header, Header
 
@@ -118,7 +119,7 @@ def parse_email_date(value: str) -> datetime.datetime:
         return datetime.datetime(1900, 1, 1)
 
 
-def quote(value: str or bytes):
+def quote(value: str or bytes) -> str or bytes:
     if isinstance(value, str):
         return '"' + value.replace('\\', '\\\\').replace('"', '\\"') + '"'
     else:
@@ -130,3 +131,11 @@ def pairs_to_dict(items: list) -> dict:
     if len(items) % 2 != 0:
         raise ValueError('An even-length array is expected')
     return dict((items[i * 2], items[i * 2 + 1]) for i in range(len(items) // 2))
+
+
+def grouper(iterable: iter, n: int, fill_value=None) -> iter:
+    """
+    Collect data into fixed-length chunks or blocks
+    Example: grouper('ABCDEFG', 3, 'x') --> ABC DEF Gxx
+    """
+    return zip_longest(*[iter(iterable)] * n, fillvalue=fill_value)

@@ -1,3 +1,11 @@
+0.23.0
+======
+* Added BaseMailBox.search method
+* Added BaseMailBox.fetch bulk argument
+* Removed BaseMailBox._criteria_encoder
+* Removed BaseMailBox.last_search_ids
+* Added utils.grouper
+
 0.22.0
 ======
 * Added Attachment.content_id

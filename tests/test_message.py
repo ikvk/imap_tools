@@ -13,23 +13,36 @@ class MessageTest(MailboxTestCase):
         none_type = type(None)
         for mailbox in self.mailbox_set.values():
             mailbox.folder.set(mailbox.folder_test_base)
+            flag_set = {MailMessageFlags.ANSWERED, MailMessageFlags.FLAGGED}
+
+            # search
+            found_nums = mailbox.search()
+            self.assertTrue(all(type(i) is str for i in found_nums))
 
             # headers_only
-            cnt_fetch_head = 0
-            cnt_fetch_head_answered_and_flagged = 0
+            cnt_fetch_all_head = 0
+            cnt_fetch_all_head_answered_and_flagged = 0
             for message in mailbox.fetch(headers_only=True):
-                if {MailMessageFlags.ANSWERED, MailMessageFlags.FLAGGED}.issubset(message.flags):
-                    cnt_fetch_head_answered_and_flagged += 1
-                cnt_fetch_head += 1
+                if flag_set.issubset(message.flags):
+                    cnt_fetch_all_head_answered_and_flagged += 1
+                cnt_fetch_all_head += 1
                 self.assertEqual(message.text, '')
                 self.assertEqual(message.html, '')
                 self.assertEqual(len(message.attachments), 0)
 
-            # types
+            # fetch in bulk
+            cnt_fetch_all_bulk = 0
+            cnt_fetch_all_bulk_answered_and_flagged = 0
+            for message in mailbox.fetch(bulk=True):
+                if flag_set.issubset(message.flags):
+                    cnt_fetch_all_bulk_answered_and_flagged += 1
+                cnt_fetch_all_bulk += 1
+
+            # fetch by one, types
             cnt_fetch_all = 0
             cnt_fetch_all_answered_and_flagged = 0
             for message in mailbox.fetch():
-                if {MailMessageFlags.ANSWERED, MailMessageFlags.FLAGGED}.issubset(message.flags):
+                if flag_set.issubset(message.flags):
                     cnt_fetch_all_answered_and_flagged += 1
                 cnt_fetch_all += 1
                 self.assertIn(type(message.uid), (str, none_type))
@@ -61,13 +74,14 @@ class MessageTest(MailboxTestCase):
 
             # counts
             self.assertTrue(cnt_fetch_all_answered_and_flagged >= 1)
-            self.assertEqual(cnt_fetch_all, 6)
-
-            self.assertTrue(cnt_fetch_head_answered_and_flagged >= 1)
-            self.assertEqual(cnt_fetch_head, 6)
-
-            self.assertEqual(cnt_fetch_head, cnt_fetch_all)
-            self.assertEqual(cnt_fetch_head_answered_and_flagged, cnt_fetch_all_answered_and_flagged)
+            self.assertTrue(cnt_fetch_all_head_answered_and_flagged >= 1)
+            self.assertTrue(cnt_fetch_all_bulk_answered_and_flagged >= 1)
+            self.assertTrue(cnt_fetch_all == cnt_fetch_all_head == cnt_fetch_all_bulk == len(found_nums) == 6)
+            self.assertTrue(
+                cnt_fetch_all_answered_and_flagged ==
+                cnt_fetch_all_head_answered_and_flagged ==
+                cnt_fetch_all_bulk_answered_and_flagged
+            )
 
     def test_attributes(self):
         msg_attr_set = {'subject', 'from_', 'to', 'cc', 'bcc', 'reply_to', 'date', 'date_str', 'text', 'html',

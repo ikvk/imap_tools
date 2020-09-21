@@ -46,7 +46,7 @@ Basic
     subjects = [msg.subject for msg in mailbox.fetch(AND(all=True))]
     mailbox.logout()
 
-MailBox, MailBoxUnencrypted - for create mailbox instance.
+MailBox(BaseMailBox), MailBoxUnencrypted(BaseMailBox) - for create mailbox instance.
 
 BaseMailBox.box - imaplib.IMAP4/IMAP4_SSL client instance.
 
@@ -62,8 +62,10 @@ BaseMailBox.fetch - email message generator, first searches email ids by criteri
 * *mark_seen* = True, mark emails as seen on fetch
 * *reverse* = False, in order from the larger date to the smaller
 * *headers_only* = False, get only email headers (without text, html, attachments)
+* *bulk* = False, False - fetch each message separately per N commands - low memory consumption, slow
+                  True - fetch all messages per 1 command - high memory consumption, fast
 
-BaseMailBox instance has attribute mailbox.last_search_ids, it fills after each fetch - msg ids from search command
+BaseMailBox.search - search mailbox for matching message numbers
 
 Email attributes
 ^^^^^^^^^^^^^^^^
@@ -119,7 +121,6 @@ You can use 3 approaches to build search criteria:
 
 The "charset" is argument used for encode criteria to this encoding.
 You can pass criteria as bytes in desired encoding - charset will be ignored.
-Encoding logic located in MailBox._criteria_encoder.
 
 Query builder implements all search logic described in `rfc3501 <https://tools.ietf.org/html/rfc3501#section-6.4.4>`_.
 See `query examples <https://github.com/ikvk/imap_tools/blob/master/examples/search.py>`_.
@@ -298,6 +299,7 @@ Big thanks to people who helped develop this library:
 `backelj <https://github.com/backelj>`_,
 `ohayak <https://github.com/ohayak>`_,
 `mwherman95926 <https://github.com/mwherman95926>`_,
-`andyfensham <https://github.com/andyfensham>`_
+`andyfensham <https://github.com/andyfensham>`_,
+`mike-code <https://github.com/mike-code>`_
 
 💰 You may `thank me <https://github.com/ikvk/imap_tools/blob/master/docs/donate.rst>`_, if this library helped you.
