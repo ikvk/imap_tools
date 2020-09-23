@@ -48,13 +48,11 @@ Basic
 
 MailBox(BaseMailBox), MailBoxUnencrypted(BaseMailBox) - for create mailbox instance.
 
-BaseMailBox.box - imaplib.IMAP4/IMAP4_SSL client instance.
-
 BaseMailBox.login, MailBox.xoauth2 - authentication functions
 
-BaseMailBox.fetch - email message generator, first searches email ids by criteria, then fetch and yields emails by one:
+BaseMailBox.fetch - email message generator, first searches email nums by criteria, then fetch and yields `Message <#email-attributes>`_:
 
-* *criteria* = 'ALL', message search criteria, `docs <#search-criteria>`_
+* *criteria* = 'ALL', message search criteria, `query builder <#search-criteria>`_
 * *charset* = 'US-ASCII', indicates charset of the strings that appear in the search criteria. See rfc2978
 * *limit* = None, limit on the number of read emails, useful for actions with a large number of messages, like "move"
 * *miss_defect* = True, miss emails with defects
@@ -64,7 +62,13 @@ BaseMailBox.fetch - email message generator, first searches email ids by criteri
 * *headers_only* = False, get only email headers (without text, html, attachments)
 * *bulk* = False, False - fetch each message separately per N commands - low memory consumption, slow; True - fetch all messages per 1 command - high memory consumption, fast
 
+BaseMailBox.<action> - `copy, move, delete, flag, seen <#actions-with-emails-in-folder>`_
+
+BaseMailBox.folder - `folder manager <#actions-with-mailbox-folders>`_
+
 BaseMailBox.search - search mailbox for matching message numbers
+
+BaseMailBox.box - imaplib.IMAP4/IMAP4_SSL client instance.
 
 Email attributes
 ^^^^^^^^^^^^^^^^
@@ -149,7 +153,7 @@ Header  H      for search by headers                      name: str, value: str
     # python note: you can't do: A(text='two', NOT(subject='one'))
     A(NOT(subject='one'), text='two')  # use kwargs after logic classes (args)
 
-The search key types are marked with `*` can accepts a sequence of values like list, tuple, set or generator.
+Search key table. Key types marked with `*` can accepts a sequence of values like list, tuple, set or generator.
 
 =============  ==============  ======================  =================================================================
 Key            Types           Results                 Description
@@ -198,7 +202,7 @@ You can use 2 approaches to perform these operations:
 * "in bulk" - Perform IMAP operation for message set per 1 command
 * "by one" - Perform IMAP operation for each message separately per N commands
 
-Result of MailBox.fetch generator in actions will be implicitly converted to uid list.
+MailBox.fetch generator instance passed as the first argument to any action will be implicitly converted to uid list.
 
 For actions with a large number of messages imap command may be too large and will cause an exception,
 use 'limit' argument for fetch in this case.
