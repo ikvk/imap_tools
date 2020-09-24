@@ -186,7 +186,7 @@ recent         True            RECENT                  have the Recent flag set
 all            True            ALL                     all, criteria by default
 uid            iter(str)|str   UID 1,2,17              corresponding to the specified unique identifier set
 header         H(str, str)*    HEADER "A-Spam" "5.8"   have a header that contains the specified str in the text
-gmail_label    str*            X-GM-LABELS "some_lbl"  have this gmail label.
+gmail_label    str*            X-GM-LABELS "label1"    have this gmail label.
 =============  ==============  ======================  =================================================================
 
 Server side search notes:
@@ -272,7 +272,7 @@ Reasons
 
 - Excessive low level of `imaplib` library.
 - Other libraries contain various shortcomings or not convenient.
-- Open source projects makes world better.
+- Open source projects make world better.
 
 Thanks
 ------
