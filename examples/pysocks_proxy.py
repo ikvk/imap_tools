@@ -7,6 +7,8 @@ import ssl
 import socks
 from imaplib import IMAP4
 
+from imap_tools import BaseMailBox, MailBoxUnencrypted
+
 
 class Imap4Proxy(IMAP4):
     def __init__(self,
@@ -14,7 +16,7 @@ class Imap4Proxy(IMAP4):
                  port: int = 143,
                  p_timeout: int = None,
                  p_source_address: tuple = None,
-                 p_proxy_type: socks.PROXY_TYPES = "HTTP",
+                 p_proxy_type: socks.PROXY_TYPES = socks.HTTP,
                  p_proxy_addr: str = None,
                  p_proxy_port: int = None,
                  p_proxy_rdns=True,
@@ -59,7 +61,7 @@ class Imap4SslProxy(Imap4Proxy):
                  ssl_context=None,
                  p_timeout: int = None,
                  p_source_address: tuple = None,
-                 p_proxy_type: socks.PROXY_TYPES = "HTTP",
+                 p_proxy_type: socks.PROXY_TYPES = socks.HTTP,
                  p_proxy_addr: str = None,
                  p_proxy_port: int = None,
                  p_proxy_rdns=True,
@@ -106,7 +108,7 @@ class Imap4SslProxy(Imap4Proxy):
         super().open(host, port)
 
 
-class MailBoxUnencryptedProxy:
+class MailBoxUnencryptedProxy(MailBoxUnencrypted):
     """Working with the email box through IMAP4 through proxy"""
 
     def __init__(self,
@@ -114,7 +116,7 @@ class MailBoxUnencryptedProxy:
                  port: int = 143,
                  p_timeout: int = None,
                  p_source_address: tuple = None,
-                 p_proxy_type: socks.PROXY_TYPES = "HTTP",
+                 p_proxy_type: socks.PROXY_TYPES = socks.HTTP,
                  p_proxy_addr: str = None,
                  p_proxy_port: int = None,
                  p_proxy_rdns=True,
@@ -142,7 +144,7 @@ class MailBoxUnencryptedProxy:
             self._p_proxy_rdns, self._p_proxy_username, self._p_proxy_password, self._p_socket_options)
 
 
-class MailBoxProxy:
+class MailBoxProxy(BaseMailBox):
     """Working with the email box through IMAP4 over SSL connection through proxy"""
 
     def __init__(self,
@@ -153,7 +155,7 @@ class MailBoxProxy:
                  ssl_context=None,
                  p_timeout: int = None,
                  p_source_address: tuple = None,
-                 p_proxy_type: socks.PROXY_TYPES = "HTTP",
+                 p_proxy_type: socks.PROXY_TYPES = socks.HTTP,
                  p_proxy_addr: str = None,
                  p_proxy_port: int = None,
                  p_proxy_rdns=True,
