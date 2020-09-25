@@ -184,3 +184,15 @@ class MailBoxProxy(BaseMailBox):
             self._host, self._port, self._keyfile, self._certfile, self._ssl_context,
             self._p_timeout, self._p_source_address, self._p_proxy_type, self._p_proxy_addr, self._p_proxy_port,
             self._p_proxy_rdns, self._p_proxy_username, self._p_proxy_password, self._p_socket_options)
+
+
+if __name__ == '__main__':
+    with MailBoxProxy(p_proxy_type=socks.HTTP,
+                      p_proxy_addr='1.2.3.4',  # zproxy.lum-superproxy.io
+                      p_proxy_port=3192,  # 22225
+                      p_proxy_username='proxy_username',
+                      p_proxy_password='proxy_pwd_123',
+                      p_timeout=10,
+                      host='imap.host.com').login('mail.user', 'mail_pwd_123', 'INBOX') as mailbox:
+        for msg in mailbox.fetch():
+            print(msg.subject, msg.date_str)
