@@ -66,7 +66,7 @@ BaseMailBox.<action> - `copy, move, delete, flag, seen <#actions-with-emails-in-
 
 BaseMailBox.folder - `folder manager <#actions-with-mailbox-folders>`_
 
-BaseMailBox.search - search mailbox for matching message numbers
+BaseMailBox.search - search mailbox for matching message numbers (this is not uids)
 
 BaseMailBox.box - imaplib.IMAP4/IMAP4_SSL client instance.
 

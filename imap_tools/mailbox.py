@@ -41,7 +41,7 @@ class BaseMailBox:
 
     def search(self, criteria: str or bytes = 'ALL', charset: str = 'US-ASCII') -> [str]:
         """
-        Search mailbox for matching message numbers
+        Search mailbox for matching message numbers (this is not uids)
         :param criteria: message search criteria (see examples at ./doc/imap_search_criteria.txt)
         :param charset: IANA charset, indicates charset of the strings that appear in the search criteria. See rfc2978
         :return list of str
