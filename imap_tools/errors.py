@@ -54,6 +54,10 @@ class MailboxSearchError(UnexpectedCommandStatusError):
     pass
 
 
+class MailboxStarttlsError(UnexpectedCommandStatusError):
+    pass
+
+
 class MailboxFetchError(UnexpectedCommandStatusError):
     pass
 

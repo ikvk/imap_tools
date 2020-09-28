@@ -4,7 +4,8 @@ from email.errors import StartBoundaryNotFoundDefect, MultipartInvariantViolatio
 from .message import MailMessage, MailMessageFlags
 from .folder import MailBoxFolderManager
 from .utils import cleaned_uid_set, check_command_status, grouper
-from .errors import MailboxLoginError, MailboxLogoutError, MailboxSearchError, MailboxFetchError, MailboxExpungeError, \
+from .errors import MailboxStarttlsError, MailboxLoginError, MailboxLogoutError, \
+    MailboxSearchError, MailboxFetchError, MailboxExpungeError, \
     MailboxDeleteError, MailboxCopyError, MailboxFlagError
 
 # Maximal line length when calling readline(). This is to prevent reading arbitrary length lines.
@@ -195,23 +196,35 @@ class MailBoxUnencrypted(BaseMailBox):
 class MailBox(BaseMailBox):
     """Working with the email box through IMAP4 over SSL connection"""
 
-    def __init__(self, host='', port=993, keyfile=None, certfile=None, ssl_context=None):
+    def __init__(self, host='', port=993, starttls=False, keyfile=None, certfile=None, ssl_context=None):
         """
         :param host: host's name (default: localhost)
         :param port: port number
+        :param starttls: whether to use starttls
         :param keyfile: PEM formatted file that contains your private key (deprecated)
         :param certfile: PEM formatted certificate chain file (deprecated)
         :param ssl_context: SSLContext object that contains your certificate chain and private key
+
+        When you set starttls to True, keyfile and certfile cannot be set also.
         """
         self._host = host
         self._port = port
         self._keyfile = keyfile
         self._certfile = certfile
         self._ssl_context = ssl_context
+        self._starttls = starttls
         super().__init__()
 
     def _get_mailbox_client(self):
-        return imaplib.IMAP4_SSL(self._host, self._port, self._keyfile, self._certfile, self._ssl_context)
+        if self._starttls:
+            if self._keyfile or self._certfile:
+                raise RuntimeError("STARTTLS cannot be combined with keyfile neither with certfile.")
+            imap = imaplib.IMAP4(self._host, self._port)
+            result = imap.starttls(self._ssl_context)
+            check_command_status(result, MailboxStarttlsError)
+            return imap
+        else:
+            return imaplib.IMAP4_SSL(self._host, self._port, self._keyfile, self._certfile, self._ssl_context)
 
     def xoauth2(self, username: str, access_token: str, initial_folder: str = 'INBOX'):
         """Authenticate to account using OAuth 2.0 mechanism"""
