@@ -53,8 +53,8 @@ class MailBoxFolderManager:
 
     def create(self, folder: str or bytes):
         """
-        Create folder on the server. D
-        *Use email box delimiter to separate folders. Example for "|" delimiter: "folder|sub folder"
+        Create folder on the server.
+        Use email box delimiter to separate folders. Example for "|" delimiter: "folder|sub folder"
         """
         result = self.mailbox.box._simple_command('CREATE', self._encode_folder(folder))
         check_command_status(result, MailboxFolderCreateError)
