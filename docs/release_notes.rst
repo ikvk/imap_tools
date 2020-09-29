@@ -1,3 +1,7 @@
+0.24.0
+======
+* Added MailBox.__init__ starttls argument for using STARTTLS
+
 0.23.0
 ======
 * Added BaseMailBox.search method
