@@ -1,6 +1,7 @@
 0.24.0
 ======
 * Added MailBox.__init__ starttls argument for using STARTTLS
+* Fixed MailBox._fetch_in_bulk bug for empty self.search result
 
 0.23.0
 ======

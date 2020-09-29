@@ -58,7 +58,10 @@ class BaseMailBox:
             yield fetch_result[1]
 
     def _fetch_in_bulk(self, message_nums: [str], message_parts: str) -> iter:
-        fetch_result = self.box.fetch(','.join(message_nums), message_parts)
+        message_nums_str = ','.join(message_nums)
+        if not message_nums_str:
+            raise StopIteration()
+        fetch_result = self.box.fetch(message_nums_str, message_parts)
         check_command_status(fetch_result, MailboxFetchError)
         for built_fetch_item in grouper(fetch_result[1], 2):
             yield built_fetch_item
