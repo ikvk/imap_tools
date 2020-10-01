@@ -1,4 +1,0 @@
-bulk+charset error:
-    criteria = AND(NOT(OR(date=[dt.date(2000, 1, 1), dt.date(2000, 1, 2)])), flagged=True, subject='你好')
-    for msg in mailbox.fetch(criteria, bulk=True, charset='utf8'):
-    imaplib.error: FETCH command error: BAD [b'Command syntax error. sc=mRXZEs1eFqM1_240927_5-e5976a598a83']

@@ -91,6 +91,7 @@ Message and Attachment public attributes are cached by functools.lru_cache
         msg.html             # str: '<b>Hello 你 Привет</b>'
         msg.flags            # tuple: ('SEEN', 'FLAGGED', 'ENCRYPTED')
         msg.headers          # dict: {'Received': ('from 1.m.ru', 'from 2.m.ru'), 'AntiVirus': ('Clean',)}
+        msg.size             # int or None: 89675
 
         for att in msg.attachments:  # list: [Attachment]
             att.filename             # str: 'cat.jpg'

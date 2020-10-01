@@ -54,6 +54,7 @@ class MessageTest(MailboxTestCase):
                 self.assertIs(type(message.text), str)
                 self.assertIs(type(message.html), str)
                 self.assertIs(type(message.headers), dict)
+                self.assertIn(type(message.size), (int, none_type))
 
                 for addr_field in {'to', 'cc', 'bcc', 'reply_to'}:
                     self.assertIs(type(getattr(message, addr_field)), tuple)

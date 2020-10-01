@@ -1,3 +1,7 @@
+0.25.0
+======
+* Added MailMessage.size attribute
+
 0.24.0
 ======
 * Added MailBox.__init__ starttls argument for using STARTTLS
