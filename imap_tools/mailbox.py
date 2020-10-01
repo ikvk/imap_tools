@@ -84,7 +84,8 @@ class BaseMailBox:
                      True  - fetch all messages per 1 command - high memory consumption, fast
         :return generator: MailMessage
         """
-        message_parts = "(BODY{}[{}] UID FLAGS)".format('' if mark_seen else '.PEEK', 'HEADER' if headers_only else '')
+
+        message_parts = "(BODY{}[{}] UID FLAGS RFC822.SIZE)".format('' if mark_seen else '.PEEK', 'HEADER' if headers_only else '')
         limit_range = slice(0, limit) if type(limit) is int else limit or slice(None)
         assert type(limit_range) is slice
         message_nums = (reversed if reverse else iter)(self.search(criteria, charset)[limit_range])

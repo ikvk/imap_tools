@@ -74,6 +74,15 @@ class MailMessage:
 
     @property
     @lru_cache()
+    def size(self) -> int or None:
+        for raw_flag_item in self._raw_flag_data:
+            size_match = re.search(r'(^|\s+)RFC822\.SIZE\s+(?P<size>\d+)($|\s+)', raw_flag_item.decode())
+            if size_match:
+                return int(size_match.group('size'))
+        return None
+
+    @property
+    @lru_cache()
     def flags(self) -> (str,):
         """
         Message flags
