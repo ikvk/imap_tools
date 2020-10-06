@@ -108,11 +108,12 @@ class MailBoxFolderManager:
         :param subscribed_only: bool - get only subscribed folders
         :return: [dict(
             name: str - folder name,
-            delim: str - delimiter,
+            delim: str - delimiter, a character used to delimit levels of hierarchy in a mailbox name
             flags: tuple(str) - folder flags,
         )]
+        A 'NIL' delimiter means that no hierarchy exists, the name is a "flat" name.
         """
-        folder_item_re = re.compile(r'\((?P<flags>[\S ]*)\) "(?P<delim>[\S ]+)" (?P<name>.+)')
+        folder_item_re = re.compile(r'\((?P<flags>[\S ]*)\) (?P<delim>[\S]+) (?P<name>.+)')
         command = 'LSUB' if subscribed_only else 'LIST'
         typ, data = self.mailbox.box._simple_command(
             command, self._encode_folder(folder), self._encode_folder(search_args))
@@ -134,5 +135,6 @@ class MailBoxFolderManager:
             else:
                 continue
             folder_dict['flags'] = tuple(folder_dict['flags'].split())  # noqa
+            folder_dict['delim'] = folder_dict['delim'].replace('"', '')
             result.append(folder_dict)
         return result

@@ -1,3 +1,7 @@
+0.25.1
+======
+* Fixed MailBoxFolderManager.list bug on delim = NIL
+
 0.25.0
 ======
 * Added MailMessage.size attribute

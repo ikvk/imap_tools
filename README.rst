@@ -305,6 +305,7 @@ Big thanks to people who helped develop this library:
 `mwherman95926 <https://github.com/mwherman95926>`_,
 `andyfensham <https://github.com/andyfensham>`_,
 `mike-code <https://github.com/mike-code>`_,
-`aknrdureegaesr <https://github.com/aknrdureegaesr>`_
+`aknrdureegaesr <https://github.com/aknrdureegaesr>`_,
+`ktulinger <https://github.com/ktulinger>`_
 
 💰 You may `thank me <https://github.com/ikvk/imap_tools/blob/master/docs/donate.rst>`_, if this library helped you.
