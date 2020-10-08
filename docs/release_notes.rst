@@ -1,6 +1,6 @@
 0.26.0
 ======
-BaseMailBox.login initial_folder argument now can be None to skip folder.set
+* BaseMailBox.login initial_folder argument now can be None to skip folder.set
 
 0.25.1
 ======
