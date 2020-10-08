@@ -198,6 +198,8 @@ Server side search notes:
 Actions with emails in folder
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+First of all read about uid `at rfc3501 <https://tools.ietf.org/html/rfc3501#section-2.3.1.1>`_.
+
 You can use 2 approaches to perform these operations:
 
 * "in bulk" - Perform IMAP operation for message set per 1 command
