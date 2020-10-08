@@ -80,7 +80,7 @@ Message and Attachment public attributes are cached by functools.lru_cache
     for msg in mailbox.fetch():
         msg.uid              # str or None: '123'
         msg.subject          # str: 'some subject 你 привет'
-        msg.from_            # str: 'sender@ya.ru'
+        msg.from_            # str: 'Sender.Bartölke@ya.ru'
         msg.to               # tuple: ('iam@goo.ru', 'friend@ya.ru', )
         msg.cc               # tuple: ('cc@mail.ru', )
         msg.bcc              # tuple: ('bcc@mail.ru', )
