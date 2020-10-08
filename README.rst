@@ -310,4 +310,4 @@ Big thanks to people who helped develop this library:
 `aknrdureegaesr <https://github.com/aknrdureegaesr>`_,
 `ktulinger <https://github.com/ktulinger>`_
 
-💰 You may `thank me <https://github.com/ikvk/imap_tools/blob/master/docs/donate.rst>`_, if this library helped you.
+💰 You may `thank me <https://github.com/ikvk/imap_tools/blob/master/docs/donate.rst>`_, if this library helped you. 💰
