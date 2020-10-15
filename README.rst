@@ -3,7 +3,7 @@
 imap_tools
 ==========
 
-Working with email and mailbox using IMAP protocol.
+Work with email and mailbox by IMAP:
 
 - Parsed email message attributes
 - Query builder for searching emails

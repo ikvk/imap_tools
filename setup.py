@@ -22,7 +22,7 @@ setuptools.setup(
     long_description_content_type="text/x-rst",
     author='Vladimir Kaukin',
     author_email='KaukinVK@ya.ru',
-    description='Working with email and mailbox using IMAP protocol.',
+    description='Work with email and mailbox by IMAP',
     keywords=['imap', 'imap-client', 'python3', 'python', 'email'],
     classifiers=[
         "Programming Language :: Python :: 3",
