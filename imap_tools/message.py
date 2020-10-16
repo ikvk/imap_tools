@@ -74,13 +74,19 @@ class MailMessage:
 
     @property
     @lru_cache()
-    def size(self) -> int or None:
-        """RFC822 message size from server, bytes count or None"""
+    def size_rfc822(self) -> int:
+        """RFC822 message size from server, bytes count, 0 if not found"""
         for raw_flag_item in self._raw_flag_data:
             size_match = re.search(r'RFC822\.SIZE\s+(?P<size>\d+)', raw_flag_item.decode())
             if size_match:
                 return int(size_match.group('size'))
-        return None
+        return 0
+
+    @property
+    @lru_cache()
+    def size(self) -> int:
+        """Message size, bytes count"""
+        return len(bytes(self.obj))
 
     @property
     @lru_cache()
@@ -281,3 +287,9 @@ class Attachment:
                         return payload_item_bytes  # quopri.decodestring
         # could not find payload
         return b''
+
+    @property
+    @lru_cache()
+    def size(self) -> int:
+        """Attachment size, bytes count"""
+        return len(bytes(self.part))

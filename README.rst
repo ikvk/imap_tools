@@ -91,7 +91,8 @@ Message and Attachment public attributes are cached by functools.lru_cache
         msg.html             # str: '<b>Hello 你 Привет</b>'
         msg.flags            # tuple: ('SEEN', 'FLAGGED', 'ENCRYPTED')
         msg.headers          # dict: {'Received': ('from 1.m.ru', 'from 2.m.ru'), 'AntiVirus': ('Clean',)}
-        msg.size             # int or None: 89675
+        msg.size_rfc822      # int: 20664
+        msg.size             # int: 20377
 
         for att in msg.attachments:  # list: [Attachment]
             att.filename             # str: 'cat.jpg'
@@ -100,6 +101,7 @@ Message and Attachment public attributes are cached by functools.lru_cache
             att.content_type         # str: 'image/jpeg'
             att.content_disposition  # str: 'inline'
             att.part                 # email.message.Message: original object
+            att.size                 # int: 17361
 
         msg.obj              # email.message.Message: original object
         msg.from_values      # dict or None: {'email': 'im@ya.ru', 'name': 'Ya 你', 'full': 'Ya 你 <im@ya.ru>'}
@@ -308,6 +310,7 @@ Big thanks to people who helped develop this library:
 `andyfensham <https://github.com/andyfensham>`_,
 `mike-code <https://github.com/mike-code>`_,
 `aknrdureegaesr <https://github.com/aknrdureegaesr>`_,
-`ktulinger <https://github.com/ktulinger>`_
+`ktulinger <https://github.com/ktulinger>`_,
+`SamGenTLEManKaka <https://github.com/SamGenTLEManKaka>`_
 
 💰 You may `thank me <https://github.com/ikvk/imap_tools/blob/master/docs/donate.rst>`_, if this library helped you.

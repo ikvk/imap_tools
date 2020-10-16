@@ -54,7 +54,8 @@ class MessageTest(MailboxTestCase):
                 self.assertIs(type(message.text), str)
                 self.assertIs(type(message.html), str)
                 self.assertIs(type(message.headers), dict)
-                self.assertIn(type(message.size), (int, none_type))
+                self.assertIs(type(message.size_rfc822), int)
+                self.assertIs(type(message.size), int)
 
                 for addr_field in {'to', 'cc', 'bcc', 'reply_to'}:
                     self.assertIs(type(getattr(message, addr_field)), tuple)
@@ -70,8 +71,11 @@ class MessageTest(MailboxTestCase):
 
                 for att in message.attachments:
                     self.assertIs(type(att.filename), str)
+                    self.assertIs(type(att.content_id), str)
                     self.assertIs(type(att.content_type), str)
+                    self.assertIs(type(att.content_disposition), str)
                     self.assertIs(type(att.payload), bytes)
+                    self.assertIs(type(att.size), int)
 
             # counts
             self.assertTrue(cnt_fetch_all_answered_and_flagged >= 1)

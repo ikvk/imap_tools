@@ -1,3 +1,9 @@
+0.27.0
+======
+* Renamed MailMessage.size -> MailMessage.size_rfc822, returned type now always int
+* Added MailMessage.size attribute
+* Added Attachment.size attribute
+
 0.26.0
 ======
 * BaseMailBox.login initial_folder argument now can be None to skip folder.set
