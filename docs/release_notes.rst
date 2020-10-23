@@ -1,3 +1,7 @@
+0.28.0
+======
+* MailMessage.attachments - improved parsing - case with Content-ID only
+
 0.27.0
 ======
 * Renamed MailMessage.size -> MailMessage.size_rfc822, returned type now always int

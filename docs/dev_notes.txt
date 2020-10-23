@@ -23,7 +23,10 @@ error example for 22000 uids in yandex:
 email lib
 =========
 Доступен email.message.EmailMessage вместо Message, есть смысл туда заглядывать по логике разбора
+
 self.obj = email.message_from_bytes(raw_message_data, _class=EmailMessage) можно так, пока не вижу смысла
+пробовал iter_attachments для MailMessage.attachments - не работает с инлайн вложениями
+
 утилиты https://docs.python.org/release/3.8.1/library/email.utils.html
 
 

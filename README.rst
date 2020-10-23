@@ -77,24 +77,24 @@ Message and Attachment public attributes are cached by functools.lru_cache
 
 .. code-block:: python
 
-    for msg in mailbox.fetch():
-        msg.uid              # str or None: '123'
-        msg.subject          # str: 'some subject 你 привет'
-        msg.from_            # str: 'Sender.Bartölke@ya.ru'
-        msg.to               # tuple: ('iam@goo.ru', 'friend@ya.ru', )
-        msg.cc               # tuple: ('cc@mail.ru', )
-        msg.bcc              # tuple: ('bcc@mail.ru', )
-        msg.reply_to         # tuple: ('reply_to@mail.ru', )
-        msg.date             # datetime.datetime: 1900-1-1 for unparsed, may be naive or with tzinfo
-        msg.date_str         # str: original date - 'Tue, 03 Jan 2017 22:26:59 +0500'
-        msg.text             # str: 'Hello 你 Привет'
-        msg.html             # str: '<b>Hello 你 Привет</b>'
-        msg.flags            # tuple: ('SEEN', 'FLAGGED', 'ENCRYPTED')
-        msg.headers          # dict: {'Received': ('from 1.m.ru', 'from 2.m.ru'), 'AntiVirus': ('Clean',)}
-        msg.size_rfc822      # int: 20664
-        msg.size             # int: 20377
+    for msg in mailbox.fetch():  # iter: imap_tools.Message
+        msg.uid          # str or None: '123'
+        msg.subject      # str: 'some subject 你 привет'
+        msg.from_        # str: 'Sender.Bartölke@ya.ru'
+        msg.to           # tuple: ('iam@goo.ru', 'friend@ya.ru', )
+        msg.cc           # tuple: ('cc@mail.ru', )
+        msg.bcc          # tuple: ('bcc@mail.ru', )
+        msg.reply_to     # tuple: ('reply_to@mail.ru', )
+        msg.date         # datetime.datetime: 1900-1-1 for unparsed, may be naive or with tzinfo
+        msg.date_str     # str: original date - 'Tue, 03 Jan 2017 22:26:59 +0500'
+        msg.text         # str: 'Hello 你 Привет'
+        msg.html         # str: '<b>Hello 你 Привет</b>'
+        msg.flags        # tuple: ('SEEN', 'FLAGGED', 'ENCRYPTED')
+        msg.headers      # dict: {'Received': ('from 1.m.ru', 'from 2.m.ru'), 'AntiVirus': ('Clean',)}
+        msg.size_rfc822  # int: 20664
+        msg.size         # int: 20377
 
-        for att in msg.attachments:  # list: [Attachment]
+        for att in msg.attachments:  # list: imap_tools.Attachment
             att.filename             # str: 'cat.jpg'
             att.payload              # bytes: b'\xff\xd8\xff\xe0\'
             att.content_id           # str: 'part45.06020801.00060008@mail.ru'
