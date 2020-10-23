@@ -1,3 +1,7 @@
+0.29.0
+======
+* BaseMailBox._fetch_in_bulk - add python versions compatibility - used return instead raise StopIteration
+
 0.28.0
 ======
 * MailMessage.attachments - improved parsing - case with Content-ID only

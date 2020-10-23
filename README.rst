@@ -311,6 +311,7 @@ Big thanks to people who helped develop this library:
 `mike-code <https://github.com/mike-code>`_,
 `aknrdureegaesr <https://github.com/aknrdureegaesr>`_,
 `ktulinger <https://github.com/ktulinger>`_,
-`SamGenTLEManKaka <https://github.com/SamGenTLEManKaka>`_
+`SamGenTLEManKaka <https://github.com/SamGenTLEManKaka>`_,
+`devkral <https://github.com/devkral>`_
 
 💰 You may `thank me <https://github.com/ikvk/imap_tools/blob/master/docs/donate.rst>`_, if this library helped you.
