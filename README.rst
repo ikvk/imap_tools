@@ -7,8 +7,8 @@ Work with email and mailbox by IMAP:
 
 - Parsed email message attributes
 - Query builder for searching emails
-- Work with emails in folders (copy, delete, flag, move, seen)
-- Work with mailbox folders (list, set, get, create, exists, rename, delete, status)
+- Actions with emails: copy, delete, flag, move, seen
+- Actions with folders: list, set, get, create, exists, rename, delete, status
 - No dependencies
 
 ===============  ===============================================================
@@ -62,9 +62,9 @@ BaseMailBox.fetch - email message generator, first searches email nums by criter
 * *headers_only* = False, get only email headers (without text, html, attachments)
 * *bulk* = False, False - fetch each message separately per N commands - low memory consumption, slow; True - fetch all messages per 1 command - high memory consumption, fast
 
-BaseMailBox.<action> - `copy, move, delete, flag, seen <#actions-with-emails-in-folder>`_
+BaseMailBox.<action> - `copy, move, delete, flag, seen <#actions-with-emails>`_
 
-BaseMailBox.folder - `folder manager <#actions-with-mailbox-folders>`_
+BaseMailBox.folder - `folder manager <#actions-with-folders>`_
 
 BaseMailBox.search - search mailbox for matching message numbers (this is not uids)
 
@@ -197,8 +197,8 @@ Server side search notes:
 * For string search keys a message matches if the string is a substring of the field. The matching is case-insensitive.
 * When searching by dates - email's time and timezone are disregarding.
 
-Actions with emails in folder
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Actions with emails
+^^^^^^^^^^^^^^^^^^^
 
 First of all read about uid `at rfc3501 <https://tools.ietf.org/html/rfc3501#section-2.3.1.1>`_.
 
@@ -233,8 +233,8 @@ use 'limit' argument for fetch in this case.
         # SEEN: mark all messages sent at 05.03.2007 in current folder as unseen, *in bulk
         mailbox.seen(mailbox.fetch("SENTON 05-Mar-2007"), False)
 
-Actions with mailbox folders
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Actions with folders
+^^^^^^^^^^^^^^^^^^^^
 .. code-block:: python
 
     with MailBox('imap.mail.com').login('test@mail.com', 'pwd') as mailbox:
