@@ -1,3 +1,7 @@
+0.30.0
+======
+* BaseMailBox.fetch - fixed wrong responses for combinations of: slice, bulk, reverse
+
 0.29.0
 ======
 * BaseMailBox._fetch_in_bulk - add python versions compatibility - used return instead raise StopIteration

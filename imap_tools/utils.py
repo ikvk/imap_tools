@@ -135,7 +135,9 @@ def pairs_to_dict(items: list) -> dict:
 
 def grouper(iterable: iter, n: int, fill_value=None) -> iter:
     """
-    Collect data into fixed-length chunks or blocks
-    Example: grouper('ABCDEFG', 3, 'x') --> ABC DEF Gxx
+    Group data into fixed-length chunks or blocks
+    Examples:
+        grouper('ABCDEFGH', 3, '?') --> [('A', 'B', 'C'), ('D', 'E', 'F'), ('G', 'H', '?')]
+        grouper([1, 2, 3, 4, 5], 2) --> [(1, 2), (3, 4), (5, None)]
     """
     return zip_longest(*[iter(iterable)] * n, fillvalue=fill_value)

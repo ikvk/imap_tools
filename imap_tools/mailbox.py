@@ -52,19 +52,18 @@ class BaseMailBox:
         check_command_status(search_result, MailboxSearchError)
         return search_result[1][0].decode().split(' ') if search_result[1][0] else []
 
-    def _fetch_by_one(self, message_nums: [str], message_parts: str) -> iter:
+    def _fetch_by_one(self, message_nums: [str], message_parts: str, reverse: bool) -> iter:  # noqa
         for message_num in message_nums:
             fetch_result = self.box.fetch(message_num, message_parts)
             check_command_status(fetch_result, MailboxFetchError)
             yield fetch_result[1]
 
-    def _fetch_in_bulk(self, message_nums: [str], message_parts: str) -> iter:
-        message_nums_str = ','.join(message_nums)
-        if not message_nums_str:
+    def _fetch_in_bulk(self, message_nums: [str], message_parts: str, reverse: bool) -> iter:
+        if not message_nums:
             return
-        fetch_result = self.box.fetch(message_nums_str, message_parts)
+        fetch_result = self.box.fetch(','.join(message_nums), message_parts)
         check_command_status(fetch_result, MailboxFetchError)
-        for built_fetch_item in grouper(fetch_result[1], 2):
+        for built_fetch_item in grouper((reversed if reverse else iter)(fetch_result[1]), 2):
             yield built_fetch_item
 
     def fetch(self, criteria: str or bytes = 'ALL', charset: str = 'US-ASCII', limit: int or slice = None,
@@ -85,13 +84,12 @@ class BaseMailBox:
                      True  - fetch all messages per 1 command - high memory consumption, fast
         :return generator: MailMessage
         """
-
         message_parts = "(BODY{}[{}] UID FLAGS RFC822.SIZE)".format(
             '' if mark_seen else '.PEEK', 'HEADER' if headers_only else '')
         limit_range = slice(0, limit) if type(limit) is int else limit or slice(None)
         assert type(limit_range) is slice
-        message_nums = (reversed if reverse else iter)(self.search(criteria, charset)[limit_range])
-        for fetch_item in (self._fetch_in_bulk if bulk else self._fetch_by_one)(message_nums, message_parts):  # noqa
+        nums = tuple((reversed if reverse else iter)(self.search(criteria, charset)))[limit_range]
+        for fetch_item in (self._fetch_in_bulk if bulk else self._fetch_by_one)(nums, message_parts, reverse):  # noqa
             mail_message = self.email_message_class(fetch_item)
             if miss_defect and mail_message.obj.defects:
                 if headers_only:
