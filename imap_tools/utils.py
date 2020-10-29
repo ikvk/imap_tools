@@ -141,3 +141,11 @@ def grouper(iterable: iter, n: int, fill_value=None) -> iter:
         grouper([1, 2, 3, 4, 5], 2) --> [(1, 2), (3, 4), (5, None)]
     """
     return zip_longest(*[iter(iterable)] * n, fillvalue=fill_value)
+
+
+def parse_flags_strict(resp: bytes) -> tuple or None:
+    match = re.compile(br'.*FLAGS \((?P<flags>[^\)]*)\)').match(resp)
+    if not match:
+        return None
+
+    return tuple(match.group('flags').split())

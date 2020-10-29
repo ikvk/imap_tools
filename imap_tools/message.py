@@ -6,7 +6,7 @@ from itertools import chain
 from functools import lru_cache
 from email.header import decode_header
 
-from .utils import decode_value, parse_email_addresses, parse_email_date
+from .utils import decode_value, parse_email_addresses, parse_email_date, parse_flags_strict
 
 
 class MailMessageFlags:
@@ -48,7 +48,7 @@ class MailMessage:
         raw_flag_data = []
         for fetch_item in fetch_data:
             # flags
-            if type(fetch_item) is bytes and imaplib.ParseFlags(fetch_item):
+            if type(fetch_item) is bytes and parse_flags_strict(fetch_item) is not None:
                 raw_flag_data.append(fetch_item)
             # data, uid
             if type(fetch_item) is tuple:
