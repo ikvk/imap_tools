@@ -48,7 +48,7 @@ class MailMessage:
         raw_flag_data = []
         for fetch_item in fetch_data:
             # flags
-            if type(fetch_item) is bytes and imaplib.ParseFlags(fetch_item):
+            if type(fetch_item) is bytes:
                 raw_flag_data.append(fetch_item)
             # data, uid
             if type(fetch_item) is tuple:
@@ -61,15 +61,12 @@ class MailMessage:
     @lru_cache()
     def uid(self) -> str or None:
         """Message UID"""
-        # zimbra, yandex, gmail, gmx
-        uid_match = re.search(r'UID\s+(?P<uid>\d+)', self._raw_uid_data.decode())
-        if uid_match:
-            return uid_match.group('uid')
-        # mail.ru, ms exchange server
-        for raw_flag_item in self._raw_flag_data:
-            uid_flag_match = re.search(r'(^|\s+)UID\s+(?P<uid>\d+)($|\s+)', raw_flag_item.decode())
-            if uid_flag_match:
-                return uid_flag_match.group('uid')
+        # _raw_uid_data - zimbra, yandex, gmail, gmx
+        # _raw_flag_data - mail.ru, ms exchange server
+        for raw_uid_item in [self._raw_uid_data] + self._raw_flag_data:
+            uid_match = re.search(r'(^|\s+|\W)UID\s+(?P<uid>\d+)', raw_uid_item.decode())
+            if uid_match:
+                return uid_match.group('uid')
         return None
 
     @property

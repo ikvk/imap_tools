@@ -131,14 +131,15 @@ You can pass criteria as bytes in desired encoding - charset will be ignored.
 Query builder implements all search logic described in `rfc3501 <https://tools.ietf.org/html/rfc3501#section-6.4.4>`_.
 See `query examples <https://github.com/ikvk/imap_tools/blob/master/examples/search.py>`_.
 
-======  =====  ========================================== ============================================================
-Class   Alias  Usage                                      Arguments
-======  =====  ========================================== ============================================================
-AND     A      combines keys by logical "AND" condition   Search keys (see below) | str
-OR      O      combines keys by logical "OR" condition    Search keys (see below) | str
-NOT     N      invert the result of a logical expression  AND/OR instances | str
-Header  H      for search by headers                      name: str, value: str
-======  =====  ========================================== ============================================================
+========  =====  ========================================== ============================================================
+Class     Alias  Usage                                      Arguments
+========  =====  ========================================== ============================================================
+AND       A      combines keys by logical "AND" condition   Search keys (see below) | str
+OR        O      combines keys by logical "OR" condition    Search keys (see below) | str
+NOT       N      invert the result of a logical expression  AND/OR instances | str
+Header    H      for search by headers                      name: str, value: str
+UidRange  U      for search by UID range                    start: str, end: str
+========  =====  ========================================== ============================================================
 
 .. code-block:: python
 
@@ -158,39 +159,39 @@ Header  H      for search by headers                      name: str, value: str
 
 Search key table. Key types marked with `*` can accepts a sequence of values like list, tuple, set or generator.
 
-=============  ==============  ======================  =================================================================
-Key            Types           Results                 Description
-=============  ==============  ======================  =================================================================
-answered       bool            `ANSWERED|UNANSWERED`   with|without the Answered flag
-seen           bool            `SEEN|UNSEEN`           with|without the Seen flag
-flagged        bool            `FLAGGED|UNFLAGGED`     with|without the Flagged flag
-draft          bool            `DRAFT|UNDRAFT`         with|without the Draft flag
-deleted        bool            `DELETED|UNDELETED`     with|without the Deleted flag
-keyword        str*            KEYWORD KEY             with the specified keyword flag
-no_keyword     str*            UNKEYWORD KEY           without the specified keyword flag
-`from_`        str*            FROM `"from@ya.ru"`     contain specified str in envelope struct's FROM field
-to             str*            TO `"to@ya.ru"`         contain specified str in envelope struct's TO field
-subject        str*            SUBJECT "hello"         contain specified str in envelope struct's SUBJECT field
-body           str*            BODY "some_key"         contain specified str in body of the message
-text           str*            TEXT "some_key"         contain specified str in header or body of the message
-bcc            str*            BCC `"bcc@ya.ru"`       contain specified str in envelope struct's BCC field
-cc             str*            CC `"cc@ya.ru"`         contain specified str in envelope struct's CC field
-date           datetime.date*  ON 15-Mar-2000          internal date is within specified date
-date_gte       datetime.date*  SINCE 15-Mar-2000       internal date is within or later than the specified date
-date_lt        datetime.date*  BEFORE 15-Mar-2000      internal date is earlier than the specified date
-sent_date      datetime.date*  SENTON 15-Mar-2000      rfc2822 Date: header is within the specified date
-sent_date_gte  datetime.date*  SENTSINCE 15-Mar-2000   rfc2822 Date: header is within or later than the specified date
-sent_date_lt   datetime.date*  SENTBEFORE 1-Mar-2000   rfc2822 Date: header is earlier than the specified date
-size_gt        int >= 0        LARGER 1024             rfc2822 size larger than specified number of octets
-size_lt        int >= 0        SMALLER 512             rfc2822 size smaller than specified number of octets
-new            True            NEW                     have the Recent flag set but not the Seen flag
-old            True            OLD                     do not have the Recent flag set
-recent         True            RECENT                  have the Recent flag set
-all            True            ALL                     all, criteria by default
-uid            iter(str)|str   UID 1,2,17              corresponding to the specified unique identifier set
-header         H(str, str)*    HEADER "A-Spam" "5.8"   have a header that contains the specified str in the text
-gmail_label    str*            X-GM-LABELS "label1"    have this gmail label.
-=============  ==============  ======================  =================================================================
+=============  ===============  ======================  =================================================================
+Key            Types            Results                 Description
+=============  ===============  ======================  =================================================================
+answered       bool             `ANSWERED|UNANSWERED`   with|without the Answered flag
+seen           bool             `SEEN|UNSEEN`           with|without the Seen flag
+flagged        bool             `FLAGGED|UNFLAGGED`     with|without the Flagged flag
+draft          bool             `DRAFT|UNDRAFT`         with|without the Draft flag
+deleted        bool             `DELETED|UNDELETED`     with|without the Deleted flag
+keyword        str*             KEYWORD KEY             with the specified keyword flag
+no_keyword     str*             UNKEYWORD KEY           without the specified keyword flag
+`from_`        str*             FROM `"from@ya.ru"`     contain specified str in envelope struct's FROM field
+to             str*             TO `"to@ya.ru"`         contain specified str in envelope struct's TO field
+subject        str*             SUBJECT "hello"         contain specified str in envelope struct's SUBJECT field
+body           str*             BODY "some_key"         contain specified str in body of the message
+text           str*             TEXT "some_key"         contain specified str in header or body of the message
+bcc            str*             BCC `"bcc@ya.ru"`       contain specified str in envelope struct's BCC field
+cc             str*             CC `"cc@ya.ru"`         contain specified str in envelope struct's CC field
+date           datetime.date*   ON 15-Mar-2000          internal date is within specified date
+date_gte       datetime.date*   SINCE 15-Mar-2000       internal date is within or later than the specified date
+date_lt        datetime.date*   BEFORE 15-Mar-2000      internal date is earlier than the specified date
+sent_date      datetime.date*   SENTON 15-Mar-2000      rfc2822 Date: header is within the specified date
+sent_date_gte  datetime.date*   SENTSINCE 15-Mar-2000   rfc2822 Date: header is within or later than the specified date
+sent_date_lt   datetime.date*   SENTBEFORE 1-Mar-2000   rfc2822 Date: header is earlier than the specified date
+size_gt        int >= 0         LARGER 1024             rfc2822 size larger than specified number of octets
+size_lt        int >= 0         SMALLER 512             rfc2822 size smaller than specified number of octets
+new            True             NEW                     have the Recent flag set but not the Seen flag
+old            True             OLD                     do not have the Recent flag set
+recent         True             RECENT                  have the Recent flag set
+all            True             ALL                     all, criteria by default
+uid            iter(str)/str/U  UID 1,2,17              corresponding to the specified unique identifier set
+header         H(str, str)*     HEADER "A-Spam" "5.8"   have a header that contains the specified str in the text
+gmail_label    str*             X-GM-LABELS "label1"    have this gmail label.
+=============  ===============  ======================  =================================================================
 
 Server side search notes:
 
@@ -313,6 +314,8 @@ Big thanks to people who helped develop this library:
 `ktulinger <https://github.com/ktulinger>`_,
 `SamGenTLEManKaka <https://github.com/SamGenTLEManKaka>`_,
 `devkral <https://github.com/devkral>`_,
-`tnusraddinov <https://github.com/tnusraddinov>`_
+`tnusraddinov <https://github.com/tnusraddinov>`_,
+`thepeshka <https://github.com/thepeshka>`_,
+`shofstet <https://github.com/shofstet>`_
 
 💰 You may `thank me <https://github.com/ikvk/imap_tools/blob/master/docs/donate.rst>`_, if this library helped you.

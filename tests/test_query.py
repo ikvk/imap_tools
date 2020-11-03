@@ -1,7 +1,7 @@
 import unittest
 import datetime as dt
 
-from imap_tools.query import ParamConverter, A, AND, OR, NOT, H
+from imap_tools.query import ParamConverter, A, AND, OR, NOT, H, U
 
 
 class QueryTest(unittest.TestCase):
@@ -22,7 +22,9 @@ class QueryTest(unittest.TestCase):
                 ('cleaned_uint', (0, 1, 145), (-1, 'str', [], {}, type, True, b'1')),
                 ('cleaned_str', ('', 'good', 'я 你好'), (1, [], {}, type, True, b'1')),
                 ('cleaned_true', (True,), (1, 'str', [], {}, type, False, b'1')),
-                ('cleaned_uid', ('1', '1,2', ['1', '2'], [], {}, fetch()), (1, type, True, b'1', '', not_fetch())),
+                ('cleaned_uid',
+                 ('1', '1,2', ['1', '2'], [], {}, fetch(), U('8', '*')),
+                 (1, type, True, b'1', '', not_fetch())),
                 ('cleaned_header', (H('X-Google-Smtp', '123'), H('a', '1')), (1, 's', ['s', 1], {}, type, False, b'1')),
         ):
             cleaned_fn = getattr(ParamConverter, cleaned_fn_name)
@@ -74,6 +76,9 @@ class QueryTest(unittest.TestCase):
         self.assertEqual(A(header=H('X-Google-Smtp-Source', '123')), '(HEADER "X-Google-Smtp-Source" "123")')
         self.assertEqual(A(uid='1,2'), '(UID 1,2)')
         self.assertEqual(A(uid=['3', '4']), '(UID 3,4)')
+        self.assertEqual(A(uid=U('*', '1000')), '(UID *:1000)')
+        self.assertEqual(A(uid=U('2', '*')), '(UID 2:*)')
+        self.assertEqual(A(uid=U('*', '*')), '(UID *:*)')
 
         self.assertEqual(A(gmail_label="TestLabel"), '(X-GM-LABELS "TestLabel")')
 
@@ -101,3 +106,12 @@ class QueryTest(unittest.TestCase):
             str(H('key1', eval('1')))
         with self.assertRaises(TypeError):
             str(H(eval('1'), 'val1'))
+
+    def test_uid_range(self):
+        uid_range = U('1', '2')
+        self.assertEqual(uid_range.start, '1')
+        self.assertEqual(uid_range.end, '2')
+        with self.assertRaises(TypeError):
+            U('d', '1')
+        with self.assertRaises(TypeError):
+            U('2', '+0')

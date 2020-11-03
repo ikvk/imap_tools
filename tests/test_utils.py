@@ -11,12 +11,12 @@ class UtilsTest(unittest.TestCase):
         # *cleaned_uid_set tested enough in test_query.py
         pass
 
-    def test_grouper(self):
-        self.assertEqual(list(utils.grouper('ABCDE', 2, '=')), [('A', 'B'), ('C', 'D'), ('E', '=')])
-        self.assertEqual(list(utils.grouper([1, 2, 3, 4, 5, 6], 3)), [(1, 2, 3), (4, 5, 6)])
-        self.assertEqual(list(utils.grouper([], 4)), [])
-        self.assertEqual(list(utils.grouper([1, 2], 0)), [])
-        self.assertEqual(list(utils.grouper(['0', '0'], 1)), [('0',), ('0',)])
+    def test_chunks(self):
+        self.assertEqual(list(utils.chunks('ABCDE', 2, '=')), [('A', 'B'), ('C', 'D'), ('E', '=')])
+        self.assertEqual(list(utils.chunks([1, 2, 3, 4, 5, 6], 3)), [(1, 2, 3), (4, 5, 6)])
+        self.assertEqual(list(utils.chunks([], 4)), [])
+        self.assertEqual(list(utils.chunks([1, 2], 0)), [])
+        self.assertEqual(list(utils.chunks(['0', '0'], 1)), [('0',), ('0',)])
 
     def test_quote(self):
         self.assertEqual(utils.quote('str привет'), '"str привет"')

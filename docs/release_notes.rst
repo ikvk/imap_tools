@@ -1,3 +1,11 @@
+0.31.0
+======
+* MailMessage.uid - fixed bug - UID cannot be parsed if stored with empty flags list
+* MailMessage.uid - used one regexp instead two
+* MailBox, MailBoxUnencrypted - add timeout argument (supports since python 3.9)
+* Added query.UidRange, for search by uid range, UID *:123
+* Deprecated query.Q was removed
+
 0.30.0
 ======
 * BaseMailBox.fetch - fixed wrong responses for combinations of: slice, bulk, reverse

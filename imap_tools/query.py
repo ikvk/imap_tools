@@ -55,13 +55,6 @@ O = OR  # noqa
 N = NOT
 
 
-class Q(AND):
-    def __init__(self, *args, **kwargs):
-        import warnings
-        warnings.warn('alias Q are deprecated and will be removed soon, use A instead')
-        super().__init__(*args, **kwargs)
-
-
 class Header:
     __slots__ = ('name', 'value')
 
@@ -78,6 +71,29 @@ class Header:
 
 
 H = Header  # Short alias
+
+
+class UidRange:
+    """
+    NOTE: UID range of <value>:* always includes the UID of the last message in the mailbox,
+    even if <value> is higher than any assigned UID value ->
+    any UID range with * indicates at least one message (with the highest numbered UID), unless the mailbox is empty.
+    """
+    __slots__ = ('start', 'end')
+
+    def __init__(self, start: str, end: str):
+        self.start = str(start).strip()
+        if not (self.start.isdigit() or self.start == '*'):
+            raise TypeError('UidRange start arg must be str with digits or *')
+        self.end = str(end).strip()
+        if not (self.end.isdigit() or self.end == '*'):
+            raise TypeError('UidRange end arg must be str with digits or *')
+
+    def __str__(self):
+        return '{0.start}:{0.end}'.format(self)
+
+
+U = UidRange  # Short alias
 
 
 class ParamConverter:
@@ -156,11 +172,14 @@ class ParamConverter:
 
     @staticmethod
     def cleaned_uid(key, value) -> str:
+        # range
+        if isinstance(value, UidRange):
+            return str(value)
+        # set
         try:
-            uid_set = cleaned_uid_set(value)
+            return cleaned_uid_set(value)
         except TypeError as e:
             raise TypeError('{} parse error: {}'.format(key, str(e)))
-        return uid_set
 
     @staticmethod
     def cleaned_header(key, value) -> H:

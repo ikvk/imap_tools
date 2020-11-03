@@ -11,10 +11,11 @@ SHORT_MONTH_NAMES = ('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Se
 def cleaned_uid_set(uid_set: str or [str] or iter) -> str:
     """
     Prepare set of uid for use in IMAP commands
-    uid_set may be:
+    :param uid_set:
         str, that is comma separated uids
         Iterable, that contains str uids
         Generator with "fetch" name, implicitly gets all uids
+    :return: str - uids, concatenated by a comma
     """
     # str
     if type(uid_set) is str:
@@ -133,11 +134,11 @@ def pairs_to_dict(items: list) -> dict:
     return dict((items[i * 2], items[i * 2 + 1]) for i in range(len(items) // 2))
 
 
-def grouper(iterable: iter, n: int, fill_value=None) -> iter:
+def chunks(iterable: iter, n: int, fill_value=None) -> iter:
     """
     Group data into fixed-length chunks or blocks
     Examples:
-        grouper('ABCDEFGH', 3, '?') --> [('A', 'B', 'C'), ('D', 'E', 'F'), ('G', 'H', '?')]
-        grouper([1, 2, 3, 4, 5], 2) --> [(1, 2), (3, 4), (5, None)]
+        chunks('ABCDEFGH', 3, '?') --> [('A', 'B', 'C'), ('D', 'E', 'F'), ('G', 'H', '?')]
+        chunks([1, 2, 3, 4, 5], 2) --> [(1, 2), (3, 4), (5, None)]
     """
     return zip_longest(*[iter(iterable)] * n, fillvalue=fill_value)
