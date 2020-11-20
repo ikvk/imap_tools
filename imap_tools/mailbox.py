@@ -4,7 +4,7 @@ from email.errors import StartBoundaryNotFoundDefect, MultipartInvariantViolatio
 
 from .message import MailMessage, MailMessageFlags
 from .folder import MailBoxFolderManager
-from .utils import cleaned_uid_set, check_command_status, chunks
+from .utils import cleaned_uid_set, check_command_status, chunks, encode_folder
 from .errors import MailboxStarttlsError, MailboxLoginError, MailboxLogoutError, MailboxSearchError, \
     MailboxFetchError, MailboxExpungeError, MailboxDeleteError, MailboxCopyError, MailboxFlagError
 
@@ -122,7 +122,7 @@ class BaseMailBox:
         expunge_result = self.expunge()
         return store_result, expunge_result
 
-    def copy(self, uid_list, destination_folder: str) -> tuple or None:
+    def copy(self, uid_list, destination_folder: str or bytes) -> tuple or None:
         """
         Copy email messages into the specified folder
         Do nothing on empty uid_list
@@ -131,11 +131,11 @@ class BaseMailBox:
         uid_str = cleaned_uid_set(uid_list)
         if not uid_str:
             return None
-        copy_result = self.box.uid('COPY', uid_str, destination_folder)
+        copy_result = self.box.uid('COPY', uid_str, encode_folder(destination_folder))  # noqa
         check_command_status(copy_result, MailboxCopyError)
         return copy_result
 
-    def move(self, uid_list, destination_folder: str) -> (tuple, tuple) or None:
+    def move(self, uid_list, destination_folder: str or bytes) -> (tuple, tuple) or None:
         """
         Move email messages into the specified folder
         Do nothing on empty uid_list

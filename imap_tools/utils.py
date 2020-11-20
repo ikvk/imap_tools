@@ -5,6 +5,8 @@ from itertools import zip_longest
 from email.utils import getaddresses, parsedate_to_datetime
 from email.header import decode_header, Header
 
+from . import imap_utf7
+
 SHORT_MONTH_NAMES = ('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec')
 
 
@@ -142,3 +144,11 @@ def chunks(iterable: iter, n: int, fill_value=None) -> iter:
         chunks([1, 2, 3, 4, 5], 2) --> [(1, 2), (3, 4), (5, None)]
     """
     return zip_longest(*[iter(iterable)] * n, fillvalue=fill_value)
+
+
+def encode_folder(folder: str or bytes) -> bytes:
+    """Encode folder name"""
+    if isinstance(folder, bytes):
+        return quote(folder)
+    else:
+        return quote(imap_utf7.encode(folder))

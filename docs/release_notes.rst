@@ -1,3 +1,7 @@
+0.32.0
+======
+* Fixed bug at BaseMailBox.copy - folder name was not encoded
+
 0.31.0
 ======
 * MailMessage.uid - fixed bug - UID cannot be parsed if stored with empty flags list

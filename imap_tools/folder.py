@@ -1,7 +1,7 @@
 import re
 
 from . import imap_utf7
-from .utils import check_command_status, quote, pairs_to_dict
+from .utils import check_command_status, pairs_to_dict, encode_folder
 from .errors import MailboxFolderStatusValueError, MailboxFolderSelectError, MailboxFolderCreateError, \
     MailboxFolderRenameError, MailboxFolderDeleteError, MailboxFolderStatusError
 
@@ -32,17 +32,9 @@ class MailBoxFolderManager:
         self.mailbox = mailbox
         self._current_folder = None
 
-    @staticmethod
-    def _encode_folder(folder: str or bytes) -> bytes:
-        """Encode folder name"""
-        if isinstance(folder, bytes):
-            return quote(folder)
-        else:
-            return quote(imap_utf7.encode(folder))
-
     def set(self, folder: str or bytes):
         """Select current folder"""
-        result = self.mailbox.box.select(self._encode_folder(folder))
+        result = self.mailbox.box.select(encode_folder(folder))
         check_command_status(result, MailboxFolderSelectError)
         self._current_folder = folder
         return result
@@ -56,7 +48,7 @@ class MailBoxFolderManager:
         Create folder on the server.
         Use email box delimiter to separate folders. Example for "|" delimiter: "folder|sub folder"
         """
-        result = self.mailbox.box._simple_command('CREATE', self._encode_folder(folder))
+        result = self.mailbox.box._simple_command('CREATE', encode_folder(folder))
         check_command_status(result, MailboxFolderCreateError)
         return result
 
@@ -67,13 +59,13 @@ class MailBoxFolderManager:
     def rename(self, old_name: str or bytes, new_name: str or bytes):
         """Renemae folder from old_name to new_name"""
         result = self.mailbox.box._simple_command(
-            'RENAME', self._encode_folder(old_name), self._encode_folder(new_name))
+            'RENAME', encode_folder(old_name), encode_folder(new_name))
         check_command_status(result, MailboxFolderRenameError)
         return result
 
     def delete(self, folder: str or bytes):
         """Delete folder"""
-        result = self.mailbox.box._simple_command('DELETE', self._encode_folder(folder))
+        result = self.mailbox.box._simple_command('DELETE', encode_folder(folder))
         check_command_status(result, MailboxFolderDeleteError)
         return result
 
@@ -91,7 +83,7 @@ class MailBoxFolderManager:
             if opt not in MailBoxFolderStatusOptions.all:
                 raise MailboxFolderStatusValueError(str(opt))
         status_result = self.mailbox.box._simple_command(
-            command, self._encode_folder(folder), '({})'.format(' '.join(options)))
+            command, encode_folder(folder), '({})'.format(' '.join(options)))
         check_command_status(status_result, MailboxFolderStatusError)
         result = self.mailbox.box._untagged_response(status_result[0], status_result[1], command)
         check_command_status(result, MailboxFolderStatusError)
@@ -116,7 +108,7 @@ class MailBoxFolderManager:
         folder_item_re = re.compile(r'\((?P<flags>[\S ]*)\) (?P<delim>[\S]+) (?P<name>.+)')
         command = 'LSUB' if subscribed_only else 'LIST'
         typ, data = self.mailbox.box._simple_command(
-            command, self._encode_folder(folder), self._encode_folder(search_args))
+            command, encode_folder(folder), encode_folder(search_args))
         typ, data = self.mailbox.box._untagged_response(typ, data, command)
         result = []
         for folder_item in data:

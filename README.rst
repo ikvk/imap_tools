@@ -316,6 +316,7 @@ Big thanks to people who helped develop this library:
 `devkral <https://github.com/devkral>`_,
 `tnusraddinov <https://github.com/tnusraddinov>`_,
 `thepeshka <https://github.com/thepeshka>`_,
-`shofstet <https://github.com/shofstet>`_
+`shofstet <https://github.com/shofstet>`_,
+`the7erm <https://github.com/the7erm>`_
 
 💰 You may `thank me <https://github.com/ikvk/imap_tools/blob/master/docs/donate.rst>`_, if this library helped you.
