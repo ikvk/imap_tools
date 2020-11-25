@@ -129,7 +129,6 @@ The "charset" is argument used for encode criteria to this encoding.
 You can pass criteria as bytes in desired encoding - charset will be ignored.
 
 Query builder implements all search logic described in `rfc3501 <https://tools.ietf.org/html/rfc3501#section-6.4.4>`_.
-See `query examples <https://github.com/ikvk/imap_tools/blob/master/examples/search.py>`_.
 
 ========  =====  ========================================== ============================================================
 Class     Alias  Usage                                      Arguments
@@ -156,6 +155,8 @@ UidRange  U      for search by UID range                    start: str, end: str
     mailbox.fetch(A(subject='привет'), charset='utf8')
     # python note: you can't do: A(text='two', NOT(subject='one'))
     A(NOT(subject='one'), text='two')  # use kwargs after logic classes (args)
+
+See more `query examples <https://github.com/ikvk/imap_tools/blob/master/examples/search.py>`_.
 
 Search key table. Key types marked with `*` can accepts a sequence of values like list, tuple, set or generator.
 
@@ -210,7 +211,7 @@ You can use 2 approaches to perform these operations:
 
 MailBox.fetch generator instance passed as the first argument to any action will be implicitly converted to uid list.
 
-For actions with a large number of messages imap command may be too large and will cause an exception,
+For actions with a large number of messages imap command may be too large and will cause exception at server side,
 use 'limit' argument for fetch in this case.
 
 .. code-block:: python
