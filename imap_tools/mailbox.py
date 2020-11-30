@@ -31,6 +31,13 @@ class BaseMailBox:
     def login(self, username: str, password: str, initial_folder: str or None = 'INBOX'):
         login_result = self.box.login(username, password)
         check_command_status(login_result, MailboxLoginError)
+        special = ['163.com', '126.com', 'yeah.net']
+        if any(w in username and w for w in special):
+            imaplib.Commands['ID'] = ('AUTH')
+            args = ("name", "hsu1943", "contact", "osnail1943@gmail.com", "version", "1.0.0", "vendor", "hsu1943")
+            id_result = self.box._simple_command('ID', '("' + '" "'.join(args) + '")')
+            print(id_result)
+            check_command_status(id_result, MailboxLoginError)
         self.folder = self.folder_manager_class(self)
         if initial_folder is not None:
             self.folder.set(initial_folder)
