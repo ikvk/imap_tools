@@ -318,6 +318,8 @@ Big thanks to people who helped develop this library:
 `tnusraddinov <https://github.com/tnusraddinov>`_,
 `thepeshka <https://github.com/thepeshka>`_,
 `shofstet <https://github.com/shofstet>`_,
-`the7erm <https://github.com/the7erm>`_
+`the7erm <https://github.com/the7erm>`_,
+`c0da <https://github.com/c0da>`_,
+`dev4max <https://github.com/dev4max>`_
 
 💰 You may `thank me <https://github.com/ikvk/imap_tools/blob/master/docs/donate.rst>`_, if this library helped you.

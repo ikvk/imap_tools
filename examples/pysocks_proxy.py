@@ -1,7 +1,6 @@
 """
 MailBox traffic through proxy servers using https://github.com/Anorov/PySocks
-THIS EXAMPLE ARE NOT CHECKED
-PLEASE, LET ME KNOW ABOUT TEST RESULTS!
+This logic will not be part of imap_tools
 """
 import ssl
 import socks

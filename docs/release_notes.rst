@@ -1,3 +1,7 @@
+0.33.0
+======
+* MailMessage.attachments - fixed miss some attachments
+
 0.32.0
 ======
 * Fixed bug at BaseMailBox.copy - folder name was not encoded

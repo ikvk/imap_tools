@@ -116,12 +116,16 @@ class MailBoxFolderManager:
                 continue
             if type(folder_item) is bytes:
                 folder_match = re.search(folder_item_re, imap_utf7.decode(folder_item))
+                if not folder_match:
+                    continue
                 folder_dict = folder_match.groupdict()
                 if folder_dict['name'].startswith('"') and folder_dict['name'].endswith('"'):
                     folder_dict['name'] = folder_dict['name'][1:-1]
             elif type(folder_item) is tuple:
                 # when name has " or \ chars
                 folder_match = re.search(folder_item_re, imap_utf7.decode(folder_item[0]))
+                if not folder_match:
+                    continue
                 folder_dict = folder_match.groupdict()
                 folder_dict['name'] = imap_utf7.decode(folder_item[1])
             else:
