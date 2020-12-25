@@ -322,4 +322,4 @@ Big thanks to people who helped develop this library:
 `c0da <https://github.com/c0da>`_,
 `dev4max <https://github.com/dev4max>`_
 
-💰 You may `thank me <https://github.com/ikvk/imap_tools/blob/master/docs/donate.rst>`_, if this library helped you.
+💰 You may `donate <https://github.com/ikvk/imap_tools/blob/master/docs/donate.rst>`_, if this library helped you.
