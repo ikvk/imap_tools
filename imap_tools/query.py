@@ -8,12 +8,12 @@ from .utils import cleaned_uid_set, SHORT_MONTH_NAMES, quote
 
 
 class LogicOperator(collections.UserString):
-    def __init__(self, *converted_strings, **unconverted_dicts):
+    def __init__(self, *converted_strings, **unconverted_dict):
         self.converted_strings = converted_strings
         for val in converted_strings:
             if not any(isinstance(val, t) for t in (str, collections.UserString)):
                 raise TypeError('Unexpected type "{}" for converted part, str like obj expected'.format(type(val)))
-        self.converted_params = ParamConverter(unconverted_dicts).convert()
+        self.converted_params = ParamConverter(unconverted_dict).convert()
         if not any((self.converted_strings, self.converted_params)):
             raise ValueError('{} expects params'.format(self.__class__.__name__))
         super().__init__(self.combine_params())
