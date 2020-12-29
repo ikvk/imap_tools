@@ -91,8 +91,8 @@ Message and Attachment public attributes are cached by functools.lru_cache
         msg.html         # str: '<b>Hello 你 Привет</b>'
         msg.flags        # tuple: ('SEEN', 'FLAGGED', 'ENCRYPTED')
         msg.headers      # dict: {'Received': ('from 1.m.ru', 'from 2.m.ru'), 'AntiVirus': ('Clean',)}
-        msg.size_rfc822  # int: 20664
-        msg.size         # int: 20377
+        msg.size_rfc822  # int: 20664 bytes - size info from server (*useful with headers_only arg)
+        msg.size         # int: 20377 bytes
 
         for att in msg.attachments:  # list: imap_tools.Attachment
             att.filename             # str: 'cat.jpg'
@@ -101,7 +101,7 @@ Message and Attachment public attributes are cached by functools.lru_cache
             att.content_type         # str: 'image/jpeg'
             att.content_disposition  # str: 'inline'
             att.part                 # email.message.Message: original object
-            att.size                 # int: 17361
+            att.size                 # int: 17361 bytes
 
         msg.obj              # email.message.Message: original object
         msg.from_values      # dict or None: {'email': 'im@ya.ru', 'name': 'Ya 你', 'full': 'Ya 你 <im@ya.ru>'}

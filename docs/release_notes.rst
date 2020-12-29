@@ -1,3 +1,7 @@
+0.34.0
+======
+* Improved MailMessage.text, MailMessage.html on case: no text/html and with text/html attachment
+
 0.33.0
 ======
 * MailMessage.attachments - fixed miss some attachments

@@ -6,7 +6,7 @@ from itertools import chain
 from functools import lru_cache
 from email.header import decode_header
 
-from .utils import decode_value, parse_email_addresses, parse_email_date
+from .utils import decode_value, parse_email_addresses, parse_email_date, is_attachment
 
 
 class MailMessageFlags:
@@ -187,8 +187,7 @@ class MailMessage:
     def text(self) -> str:
         """Plain text of the mail message"""
         for part in self.obj.walk():
-            # multipart/* are containers
-            if part.get_content_maintype() == 'multipart':
+            if part.get_content_maintype() == 'multipart' or is_attachment(part):
                 continue
             if part.get_content_type() in ('text/plain', 'text/'):
                 return decode_value(part.get_payload(decode=True), part.get_content_charset())
@@ -199,8 +198,7 @@ class MailMessage:
     def html(self) -> str:
         """HTML text of the mail message"""
         for part in self.obj.walk():
-            # multipart/* are containers
-            if part.get_content_maintype() == 'multipart':
+            if part.get_content_maintype() == 'multipart' or is_attachment(part):
                 continue
             if part.get_content_type() == 'text/html':
                 return decode_value(part.get_payload(decode=True), part.get_content_charset())
@@ -222,12 +220,9 @@ class MailMessage:
         """
         results = []
         for part in self.obj.walk():
-            if part.get_content_maintype() == 'multipart':
-                # multipart/* are just containers
+            if part.get_content_maintype() == 'multipart':  # multipart/* are containers
                 continue
-            if part.get('Content-Disposition') is None \
-                    and part.get('Content-ID') is None \
-                    and part.get_filename() is None:
+            if not is_attachment(part):
                 continue
             results.append(Attachment(part))
         return results
