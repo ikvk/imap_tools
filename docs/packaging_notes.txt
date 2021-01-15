@@ -14,5 +14,8 @@ https://packaging.python.org/tutorials/packaging-projects/
     cd C:\kvk\develop\Python\imap_tools\
     C:\python\venv\imap_tools\Scripts\python.exe C:\kvk\develop\Python\imap_tools\setup.py sdist bdist_wheel
 
-4. Uploading the distribution archives:
+4. Check the distribution archives:
+    C:\python\venv\imap_tools\Scripts\python.exe -m twine check dist/*
+
+5. Uploading the distribution archives:
     C:\python\venv\imap_tools\Scripts\python.exe -m twine upload dist/*
