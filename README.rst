@@ -7,9 +7,15 @@ Work with email and mailbox by IMAP:
 
 - Parsed email message attributes
 - Query builder for searching emails
-- Actions with emails: copy, delete, flag, move, seen
+- Actions with emails: copy, delete, flag, move, seen, append
 - Actions with folders: list, set, get, create, exists, rename, delete, status
 - No dependencies
+
+.. raw:: html
+
+    <a href="https://pypi.python.org/pypi/imap_tools">
+        <img src="https://img.shields.io/pypi/dm/imap_tools.svg?style=social" alt="PyPI - Downloads">
+    </a>
 
 ===============  ===============================================================
 Python version   3.3+
@@ -50,7 +56,7 @@ MailBox(BaseMailBox), MailBoxUnencrypted(BaseMailBox) - for create mailbox insta
 
 BaseMailBox.login, MailBox.xoauth2 - authentication functions
 
-BaseMailBox.fetch - email message generator, first searches email nums by criteria, then fetch and yields `Message <#email-attributes>`_:
+BaseMailBox.fetch - email message generator, first searches email nums by criteria, then fetch and yields `MailMessage <#email-attributes>`_:
 
 * *criteria* = 'ALL', message search criteria, `query builder <#search-criteria>`_
 * *charset* = 'US-ASCII', indicates charset of the strings that appear in the search criteria. See rfc2978
@@ -62,7 +68,7 @@ BaseMailBox.fetch - email message generator, first searches email nums by criter
 * *headers_only* = False, get only email headers (without text, html, attachments)
 * *bulk* = False, False - fetch each message separately per N commands - low memory consumption, slow; True - fetch all messages per 1 command - high memory consumption, fast
 
-BaseMailBox.<action> - `copy, move, delete, flag, seen <#actions-with-emails>`_
+BaseMailBox.<action> - `copy, move, delete, flag, seen, append <#actions-with-emails>`_
 
 BaseMailBox.folder - `folder manager <#actions-with-folders>`_
 
@@ -73,11 +79,11 @@ BaseMailBox.box - imaplib.IMAP4/IMAP4_SSL client instance.
 Email attributes
 ^^^^^^^^^^^^^^^^
 
-Message and Attachment public attributes are cached by functools.lru_cache
+MailMessage and MailAttachment public attributes are cached by functools.lru_cache
 
 .. code-block:: python
 
-    for msg in mailbox.fetch():  # iter: imap_tools.Message
+    for msg in mailbox.fetch():  # iter: imap_tools.MailMessage
         msg.uid          # str or None: '123'
         msg.subject      # str: 'some subject 你 привет'
         msg.from_        # str: 'Sender.Bartölke@ya.ru'
@@ -94,7 +100,7 @@ Message and Attachment public attributes are cached by functools.lru_cache
         msg.size_rfc822  # int: 20664 bytes - size info from server (*useful with headers_only arg)
         msg.size         # int: 20377 bytes
 
-        for att in msg.attachments:  # list: imap_tools.Attachment
+        for att in msg.attachments:  # list: imap_tools.MailAttachment
             att.filename             # str: 'cat.jpg'
             att.payload              # bytes: b'\xff\xd8\xff\xe0\'
             att.content_id           # str: 'part45.06020801.00060008@mail.ru'
@@ -235,6 +241,11 @@ use 'limit' argument for fetch in this case.
         # SEEN: mark all messages sent at 05.03.2007 in current folder as unseen, *in bulk
         mailbox.seen(mailbox.fetch("SENTON 05-Mar-2007"), False)
 
+        # APPEND: add message to mailbox directly, to INBOX folder with SEEN flag and now date
+        with open('/tmp/message.eml', 'rb') as f:
+            msg = imap_tools.MailMessage.from_bytes(f.read())  # *or use bytes instead MailMessage
+        mailbox.append(msg, 'INBOX', dt=None flag_set=[imap_tools.MailMessageFlags.SEEN])
+
 Actions with folders
 ^^^^^^^^^^^^^^^^^^^^
 .. code-block:: python
@@ -320,6 +331,8 @@ Big thanks to people who helped develop this library:
 `shofstet <https://github.com/shofstet>`_,
 `the7erm <https://github.com/the7erm>`_,
 `c0da <https://github.com/c0da>`_,
-`dev4max <https://github.com/dev4max>`_
+`dev4max <https://github.com/dev4max>`_,
+`ascheucher <https://github.com/ascheucher>`_,
+`Borutia <https://github.com/Borutia>`_
 
 💰 You may `donate <https://github.com/ikvk/imap_tools/blob/master/docs/donate.rst>`_, if this library helped you.

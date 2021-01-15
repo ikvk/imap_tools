@@ -1,6 +1,1 @@
 Release 1.0.0 after 3 month of quiet in issues and merge requests
-
-mailbox.folder.status('zz|"123"', [MailBoxFolderStatusOptions.UNSEEN]))
-  File "C:\kvk\develop\Python\imap_tools\imap_tools\folder.py", line 90, in status
-    values = result[1][0].decode().split('(')[1].split(')')[0].split(' ')
-AttributeError: 'tuple' object has no attribute 'decode'

@@ -87,7 +87,8 @@ class MailBoxFolderManager:
         check_command_status(status_result, MailboxFolderStatusError)
         result = self.mailbox.box._untagged_response(status_result[0], status_result[1], command)
         check_command_status(result, MailboxFolderStatusError)
-        values = result[1][0].decode().split('(')[1].split(')')[0].split(' ')
+        status_data = [i for i in result[1] if type(i) is bytes][0]  # may contain tuples with encoded names
+        values = status_data.decode().split('(')[1].split(')')[0].split(' ')
         return {k: int(v) for k, v in pairs_to_dict(values).items() if str(v).isdigit()}
 
     def list(self, folder: str or bytes = '', search_args: str = '*', subscribed_only: bool = False) -> list:

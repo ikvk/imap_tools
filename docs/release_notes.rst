@@ -1,3 +1,10 @@
+0.35.0
+======
+* Added BaseMailBox.append method
+* Renamed message.Attachment -> message.MailAttachment
+* Fixed bug at utils.encode_folder for bytes
+* Fixed bug at mailbox.folder.status on encoded names
+
 0.34.0
 ======
 * Improved MailMessage.text, MailMessage.html on case: no text/html and with text/html attachment
@@ -164,7 +171,7 @@
 
 0.11.0
 ======
-* message.MailMessage.attachments now return list of message.MailMessage.Attachment objects
+* message.MailMessage.attachments now return list of message.Attachment objects
 
 0.10.0
 ======

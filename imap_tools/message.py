@@ -213,10 +213,10 @@ class MailMessage:
 
     @property
     @lru_cache()
-    def attachments(self) -> ['Attachment']:
+    def attachments(self) -> ['MailAttachment']:
         """
         Mail message attachments list
-        :return: [Attachment]
+        :return: [MailAttachment]
         """
         results = []
         for part in self.obj.walk():
@@ -224,11 +224,11 @@ class MailMessage:
                 continue
             if not is_attachment(part):
                 continue
-            results.append(Attachment(part))
+            results.append(MailAttachment(part))
         return results
 
 
-class Attachment:
+class MailAttachment:
     """An attachment for a MailMessage"""
 
     def __init__(self, part):

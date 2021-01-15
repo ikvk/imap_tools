@@ -1,12 +1,13 @@
 import sys
 import imaplib
+import datetime
 from email.errors import StartBoundaryNotFoundDefect, MultipartInvariantViolationDefect
 
 from .message import MailMessage, MailMessageFlags
 from .folder import MailBoxFolderManager
 from .utils import cleaned_uid_set, check_command_status, chunks, encode_folder
 from .errors import MailboxStarttlsError, MailboxLoginError, MailboxLogoutError, MailboxSearchError, \
-    MailboxFetchError, MailboxExpungeError, MailboxDeleteError, MailboxCopyError, MailboxFlagError
+    MailboxFetchError, MailboxExpungeError, MailboxDeleteError, MailboxCopyError, MailboxFlagError, MailboxAppendError
 
 # Maximal line length when calling readline(). This is to prevent reading arbitrary length lines.
 imaplib._MAXLINE = 4 * 1024 * 1024  # 4Mb
@@ -24,6 +25,12 @@ class BaseMailBox:
         self.folder = None  # folder manager
         self.login_result = None
         self.box = self._get_mailbox_client()
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_value, exc_traceback):
+        self.logout()
 
     def _get_mailbox_client(self) -> imaplib.IMAP4:
         raise NotImplementedError
@@ -175,11 +182,33 @@ class BaseMailBox:
         """
         return self.flag(uid_list, MailMessageFlags.SEEN, seen_val)
 
-    def __enter__(self):
-        return self
-
-    def __exit__(self, exc_type, exc_value, exc_traceback):
-        self.logout()
+    def append(self, message: MailMessage or bytes,
+               folder: str or bytes = 'INBOX',
+               dt: datetime.datetime or None = None,
+               flag_set: [str] or str or None = None) -> tuple:
+        """
+        Append email messages to server
+        :param message: MailMessage object or bytes
+        :param folder: destination folder, INBOX by default
+        :param dt: email message datetime with tzinfo, now by default, imaplib.Time2Internaldate types supported
+        :param flag_set: email message flags, no flags by default. Standard flags at message.MailMessageFlags.all
+        :return: command results
+        """
+        if sys.version_info.minor < 6:
+            timezone = datetime.timezone(datetime.timedelta(hours=0))
+        else:
+            timezone = datetime.datetime.now().astimezone().tzinfo  # system timezone
+        if type(flag_set) is str:
+            flag_set = [flag_set]
+        typ, dat = self.box.append(
+            encode_folder(folder),  # noqa
+            '({})'.format(' '.join(('\\' + i for i in flag_set))) if flag_set else None,
+            dt or datetime.datetime.now(timezone),
+            message if type(message) is bytes else message.obj.as_bytes()
+        )
+        append_result = (typ, dat)
+        check_command_status(append_result, MailboxAppendError)
+        return append_result
 
 
 class MailBoxUnencrypted(BaseMailBox):

@@ -149,7 +149,7 @@ def chunks(iterable: iter, n: int, fill_value=None) -> iter:
 def encode_folder(folder: str or bytes) -> bytes:
     """Encode folder name"""
     if isinstance(folder, bytes):
-        return quote(folder)
+        return folder
     else:
         return quote(imap_utf7.encode(folder))
 
