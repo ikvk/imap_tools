@@ -329,6 +329,7 @@ Big thanks to people who helped develop this library:
 `c0da <https://github.com/c0da>`_,
 `dev4max <https://github.com/dev4max>`_,
 `ascheucher <https://github.com/ascheucher>`_,
-`Borutia <https://github.com/Borutia>`_
+`Borutia <https://github.com/Borutia>`_,
+`nathan30 <https://github.com/nathan30>`_
 
 💰 You may `donate <https://github.com/ikvk/imap_tools/blob/master/docs/donate.rst>`_, if this library helped you.
