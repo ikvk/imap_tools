@@ -13,7 +13,7 @@ with open("README.rst", "r", encoding='utf-8') as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name='imap_tools',
+    name='imap-tools',
     version=get_version('imap_tools'),
     packages=setuptools.find_packages(),
     url='https://github.com/ikvk/imap_tools',

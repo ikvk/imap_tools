@@ -154,6 +154,3 @@ def encode_folder(folder: str or bytes) -> bytes:
         return quote(imap_utf7.encode(folder))
 
 
-def is_attachment(part):
-    """Is message part are attachment"""
-    return part.get('Content-ID') is not None or part.get_filename() is not None

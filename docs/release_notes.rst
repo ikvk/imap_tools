@@ -1,3 +1,7 @@
+0.36.0
+======
+* Fixed MailMessage.text/html parse on case: text/html with Content-ID
+
 0.35.0
 ======
 * Added BaseMailBox.append method
@@ -7,7 +11,7 @@
 
 0.34.0
 ======
-* Improved MailMessage.text, MailMessage.html on case: no text/html and with text/html attachment
+* Improved MailMessage.text/html on case: no text/html and has text/html attachment
 
 0.33.0
 ======

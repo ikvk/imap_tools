@@ -6,7 +6,7 @@ from itertools import chain
 from functools import lru_cache
 from email.header import decode_header
 
-from .utils import decode_value, parse_email_addresses, parse_email_date, is_attachment
+from .utils import decode_value, parse_email_addresses, parse_email_date
 
 
 class MailMessageFlags:
@@ -95,7 +95,7 @@ class MailMessage:
         result = []
         for raw_flag_item in self._raw_flag_data:
             result.extend(imaplib.ParseFlags(raw_flag_item))
-        return tuple(i.decode().strip().replace('\\', '').upper() for i in result)
+        return tuple(i.decode().strip().replace('\\', '').upper() for i in result)  # noqa
 
     @property
     @lru_cache()
@@ -187,7 +187,7 @@ class MailMessage:
     def text(self) -> str:
         """Plain text of the mail message"""
         for part in self.obj.walk():
-            if part.get_content_maintype() == 'multipart' or is_attachment(part):
+            if part.get_content_maintype() == 'multipart' or part.get_filename():
                 continue
             if part.get_content_type() in ('text/plain', 'text/'):
                 return decode_value(part.get_payload(decode=True), part.get_content_charset())
@@ -198,7 +198,7 @@ class MailMessage:
     def html(self) -> str:
         """HTML text of the mail message"""
         for part in self.obj.walk():
-            if part.get_content_maintype() == 'multipart' or is_attachment(part):
+            if part.get_content_maintype() == 'multipart' or part.get_filename():
                 continue
             if part.get_content_type() == 'text/html':
                 return decode_value(part.get_payload(decode=True), part.get_content_charset())
@@ -222,7 +222,7 @@ class MailMessage:
         for part in self.obj.walk():
             if part.get_content_maintype() == 'multipart':  # multipart/* are containers
                 continue
-            if not is_attachment(part):
+            if part.get('Content-ID') is None and part.get_filename() is None:
                 continue
             results.append(MailAttachment(part))
         return results

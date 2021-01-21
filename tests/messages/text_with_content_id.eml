@@ -1,0 +1,40 @@
+From: email-test.fr <ne-pas-repondre@email-test.fr>
+To: Courrier <service.courrier@mairie-email-test.fr>
+Subject: Contact email-test.fr
+Thread-Topic: Contact email-test.fr
+Thread-Index: AQHW7O2SJAZxCkqG10awu/NtCY1I/A==
+Date: Sun, 17 Jan 2021 16:26:56 +0000
+Message-ID: <c831ea72834dd8fcc648dac294e810fb@www.email-test.fr>
+Reply-To: HELOU <emmanuellehelou@orange.fr>
+Content-Language: fr-FR
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-MS-Exchange-Organization-AuthSource: serv-exchange.mairie-email-test.fr
+X-MS-Has-Attach:
+X-MS-Exchange-Organization-Network-Message-Id: b33ffe95-382f-49d7-269d-08d8bb04b512
+X-MS-TNEF-Correlator:
+X-MS-Exchange-Organization-RecordReviewCfmType: 0
+x-ms-exchange-organization-originalclientipaddress: 192.168.2.8
+x-ms-exchange-organization-originalserveripaddress: 172.16.0.199
+x-mailer: TYPO3
+dkim-signature: v=1; a=rsa-sha256; c=simple/simple; d=email-test.fr;	s=dkim;
+ t=1610900816;	bh=OW4RY4SudtC3hIBJtmsQXcuoAP02QMZsI0y7sCUVX00=;
+	h=Date:Subject:From:Reply-To:To:From;
+	b=sPHozdsx6imqijuc+XCa9szrzsigwwFKERJ1KeO0L6Omm0gL+a4+F2/I3BePWKn5Y
+	 Y9Kott89Zop2kx/mnnGObQ9wY7RevYce9Ke5YXyXBzkyqzhlKsgzXKsJtB2XZcWoXH
+	 WtNyyhiD1w84rIHmCosuKrhrFFI50+ZihXxXhxek=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <8DEF3B2930D4004EB38802D09A7F5EDE@mairie-email-test.fr>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+
+Qm9uam91ci4KClVuZSBub3V2ZWxsZSBkZW1hbmRlIHZvdXMgYSDDqXTDqSB0cmFuc21pc2UgdmlhIGxlIGZv
+cm11bGFpcmUgZGUgY29udGFjdCBkdSBzaXRlIHd3dy5zYWludG5hemFpcmUuZnIKClZvdHJlIG1lc3NhZ2Ug
+OiBvbmpvdXIsCgpKZSB2b3VsYWlzIHZvdXMgYWxlcnRlciBxdWUgbGUgcGl6emHDr29sbyBkdSBjYW1pb24g
+YW1idWxhbnQgUEFTVEEgUElaWkEgZGUgVmlsbMOocyBNYXJ0aW4gZHUgZGltYW5jaGUgbmUgcG9ydGUgcGFz
+IGRlIG1hc3F1ZXMgcG91ciBjb25mZWN0aW9ubmVyIHNlcyBwaXp6YXMgZXQgcG91ciBwYXJsZXIgw6Agc2Vz
+IGNsaWVudHM7IHBhcyBkZSBnZWwgaHlkcm9hbGNvb2xvaXF1ZSBub24gcGx1czsgdHJhdmFpbGxhbnQgZGFu
+cyBsZXMgaMO0cGl0YXV4IGplIHN1aXMgY29uc3Rlcm7DqWUgZGUgdm9pciBlbmNvcmUgZGVzIHByb2Zlc3Np
+b25uZWxzIGV0IGVuIGNvbnRhY3QgYXZlYyB1biBwdWJsaWMgZGUgbmUgcGFzIHJlc3BlY3RlciBsZSBwb3J0
+IGR1IG1hc3F1ZTsgaWwgY29udGFtaW5lIHNlcyBwcm9kdWl0cywgbGVzIGNsaWVudHMgLi4uCkNlIG4nZXN0
+IHBhcyBub3JtYWwgZGUgbmUgcGFzIGNvbnRyw7RsZXIgY2VzIHByb2Zlc3Npb25uZWxzIGFtYnVsYW50cy4K
+Ck1lcmNpIGJlYXVjb3VwCgoKCk1lcmNpLgo=
