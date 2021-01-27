@@ -9,3 +9,4 @@ MANIFEST
 /examples/check.py
 /.python-version
 /.idea/
+/venv/
