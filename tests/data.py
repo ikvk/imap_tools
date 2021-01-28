@@ -12,9 +12,7 @@ attachment_2_base64.eml
 """
 
 MESSAGE_ATTRIBUTES = {
-
-    # ===
-    'simple': dict(
+    'base': dict(
         subject='Соберите всю почту в этот ящик',
         from_='hello@yandex.ru',
         to=(),
@@ -33,11 +31,12 @@ MESSAGE_ATTRIBUTES = {
 <a href="https://mail.yandex.ru/neo2/#setup/collectors">
 <font size="5">Настроить сбор почты</font></a></font></td></tr></tbody></table></font>
 </body></html>""",
-        headers={'MIME-Version': ('1.0',), 'From': ('=?utf-8?b?0K/QvdC00LXQutGB?= <hello@yandex.ru>',),
-                 'Content-Type': ('multipart/related; boundary="===============1696383123=="',), 'Reply-To': (
+        headers={'content-type': ('multipart/related; boundary="===============1696383123=="',),
+                 'mime-version': ('1.0',), 'reply-to': (
                 '=?UTF-8?B?0L/RgNC40LLQtdGC?= <foma@company.ru>,\r\n =?UTF-8?B?0L/QvtC60LA=?= <petr@company.ru>',),
-                 'Message-Id': ('<20110815165837.A26162B2802A@yaback1.mail.yandex.net>',), 'Subject': (
-                '=?utf-8?b?0KHQvtCx0LXRgNC40YLQtSDQstGB0Y4g0L/QvtGH0YLRgyDQsiDRjdGC0L4=?=\r\n =?utf-8?b?0YIg0Y/RidC40Lo=?=',)},
+                 'from': ('=?utf-8?b?0K/QvdC00LXQutGB?= <hello@yandex.ru>',), 'subject': (
+                '=?utf-8?b?0KHQvtCx0LXRgNC40YLQtSDQstGB0Y4g0L/QvtGH0YLRgyDQsiDRjdGC0L4=?=\r\n =?utf-8?b?0YIg0Y/RidC40Lo=?=',),
+                 'message-id': ('<20110815165837.A26162B2802A@yaback1.mail.yandex.net>',), 'the-check': ('1', '2')},
         attachments=[
             dict(
                 filename='collector.jpg',
@@ -54,8 +53,6 @@ MESSAGE_ATTRIBUTES = {
         reply_to_values=({'email': 'foma@company.ru', 'full': 'привет <foma@company.ru>', 'name': 'привет'},
                          {'email': 'petr@company.ru', 'full': 'пока <petr@company.ru>', 'name': 'пока'}),
     ),
-
-    # ===
     'attachment_8bit': dict(
         subject='S19 IZM A7-342',
         from_='k1@yandex.ru',
@@ -98,22 +95,22 @@ e-mail: <a class="moz-txt-link-abbreviated" href="mailto:e.sp@com.ru">e.sp@com.r
   </body>
 </html>
 """.replace('\n', '\r\n'),
-        headers={'To': ('=?UTF-8?B?0KLQrtCc0JXQndCs?= <rasp@wat.aero>',), 'MIME-Version': ('1.0',),
-                 'X-Forwarded-Message-Id': ('<1333139463.20190207083243@com.ru>',),
-                 'Date': ('Thu, 7 Feb 2019 13:18:20 +0500',), 'References': ('<1333139463.20190207083243@com.ru>',),
-                 'Return-Path': ('e.sp@com.ru',), 'Received': (
+        headers={'to': ('=?UTF-8?B?0KLQrtCc0JXQndCs?= <rasp@wat.aero>',), 'mime-version': ('1.0',),
+                 'x-forwarded-message-id': ('<1333139463.20190207083243@com.ru>',),
+                 'date': ('Thu, 7 Feb 2019 13:18:20 +0500',), 'references': ('<1333139463.20190207083243@com.ru>',),
+                 'return-path': ('e.sp@com.ru',), 'received': (
                 'from m101.com.ru (LHLO m101.com.ru) (92.233.222.111) by m101.com.ru\r\n with LMTP; Thu, 7 Feb 2019 13:18:22 +0500 (YEKT)',
                 'from localhost (localhost [127.0.0.1])\r\n\tby m101.com.ru (Postfix) with ESMTP id 9A9181170B7;\r\n\tThu,  7 Feb 2019 13:18:22 +0500 (YEKT)',
                 'from m101.com.ru ([127.0.0.1])\r\n\tby localhost (m101.com.ru [127.0.0.1]) (amavisd-new, port 10026)\r\n\twith ESMTP id Q3OLc4gNDjjO; Thu,  7 Feb 2019 13:18:22 +0500 (YEKT)',
                 'from [192.168.104.100] (kom-420-1.hades.company [192.168.104.100])\r\n\tby m101.com.ru (Postfix) with ESMTPSA id DC7BB1170A1;\r\n\tThu,  7 Feb 2019 13:18:21 +0500 (YEKT)'),
-                 'Cc': ('aa@com.ru, mm@com.ru',), 'Bcc': (
+                 'cc': ('aa@com.ru, mm@com.ru',), 'bcc': (
                 '=?utf-8?b?0JrQvtC80LDQvdC00LAg0K/QvdC00LXQutGBLtCf0L7Rh9GC0Ys=?=\r\n\t<hello@yandex-team.ru>',),
-                 'From': ('=?utf-8?B?0JrQsNGD0LrQuNC9INCS0LvQsNC00LjQvNC40YA=?= <k1@yandex.ru>',),
-                 'Content-Type': ('multipart/mixed;\r\n boundary="------------FFFBFD561B1FF33B4E5E7050"',),
-                 'Subject': ('S19 IZM A7-342',), 'X-Virus-Scanned': ('amavisd-new at m101.com.ru',),
-                 'User-Agent': ('Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101\r\n Thunderbird/60.5.0',),
-                 'Message-ID': ('<2ffd4cec-d312-60da-72f3-5b6e4406fddf@com.ru>',), 'Content-Language': ('ru',),
-                 'In-Reply-To': ('<1333139463.20190207083243@com.ru>',)},
+                 'from': ('=?utf-8?B?0JrQsNGD0LrQuNC9INCS0LvQsNC00LjQvNC40YA=?= <k1@yandex.ru>',),
+                 'content-type': ('multipart/mixed;\r\n boundary="------------FFFBFD561B1FF33B4E5E7050"',),
+                 'subject': ('S19 IZM A7-342',), 'x-virus-scanned': ('amavisd-new at m101.com.ru',),
+                 'user-agent': ('Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101\r\n Thunderbird/60.5.0',),
+                 'message-id': ('<2ffd4cec-d312-60da-72f3-5b6e4406fddf@com.ru>',), 'content-language': ('ru',),
+                 'in-reply-to': ('<1333139463.20190207083243@com.ru>',)},
         attachments=[
             dict(
                 filename='Message01.eml',
@@ -131,8 +128,6 @@ e-mail: <a class="moz-txt-link-abbreviated" href="mailto:e.sp@com.ru">e.sp@com.r
                      'full': 'Команда Яндекс.Почты <hello@yandex-team.ru>'},),
         reply_to_values=(),
     ),
-
-    # ===
     'attachment_7bit': dict(
         subject='статус',
         from_='i.kor@company.ru',
@@ -187,27 +182,27 @@ e-mail: <a class="moz-txt-link-abbreviated" href="mailto:e.sp@com.ru">e.sp@com.r
     </html>
 
 """.replace('\n', '\r\n'),
-        headers={'Message-ID': ('<2405271c-86ac-0a65-e50c-d1ebccfcc644@company.ru>',),
-                 'References': ('<20171011085432.15374.20485@web.hades.company>',), 'To': (
+        headers={'message-id': ('<2405271c-86ac-0a65-e50c-d1ebccfcc644@company.ru>',),
+                 'references': ('<20171011085432.15374.20485@web.hades.company>',), 'to': (
                 'Jessica Schmidt <jessica.schmidt@uni.de>,\r\n\t=?iso-8859-1?Q?Rabea=2EBart=F6lke=40uni=2Ede?= <\udcd1\udc8f\udce4\udcbd\udca0Rabea.Bart\udcc3\udcb6lke@uni.de>',),
-                 'Content-Type': ('multipart/mixed;\r\n boundary="------------BF90926EC9DF73443A6B8F28"',),
-                 'X-Spam-Score': ('-2.898',), 'From': ('i.kor@company.ru',), 'Content-Language': ('ru',),
-                 'Date': ('Thu, 12 Oct 2017 09:41:56 +0500',),
-                 'In-Reply-To': ('<20171011085432.15374.20485@web.hades.company>',), 'X-Spam-Flag': ('NO',),
-                 'Return-Path': ('i.kor@company.ru',),
-                 'User-Agent': ('Mozilla/5.0 (Windows NT 6.1; WOW64; rv:52.0) Gecko/20100101\r\n Thunderbird/52.4.0',),
-                 'X-Forwarded-Message-Id': ('<20171011085432.15374.20485@web.hades.company>',),
-                 'X-Virus-Scanned': ('amavisd-new at m101.comp.ru',), 'Subject': ('=?UTF-8?B?0YHRgtCw0YLRg9GB?=    ',),
-                 'MIME-Version': ('1.0',), 'Received': (
+                 'content-type': ('multipart/mixed;\r\n boundary="------------BF90926EC9DF73443A6B8F28"',),
+                 'x-spam-score': ('-2.898',), 'from': ('i.kor@company.ru',), 'content-language': ('ru',),
+                 'date': ('Thu, 12 Oct 2017 09:41:56 +0500',),
+                 'in-reply-to': ('<20171011085432.15374.20485@web.hades.company>',), 'x-spam-flag': ('NO',),
+                 'return-path': ('i.kor@company.ru',),
+                 'user-agent': ('Mozilla/5.0 (Windows NT 6.1; WOW64; rv:52.0) Gecko/20100101\r\n Thunderbird/52.4.0',),
+                 'x-forwarded-message-id': ('<20171011085432.15374.20485@web.hades.company>',),
+                 'x-virus-scanned': ('amavisd-new at m101.comp.ru',), 'subject': ('=?UTF-8?B?0YHRgtCw0YLRg9GB?=    ',),
+                 'mime-version': ('1.0',), 'received': (
                 'from m101.comp.ru (LHLO m101.comp.ru) (192.168.99.101) by m101.comp.ru\r\n with LMTP; Thu, 12 Oct 2017 09:41:57 +0500 (YEKT)',
                 'from localhost (localhost [127.0.0.1])\r\n\tby m101.comp.ru (Postfix) with ESMTP id 555275B43;\r\n\tThu, 12 Oct 2017 09:41:57 +0500 (YEKT)',
                 'from m101.comp.ru ([127.0.0.1])\r\n\tby localhost (m101.comp.ru [127.0.0.1]) (amavisd-new, port 10032)\r\n\twith ESMTP id rY6SAtl4piy1; Thu, 12 Oct 2017 09:41:56 +0500 (YEKT)',
                 'from localhost (localhost [127.0.0.1])\r\n\tby m101.comp.ru (Postfix) with ESMTP id C8F0F5B4B;\r\n\tThu, 12 Oct 2017 09:41:56 +0500 (YEKT)',
                 'from m101.comp.ru ([127.0.0.1])\r\n\tby localhost (m101.comp.ru [127.0.0.1]) (amavisd-new, port 10026)\r\n\twith ESMTP id kq2wE_i9_8EK; Thu, 12 Oct 2017 09:41:56 +0500 (YEKT)',
                 'from [192.168.104.80] (notebook26.hades.company [192.168.104.80])\r\n\tby m101.comp.ru (Postfix) with ESMTPSA id 9563A5B44\r\n\tfor <user@company.ru>; Thu, 12 Oct 2017 09:41:56 +0500 (YEKT)'),
-                 'X-Spam-Status': (
+                 'x-spam-status': (
                      'No, score=-2.898 required=6.6 tests=[ALL_TRUSTED=-1,\r\n\tBAYES_00=-1.9, HTML_MESSAGE=0.001, URIBL_BLOCKED=0.001]\r\n\tautolearn=ham autolearn_force=no',),
-                 'X-Spam-Level': ('',)},
+                 'x-spam-level': ('',)},
         attachments=[
             dict(
                 filename='Contract 25 04 2020.docx',
@@ -226,8 +221,6 @@ e-mail: <a class="moz-txt-link-abbreviated" href="mailto:e.sp@com.ru">e.sp@com.r
         bcc_values=(),
         reply_to_values=(),
     ),
-
-    # ===
     'attachment_2_base64': dict(
         subject='eml attachments ',
         from_='kaukinvk@yandex.ru',
@@ -357,22 +350,22 @@ T3JnYW5pemF0aW9uIiwNCiJuYW1lIjogIkdpdEh1YiIsDQoidXJsIjogImh0dHBzOi8vZ2l0aHVi
 LmNvbSINCn0NCn0NCl08L3NjcmlwdD4NCi0tLS09PV9taW1lcGFydF81Y2M1OGY1Mzc1NDJfNDll
 YjNmYmE0MGNjZDk2MDMwODRiZS0tDQo=""".replace('\n', '\r\n'),
         html='<div>two attach</div>',
-        headers={'X-Yandex-Internal': ('1',), 'Received': (
+        headers={'x-yandex-internal': ('1',), 'received': (
             'from mxback2g.mail.yandex.net ([127.0.0.1])\r\n\tby mxback2g.mail.yandex.net with LMTP id GCaAmtYs;\r\n\tWed, 1 May 2019 10:20:30 +0300',
             'from mxback2g.mail.yandex.net (localhost.localdomain [127.0.0.1])\r\n\tby mxback2g.mail.yandex.net (Yandex) with ESMTP id C4C9426E11B7;\r\n\tWed,  1 May 2019 10:20:30 +0300 (MSK)',
             'from localhost (localhost [::1])\r\n\tby mxback2g.mail.yandex.net (nwsmtp/Yandex) with ESMTP id HIJe2M7myP-KThSAlHL;\r\n\tWed, 01 May 2019 10:20:29 +0300',
             'by myt5-262fb1897c00.qloud-c.yandex.net with HTTP;\r\n\tWed, 01 May 2019 10:20:29 +0300'),
-                 'X-Yandex-Spam': ('1',), 'Return-Path': ('kaukinvk@yandex.ru',), 'X-Yandex-Sender-Uid': ('52494202',),
-                 'Envelope-From': ('kaukinvk@yandex.ru',),
-                 'Message-Id': ('<8872861556695229@myt5-262fb1897c00.qloud-c.yandex.net>',),
-                 'X-Yandex-TimeMark': ('1556695229.976',), 'To': ('imap.tools@ya.ru',), 'MIME-Version': ('1.0',),
-                 'Authentication-Results': ('mxback2g.mail.yandex.net; dkim=pass header.i=@yandex.ru',),
-                 'X-Yandex-Forward': ('d910e166fb8fe03380632bd988c8b67f',),
-                 'X-Mailer': ('Yamail [ http://yandex.ru ] 5.0',), 'X-Yandex-Front': ('mxback2g.mail.yandex.net',),
-                 'Subject': ('eml attachments ',), 'DKIM-Signature': (
+                 'x-yandex-spam': ('1',), 'return-path': ('kaukinvk@yandex.ru',), 'x-yandex-sender-uid': ('52494202',),
+                 'envelope-from': ('kaukinvk@yandex.ru',),
+                 'message-id': ('<8872861556695229@myt5-262fb1897c00.qloud-c.yandex.net>',),
+                 'x-yandex-timemark': ('1556695229.976',), 'to': ('imap.tools@ya.ru',), 'mime-version': ('1.0',),
+                 'authentication-results': ('mxback2g.mail.yandex.net; dkim=pass header.i=@yandex.ru',),
+                 'x-yandex-forward': ('d910e166fb8fe03380632bd988c8b67f',),
+                 'x-mailer': ('Yamail [ http://yandex.ru ] 5.0',), 'x-yandex-front': ('mxback2g.mail.yandex.net',),
+                 'subject': ('eml attachments ',), 'dkim-signature': (
                 'v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail; t=1556695230;\r\n\tbh=Zmx9VIRnyRQRflnyRn1kpGYLdyO5YBC6/Wu9orXmTDk=;\r\n\th=Message-Id:Date:Subject:To:From;\r\n\tb=AM6LCew9Mz4XSIF78liQrYp4Kyg9RonJDizzaCNBRs5bOwla7bFphFQMIIYfmneJw\r\n\t 51WhDeo5L9ahRqG27no2kwmOggZ+Do99qY8oReCFObnfnaII6V2ZIvogKFXEfjHTB0\r\n\t bZlslZahe65zi1+xD7PnpeSWv8aYLZBgPuNJgA10=',),
-                 'From': ('=?utf-8?B?0JrQsNGD0LrQuNC9INCS0LvQsNC00LjQvNC40YA=?= <kaukinvk@yandex.ru>',),
-                 'Date': ('Wed, 01 May 2019 12:20:29 +0500',), 'Content-Type': (
+                 'from': ('=?utf-8?B?0JrQsNGD0LrQuNC9INCS0LvQsNC00LjQvNC40YA=?= <kaukinvk@yandex.ru>',),
+                 'date': ('Wed, 01 May 2019 12:20:29 +0500',), 'content-type': (
                 'multipart/mixed;\r\n\tboundary="----==--bound.887287.myt5-262fb1897c00.qloud-c.yandex.net"',)},
         attachments=[
             dict(
@@ -408,17 +401,17 @@ YjNmYmE0MGNjZDk2MDMwODRiZS0tDQo=""".replace('\n', '\r\n'),
         date_str='Wed, 01 May 2019 12:20',
         text='',
         html='<div>double_fields</div>',
-        headers={'To': ('aa@aa.ru', 'bb@aa.ru', ''),
-                 'From': ('=?utf-8?B?0JrQsNGD0LrQuNC9INCS0LvQsNC00LjQvNC40YA=?= <kaukinvk@yandex.ru>',),
-                 'Return-Path': ('kaukinvk@yandex.ru',), 'Envelope-From': ('kaukinvk@yandex.ru',),
-                 'Date': ('Wed, 01 May 2019 12:20',), 'Subject': ('double_fields',),
-                 'Message-Id': ('<8872861556695229@myt5-262fb1897c00.qloud-c.yandex.net>',), 'MIME-Version': ('1.0',),
-                 'Content-Type': (
+        headers={'to': ('aa@aa.ru', 'bb@aa.ru', ''),
+                 'from': ('=?utf-8?B?0JrQsNGD0LrQuNC9INCS0LvQsNC00LjQvNC40YA=?= <kaukinvk@yandex.ru>',),
+                 'return-path': ('kaukinvk@yandex.ru',), 'envelope-from': ('kaukinvk@yandex.ru',),
+                 'date': ('Wed, 01 May 2019 12:20',), 'subject': ('double_fields',),
+                 'message-id': ('<8872861556695229@myt5-262fb1897c00.qloud-c.yandex.net>',), 'mime-version': ('1.0',),
+                 'content-type': (
                      'multipart/mixed;\r\n\tboundary="----==--bound.887287.myt5-262fb1897c00.qloud-c.yandex.net"',),
-                 'Reply-To': (
+                 'reply-to': (
                      '=?UTF-8?B?0L/RgNC40LLQtdGC?= <foma1@company.ru>,\r\n =?UTF-8?B?0L/QvtC60LA=?= <petr1@company.ru>',
                      '=?UTF-8?B?0L/RgNC40LLQtdGC?= <foma2@company.ru>,\r\n =?UTF-8?B?0L/QvtC60LA=?= <petr2@company.ru>'),
-                 'Bcc': ('zz1@aa.ru', 'zz2@aa.ru'), 'Cc': ('cc@aa.ru', 'dd@aa.ru')},
+                 'bcc': ('zz1@aa.ru', 'zz2@aa.ru'), 'cc': ('cc@aa.ru', 'dd@aa.ru')},
         attachments=[],
         from_values={'email': 'kaukinvk@yandex.ru', 'name': 'Каукин Владимир',
                      'full': 'Каукин Владимир <kaukinvk@yandex.ru>'},
@@ -446,9 +439,9 @@ YjNmYmE0MGNjZDk2MDMwODRiZS0tDQo=""".replace('\n', '\r\n'),
         date_str='',
         text="""Здравствуйте\r\n""",
         html="""<html>\r\n  <head>\r\n    <meta http-equiv="content-type" content="text/html; charset=utf-8">\r\n  </head>\r\n  <body bgcolor="#FFFFFF" text="#000000">\r\n    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">\r\n        \r\n    <div style="line-height:0;font-size:0;"><img\r\n                src="cid:part1.02000503.06000807@mail.ru" alt=""\r\n                style="width:28px;height:1px;" height="1" width="28"></div>\r\n\r\n    <div style="line-height:0;height:25px;" class="mmwe3-mso_lh5"><img\r\n                src="cid:part51.09060808.01070700@mail.ru"\r\n                style="width:125px;height:25px;" alt="@Mail.Ru"\r\n                height="25" width="125"></div>\r\n                \r\n    <div style="line-height:0;height:60px;" class="mmwe3-mso_lh4"><a\r\n                        href="https://www.odnoklassniki.ru/pochtamail"\r\n                        title="Одноклассники"><img\r\n                          src="cid:part41.01020108.09060604@mail.ru"\r\n                          style="width:60px;height:60px;"\r\n                          alt="Одноклассники" height="60" width="60"></a></div>\r\n\r\n  </body>\r\n</html>\r\n""",
-        headers={'Content-Type': ('multipart/alternative;\r\n boundary="------------080400030209020702000207"',),
-                 'From': ('=?UTF-8?B?0JrQvtC80LDQvdC00LAg0J/QvtGH0YLRiyBNYWlsLlJ1?=\r\n <welcome@corp.mail.ru>',),
-                 'MIME-Version': ('1.0',), 'To': ('imap.tools@mail.ru',), 'Subject': (
+        headers={'content-type': ('multipart/alternative;\r\n boundary="------------080400030209020702000207"',),
+                 'from': ('=?UTF-8?B?0JrQvtC80LDQvdC00LAg0J/QvtGH0YLRiyBNYWlsLlJ1?=\r\n <welcome@corp.mail.ru>',),
+                 'mime-version': ('1.0',), 'to': ('imap.tools@mail.ru',), 'subject': (
                 '=?UTF-8?B?TWFpbC5SdSDigJMg0LHQvtC70YzRiNC1LCDRh9C10Lwg0L/QvtGH0YLQsC4g?=\r\n =?UTF-8?B?0J/QvtC30L3QsNC60L7QvNGM0YLQtdGB0Ywg0YEg0L/RgNC+0LXQutGC0LA=?=\r\n =?UTF-8?B?0LzQuCBNYWlsLlJ1IEdyb3Vw?=',)},
         attachments=[
             dict(
@@ -491,26 +484,26 @@ YjNmYmE0MGNjZDk2MDMwODRiZS0tDQo=""".replace('\n', '\r\n'),
         date_str='Wed, 21 Oct 2020 11:34:09 +0800',
         text="""""",
         html="""<meta http-equiv="Content-Type" content="text/html; charset=GB18030"><div><img src="cid:F76361FC@E3C5215F.31AC8F5F.png" style="" id="img_insert_160325124624005018289219499459"><br><br></div>""",
-        headers={'Mime-Version': ('1.0',), 'From': ('"=?ISO-8859-1?B?c2g=?=" <samgentlemankaka@foxmail.com>',),
-                 'X-Original-To': ('qmebi@mfk.app',), 'X-QQ-SSF': ('00000000000000F100000000000000J',),
-                 'To': ('"=?ISO-8859-1?B?cW1lYmk=?=" <qmebi@mfk.app>',), 'Received': (
+        headers={'mime-version': ('1.0',), 'from': ('"=?ISO-8859-1?B?c2g=?=" <samgentlemankaka@foxmail.com>',),
+                 'x-original-to': ('qmebi@mfk.app',), 'x-qq-ssf': ('00000000000000F100000000000000J',),
+                 'to': ('"=?ISO-8859-1?B?cW1lYmk=?=" <qmebi@mfk.app>',), 'received': (
                 'from qq.com (unknown [113.96.223.80])\r\n\tby mail.mfk.app (Postfix) with ESMTP id DD4B62140DD4\r\n\tfor <qmebi@mfk.app>; Wed, 21 Oct 2020 03:34:11 +0000 (UTC)',
                 'from qq.com (unknown [127.0.0.1])\r\n\tby smtp.qq.com (ESMTP) with SMTP\r\n\tid ; Wed, 21 Oct 2020 11:34:10 +0800 (CST)'),
-                 'Content-Type': (
+                 'content-type': (
                      'multipart/related;\r\n\ttype="multipart/alternative";\r\n\tboundary="----=_NextPart_5F8FAC31_11789E80_23290B52"',),
-                 'X-HAS-ATTACH': ('no',), 'X-QQ-XMAILINFO': (
+                 'x-has-attach': ('no',), 'x-qq-xmailinfo': (
                 'MKhv4vGKTxZzZwBiOOWzJjOs1CMM2urx0EOWlCdHAK4tftFk+6UX7CdZHFmrau\r\n\t guT9pUXQHsD4SoKYAbJJgAkezWTcclYEtZ5xC4nTjAObSp7hATM9Wz70KG1uocKqaXQT7MJP0sc9c\r\n\t bpSK6QNPNd3+j7/BptWtYSJjEQSs7BFqvSDf3T7b1gPmf14cCPF4OGaIV332nu7Yfv6UeJDuMtM8E\r\n\t V8WKUfbWqjedOX7j/4mx94I9GBJK7MwebhIqqVST1wrdrAckfU+wzSRmn+GsvqRnYuog5vBEtUjMW\r\n\t dHVOpXPD3GtA0tqfs3mbYyV45ix3wR5P3AQQoVgyyFiIMVWW2Ro/pCCxW4t8IGJLDWtm7SE1x+n5l\r\n\t ovf0oGXFRVI14LDD6ANU8IspSEEhCNBy8VY8j4nAIbME2fbMvnlP65Ypa9e7HpLYcaJryAp/z0qh2\r\n\t qUVXkbM7NBGR/gQfTjUa9HduSGNfUAdrPy/PCFyUr6TzuKfWdv1oaHe5muNm91NtaCZdPcy+bTNYf\r\n\t oI6eyoMTJflL8zriZXN7PjVgtZBrRkuGLDBBphNYVLKnqW0Pf9UQf46pCuQvvneVPqSb3pSzoy+O2\r\n\t fiO8+pRyy/J/L9YrHExFlgz38D8S1qYzUq5nGEBOvkTiaJZfu/ie5Gmv0a8W0CkWEqmNgGCg556Wr\r\n\t cSs9YFvPuleEF6mSFSzbj7R1dz4Q==',),
-                 'Subject': ('test',), 'X-QQ-STYLE': ('',), 'Delivered-To': ('qmebi@mfk.app',),
-                 'X-QQ-mid': ('webmail615t1603251249t9058947',), 'Date': ('Wed, 21 Oct 2020 11:34:09 +0800',),
-                 'X-Mailer': ('QQMail 2.x',), 'X-QQ-MIME': ('TCMime 1.0 by Tencent',), 'X-QQ-FEAT': (
+                 'subject': ('test',), 'x-qq-style': ('',), 'delivered-to': ('qmebi@mfk.app',),
+                 'x-qq-mid': ('webmail615t1603251249t9058947',), 'date': ('Wed, 21 Oct 2020 11:34:09 +0800',),
+                 'x-mailer': ('QQMail 2.x',), 'x-qq-mime': ('TCMime 1.0 by Tencent',), 'x-qq-feat': (
                 'AU3gs7VM8fUm1shbPQ2y/acBleNQwil+zNLsynIgszFw26Mnhh/EwwA+B+R36\r\n\tyfTKfZtupqkoghvYDKTdaoIJHPvl3hwvMYCK5O0pgoIgbwuFYw2V5fn3Gldt7UXsU6U7tyH\r\n\twqWfCV4fZ445hfnnbUWSDNVElNzvEyQ+KXbeWoY8wscD6YadaE8uZDImlxSshpPqQ6QZ+Hv\r\n\tLAH0CFTPcbU0pVX7JZWe+yehkkfGa8pNbg2udDcM+l2It8FiRxZE1Dd/e+eLR6ZeHxrSdcF\r\n\tzsYA==',),
-                 'Message-ID': ('<tencent_DF1A0C2499D7CA259C7FB26CDFCB49C60809@qq.com>',), 'X-Priority': ('3',),
-                 'Return-Path': ('<samgentlemankaka@foxmail.com>',),
-                 'Feedback-ID': ('webmail:foxmail.com:bgweb:bgweb17',), 'X-QQ-Mailer': ('QQMail 2.x',),
-                 'DKIM-Signature': (
+                 'message-id': ('<tencent_DF1A0C2499D7CA259C7FB26CDFCB49C60809@qq.com>',), 'x-priority': ('3',),
+                 'return-path': ('<samgentlemankaka@foxmail.com>',),
+                 'feedback-id': ('webmail:foxmail.com:bgweb:bgweb17',), 'x-qq-mailer': ('QQMail 2.x',),
+                 'dkim-signature': (
                      'v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;\r\n\ts=s201512; t=1603251251;\r\n\tbh=bZSz/mtqfdz94kmtGaFYXC+YAQiOxaGFSWBJgZKsdU4=;\r\n\th=From:To:Subject:Mime-Version:Date:Message-ID;\r\n\tb=bHrL4mJuop2NculsqdAgtZBTFjvA8VK2WqfJwn4MqmVpNUvfUQ/OyCzC7WAG2DjDq\r\n\t NhaAt5+61RCFDBKuv2NVx7xyH7xPTI0xVrCbUZinXDQQ53r6vBwP08jwx4GaP+b4k6\r\n\t WYypqGbGKA2pDDUKmsABkHWdG2QbANM0YDCLnlBM=',),
-                 'X-QQ-BUSINESS-ORIGIN': ('2',), 'X-QQ-SENDSIZE': ('520',), 'Content-Transfer-Encoding': ('8Bit',),
-                 'X-Originating-IP': ('112.80.214.47',)},
+                 'x-qq-business-origin': ('2',), 'x-qq-sendsize': ('520',), 'content-transfer-encoding': ('8Bit',),
+                 'x-originating-ip': ('112.80.214.47',)},
         attachments=[
             dict(
                 filename='F76361FC@E3C5215F.31AC8F5F.png.jpg',
@@ -538,11 +531,11 @@ YjNmYmE0MGNjZDk2MDMwODRiZS0tDQo=""".replace('\n', '\r\n'),
         date_str='Mon, 09 Nov 2020 14:49:07 -0800 (PST)',
         text="""Daily Data: D09.ZPH (Averaged data)\nEmail generated: 10/11/2020 00:04:03.765\nEmail sent: 10/11/2020 00:49:03.125""",
         html="""""",
-        headers={'From': ('"Sender" <status@sender.com>',), 'To': ('"Data Email" <data@email.com>',),
-                 'Content-Type': ('multipart/mixed; boundary=--boundary_20_d4727d16-8454-4fa4-9da0-950a95b2c962',),
-                 'Date': ('Mon, 09 Nov 2020 14:49:07 -0800 (PST)',), 'MIME-Version': ('1.0',),
-                 'Message-ID': ('<5fa9c763.1c69fb81.76d95.43d7@mx.google.com>',),
-                 'Subject': ('Daily Data: D09.ZPH (Averaged data)',)},
+        headers={'from': ('"Sender" <status@sender.com>',), 'to': ('"Data Email" <data@email.com>',),
+                 'content-type': ('multipart/mixed; boundary=--boundary_20_d4727d16-8454-4fa4-9da0-950a95b2c962',),
+                 'date': ('Mon, 09 Nov 2020 14:49:07 -0800 (PST)',), 'mime-version': ('1.0',),
+                 'message-id': ('<5fa9c763.1c69fb81.76d95.43d7@mx.google.com>',),
+                 'subject': ('Daily Data: D09.ZPH (Averaged data)',)},
         attachments=[
             dict(
                 filename='D09.ZPH.txt',
@@ -569,23 +562,22 @@ YjNmYmE0MGNjZDk2MDMwODRiZS0tDQo=""".replace('\n', '\r\n'),
         date_str='Sun, 17 Jan 2021 16:26:56 +0000',
         text="Bonjour.\n\nUne nouvelle demande vous a été transmise via le formulaire de contact du site www.saintnazaire.fr\n\nVotre message : onjour,\n\nJe voulais vous alerter que le pizzaïolo du camion ambulant PASTA PIZZA de Villès Martin du dimanche ne porte pas de masques pour confectionner ses pizzas et pour parler à ses clients; pas de gel hydroalcooloique non plus; travaillant dans les hôpitaux je suis consternée de voir encore des professionnels et en contact avec un public de ne pas respecter le port du masque; il contamine ses produits, les clients ...\nCe n'est pas normal de ne pas contrôler ces professionnels ambulants.\n\nMerci beaucoup\n\n\n\nMerci.\n",
         html="",
-        headers={'Reply-To': ('HELOU <emmanuellehelou@orange.fr>',), 'X-MS-Has-Attach': ('',),
-                 'x-ms-exchange-organization-originalserveripaddress': ('172.16.0.199',),
+        headers={'message-id': ('<c831ea72834dd8fcc648dac294e810fb@www.email-test.fr>',), 'x-ms-has-attach': ('',),
+                 'content-type': ('text/plain; charset="utf-8"',), 'date': ('Sun, 17 Jan 2021 16:26:56 +0000',),
+                 'x-ms-exchange-organization-recordreviewcfmtype': ('0',), 'subject': ('Contact email-test.fr',),
+                 'content-language': ('fr-FR',), 'from': ('email-test.fr <ne-pas-repondre@email-test.fr>',),
+                 'reply-to': ('HELOU <emmanuellehelou@orange.fr>',),
+                 'x-ms-exchange-organization-authas': ('Anonymous',), 'thread-topic': ('Contact email-test.fr',),
+                 'x-ms-exchange-organization-authsource': ('serv-exchange.mairie-email-test.fr',),
+                 'content-transfer-encoding': ('base64',),
+                 'x-ms-exchange-organization-network-message-id': ('b33ffe95-382f-49d7-269d-08d8bb04b512',),
+                 'thread-index': ('AQHW7O2SJAZxCkqG10awu/NtCY1I/A==',), 'dkim-signature': (
+                'v=1; a=rsa-sha256; c=simple/simple; d=email-test.fr;\ts=dkim;\r\n t=1610900816;\tbh=OW4RY4SudtC3hIBJtmsQXcuoAP02QMZsI0y7sCUVX00=;\r\n\th=Date:Subject:From:Reply-To:To:From;\r\n\tb=sPHozdsx6imqijuc+XCa9szrzsigwwFKERJ1KeO0L6Omm0gL+a4+F2/I3BePWKn5Y\r\n\t Y9Kott89Zop2kx/mnnGObQ9wY7RevYce9Ke5YXyXBzkyqzhlKsgzXKsJtB2XZcWoXH\r\n\t WtNyyhiD1w84rIHmCosuKrhrFFI50+ZihXxXhxek=',),
+                 'mime-version': ('1.0',), 'to': ('Courrier <service.courrier@mairie-email-test.fr>',),
+                 'x-ms-tnef-correlator': ('',),
+                 'content-id': ('<8DEF3B2930D4004EB38802D09A7F5EDE@mairie-email-test.fr>',), 'x-mailer': ('TYPO3',),
                  'x-ms-exchange-organization-originalclientipaddress': ('192.168.2.8',),
-                 'X-MS-Exchange-Organization-AuthAs': ('Anonymous',),
-                 'Thread-Index': ('AQHW7O2SJAZxCkqG10awu/NtCY1I/A==',),
-                 'X-MS-Exchange-Organization-AuthSource': ('serv-exchange.mairie-email-test.fr',), 'dkim-signature': (
-            'v=1; a=rsa-sha256; c=simple/simple; d=email-test.fr;\ts=dkim;\n t=1610900816;\tbh=OW4RY4SudtC3hIBJtmsQXcuoAP02QMZsI0y7sCUVX00=;\n\th=Date:Subject:From:Reply-To:To:From;\n\tb=sPHozdsx6imqijuc+XCa9szrzsigwwFKERJ1KeO0L6Omm0gL+a4+F2/I3BePWKn5Y\n\t Y9Kott89Zop2kx/mnnGObQ9wY7RevYce9Ke5YXyXBzkyqzhlKsgzXKsJtB2XZcWoXH\n\t WtNyyhiD1w84rIHmCosuKrhrFFI50+ZihXxXhxek=',),
-                 'Subject': ('Contact email-test.fr',), 'X-MS-TNEF-Correlator': ('',),
-                 'Content-Type': ('text/plain; charset="utf-8"',),
-                 'Content-ID': ('<8DEF3B2930D4004EB38802D09A7F5EDE@mairie-email-test.fr>',),
-                 'Message-ID': ('<c831ea72834dd8fcc648dac294e810fb@www.email-test.fr>',),
-                 'X-MS-Exchange-Organization-RecordReviewCfmType': ('0',), 'Thread-Topic': ('Contact email-test.fr',),
-                 'From': ('email-test.fr <ne-pas-repondre@email-test.fr>',),
-                 'To': ('Courrier <service.courrier@mairie-email-test.fr>',), 'MIME-Version': ('1.0',),
-                 'Date': ('Sun, 17 Jan 2021 16:26:56 +0000',), 'Content-Language': ('fr-FR',), 'x-mailer': ('TYPO3',),
-                 'Content-Transfer-Encoding': ('base64',),
-                 'X-MS-Exchange-Organization-Network-Message-Id': ('b33ffe95-382f-49d7-269d-08d8bb04b512',)},
+                 'x-ms-exchange-organization-originalserveripaddress': ('172.16.0.199',)},
         attachments=[
             dict(
                 filename='',
@@ -602,6 +594,6 @@ YjNmYmE0MGNjZDk2MDMwODRiZS0tDQo=""".replace('\n', '\r\n'),
         cc_values=(),
         bcc_values=(),
         reply_to_values=(
-        {'email': 'emmanuellehelou@orange.fr', 'name': 'HELOU', 'full': 'HELOU <emmanuellehelou@orange.fr>'},),
+            {'email': 'emmanuellehelou@orange.fr', 'name': 'HELOU', 'full': 'HELOU <emmanuellehelou@orange.fr>'},),
     )
 }

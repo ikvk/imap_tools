@@ -4,7 +4,6 @@ MANIFEST
 /build/
 /dist/
 /imap_tools.egg-info/
-/samples/
 /tests/credentials.ini
 /examples/check.py
 /.python-version

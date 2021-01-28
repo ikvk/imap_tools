@@ -1,3 +1,8 @@
+0.37.0
+======
+* Breaking change: MailMessage.headers - now all keys in lower-case (*email headers are not case-sensitive)
+* Path with tests excluded from distribution archive
+
 0.36.0
 ======
 * Fixed MailMessage.text/html parse on case: text/html with Content-ID

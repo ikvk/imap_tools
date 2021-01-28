@@ -240,7 +240,7 @@ use 'limit' argument for fetch in this case.
         # APPEND: add message to mailbox directly, to INBOX folder with SEEN flag and now date
         with open('/tmp/message.eml', 'rb') as f:
             msg = imap_tools.MailMessage.from_bytes(f.read())  # *or use bytes instead MailMessage
-        mailbox.append(msg, 'INBOX', dt=None flag_set=[imap_tools.MailMessageFlags.SEEN])
+        mailbox.append(msg, 'INBOX', dt=None, flag_set=[imap_tools.MailMessageFlags.SEEN])
 
 Actions with folders
 ^^^^^^^^^^^^^^^^^^^^
@@ -330,6 +330,7 @@ Big thanks to people who helped develop this library:
 `dev4max <https://github.com/dev4max>`_,
 `ascheucher <https://github.com/ascheucher>`_,
 `Borutia <https://github.com/Borutia>`_,
-`nathan30 <https://github.com/nathan30>`_
+`nathan30 <https://github.com/nathan30>`_,
+`daniel55411 <https://github.com/daniel55411>`_
 
 💰 You may `donate <https://github.com/ikvk/imap_tools/blob/master/docs/donate.rst>`_, if this library helped you.

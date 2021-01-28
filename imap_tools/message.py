@@ -207,9 +207,14 @@ class MailMessage:
     @property
     @lru_cache()
     def headers(self) -> {str: (str,)}:
-        """Message headers"""
-        raw_headers = getattr(self.obj, '_headers', ())
-        return {key: tuple(v for k, v in raw_headers if k == key) for key in set(i[0] for i in raw_headers)}
+        """
+        Message headers
+        Keys in result dict are in lower register (email headers are not case-sensitive)
+        """
+        result = {}
+        for key, val in getattr(self.obj, '_headers', ()):
+            result.setdefault(key.lower(), []).append(val)
+        return {k: tuple(v) for k, v in result.items()}
 
     @property
     @lru_cache()
