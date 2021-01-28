@@ -15,7 +15,7 @@ with open("README.rst", "r", encoding='utf-8') as fh:
 setuptools.setup(
     name='imap-tools',
     version=get_version('imap_tools'),
-    packages=setuptools.find_packages(),
+    packages=setuptools.find_packages(exclude=['tests']),
     url='https://github.com/ikvk/imap_tools',
     license='Apache-2.0',
     long_description=long_description,
