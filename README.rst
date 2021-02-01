@@ -92,7 +92,7 @@ MailMessage and MailAttachment public attributes are cached by functools.lru_cac
         msg.text         # str: 'Hello 你 Привет'
         msg.html         # str: '<b>Hello 你 Привет</b>'
         msg.flags        # tuple: ('SEEN', 'FLAGGED', 'ENCRYPTED')
-        msg.headers      # dict: {'Received': ('from 1.m.ru', 'from 2.m.ru'), 'AntiVirus': ('Clean',)}
+        msg.headers      # dict: {'received': ('from 1.m.ru', 'from 2.m.ru'), 'anti-virus': ('Clean',)}
         msg.size_rfc822  # int: 20664 bytes - size info from server (*useful with headers_only arg)
         msg.size         # int: 20377 bytes
 
@@ -165,11 +165,11 @@ Search key table. Key types marked with `*` can accepts a sequence of values lik
 =============  ===============  ======================  =================================================================
 Key            Types            Results                 Description
 =============  ===============  ======================  =================================================================
-answered       bool             `ANSWERED|UNANSWERED`   with|without the Answered flag
-seen           bool             `SEEN|UNSEEN`           with|without the Seen flag
-flagged        bool             `FLAGGED|UNFLAGGED`     with|without the Flagged flag
-draft          bool             `DRAFT|UNDRAFT`         with|without the Draft flag
-deleted        bool             `DELETED|UNDELETED`     with|without the Deleted flag
+answered       bool             `ANSWERED/UNANSWERED`   with/without the Answered flag
+seen           bool             `SEEN/UNSEEN`           with/without the Seen flag
+flagged        bool             `FLAGGED/UNFLAGGED`     with/without the Flagged flag
+draft          bool             `DRAFT/UNDRAFT`         with/without the Draft flag
+deleted        bool             `DELETED/UNDELETED`     with/without the Deleted flag
 keyword        str*             KEYWORD KEY             with the specified keyword flag
 no_keyword     str*             UNKEYWORD KEY           without the specified keyword flag
 `from_`        str*             FROM `"from@ya.ru"`     contain specified str in envelope struct's FROM field
@@ -263,8 +263,8 @@ Actions with folders
         # DELETE
         mailbox.folder.delete('folder2')
         # STATUS
-        folder_status = mailbox.folder.status('some_folder')
-        print(folder_status)  # {'MESSAGES': 41, 'RECENT': 0, 'UIDNEXT': 11996, 'UIDVALIDITY': 1, 'UNSEEN': 5}
+        stat = mailbox.folder.status('some_folder')
+        print(stat)  # {'MESSAGES': 41, 'RECENT': 0, 'UIDNEXT': 11996, 'UIDVALIDITY': 1, 'UNSEEN': 5}
 
 Exceptions
 ^^^^^^^^^^
