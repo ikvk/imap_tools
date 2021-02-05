@@ -27,7 +27,7 @@ Installation
 ------------
 ::
 
-    $ pip install imap_tools
+    $ pip install imap-tools
 
 Guide
 -----
