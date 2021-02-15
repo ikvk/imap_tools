@@ -234,7 +234,7 @@ use 'limit' argument for fetch in this case.
         flags = (imap_tools.MailMessageFlags.ANSWERED, imap_tools.MailMessageFlags.FLAGGED)
         mailbox.flag(mailbox.fetch(AND(seen=False)), flags, True)
 
-        # SEEN: mark all messages sent at 05.03.2007 in current folder as unseen, *in bulk
+        # SEEN: flag as unseen all messages sent at 05.03.2007 in current folder, *in bulk
         mailbox.seen(mailbox.fetch("SENTON 05-Mar-2007"), False)
 
         # APPEND: add message to mailbox directly, to INBOX folder with SEEN flag and now date

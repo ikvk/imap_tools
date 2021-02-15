@@ -19,7 +19,7 @@ class BaseMailBox:
     email_message_class = MailMessage
     folder_manager_class = MailBoxFolderManager
     with_headers_only_allowed_errors = (StartBoundaryNotFoundDefect, MultipartInvariantViolationDefect)
-    timeout_not_supported_error = 'timeout argument supported since python 3.9'
+    _timeout_arg_support_error = 'timeout argument supported since python 3.9'
 
     def __init__(self):
         self.folder = None  # folder manager
@@ -221,7 +221,7 @@ class MailBoxUnencrypted(BaseMailBox):
         :param timeout: timeout in seconds for the connection attempt, since python 3.9
         """
         if timeout and sys.version_info.minor < 9:
-            raise ValueError(self.timeout_not_supported_error)
+            raise ValueError(self._timeout_arg_support_error)
         self._host = host
         self._port = port
         self._timeout = timeout
@@ -248,7 +248,7 @@ class MailBox(BaseMailBox):
         :param starttls: whether to use starttls
         """
         if timeout and sys.version_info.minor < 9:
-            raise ValueError(self.timeout_not_supported_error)
+            raise ValueError(self._timeout_arg_support_error)
         self._host = host
         self._port = port
         self._timeout = timeout
