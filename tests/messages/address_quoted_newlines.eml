@@ -1,0 +1,27 @@
+Message-ID: <5fa9c763>
+Date: Mon, 01 Nov 2020 14:49:07 -0800 (PST)
+MIME-Version: 1.0
+From: "Sender" <status@sender.com>
+To: My Name <my.name@domain.com>, Other Name
+    <other.name@domain.com>
+CC: Third Name <third.name@domain.com>, "Quoted Mailing List
+ One" <quoted-mailing-list-one@domain.com>, "Quoted
+ Mailing List Two" <quoted-mailing-list-two@domain.com>
+Bcc: My Name <my.name@domain.com>, Mailing List One - One Name
+    <list1-one-name@domain.com>, Mailing List Two - Second Name
+    <list2-second-name@domain.com>
+Subject: Daily
+Content-Type: multipart/mixed; boundary=--boundary_20_d4727d16-8454-4fa4-9da0-950a95b2c962
+
+
+----boundary_20_d4727d16-8454-4fa4-9da0-950a95b2c962
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: quoted-printable
+
+Daily Data: D09.ZPH (Averaged data)=0AEmail generated:=
+ 10/11/2020 00:04:03.765=0AEmail sent: 10/11/2020 00:49:03.125
+----boundary_20_d4727d16-8454-4fa4-9da0-950a95b2c962
+Content-Type: application/octet-stream; name="D09.ZPH.txt"
+
+12
+----boundary_20_d4727d16-8454-4fa4-9da0-950a95b2c962--

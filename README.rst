@@ -331,6 +331,7 @@ Big thanks to people who helped develop this library:
 `ascheucher <https://github.com/ascheucher>`_,
 `Borutia <https://github.com/Borutia>`_,
 `nathan30 <https://github.com/nathan30>`_,
-`daniel55411 <https://github.com/daniel55411>`_
+`daniel55411 <https://github.com/daniel55411>`_,
+`rcarmo <https://github.com/rcarmo>`_
 
 💰 You may `donate <https://github.com/ikvk/imap_tools/blob/master/docs/donate.rst>`_, if this library helped you.

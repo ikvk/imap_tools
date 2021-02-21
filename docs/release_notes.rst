@@ -1,3 +1,7 @@
+0.38.0
+======
+* Fixed bug at utils.parse_email_addresses - quoted with newlines
+
 0.37.0
 ======
 * Breaking change: MailMessage.headers - now all keys in lower-case (*email headers are not case-sensitive)

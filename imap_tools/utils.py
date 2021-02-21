@@ -75,7 +75,7 @@ def parse_email_addresses(raw_header: str or Header) -> (dict,):
     result = []
     if type(raw_header) is Header:
         raw_header = decode_value(*decode_header(raw_header)[0])
-    for raw_name, email in getaddresses([raw_header]):
+    for raw_name, email in getaddresses([raw_header.replace('\r\n', '').replace('\n', '')]):
         name = decode_value(*decode_header(raw_name)[0]).strip()
         email = email.strip()
         if not (name or email):
