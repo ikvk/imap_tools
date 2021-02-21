@@ -3,7 +3,7 @@ import unittest
 import configparser
 from imap_tools import MailBox
 
-TEST_MAILBOX_NAME_SET = {'YANDEX', 'ZIMBRA', 'MAIL_RU', 'OUTLOOK', 'GOOGLE'}
+TEST_MAILBOX_NAME_SET = {'YANDEX', 'ZIMBRA', 'MAIL_RU', 'OUTLOOK', 'GOOGLE', 'YAHOO'}
 
 
 def get_test_mailbox_config(mailbox_name: str) -> dict:
@@ -26,7 +26,7 @@ def get_test_mailbox(mailbox_name: str):
     config = get_test_mailbox_config(mailbox_name)
 
     # add test attributes to MailBox
-    class MailBoxTestEx(MailBox):
+    class TestMailBox(MailBox):
         def __init__(self, *args):
             super().__init__(*args)
             test_folder = config['test_folder']
@@ -37,9 +37,10 @@ def get_test_mailbox(mailbox_name: str):
             self.folder_test_temp2 = '{}{}temp2'.format(test_folder, path_separator)
             self.folder_test_new = '{}{}new'.format(test_folder, path_separator)
             self.folder_test_new1 = '{}{}new1'.format(test_folder, path_separator)
+            self.mailbox_name = mailbox_name
 
     # create mailbox instance
-    mailbox = MailBoxTestEx(config['host'])
+    mailbox = TestMailBox(config['host'])
     # connect
     mailbox.login(config['email'], config['password'])
     # done

@@ -1,6 +1,7 @@
 0.38.0
 ======
 * Fixed bug at utils.parse_email_addresses - quoted with newlines
+* Fixed bug at BaseMailBox.search - empty elements on split result with trailing spaces
 
 0.37.0
 ======

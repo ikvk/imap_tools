@@ -49,8 +49,12 @@ class FoldersTest(MailboxTestCase):
                 self.assertIs(type(status_key), str)
                 self.assertIs(type(status_val), int)
             # error
-            with self.assertRaises(MailboxFolderSelectError):
-                mailbox.folder.set('__nonexistent_folder__')
+            if mailbox.mailbox_name != 'YAHOO':
+                # YAHOO:
+                #   imaplib.IMAP4.error: SELECT command error: BAD [b'[TRYCREATE] SELECT error -
+                #   Folder does not exist or server encountered an error']
+                with self.assertRaises(MailboxFolderSelectError):
+                    mailbox.folder.set('__nonexistent_folder__')
 
 
 if __name__ == "__main__":

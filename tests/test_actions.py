@@ -32,8 +32,12 @@ class ActionTest(MailboxTestCase):
             mailbox.folder.set(mailbox.folder_test_base)
             uid_set = [msg.uid for msg in mailbox.fetch()]
             mailbox.copy(uid_set, mailbox.folder_test_temp1)
-            with self.assertRaises(MailboxCopyError):
-                mailbox.copy(uid_set, '__nonexistent_folder__')
+            if mailbox.mailbox_name != 'YAHOO':
+                # YAHOO:
+                #   imaplib.IMAP4.error: UID command error: BAD [b'[TRYCREATE] UID COPY failed -
+                #   No mailbox exists with name - "__nonexistent_folder__"']
+                with self.assertRaises(MailboxCopyError):
+                    mailbox.copy(uid_set, '__nonexistent_folder__')
             self.assertEqual(len(list(mailbox.fetch())), self.base_test_msg_cnt)
             mailbox.folder.set(mailbox.folder_test_temp1)
             self.assertEqual(len(list(mailbox.fetch())), self.base_test_msg_cnt)

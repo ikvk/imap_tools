@@ -59,7 +59,7 @@ class BaseMailBox:
         encoded_criteria = criteria if type(criteria) is bytes else str(criteria).encode(charset)
         search_result = self.box.search(charset, encoded_criteria)
         check_command_status(search_result, MailboxSearchError)
-        return search_result[1][0].decode().split(' ') if search_result[1][0] else []
+        return search_result[1][0].decode().split() if search_result[1][0] else []
 
     def _fetch_by_one(self, message_nums: [str], message_parts: str, reverse: bool) -> iter:  # noqa
         for message_num in message_nums:
