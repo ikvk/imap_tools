@@ -1,3 +1,7 @@
+0.39.0
+======
+* Fixed MailAttachment.attachments - message/rfc822 forwarded messages not missing now
+
 0.38.0
 ======
 * Fixed bug at utils.parse_email_addresses - quoted with newlines

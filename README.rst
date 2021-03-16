@@ -333,6 +333,7 @@ Big thanks to people who helped develop this library:
 `nathan30 <https://github.com/nathan30>`_,
 `daniel55411 <https://github.com/daniel55411>`_,
 `rcarmo <https://github.com/rcarmo>`_,
-`bhernacki <https://github.com/bhernacki>`_
+`bhernacki <https://github.com/bhernacki>`_,
+`ilep <https://github.com/ilep>`_
 
 💰 You may `donate <https://github.com/ikvk/imap_tools/blob/master/docs/donate.rst>`_, if this library helped you.

@@ -227,7 +227,8 @@ class MailMessage:
         for part in self.obj.walk():
             if part.get_content_maintype() == 'multipart':  # multipart/* are containers
                 continue
-            if part.get('Content-ID') is None and part.get_filename() is None:
+            if part.get('Content-ID') is None and part.get_filename() is None  \
+                    and part.get_content_type() != 'message/rfc822':
                 continue
             results.append(MailAttachment(part))
         return results
@@ -249,8 +250,8 @@ class MailAttachment:
             forwarded message (Content-Type = message/rfc822)
         :return: filename
         """
-        filename = self.part.get_filename() or ''
-        return ''.join(decode_value(*head_part) for head_part in decode_header(filename))
+        raw = self.part.get_filename() or ''
+        return ''.join(decode_value(*head_part) for head_part in decode_header(raw))
 
     @property
     @lru_cache()
