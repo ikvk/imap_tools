@@ -79,7 +79,7 @@ MailMessage and MailAttachment public attributes are cached by functools.lru_cac
 
 .. code-block:: python
 
-    for msg in mailbox.fetch():  # iter: imap_tools.MailMessage
+    for msg in mailbox.fetch():  # generator: imap_tools.MailMessage
         msg.uid          # str or None: '123'
         msg.subject      # str: 'some subject 你 привет'
         msg.from_        # str: 'Bartölke@ya.ru'
@@ -94,7 +94,7 @@ MailMessage and MailAttachment public attributes are cached by functools.lru_cac
         msg.flags        # tuple: ('SEEN', 'FLAGGED', 'ENCRYPTED')
         msg.headers      # dict: {'received': ('from 1.m.ru', 'from 2.m.ru'), 'anti-virus': ('Clean',)}
         msg.size_rfc822  # int: 20664 bytes - size info from server (*useful with headers_only arg)
-        msg.size         # int: 20377 bytes
+        msg.size         # int: 20377 bytes - size of received message
 
         for att in msg.attachments:  # list: imap_tools.MailAttachment
             att.filename             # str: 'cat.jpg'
@@ -234,7 +234,7 @@ use 'limit' argument for fetch in this case.
         flags = (imap_tools.MailMessageFlags.ANSWERED, imap_tools.MailMessageFlags.FLAGGED)
         mailbox.flag(mailbox.fetch(AND(seen=False)), flags, True)
 
-        # SEEN: flag as unseen all messages sent at 05.03.2007 in current folder, *in bulk
+        # SEEN: flag as unseen all messages sent at 05.03.2007 in current folder, *in bulk (shortcut for .flag)
         mailbox.seen(mailbox.fetch("SENTON 05-Mar-2007"), False)
 
         # APPEND: add message to mailbox directly, to INBOX folder with SEEN flag and now date
@@ -247,22 +247,30 @@ Actions with folders
 .. code-block:: python
 
     with MailBox('imap.mail.com').login('test@mail.com', 'pwd') as mailbox:
-        # LIST
+
+        # LIST: get all subfolders of the specified folder (root by default)
         for f in mailbox.folder.list('INBOX'):
             print(f)  # {'name': 'INBOX|cats', 'delim': '|', 'flags': ('\\Unmarked', '\\HasChildren')}
-        # SET
+
+        # SET: select folder for work
         mailbox.folder.set('INBOX')
-        # GET
+
+        # GET: get selected folder
         current_folder = mailbox.folder.get()
-        # CREATE
-        mailbox.folder.create('folder1')
-        # EXISTS
-        is_exists = mailbox.folder.exists('folder1')
-        # RENAME
-        mailbox.folder.rename('folder1', 'folder2')
-        # DELETE
-        mailbox.folder.delete('folder2')
-        # STATUS
+
+        # CREATE: create new folder
+        mailbox.folder.create('INBOX|folder1')
+
+        # EXISTS: check is folder exists (shortcut for list)
+        is_exists = mailbox.folder.exists('INBOX|folder1')
+
+        # RENAME: set new name to folder
+        mailbox.folder.rename('folder3', 'folder4')
+
+        # DELETE: delete folder
+        mailbox.folder.delete('folder4')
+
+        # STATUS: get folder status info
         stat = mailbox.folder.status('some_folder')
         print(stat)  # {'MESSAGES': 41, 'RECENT': 0, 'UIDNEXT': 11996, 'UIDVALIDITY': 1, 'UNSEEN': 5}
 
