@@ -106,7 +106,7 @@ MailMessage and MailAttachment public attributes are cached by functools.lru_cac
             att.size                 # int: 17361 bytes
 
         msg.obj              # email.message.Message: original object
-        msg.from_values      # dict or None: {'email': 'im@ya.ru', 'name': 'Ya 你', 'full': 'Ya 你 <im@ya.ru>'}
+        msg.from_values      # dict or None: {'email': 'im@ya.ru', 'name': 'Ya', 'full': 'Ya <im@ya.ru>'}
         msg.to_values        # tuple: ({'email': '', 'name': '', 'full': ''},)
         msg.cc_values        # tuple: ({'email': '', 'name': '', 'full': ''},)
         msg.bcc_values       # tuple: ({'email': '', 'name': '', 'full': ''},)
@@ -234,7 +234,7 @@ use 'limit' argument for fetch in this case.
         flags = (imap_tools.MailMessageFlags.ANSWERED, imap_tools.MailMessageFlags.FLAGGED)
         mailbox.flag(mailbox.fetch(AND(seen=False)), flags, True)
 
-        # SEEN: flag as unseen all messages sent at 05.03.2007 in current folder, *in bulk (shortcut for .flag)
+        # SEEN: flag as unseen all messages sent at 05.03.2007 in current folder, *in bulk
         mailbox.seen(mailbox.fetch("SENTON 05-Mar-2007"), False)
 
         # APPEND: add message to mailbox directly, to INBOX folder with SEEN flag and now date
