@@ -82,7 +82,7 @@ MailMessage and MailAttachment public attributes are cached by functools.lru_cac
     for msg in mailbox.fetch():  # iter: imap_tools.MailMessage
         msg.uid          # str or None: '123'
         msg.subject      # str: 'some subject 你 привет'
-        msg.from_        # str: 'Sender.Bartölke@ya.ru'
+        msg.from_        # str: 'Bartölke@ya.ru'
         msg.to           # tuple: ('iam@goo.ru', 'friend@ya.ru', )
         msg.cc           # tuple: ('cc@mail.ru', )
         msg.bcc          # tuple: ('bcc@mail.ru', )
@@ -335,5 +335,8 @@ Big thanks to people who helped develop this library:
 `rcarmo <https://github.com/rcarmo>`_,
 `bhernacki <https://github.com/bhernacki>`_,
 `ilep <https://github.com/ilep>`_
+
+Donate
+------
 
 💰 You may `donate <https://github.com/ikvk/imap_tools/blob/master/docs/donate.rst>`_, if this library helped you.
