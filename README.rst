@@ -1,7 +1,7 @@
 .. http://docutils.sourceforge.net/docs/user/rst/quickref.html
 
-imap_tools
-==========
+imap_tools 📧
+=============
 
 Work with email and mailbox by IMAP:
 
