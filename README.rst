@@ -57,7 +57,7 @@ BaseMailBox.fetch - email message generator, first searches email nums by criter
 * *criteria* = 'ALL', message search criteria, `query builder <#search-criteria>`_
 * *charset* = 'US-ASCII', indicates charset of the strings that appear in the search criteria. See rfc2978
 * *limit* = None, limit on the number of read emails, useful for actions with a large number of messages, like "move"
-* *miss_defect* = True, miss emails with defects
+* *miss_defect* = False, miss emails with defects (deprecated)
 * *miss_no_uid* = True, miss emails without uid
 * *mark_seen* = True, mark emails as seen on fetch
 * *reverse* = False, in order from the larger date to the smaller

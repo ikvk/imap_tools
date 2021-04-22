@@ -1,3 +1,10 @@
+0.40.0
+======
+* Fixed MailMessage.from_bytes - MailMessage.uid/flags parse errors
+* Fixed utils.parse_email_date - parse bug on bad dates
+* Breaking change: BaseMailBox.fetch miss_defect argument now is False by default, it will be removed soon
+* Increased the email collection for tests
+
 0.39.0
 ======
 * Fixed MailAttachment.attachments - message/rfc822 forwarded messages not missing now

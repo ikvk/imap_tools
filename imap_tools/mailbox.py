@@ -1,6 +1,7 @@
 import sys
 import imaplib
 import datetime
+import warnings
 from email.errors import StartBoundaryNotFoundDefect, MultipartInvariantViolationDefect
 
 from .message import MailMessage, MailMessageFlags
@@ -76,7 +77,7 @@ class BaseMailBox:
             yield built_fetch_item
 
     def fetch(self, criteria: str or bytes = 'ALL', charset: str = 'US-ASCII', limit: int or slice = None,
-              miss_defect=True, miss_no_uid=True, mark_seen=True, reverse=False, headers_only=False,
+              miss_defect=False, miss_no_uid=True, mark_seen=True, reverse=False, headers_only=False,
               bulk=False) -> iter:
         """
         Mail message generator in current folder by search criteria
@@ -93,6 +94,8 @@ class BaseMailBox:
                      True  - fetch all messages per 1 command - high memory consumption, fast
         :return generator: MailMessage
         """
+        if miss_defect:
+            warnings.warn('miss_defect argument are deprecated and will be removed soon')
         message_parts = "(BODY{}[{}] UID FLAGS RFC822.SIZE)".format(
             '' if mark_seen else '.PEEK', 'HEADER' if headers_only else '')
         limit_range = slice(0, limit) if type(limit) is int else limit or slice(None)

@@ -3,6 +3,8 @@ Packaging
 
 https://packaging.python.org/tutorials/packaging-projects/
 
+* Иногда для применения некоторых настроек билда нужно удалить старые папки билдов
+
 1. Create .pypirc
     C:\Users\v.kaukin\.pypirc
     https://docs.python.org/3/distutils/packageindex.html#pypirc

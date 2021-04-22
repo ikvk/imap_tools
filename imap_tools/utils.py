@@ -97,29 +97,34 @@ def parse_email_date(value: str) -> datetime.datetime:
         return parsedate_to_datetime(value)
     except Exception:  # noqa
         pass
-    match = re.search(r'(?P<date>\d{1,2}\s+(' + '|'.join(SHORT_MONTH_NAMES) + r')\s+\d{4})\s+' +
-                      r'(?P<time>\d{1,2}:\d{1,2}(:\d{1,2})?)\s*' +
-                      r'(?P<zone_sign>[+-])?(?P<zone>\d{4})?', value)
+    match = re.search(
+        r'(?P<date>\d{1,2}\s+(' + '|'.join(SHORT_MONTH_NAMES) + r')\s+\d{4})\s+' +
+        r'(?P<time>\d{1,2}:\d{1,2}(:\d{1,2})?)\s*' +
+        r'(?P<zone_sign>[+-])?(?P<zone>\d{4})?',
+        value
+    )
     if match:
         group = match.groupdict()
         day, month, year = group['date'].split()
         time_values = group['time'].split(':')
         zone_sign = int('{}1'.format(group.get('zone_sign') or '+'))
         zone = group['zone']
-        return datetime.datetime(
-            year=int(year),
-            month=SHORT_MONTH_NAMES.index(month) + 1,
-            day=int(day),
-            hour=int(time_values[0]),
-            minute=int(time_values[1]),
-            second=int(time_values[2]) if len(time_values) > 2 else 0,
-            tzinfo=datetime.timezone(datetime.timedelta(
-                hours=int(zone[:2]) * zone_sign,
-                minutes=int(zone[2:]) * zone_sign
-            )) if zone else None,
-        )
-    else:
-        return datetime.datetime(1900, 1, 1)
+        try:
+            return datetime.datetime(
+                year=int(year),
+                month=SHORT_MONTH_NAMES.index(month) + 1,
+                day=int(day),
+                hour=int(time_values[0]),
+                minute=int(time_values[1]),
+                second=int(time_values[2]) if len(time_values) > 2 else 0,
+                tzinfo=datetime.timezone(datetime.timedelta(
+                    hours=int(zone[:2]) * zone_sign,
+                    minutes=int(zone[2:]) * zone_sign
+                )) if zone else None,
+            )
+        except ValueError:
+            pass
+    return datetime.datetime(1900, 1, 1)
 
 
 def quote(value: str or bytes) -> str or bytes:
@@ -152,5 +157,3 @@ def encode_folder(folder: str or bytes) -> bytes:
         return folder
     else:
         return quote(imap_utf7.encode(folder))
-
-

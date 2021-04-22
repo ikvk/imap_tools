@@ -1,10 +1,23 @@
 import os
+import sys
 import unittest
 import datetime
 from tests.utils import MailboxTestCase
 
-from tests.data import MESSAGE_ATTRIBUTES
 from imap_tools import MailMessage, MailMessageFlags
+
+
+def _load_module(full_path: str):
+    module_name = ''
+    if sys.version_info.minor >= 5:
+        import importlib.util
+        spec = importlib.util.spec_from_file_location(module_name, full_path)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)  # noqa
+        return module
+    else:
+        from importlib.machinery import SourceFileLoader
+        return SourceFileLoader(module_name, full_path).load_module()  # noqa
 
 
 class MessageTest(MailboxTestCase):
@@ -89,23 +102,42 @@ class MessageTest(MailboxTestCase):
             )
 
     def test_attributes(self):
-        msg_attr_set = {'subject', 'from_', 'to', 'cc', 'bcc', 'reply_to', 'date', 'date_str', 'text', 'html',
-                        'headers', 'from_values', 'to_values', 'cc_values', 'bcc_values', 'reply_to_values'}
-        att_attr_set = {'filename', 'content_id', 'content_type', 'content_disposition', 'payload'}
-        for file_name in MESSAGE_ATTRIBUTES.keys():
-            message_data = MESSAGE_ATTRIBUTES[file_name]
-            for msg_path in ('../tests/messages/{}.eml'.format(file_name), 'tests/messages/{}.eml'.format(file_name)):
-                if not os.path.exists(msg_path):
-                    continue
-                with open(msg_path, 'rb') as f:
-                    bytes_data = f.read()
+        test_msg_attr_set = {'subject', 'from_', 'to', 'cc', 'bcc', 'reply_to', 'date', 'date_str', 'text', 'html',
+                             'headers', 'from_values', 'to_values', 'cc_values', 'bcc_values', 'reply_to_values'}
+        test_att_attr_set = {'filename', 'content_id', 'content_type', 'content_disposition', 'payload'}
+
+        eml_path_set = []
+        for path_variant in ('../tests/messages', 'tests/messages'):
+            for root, subdirs, files in os.walk(path_variant):
+                for file_name in files:
+                    full_path = os.path.abspath('{}/{}'.format(root, file_name)).replace('\\', '/')
+                    if full_path.lower().endswith('.eml'):
+                        eml_path_set.append(full_path)
+
+        for eml_path in eml_path_set:
+            py_path = eml_path.replace('/messages/', '/messages_data/')[:-4] + '.py'
+            eml_data_module = _load_module(py_path)
+            expected_data = eml_data_module.DATA # noqa
+            with open(eml_path, 'rb') as f:
+                bytes_data = f.read()
             message = MailMessage.from_bytes(bytes_data)
-            for msg_attr in msg_attr_set:
-                self.assertEqual(getattr(message, msg_attr), message_data[msg_attr])
+            for msg_attr in test_msg_attr_set:
+                self.assertEqual(getattr(message, msg_attr), expected_data[msg_attr])
             for att_i, att in enumerate(message.attachments):
-                for att_attr in att_attr_set:
-                    self.assertEqual(getattr(att, att_attr), message_data['attachments'][att_i][att_attr])
+                for att_attr in test_att_attr_set:
+                    self.assertEqual(getattr(att, att_attr), expected_data['attachments'][att_i][att_attr])
 
 
 if __name__ == "__main__":
     unittest.main()
+
+"""
+attachment_2_base64
+    Непонятно почему get_content_type не может получить content-type, в файле он есть
+    Из за этого 2е вложение воспринимается как msg.text, хотя в файле его нет
+    Возможно это из за наличия дефекта MissingHeaderBodySeparatorDefect
+    .../python/Python36-32/Lib/email/message.py 
+    def get_content_type(self): 
+        ...
+        value = self.get('content-type', missing) -> None -> return self.get_default_type() -> text/plain
+"""
