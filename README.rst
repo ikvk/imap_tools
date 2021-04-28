@@ -50,7 +50,8 @@ Basic
 
 MailBox(BaseMailBox), MailBoxUnencrypted(BaseMailBox) - for create mailbox instance.
 
-BaseMailBox.login, MailBox.xoauth2 - authentication functions
+BaseMailBox.login, MailBox.xoauth2 - authentication functions. TLS connection
+`example <https://github.com/ikvk/imap_tools/blob/master/examples/tls.py>`_.
 
 BaseMailBox.fetch - email message generator, first searches email nums by criteria, then fetch and yields `MailMessage <#email-attributes>`_:
 

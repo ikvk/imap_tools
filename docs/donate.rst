@@ -1,7 +1,8 @@
-PayPal
+My PayPal 💰
     KaukinVK@ya.ru
 
-Just star imap_tools project =)
+Star imap_tools project ⭐
     https://github.com/ikvk/imap_tools
 
-Thanks to all who donated!
+Thanks to all who donated 🎉
+    It is really nice.
