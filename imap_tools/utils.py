@@ -91,7 +91,8 @@ def parse_email_addresses(raw_header: str or Header) -> (dict,):
 def parse_email_date(value: str) -> datetime.datetime:
     """
     Parsing the date described in rfc2822
-    1900-1-1 for unparsed, may be naive or with tzinfo
+    Result datetime may be naive or with tzinfo
+    1900-1-1 for unparsed
     """
     try:
         return parsedate_to_datetime(value)
