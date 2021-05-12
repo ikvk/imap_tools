@@ -129,19 +129,26 @@ You can use 3 approaches to build search criteria:
     mailbox.fetch(b'TEXT "\xd1\x8f"')      # bytes, *charset arg is ignored
 
 The "charset" is argument used for encode criteria to this encoding.
-You can pass criteria as bytes in desired encoding - charset will be ignored.
+You can pass the criteria as bytes in the desired encoding - in this case, the encoding will be ignored.
+
+.. code-block:: python
+
+    mailbox.fetch(A(subject='жёлтый'), charset='utf8')
 
 Query builder implements all search logic described in `rfc3501 <https://tools.ietf.org/html/rfc3501#section-6.4.4>`_.
+It uses this classes:
 
-========  =====  ========================================== ============================================================
+========  =====  ========================================== ======================================
 Class     Alias  Usage                                      Arguments
-========  =====  ========================================== ============================================================
-AND       A      combines keys by logical "AND" condition   Search keys (see below) | str
-OR        O      combines keys by logical "OR" condition    Search keys (see below) | str
+========  =====  ========================================== ======================================
+AND       A      combines keys by logical "AND" condition   Search keys (see table below) | str
+OR        O      combines keys by logical "OR" condition    Search keys (see table below) | str
 NOT       N      invert the result of a logical expression  AND/OR instances | str
 Header    H      for search by headers                      name: str, value: str
 UidRange  U      for search by UID range                    start: str, end: str
-========  =====  ========================================== ============================================================
+========  =====  ========================================== ======================================
+
+See `query examples <https://github.com/ikvk/imap_tools/blob/master/examples/search.py>`_. A few examples:
 
 .. code-block:: python
 
@@ -154,12 +161,8 @@ UidRange  U      for search by UID range                    start: str, end: str
     NOT(text='hello', new=True)  # 'NOT (TEXT "hello" NEW)'
     # complex
     A(OR(from_='from@ya.ru', text='"the text"'), NOT(OR(A(answered=False), A(new=True))), to='to@ya.ru')
-    # encoding
-    mailbox.fetch(A(subject='привет'), charset='utf8')
     # python note: you can't do: A(text='two', NOT(subject='one'))
     A(NOT(subject='one'), text='two')  # use kwargs after logic classes (args)
-
-See more `query examples <https://github.com/ikvk/imap_tools/blob/master/examples/search.py>`_.
 
 Search key table. Key types marked with `*` can accepts a sequence of values like list, tuple, set or generator.
 
