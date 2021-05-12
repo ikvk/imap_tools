@@ -346,7 +346,8 @@ Big thanks to people who helped develop this library:
 `daniel55411 <https://github.com/daniel55411>`_,
 `rcarmo <https://github.com/rcarmo>`_,
 `bhernacki <https://github.com/bhernacki>`_,
-`ilep <https://github.com/ilep>`_
+`ilep <https://github.com/ilep>`_,
+`ThKue <https://github.com/ThKue>`_
 
 Donate
 ------

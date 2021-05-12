@@ -1,7 +1,7 @@
 import datetime
     
 DATA = dict(
-    subject='статус',
+    subject='статус    ',
     from_='i.kor@company.ru',
     to=('jessica.schmidt@uni.de', 'я你Rabea.Bartölke@uni.de'),
     cc=(),

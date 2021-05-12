@@ -102,8 +102,8 @@ class MailMessage:
     def subject(self) -> str:
         """Message subject"""
         if 'subject' in self.obj:
-            msg_subject = decode_header(self.obj['subject'])
-            return decode_value(msg_subject[0][0], msg_subject[0][1])
+            raw = self.obj['subject']
+            return ''.join(decode_value(*head_part) for head_part in decode_header(raw))
         return ''
 
     @property

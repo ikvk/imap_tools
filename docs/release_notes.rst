@@ -1,3 +1,7 @@
+0.41.0
+======
+* Fixed multiple encodings case bug at MailMessage.subject
+
 0.40.0
 ======
 * Fixed MailMessage.from_bytes - MailMessage.uid/flags parse errors
