@@ -347,7 +347,8 @@ Big thanks to people who helped develop this library:
 `rcarmo <https://github.com/rcarmo>`_,
 `bhernacki <https://github.com/bhernacki>`_,
 `ilep <https://github.com/ilep>`_,
-`ThKue <https://github.com/ThKue>`_
+`ThKue <https://github.com/ThKue>`_,
+`repodiac <https://github.com/repodiac>`_
 
 Donate
 ------
