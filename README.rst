@@ -234,8 +234,8 @@ use 'limit' argument for fetch in this case.
         # DELETE all messages from current folder, *in bulk (explicit creation of uid list)
         mailbox.delete([msg.uid for msg in mailbox.fetch()])
 
-        # FLAG unseen messages in current folder as Answered and Flagged, *in bulk.
-        flags = (imap_tools.MailMessageFlags.ANSWERED, imap_tools.MailMessageFlags.FLAGGED)
+        # FLAG unseen messages in current folder as Answered, Flagged and TAG1, *in bulk.
+        flags = (imap_tools.MailMessageFlags.ANSWERED, imap_tools.MailMessageFlags.FLAGGED, 'TAG1')
         mailbox.flag(mailbox.fetch(AND(seen=False)), flags, True)
 
         # SEEN: flag as unseen all messages sent at 05.03.2007 in current folder, *in bulk
