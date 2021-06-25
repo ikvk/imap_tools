@@ -9,19 +9,6 @@ from email.header import decode_header
 from .utils import decode_value, parse_email_addresses, parse_email_date
 
 
-class MailMessageFlags:
-    """Standard email message flags"""
-    SEEN = 'SEEN'
-    ANSWERED = 'ANSWERED'
-    FLAGGED = 'FLAGGED'
-    DELETED = 'DELETED'
-    DRAFT = 'DRAFT'
-    RECENT = 'RECENT'
-    all = (
-        SEEN, ANSWERED, FLAGGED, DELETED, DRAFT, RECENT
-    )
-
-
 class MailMessage:
     """The email message"""
 
@@ -95,7 +82,7 @@ class MailMessage:
         result = []
         for raw_flag_item in self._raw_flag_data:
             result.extend(imaplib.ParseFlags(raw_flag_item))
-        return tuple(i.decode().strip().replace('\\', '').upper() for i in result)  # noqa
+        return tuple(i.decode().strip() for i in result)  # noqa
 
     @property
     @lru_cache()
@@ -227,7 +214,7 @@ class MailMessage:
         for part in self.obj.walk():
             if part.get_content_maintype() == 'multipart':  # multipart/* are containers
                 continue
-            if part.get('Content-ID') is None and part.get_filename() is None  \
+            if part.get('Content-ID') is None and part.get_filename() is None \
                     and part.get_content_type() != 'message/rfc822':
                 continue
             results.append(MailAttachment(part))

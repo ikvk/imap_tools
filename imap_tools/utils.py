@@ -5,12 +5,11 @@ from itertools import zip_longest
 from email.utils import getaddresses, parsedate_to_datetime
 from email.header import decode_header, Header
 
+from .consts import SHORT_MONTH_NAMES, MailMessageFlags
 from . import imap_utf7
 
-SHORT_MONTH_NAMES = ('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec')
 
-
-def cleaned_uid_set(uid_set: str or [str] or iter) -> str:
+def clean_uids(uid_set: str or [str] or iter) -> str:
     """
     Prepare set of uid for use in IMAP commands
     :param uid_set:
@@ -38,7 +37,7 @@ def cleaned_uid_set(uid_set: str or [str] or iter) -> str:
             raise TypeError('uid "{}" is not string'.format(str(uid)))
         if not uid.strip().isdigit():
             raise TypeError('Wrong uid: "{}"'.format(uid))
-    return ','.join((i.strip() for i in uid_set))
+    return ','.join(i.strip() for i in uid_set)
 
 
 def check_command_status(command_result: tuple, exception: type, expected='OK'):
@@ -158,3 +157,19 @@ def encode_folder(folder: str or bytes) -> bytes:
         return folder
     else:
         return quote(imap_utf7.encode(folder))
+
+
+def clean_flags(flag_set: [str] or str) -> [str]:
+    """
+    Check the correctness of the flags
+    :return: list of str - flags
+    """
+    if type(flag_set) is str:
+        flag_set = [flag_set]
+    upper_sys_flags = tuple(i.upper() for i in MailMessageFlags.all)
+    for flag in flag_set:
+        if not type(flag) is str:
+            raise ValueError('Flag - str value expected, but {} received'.format(type(flag_set)))
+        if flag.upper() not in upper_sys_flags and flag.startswith('\\'):
+            raise ValueError('Non system flag must not start with "\\"')
+    return flag_set

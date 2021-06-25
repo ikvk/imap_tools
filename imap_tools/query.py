@@ -4,7 +4,8 @@ import itertools
 import functools
 import collections
 
-from .utils import cleaned_uid_set, SHORT_MONTH_NAMES, quote
+from .consts import SHORT_MONTH_NAMES
+from .utils import clean_uids, quote
 
 
 class LogicOperator(collections.UserString):
@@ -177,7 +178,7 @@ class ParamConverter:
             return str(value)
         # set
         try:
-            return cleaned_uid_set(value)
+            return clean_uids(value)
         except TypeError as e:
             raise TypeError('{} parse error: {}'.format(key, str(e)))
 

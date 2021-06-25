@@ -3,13 +3,24 @@ import datetime
 
 from imap_tools import utils
 from imap_tools.errors import ImapToolsError, UnexpectedCommandStatusError, MailboxCopyError
+from imap_tools.consts import MailMessageFlags
 
 
 class UtilsTest(unittest.TestCase):
 
-    def test_cleaned_uid_set(self):
-        # *cleaned_uid_set tested enough in test_query.py
+    def test_clean_uids(self):
+        # *clean_uids tested enough in test_query.py
         pass
+
+    def test_clean_flags(self):
+        self.assertEqual(utils.clean_flags([MailMessageFlags.FLAGGED, MailMessageFlags.SEEN]), ['\\Flagged', '\\Seen'])
+        self.assertEqual(utils.clean_flags(['\\FLAGGED', '\\seen']), ['\\FLAGGED', '\\seen'])
+        self.assertEqual(utils.clean_flags(['TAG1']), ['TAG1',])
+        self.assertEqual(utils.clean_flags(['tag2']), ['tag2',])
+        for flag in MailMessageFlags.all:
+            self.assertEqual(utils.clean_flags(flag), ['\\' + flag.replace('\\', '', 1).capitalize()])
+        with self.assertRaises(ValueError):
+            utils.clean_flags([MailMessageFlags.FLAGGED, '\\CUSTOM_TAG_WITH_SLASH'])
 
     def test_chunks(self):
         self.assertEqual(list(utils.chunks('ABCDE', 2, '=')), [('A', 'B'), ('C', 'D'), ('E', '=')])
@@ -40,9 +51,9 @@ class UtilsTest(unittest.TestCase):
         self.assertIsNone(utils.check_command_status(('EXP', 'command_result_data'), MailboxCopyError, expected='EXP'))
         self.assertIsNone(utils.check_command_status(('OK', 'res'), UnexpectedCommandStatusError))
         with self.assertRaises(TypeError):
-            self.assertFalse(utils.check_command_status(('NOT_OK', 'test'), ImapToolsError))
+            utils.check_command_status(('NOT_OK', 'test'), ImapToolsError)
         with self.assertRaises(MailboxCopyError):
-            self.assertFalse(utils.check_command_status(('BYE', ''), MailboxCopyError, expected='OK'))
+            utils.check_command_status(('BYE', ''), MailboxCopyError, expected='OK')
 
     def test_parse_email_date(self):
         for val, exp in (

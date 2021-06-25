@@ -4,9 +4,10 @@ import datetime
 import warnings
 from email.errors import StartBoundaryNotFoundDefect, MultipartInvariantViolationDefect
 
-from .message import MailMessage, MailMessageFlags
+from .consts import MailMessageFlags
+from .message import MailMessage
 from .folder import MailBoxFolderManager
-from .utils import cleaned_uid_set, check_command_status, chunks, encode_folder
+from .utils import clean_uids, check_command_status, chunks, encode_folder, clean_flags
 from .errors import MailboxStarttlsError, MailboxLoginError, MailboxLogoutError, MailboxSearchError, \
     MailboxFetchError, MailboxExpungeError, MailboxDeleteError, MailboxCopyError, MailboxFlagError, MailboxAppendError
 
@@ -124,7 +125,7 @@ class BaseMailBox:
         Do nothing on empty uid_list
         :return: None on empty uid_list, command results otherwise
         """
-        uid_str = cleaned_uid_set(uid_list)
+        uid_str = clean_uids(uid_list)
         if not uid_str:
             return None
         store_result = self.box.uid('STORE', uid_str, '+FLAGS', r'(\Deleted)')
@@ -138,7 +139,7 @@ class BaseMailBox:
         Do nothing on empty uid_list
         :return: None on empty uid_list, command results otherwise
         """
-        uid_str = cleaned_uid_set(uid_list)
+        uid_str = clean_uids(uid_list)
         if not uid_str:
             return None
         copy_result = self.box.uid('COPY', uid_str, encode_folder(destination_folder))  # noqa
@@ -152,7 +153,7 @@ class BaseMailBox:
         :return: None on empty uid_list, command results otherwise
         """
         # here for avoid double fetch in uid_set
-        uid_str = cleaned_uid_set(uid_list)
+        uid_str = clean_uids(uid_list)
         if not uid_str:
             return None
         copy_result = self.copy(uid_str, destination_folder)
@@ -163,17 +164,15 @@ class BaseMailBox:
         """
         Set/unset email flags
         Do nothing on empty uid_list
-        Standard flags contains in message.MailMessageFlags.all
+        System flags contains in consts.MailMessageFlags.all
         :return: None on empty uid_list, command results otherwise
         """
-        uid_str = cleaned_uid_set(uid_list)
+        uid_str = clean_uids(uid_list)
         if not uid_str:
             return None
-        if type(flag_set) is str:
-            flag_set = [flag_set]
         store_result = self.box.uid(
             'STORE', uid_str, ('+' if value else '-') + 'FLAGS',
-            '({})'.format(' '.join(('\\' + i for i in flag_set))))
+            '({})'.format(' '.join(clean_flags(flag_set))))
         check_command_status(store_result, MailboxFlagError)
         expunge_result = self.expunge()
         return store_result, expunge_result
@@ -194,18 +193,17 @@ class BaseMailBox:
         :param message: MailMessage object or bytes
         :param folder: destination folder, INBOX by default
         :param dt: email message datetime with tzinfo, now by default, imaplib.Time2Internaldate types supported
-        :param flag_set: email message flags, no flags by default. Standard flags at message.MailMessageFlags.all
+        :param flag_set: email message flags, no flags by default. System flags at consts.MailMessageFlags.all
         :return: command results
         """
         if sys.version_info.minor < 6:
             timezone = datetime.timezone(datetime.timedelta(hours=0))
         else:
             timezone = datetime.datetime.now().astimezone().tzinfo  # system timezone
-        if type(flag_set) is str:
-            flag_set = [flag_set]
+        cleaned_flags = clean_flags(flag_set)
         typ, dat = self.box.append(
             encode_folder(folder),  # noqa
-            '({})'.format(' '.join(('\\' + i for i in flag_set))) if flag_set else None,
+            '({})'.format(' '.join(cleaned_flags)) if cleaned_flags else None,
             dt or datetime.datetime.now(timezone),
             message if type(message) is bytes else message.obj.as_bytes()
         )

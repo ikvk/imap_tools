@@ -92,7 +92,7 @@ MailMessage and MailAttachment public attributes are cached by functools.lru_cac
         msg.date_str     # str: original date - 'Tue, 03 Jan 2017 22:26:59 +0500'
         msg.text         # str: 'Hello 你 Привет'
         msg.html         # str: '<b>Hello 你 Привет</b>'
-        msg.flags        # tuple: ('SEEN', 'FLAGGED', 'ENCRYPTED')
+        msg.flags        # tuple: ('\\Seen', '\\Flagged', 'ENCRYPTED')
         msg.headers      # dict: {'received': ('from 1.m.ru', 'from 2.m.ru'), 'anti-virus': ('Clean',)}
         msg.size_rfc822  # int: 20664 bytes - size info from server (*useful with headers_only arg)
         msg.size         # int: 20377 bytes - size of received message
@@ -241,7 +241,7 @@ use 'limit' argument for fetch in this case.
         # SEEN: flag as unseen all messages sent at 05.03.2007 in current folder, *in bulk
         mailbox.seen(mailbox.fetch("SENTON 05-Mar-2007"), False)
 
-        # APPEND: add message to mailbox directly, to INBOX folder with SEEN flag and now date
+        # APPEND: add message to mailbox directly, to INBOX folder with \SEEN flag and now date
         with open('/tmp/message.eml', 'rb') as f:
             msg = imap_tools.MailMessage.from_bytes(f.read())  # *or use bytes instead MailMessage
         mailbox.append(msg, 'INBOX', dt=None, flag_set=[imap_tools.MailMessageFlags.SEEN])
@@ -351,7 +351,8 @@ Big thanks to people who helped develop this library:
 `bhernacki <https://github.com/bhernacki>`_,
 `ilep <https://github.com/ilep>`_,
 `ThKue <https://github.com/ThKue>`_,
-`repodiac <https://github.com/repodiac>`_
+`repodiac <https://github.com/repodiac>`_,
+`tiuub <https://github.com/tiuub>`_
 
 Donate
 ------

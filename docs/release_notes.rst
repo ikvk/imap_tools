@@ -1,3 +1,13 @@
+0.42.0
+======
+* Fixed MessageFlags values - all system flags begin with "\"
+* Fixed BaseMailBox.flag, BaseMailBox.append, MailMessage.flags - now works with system/custom flags correctly, -upper
+* Added utils.clean_flags
+* Moved message.MessageFlags -> consts.MailMessageFlags
+* Moved folder.MailBoxFolderStatusOptions -> consts.MailBoxFolderStatusOptions
+* Moved utils.SHORT_MONTH_NAMES -> consts.SHORT_MONTH_NAMES
+* Renamed utils.cleaned_uid_set -> utils.clean_uids
+
 0.41.0
 ======
 * Fixed multiple encodings case bug at MailMessage.subject
