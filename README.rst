@@ -291,7 +291,10 @@ History of important changes: `release_notes.rst <https://github.com/ikvk/imap_t
 Contribute
 ----------
 
-If you found a bug or have a question, please let me know - create merge request or issue.
+If you found a bug or have a question, then:
+
+1. Look for answer at: this page, issues, pull requests, source, RFCs, stackoverflow.com, internet.
+2. And only then - create merge request or issue.
 
 Reasons
 -------
