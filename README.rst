@@ -34,9 +34,10 @@ Guide
 
 Basic
 ^^^^^
-.. code-block:: python
 
 Find info about imap-tools at: *this page*, issues, pull requests, source, stackoverflow.com
+
+.. code-block:: python
 
     from imap_tools import MailBox, AND
 
