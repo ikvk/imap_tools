@@ -182,6 +182,7 @@ class BaseMailBox:
         Mark email as read/unread
         This is shortcut for flag method
         """
+        warnings.warn('seen method are deprecated and will be removed soon, use flag method instead')
         return self.flag(uid_list, MailMessageFlags.SEEN, seen_val)
 
     def append(self, message: MailMessage or bytes,

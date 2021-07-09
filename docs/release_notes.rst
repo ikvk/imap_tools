@@ -1,5 +1,10 @@
 0.42.0
 ======
+* Added MailBoxFolderManager.subscribe method
+* Deprecation: BaseMailBox.seen method are deprecated now, use flag method
+
+0.42.0
+======
 * Fixed MessageFlags values - all system flags begin with "\"
 * Fixed BaseMailBox.flag, BaseMailBox.append, MailMessage.flags - now works with system/custom flags correctly, -upper
 * Added utils.clean_flags

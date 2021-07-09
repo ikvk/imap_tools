@@ -57,16 +57,18 @@ class ActionTest(MailboxTestCase):
             self.assertTrue(
                 all([imap_tools.MailMessageFlags.FLAGGED in msg.flags for msg in mailbox.fetch(**FETCH_ARGS)]))
 
-            # SEEN
-            mailbox.folder.set(mailbox.folder_test_temp2)
-            mailbox.seen([msg.uid for msg in mailbox.fetch(**FETCH_ARGS)], False)
-            self.assertTrue(all([imap_tools.MailMessageFlags.SEEN not in msg.flags
-                                 for msg in mailbox.fetch(mark_seen=False)]))
-
             # DELETE
             mailbox.folder.set(mailbox.folder_test_temp2)
             mailbox.delete([msg.uid for msg in mailbox.fetch(**FETCH_ARGS)])
             self.assertEqual(len(list(mailbox.fetch(**FETCH_ARGS))), 0)
+
+            # SUBSCRIBE
+            if mailbox.mailbox_name not in ('MAIL_RU',):
+                mailbox.folder.subscribe(mailbox.folder_test_temp2, False)
+                self.assertIn(mailbox.folder_test_temp2, [i['name'] for i in mailbox.folder.list()])
+                self.assertNotIn(mailbox.folder_test_temp2, [i['name'] for i in mailbox.folder.list(subscribed_only=1)])
+                mailbox.folder.subscribe(mailbox.folder_test_temp2, True)
+                self.assertIn(mailbox.folder_test_temp2, [i['name'] for i in mailbox.folder.list(subscribed_only=1)])
 
 
 if __name__ == "__main__":

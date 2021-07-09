@@ -42,6 +42,10 @@ class MailboxFolderStatusError(UnexpectedCommandStatusError):
     pass
 
 
+class MailboxFolderSubscribeError(UnexpectedCommandStatusError):
+    pass
+
+
 class MailboxLoginError(UnexpectedCommandStatusError):
     pass
 

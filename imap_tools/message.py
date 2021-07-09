@@ -77,7 +77,7 @@ class MailMessage:
     def flags(self) -> (str,):
         """
         Message flags
-        *This attribute will not be changed after actions: flag, seen
+        *This attribute will not be changed after "flag" actions
         """
         result = []
         for raw_flag_item in self._raw_flag_data:

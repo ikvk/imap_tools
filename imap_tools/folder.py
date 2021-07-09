@@ -4,7 +4,7 @@ from . import imap_utf7
 from .consts import MailBoxFolderStatusOptions
 from .utils import check_command_status, pairs_to_dict, encode_folder
 from .errors import MailboxFolderStatusValueError, MailboxFolderSelectError, MailboxFolderCreateError, \
-    MailboxFolderRenameError, MailboxFolderDeleteError, MailboxFolderStatusError
+    MailboxFolderRenameError, MailboxFolderDeleteError, MailboxFolderStatusError, MailboxFolderSubscribeError
 
 
 class MailBoxFolderManager:
@@ -116,4 +116,10 @@ class MailBoxFolderManager:
             folder_dict['flags'] = tuple(folder_dict['flags'].split())  # noqa
             folder_dict['delim'] = folder_dict['delim'].replace('"', '')
             result.append(folder_dict)
+        return result
+
+    def subscribe(self, folder: str or bytes, value: bool):
+        method = self.mailbox.box.subscribe if value else self.mailbox.box.unsubscribe
+        result = method(encode_folder(folder))
+        check_command_status(result, MailboxFolderSubscribeError)
         return result

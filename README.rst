@@ -7,8 +7,8 @@ Work with email and mailbox by IMAP:
 
 - Parsed email message attributes
 - Query builder for searching emails
-- Actions with emails: copy, delete, flag, move, seen, append
-- Actions with folders: list, set, get, create, exists, rename, delete, status
+- Actions with emails: copy, delete, flag, move, append
+- Actions with folders: list, set, get, create, exists, rename, subscribe, delete, status
 - No dependencies
 
 .. image:: https://img.shields.io/pypi/dm/imap_tools.svg?style=social
@@ -36,6 +36,8 @@ Basic
 ^^^^^
 .. code-block:: python
 
+Find info about imap-tools at: *this page*, issues, pull requests, source, stackoverflow.com
+
     from imap_tools import MailBox, AND
 
     # get list of email subjects from INBOX folder
@@ -58,14 +60,13 @@ BaseMailBox.fetch - email message generator, first searches email nums by criter
 * *criteria* = 'ALL', message search criteria, `query builder <#search-criteria>`_
 * *charset* = 'US-ASCII', indicates charset of the strings that appear in the search criteria. See rfc2978
 * *limit* = None, limit on the number of read emails, useful for actions with a large number of messages, like "move"
-* *miss_defect* = False, miss emails with defects (deprecated)
 * *miss_no_uid* = True, miss emails without uid
 * *mark_seen* = True, mark emails as seen on fetch
 * *reverse* = False, in order from the larger date to the smaller
 * *headers_only* = False, get only email headers (without text, html, attachments)
 * *bulk* = False, False - fetch each message separately per N commands - low memory consumption, slow; True - fetch all messages per 1 command - high memory consumption, fast
 
-BaseMailBox.<action> - `copy, move, delete, flag, seen, append <#actions-with-emails>`_
+BaseMailBox.<action> - `copy, move, delete, flag, append <#actions-with-emails>`_
 
 BaseMailBox.folder - `folder manager <#actions-with-folders>`_
 
@@ -210,12 +211,11 @@ Actions with emails
 
 First of all read about uid `at rfc3501 <https://tools.ietf.org/html/rfc3501#section-2.3.1.1>`_.
 
-You can use 2 approaches to perform these operations:
+Action's uid_list arg may takes:
 
-* "in bulk" - Perform IMAP operation for message set per 1 command
-* "by one" - Perform IMAP operation for each message separately per N commands
-
-MailBox.fetch generator instance passed as the first argument to any action will be implicitly converted to uid list.
+* str, that is comma separated uids
+* Iterable, that contains str uids
+* Generator with "fetch" name, implicitly gets all uids
 
 For actions with a large number of messages imap command may be too large and will cause exception at server side,
 use 'limit' argument for fetch in this case.
@@ -224,24 +224,20 @@ use 'limit' argument for fetch in this case.
 
     with MailBox('imap.mail.com').login('test@mail.com', 'pwd', initial_folder='INBOX') as mailbox:
 
-        # COPY all messages from current folder to folder1, *by one
-        for msg in mailbox.fetch():
-            res = mailbox.copy(msg.uid, 'INBOX/folder1')
+        # COPY messages with uid in 23,27 from current folder to folder1
+        mailbox.copy('23,27', 'folder1')
 
-        # MOVE all messages from current folder to folder2, *in bulk (implicit creation of uid list)
+        # MOVE all messages from current folder to INBOX/folder2, (implicit creation of uid list)
         mailbox.move(mailbox.fetch(), 'INBOX/folder2')
 
-        # DELETE all messages from current folder, *in bulk (explicit creation of uid list)
+        # DELETE all messages from current folder, (explicit creation of uid list)
         mailbox.delete([msg.uid for msg in mailbox.fetch()])
 
-        # FLAG unseen messages in current folder as Answered, Flagged and TAG1, *in bulk.
-        flags = (imap_tools.MailMessageFlags.ANSWERED, imap_tools.MailMessageFlags.FLAGGED, 'TAG1')
+        # FLAG unseen messages in current folder as \Seen, \Flagged and TAG1
+        flags = (imap_tools.MailMessageFlags.SEEN, imap_tools.MailMessageFlags.FLAGGED, 'TAG1')
         mailbox.flag(mailbox.fetch(AND(seen=False)), flags, True)
 
-        # SEEN: flag as unseen all messages sent at 05.03.2007 in current folder, *in bulk
-        mailbox.seen(mailbox.fetch("SENTON 05-Mar-2007"), False)
-
-        # APPEND: add message to mailbox directly, to INBOX folder with \SEEN flag and now date
+        # APPEND: add message to mailbox directly, to INBOX folder with \Seen flag and now date
         with open('/tmp/message.eml', 'rb') as f:
             msg = imap_tools.MailMessage.from_bytes(f.read())  # *or use bytes instead MailMessage
         mailbox.append(msg, 'INBOX', dt=None, flag_set=[imap_tools.MailMessageFlags.SEEN])
@@ -270,6 +266,9 @@ Actions with folders
 
         # RENAME: set new name to folder
         mailbox.folder.rename('folder3', 'folder4')
+
+        # SUBSCRIBE: subscribe/unsubscribe to folder
+        mailbox.folder.subscribe('INBOX|папка два', True)
 
         # DELETE: delete folder
         mailbox.folder.delete('folder4')
@@ -352,7 +351,8 @@ Big thanks to people who helped develop this library:
 `ilep <https://github.com/ilep>`_,
 `ThKue <https://github.com/ThKue>`_,
 `repodiac <https://github.com/repodiac>`_,
-`tiuub <https://github.com/tiuub>`_
+`tiuub <https://github.com/tiuub>`_,
+`Yannik <https://github.com/Yannik>`_
 
 Donate
 ------
