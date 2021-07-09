@@ -1,4 +1,4 @@
-0.42.0
+0.43.0
 ======
 * Added MailBoxFolderManager.subscribe method
 * Deprecation: BaseMailBox.seen method are deprecated now, use flag method
