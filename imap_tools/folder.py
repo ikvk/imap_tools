@@ -119,6 +119,7 @@ class MailBoxFolderManager:
         return result
 
     def subscribe(self, folder: str or bytes, value: bool):
+        """subscribe/unsubscribe to folder"""
         method = self.mailbox.box.subscribe if value else self.mailbox.box.unsubscribe
         result = method(encode_folder(folder))
         check_command_status(result, MailboxFolderSubscribeError)
