@@ -14,9 +14,9 @@ class MailBoxFolderManager:
         self.mailbox = mailbox
         self._current_folder = None
 
-    def set(self, folder: str or bytes):
+    def set(self, folder: str or bytes, readonly: bool = False):
         """Select current folder"""
-        result = self.mailbox.box.select(encode_folder(folder))
+        result = self.mailbox.box.select(encode_folder(folder), readonly)
         check_command_status(result, MailboxFolderSelectError)
         self._current_folder = folder
         return result
