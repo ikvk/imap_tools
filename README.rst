@@ -56,7 +56,7 @@ MailBox(BaseMailBox), MailBoxUnencrypted(BaseMailBox) - for create mailbox insta
 BaseMailBox.login, MailBox.xoauth2 - authentication functions. TLS connection
 `example <https://github.com/ikvk/imap_tools/blob/master/examples/tls.py>`_.
 
-BaseMailBox.fetch - email message generator, first searches email nums by criteria, then fetch and yields `MailMessage <#email-attributes>`_:
+BaseMailBox.fetch - first searches email nums by criteria in current folder, then fetch and yields `MailMessage <#email-attributes>`_:
 
 * *criteria* = 'ALL', message search criteria, `query builder <#search-criteria>`_
 * *charset* = 'US-ASCII', indicates charset of the strings that appear in the search criteria. See rfc2978
@@ -71,7 +71,7 @@ BaseMailBox.<action> - `copy, move, delete, flag, append <#actions-with-emails>`
 
 BaseMailBox.folder - `folder manager <#actions-with-folders>`_
 
-BaseMailBox.search - search mailbox for matching message numbers (this is not uids)
+BaseMailBox.search - search mailbox for matching message numbers in current folder (this is not uids)
 
 BaseMailBox.box - imaplib.IMAP4/IMAP4_SSL client instance.
 

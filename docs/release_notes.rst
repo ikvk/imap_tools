@@ -1,3 +1,8 @@
+0.44.0
+======
+* Fixed BaseMailBox.append bug on flag_set=None
+* Added MailBoxFolderManager.set readonly argument
+
 0.43.0
 ======
 * Added MailBoxFolderManager.subscribe method

@@ -1,10 +1,13 @@
 import unittest
 
-import imap_tools
 from tests.utils import MailboxTestCase, TEST_MAILBOX_NAME_SET, get_test_mailbox
 from imap_tools.errors import MailboxCopyError
+from imap_tools.consts import MailMessageFlags
+from imap_tools.query import A
 
 FETCH_ARGS = dict(bulk=True, headers_only=True)
+
+TEST_MESSAGE_DATA = b'From: Mikel <test@lindsaar.net>\nTo: Mikel <raasdnil@gmail.com>\nContent-Type: text/plain; charset=US-ASCII; format=flowed\nContent-Transfer-Encoding: 7bit\nMime-Version: 1.0 (Apple Message framework v929.2)\nSubject: _append_\nDate: Sat, 22 Nov 2008 11:04:59 +1100\n\nPlain email.\n'  # noqa
 
 
 class ActionTest(MailboxTestCase):
@@ -16,59 +19,56 @@ class ActionTest(MailboxTestCase):
         for test_mailbox_name in TEST_MAILBOX_NAME_SET:
             mailbox = get_test_mailbox(test_mailbox_name)
             mailbox.folder.set(mailbox.folder_test_temp1)
-            for_del_1 = [msg.uid for msg in mailbox.fetch(**FETCH_ARGS)]
-            if for_del_1:
-                mailbox.delete([msg.uid for msg in mailbox.fetch(**FETCH_ARGS)])
+            mailbox.delete(mailbox.fetch(**FETCH_ARGS))
             mailbox.folder.set(mailbox.folder_test_temp2)
-            for_del_2 = [msg.uid for msg in mailbox.fetch(**FETCH_ARGS)]
-            if for_del_2:
-                mailbox.delete(for_del_2)
+            mailbox.delete(mailbox.fetch(**FETCH_ARGS))
 
     def test_action(self):
         for mailbox in self.mailbox_set.values():
             # FETCH
             mailbox.folder.set(mailbox.folder_test_base)
-            self.assertEqual(len(list(mailbox.fetch(**FETCH_ARGS))), self.base_test_msg_cnt)
+            self.assertEqual(len(list(mailbox.search())), self.base_test_msg_cnt)
 
             # COPY
             mailbox.folder.set(mailbox.folder_test_base)
-            uid_set = [msg.uid for msg in mailbox.fetch(**FETCH_ARGS)]
-            mailbox.copy(uid_set, mailbox.folder_test_temp1)
+            mailbox.copy(mailbox.fetch(**FETCH_ARGS), mailbox.folder_test_temp1)
             if mailbox.mailbox_name != 'YAHOO':
                 # YAHOO:
                 #   imaplib.IMAP4.error: UID command error: BAD [b'[TRYCREATE] UID COPY failed -
                 #   No mailbox exists with name - "__nonexistent_folder__"']
                 with self.assertRaises(MailboxCopyError):
-                    mailbox.copy(uid_set, '__nonexistent_folder__')
-            self.assertEqual(len(list(mailbox.fetch(**FETCH_ARGS))), self.base_test_msg_cnt)
+                    mailbox.copy(mailbox.fetch(limit=1), '__nonexistent_folder__')
+            self.assertEqual(len(list(mailbox.search())), self.base_test_msg_cnt)
             mailbox.folder.set(mailbox.folder_test_temp1)
-            self.assertEqual(len(list(mailbox.fetch(**FETCH_ARGS))), self.base_test_msg_cnt)
+            self.assertEqual(len(list(mailbox.search())), self.base_test_msg_cnt)
 
             # MOVE
             mailbox.folder.set(mailbox.folder_test_temp1)
-            mailbox.move([msg.uid for msg in mailbox.fetch(**FETCH_ARGS)], mailbox.folder_test_temp2)
-            self.assertEqual(len(list(mailbox.fetch(**FETCH_ARGS))), 0)
+            mailbox.move(mailbox.fetch(**FETCH_ARGS), mailbox.folder_test_temp2)
+            self.assertEqual(len(list(mailbox.search())), 0)
             mailbox.folder.set(mailbox.folder_test_temp2)
-            self.assertEqual(len(list(mailbox.fetch(**FETCH_ARGS))), self.base_test_msg_cnt)
+            self.assertEqual(len(list(mailbox.search())), self.base_test_msg_cnt)
 
             # FLAG
             mailbox.folder.set(mailbox.folder_test_temp2)
-            mailbox.flag([msg.uid for msg in mailbox.fetch(**FETCH_ARGS)], imap_tools.MailMessageFlags.FLAGGED, True)
+            mailbox.flag(mailbox.fetch(**FETCH_ARGS), MailMessageFlags.FLAGGED, True)
             self.assertTrue(
-                all([imap_tools.MailMessageFlags.FLAGGED in msg.flags for msg in mailbox.fetch(**FETCH_ARGS)]))
+                all([MailMessageFlags.FLAGGED in msg.flags for msg in mailbox.fetch(**FETCH_ARGS)]))
 
             # DELETE
             mailbox.folder.set(mailbox.folder_test_temp2)
-            mailbox.delete([msg.uid for msg in mailbox.fetch(**FETCH_ARGS)])
-            self.assertEqual(len(list(mailbox.fetch(**FETCH_ARGS))), 0)
+            mailbox.delete(mailbox.fetch(**FETCH_ARGS))
+            self.assertEqual(len(list(mailbox.search())), 0)
 
-            # SUBSCRIBE
-            if mailbox.mailbox_name not in ('MAIL_RU',):
-                mailbox.folder.subscribe(mailbox.folder_test_temp2, False)
-                self.assertIn(mailbox.folder_test_temp2, [i['name'] for i in mailbox.folder.list()])
-                self.assertNotIn(mailbox.folder_test_temp2, [i['name'] for i in mailbox.folder.list(subscribed_only=1)])
-                mailbox.folder.subscribe(mailbox.folder_test_temp2, True)
-                self.assertIn(mailbox.folder_test_temp2, [i['name'] for i in mailbox.folder.list(subscribed_only=1)])
+            # APPEND
+            if mailbox.mailbox_name not in ('MAIL_RU', 'YANDEX'):
+                mailbox.folder.set('INBOX')
+                q = A(subject='_append_')
+                mailbox.delete(mailbox.fetch(q, **FETCH_ARGS))
+                self.assertEqual(len(list(mailbox.search(q))), 0)
+                mailbox.append(TEST_MESSAGE_DATA)
+                self.assertEqual(len(list(mailbox.search(q))), 1)  # YANDEX 0!=1 in test only, strange
+                mailbox.delete(mailbox.fetch(q, **FETCH_ARGS))
 
 
 if __name__ == "__main__":

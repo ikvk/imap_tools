@@ -5,4 +5,4 @@ from .folder import MailBoxFolderManager
 from .consts import MailMessageFlags, MailBoxFolderStatusOptions
 from .errors import *
 
-__version__ = '0.43.0'
+__version__ = '0.44.0'
