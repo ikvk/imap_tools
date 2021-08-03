@@ -2,4 +2,8 @@ Release 1.0.0 after 3 month of quiet in issues and merge requests
 
 test py versions by tox
 
-deprecated: seen, miss_defect
+deprecated: miss_defect, seen, search
+
+def uids(self, criteria: str or bytes = 'ALL', charset: str = 'US-ASCII',
+         limit: int or slice = None, miss_no_uid=True) -> [str]
+https://stackoverflow.com/questions/68117605/

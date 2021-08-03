@@ -2,7 +2,7 @@ from imap_tools import MailBox
 
 with MailBox('imap.mail.com').login('test@mail.com', 'pwd', 'INBOX') as mailbox:
     criteria = 'ALL'
-    found_nums = mailbox.search(criteria)
+    found_nums = mailbox.numbers(criteria)
     page_len = 3
     pages = int(len(found_nums) // page_len) + 1 if len(found_nums) % page_len else int(len(found_nums) // page_len)
     for page in range(pages):

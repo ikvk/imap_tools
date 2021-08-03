@@ -54,7 +54,7 @@ class MailboxLogoutError(UnexpectedCommandStatusError):
     pass
 
 
-class MailboxSearchError(UnexpectedCommandStatusError):
+class MailboxNumbersError(UnexpectedCommandStatusError):
     pass
 
 

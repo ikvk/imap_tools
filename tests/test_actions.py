@@ -27,7 +27,7 @@ class ActionTest(MailboxTestCase):
         for mailbox in self.mailbox_set.values():
             # FETCH
             mailbox.folder.set(mailbox.folder_test_base)
-            self.assertEqual(len(list(mailbox.search())), self.base_test_msg_cnt)
+            self.assertEqual(len(list(mailbox.numbers())), self.base_test_msg_cnt)
 
             # COPY
             mailbox.folder.set(mailbox.folder_test_base)
@@ -38,16 +38,16 @@ class ActionTest(MailboxTestCase):
                 #   No mailbox exists with name - "__nonexistent_folder__"']
                 with self.assertRaises(MailboxCopyError):
                     mailbox.copy(mailbox.fetch(limit=1), '__nonexistent_folder__')
-            self.assertEqual(len(list(mailbox.search())), self.base_test_msg_cnt)
+            self.assertEqual(len(list(mailbox.numbers())), self.base_test_msg_cnt)
             mailbox.folder.set(mailbox.folder_test_temp1)
-            self.assertEqual(len(list(mailbox.search())), self.base_test_msg_cnt)
+            self.assertEqual(len(list(mailbox.numbers())), self.base_test_msg_cnt)
 
             # MOVE
             mailbox.folder.set(mailbox.folder_test_temp1)
             mailbox.move(mailbox.fetch(**FETCH_ARGS), mailbox.folder_test_temp2)
-            self.assertEqual(len(list(mailbox.search())), 0)
+            self.assertEqual(len(list(mailbox.numbers())), 0)
             mailbox.folder.set(mailbox.folder_test_temp2)
-            self.assertEqual(len(list(mailbox.search())), self.base_test_msg_cnt)
+            self.assertEqual(len(list(mailbox.numbers())), self.base_test_msg_cnt)
 
             # FLAG
             mailbox.folder.set(mailbox.folder_test_temp2)
@@ -58,16 +58,16 @@ class ActionTest(MailboxTestCase):
             # DELETE
             mailbox.folder.set(mailbox.folder_test_temp2)
             mailbox.delete(mailbox.fetch(**FETCH_ARGS))
-            self.assertEqual(len(list(mailbox.search())), 0)
+            self.assertEqual(len(list(mailbox.numbers())), 0)
 
             # APPEND
             if mailbox.mailbox_name not in ('MAIL_RU', 'YANDEX'):
                 mailbox.folder.set('INBOX')
                 q = A(subject='_append_')
                 mailbox.delete(mailbox.fetch(q, **FETCH_ARGS))
-                self.assertEqual(len(list(mailbox.search(q))), 0)
+                self.assertEqual(len(list(mailbox.numbers(q))), 0)
                 mailbox.append(TEST_MESSAGE_DATA)
-                self.assertEqual(len(list(mailbox.search(q))), 1)  # YANDEX 0!=1 in test only, strange
+                self.assertEqual(len(list(mailbox.numbers(q))), 1)  # YANDEX 0!=1 in test only, strange
                 mailbox.delete(mailbox.fetch(q, **FETCH_ARGS))
 
 

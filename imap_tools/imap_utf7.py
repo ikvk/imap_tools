@@ -4,7 +4,7 @@ Encode and decode UTF-7 string, as described in the RFC 3501
 There are variations, specific to IMAP4rev1, therefore the built-in python UTF-7 codec can't be used.
 The main difference is the shift character, used to switch from ASCII to base64 encoding context.
 This is "&" in that modified UTF-7 convention, since "+" is considered as mainly used in mailbox names.
-Full description in the RFC 3501, section 5.1.3.
+Full description at RFC 3501, section 5.1.3.
 """
 
 import binascii

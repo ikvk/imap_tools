@@ -8,11 +8,12 @@ from .consts import MailMessageFlags
 from .message import MailMessage
 from .folder import MailBoxFolderManager
 from .utils import clean_uids, check_command_status, chunks, encode_folder, clean_flags
-from .errors import MailboxStarttlsError, MailboxLoginError, MailboxLogoutError, MailboxSearchError, \
+from .errors import MailboxStarttlsError, MailboxLoginError, MailboxLogoutError, MailboxNumbersError, \
     MailboxFetchError, MailboxExpungeError, MailboxDeleteError, MailboxCopyError, MailboxFlagError, MailboxAppendError
 
 # Maximal line length when calling readline(). This is to prevent reading arbitrary length lines.
-imaplib._MAXLINE = 4 * 1024 * 1024  # 4Mb
+# 20Mb is enough for search response with about 2 000 000 message numbers
+imaplib._MAXLINE = 20 * 1024 * 1024  # 20Mb
 
 
 class BaseMailBox:
@@ -51,7 +52,7 @@ class BaseMailBox:
         check_command_status(result, MailboxLogoutError, expected='BYE')
         return result
 
-    def search(self, criteria: str or bytes = 'ALL', charset: str = 'US-ASCII') -> [str]:
+    def numbers(self, criteria: str or bytes = 'ALL', charset: str = 'US-ASCII') -> [str]:
         """
         Search mailbox for matching message numbers in current folder (this is not uids)
         :param criteria: message search criteria (see examples at ./doc/imap_search_criteria.txt)
@@ -60,8 +61,12 @@ class BaseMailBox:
         """
         encoded_criteria = criteria if type(criteria) is bytes else str(criteria).encode(charset)
         search_result = self.box.search(charset, encoded_criteria)
-        check_command_status(search_result, MailboxSearchError)
+        check_command_status(search_result, MailboxNumbersError)
         return search_result[1][0].decode().split() if search_result[1][0] else []
+
+    def search(self, *args, **kwargs) -> [str]:
+        warnings.warn('search method are deprecated and will be removed soon, use numbers method instead')
+        return self.numbers(*args, **kwargs)
 
     def _fetch_by_one(self, message_nums: [str], message_parts: str, reverse: bool) -> iter:  # noqa
         for message_num in message_nums:
@@ -101,7 +106,7 @@ class BaseMailBox:
             '' if mark_seen else '.PEEK', 'HEADER' if headers_only else '')
         limit_range = slice(0, limit) if type(limit) is int else limit or slice(None)
         assert type(limit_range) is slice
-        nums = tuple((reversed if reverse else iter)(self.search(criteria, charset)))[limit_range]
+        nums = tuple((reversed if reverse else iter)(self.numbers(criteria, charset)))[limit_range]
         for fetch_item in (self._fetch_in_bulk if bulk else self._fetch_by_one)(nums, message_parts, reverse):  # noqa
             mail_message = self.email_message_class(fetch_item)
             if miss_defect and mail_message.obj.defects:

@@ -5,4 +5,6 @@ from .folder import MailBoxFolderManager
 from .consts import MailMessageFlags, MailBoxFolderStatusOptions
 from .errors import *
 
+__author__ = 'Vladimir Kaukin <KaukinVK@ya.ru>'
+
 __version__ = '0.44.0'

@@ -1,3 +1,8 @@
+0.45.0
+======
+* Renamed BaseMailBox.search -> BaseMailBox.numbers, search are deprecated now
+* Added BaseMailBox.uids
+
 0.44.0
 ======
 * Fixed BaseMailBox.append bug on flag_set=None

@@ -28,8 +28,8 @@ class MessageTest(MailboxTestCase):
             mailbox.folder.set(mailbox.folder_test_base)
             flag_set = {MailMessageFlags.ANSWERED, MailMessageFlags.FLAGGED}
 
-            # search
-            found_nums = mailbox.search()
+            # numbers
+            found_nums = mailbox.numbers()
             self.assertTrue(all(type(i) is str for i in found_nums))
 
             # headers_only
