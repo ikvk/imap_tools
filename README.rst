@@ -35,7 +35,7 @@ Guide
 Basic
 ^^^^^
 
-Find info about imap-tools at: *this page*, issues, pull requests, source, stackoverflow.com
+Info about lib are at: *this page*, issues, pull requests, examples, source, stackoverflow.com
 
 .. code-block:: python
 
@@ -71,7 +71,9 @@ BaseMailBox.<action> - `copy, move, delete, flag, append <#actions-with-emails>`
 
 BaseMailBox.folder - `folder manager <#actions-with-folders>`_
 
-BaseMailBox.numbers - search mailbox for matching message numbers in current folder (this is not uids)
+BaseMailBox.uids - search mailbox for matching message uids in current folder
+
+BaseMailBox.numbers - search mailbox for matching message numbers in current folder
 
 BaseMailBox.box - imaplib.IMAP4/IMAP4_SSL client instance.
 
@@ -218,6 +220,8 @@ Action's uid_list arg may takes:
 * Iterable, that contains str uids
 * Generator with "fetch" name, implicitly gets all uids
 
+Get uids using maibox methods: uids, fetch.
+
 For actions with a large number of messages imap command may be too large and will cause exception at server side,
 use 'limit' argument for fetch in this case.
 
@@ -236,7 +240,7 @@ use 'limit' argument for fetch in this case.
 
         # FLAG unseen messages in current folder as \Seen, \Flagged and TAG1
         flags = (imap_tools.MailMessageFlags.SEEN, imap_tools.MailMessageFlags.FLAGGED, 'TAG1')
-        mailbox.flag(mailbox.fetch(AND(seen=False)), flags, True)
+        mailbox.flag(mailbox.uids(AND(seen=False)), flags, True)
 
         # APPEND: add message to mailbox directly, to INBOX folder with \Seen flag and now date
         with open('/tmp/message.eml', 'rb') as f:
@@ -293,7 +297,7 @@ Contribute
 
 If you found a bug or have a question, then:
 
-1. Look for answer at: this page, issues, pull requests, source, RFCs, stackoverflow.com, internet.
+1. Look for answer at: this page, issues, pull requests, examples, source, RFCs, stackoverflow.com, internet.
 2. And only then - create merge request or issue.
 
 Reasons

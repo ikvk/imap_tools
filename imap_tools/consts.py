@@ -1,6 +1,9 @@
 """Lib constants"""
+import re
 
 SHORT_MONTH_NAMES = ('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec')
+
+UID_PATTERN = re.compile(r'(^|\s+|\W)UID\s+(?P<uid>\d+)')
 
 
 class MailMessageFlags:

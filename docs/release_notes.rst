@@ -1,7 +1,8 @@
 0.45.0
 ======
 * Renamed BaseMailBox.search -> BaseMailBox.numbers, search are deprecated now
-* Added BaseMailBox.uids
+* Renamed MailboxSearchError -> MailboxNumbersError
+* Added BaseMailBox.uids, MailboxUidsError
 
 0.44.0
 ======
@@ -31,7 +32,7 @@
 ======
 * Fixed MailMessage.from_bytes - MailMessage.uid/flags parse errors
 * Fixed utils.parse_email_date - parse bug on bad dates
-* Breaking change: BaseMailBox.fetch miss_defect argument now is False by default, it will be removed soon
+* [Breaking] BaseMailBox.fetch miss_defect argument now is False by default, it will be removed soon
 * Increased the email collection for tests
 
 0.39.0
@@ -45,7 +46,7 @@
 
 0.37.0
 ======
-* Breaking change: MailMessage.headers - now all keys in lower-case (*email headers are not case-sensitive)
+* [Breaking] MailMessage.headers - now all keys in lower-case (*email headers are not case-sensitive)
 * Path with tests excluded from distribution archive
 
 0.36.0

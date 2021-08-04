@@ -7,6 +7,7 @@ from functools import lru_cache
 from email.header import decode_header
 
 from .utils import decode_value, parse_email_addresses, parse_email_date
+from .consts import UID_PATTERN
 
 
 class MailMessage:
@@ -51,7 +52,7 @@ class MailMessage:
         # _raw_uid_data - zimbra, yandex, gmail, gmx
         # _raw_flag_data - mail.ru, ms exchange server
         for raw_uid_item in [self._raw_uid_data] + self._raw_flag_data:
-            uid_match = re.search(r'(^|\s+|\W)UID\s+(?P<uid>\d+)', raw_uid_item.decode())
+            uid_match = re.search(UID_PATTERN, raw_uid_item.decode())
             if uid_match:
                 return uid_match.group('uid')
         return None

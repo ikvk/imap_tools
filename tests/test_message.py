@@ -32,6 +32,11 @@ class MessageTest(MailboxTestCase):
             found_nums = mailbox.numbers()
             self.assertTrue(all(type(i) is str for i in found_nums))
 
+            # uids
+            found_uids = mailbox.uids()
+            self.assertTrue(all(type(i) is str for i in found_uids))
+            self.assertEqual(set([i.uid for i in mailbox.fetch(headers_only=True, bulk=True)]), set(found_uids))
+
             # headers_only
             cnt_fetch_all_head = 0
             cnt_fetch_all_head_answered_and_flagged = 0
@@ -94,7 +99,14 @@ class MessageTest(MailboxTestCase):
             self.assertTrue(cnt_fetch_all_answered_and_flagged >= 1)
             self.assertTrue(cnt_fetch_all_head_answered_and_flagged >= 1)
             self.assertTrue(cnt_fetch_all_bulk_answered_and_flagged >= 1)
-            self.assertTrue(cnt_fetch_all == cnt_fetch_all_head == cnt_fetch_all_bulk == len(found_nums) == 6)
+            self.assertTrue(
+                cnt_fetch_all ==
+                cnt_fetch_all_head ==
+                cnt_fetch_all_bulk ==
+                len(found_nums) ==
+                len(found_uids) ==
+                6
+            )
             self.assertTrue(
                 cnt_fetch_all_answered_and_flagged ==
                 cnt_fetch_all_head_answered_and_flagged ==
@@ -117,7 +129,7 @@ class MessageTest(MailboxTestCase):
         for eml_path in eml_path_set:
             py_path = eml_path.replace('/messages/', '/messages_data/')[:-4] + '.py'
             eml_data_module = _load_module(py_path)
-            expected_data = eml_data_module.DATA # noqa
+            expected_data = eml_data_module.DATA  # noqa
             with open(eml_path, 'rb') as f:
                 bytes_data = f.read()
             message = MailMessage.from_bytes(bytes_data)

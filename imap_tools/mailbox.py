@@ -1,15 +1,17 @@
+import re
 import sys
 import imaplib
 import datetime
 import warnings
 from email.errors import StartBoundaryNotFoundDefect, MultipartInvariantViolationDefect
 
-from .consts import MailMessageFlags
+from .consts import MailMessageFlags, UID_PATTERN
 from .message import MailMessage
 from .folder import MailBoxFolderManager
-from .utils import clean_uids, check_command_status, chunks, encode_folder, clean_flags
+from .utils import clean_uids, check_command_status, chunks, encode_folder, clean_flags, decode_value
 from .errors import MailboxStarttlsError, MailboxLoginError, MailboxLogoutError, MailboxNumbersError, \
-    MailboxFetchError, MailboxExpungeError, MailboxDeleteError, MailboxCopyError, MailboxFlagError, MailboxAppendError
+    MailboxFetchError, MailboxExpungeError, MailboxDeleteError, MailboxCopyError, MailboxFlagError, \
+    MailboxAppendError, MailboxUidsError
 
 # Maximal line length when calling readline(). This is to prevent reading arbitrary length lines.
 # 20Mb is enough for search response with about 2 000 000 message numbers
@@ -57,7 +59,7 @@ class BaseMailBox:
         Search mailbox for matching message numbers in current folder (this is not uids)
         :param criteria: message search criteria (see examples at ./doc/imap_search_criteria.txt)
         :param charset: IANA charset, indicates charset of the strings that appear in the search criteria. See rfc2978
-        :return list of str
+        :return email message numbers
         """
         encoded_criteria = criteria if type(criteria) is bytes else str(criteria).encode(charset)
         search_result = self.box.search(charset, encoded_criteria)
@@ -67,6 +69,28 @@ class BaseMailBox:
     def search(self, *args, **kwargs) -> [str]:
         warnings.warn('search method are deprecated and will be removed soon, use numbers method instead')
         return self.numbers(*args, **kwargs)
+
+    def uids(self, criteria: str or bytes = 'ALL', charset: str = 'US-ASCII', miss_no_uid=True) -> [str]:
+        """
+        Search mailbox for matching message uids in current folder
+        :param criteria: message search criteria (see examples at ./doc/imap_search_criteria.txt)
+        :param charset: IANA charset, indicates charset of the strings that appear in the search criteria. See rfc2978
+        :param miss_no_uid: add None values to result when uid item not matched to pattern
+        :return: email message uids
+        """
+        nums = self.numbers(criteria, charset)
+        if not nums:
+            return []
+        fetch_result = self.box.fetch(','.join(nums), "(UID)")
+        check_command_status(fetch_result, MailboxUidsError)
+        result = []
+        for fetch_item in fetch_result[1]:
+            uid_match = re.search(UID_PATTERN, decode_value(fetch_item))
+            if uid_match:
+                result.append(uid_match.group('uid'))
+            elif not miss_no_uid:
+                result.append(None)
+        return result
 
     def _fetch_by_one(self, message_nums: [str], message_parts: str, reverse: bool) -> iter:  # noqa
         for message_num in message_nums:

@@ -58,6 +58,10 @@ class MailboxNumbersError(UnexpectedCommandStatusError):
     pass
 
 
+class MailboxUidsError(UnexpectedCommandStatusError):
+    pass
+
+
 class MailboxStarttlsError(UnexpectedCommandStatusError):
     pass
 
