@@ -357,7 +357,8 @@ Big thanks to people who helped develop this library:
 `ThKue <https://github.com/ThKue>`_,
 `repodiac <https://github.com/repodiac>`_,
 `tiuub <https://github.com/tiuub>`_,
-`Yannik <https://github.com/Yannik>`_
+`Yannik <https://github.com/Yannik>`_,
+`pete312 <https://github.com/pete312>`_
 
 Donate
 ------
