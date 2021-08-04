@@ -28,15 +28,6 @@ class MessageTest(MailboxTestCase):
             mailbox.folder.set(mailbox.folder_test_base)
             flag_set = {MailMessageFlags.ANSWERED, MailMessageFlags.FLAGGED}
 
-            # numbers
-            found_nums = mailbox.numbers()
-            self.assertTrue(all(type(i) is str for i in found_nums))
-
-            # uids
-            found_uids = mailbox.uids()
-            self.assertTrue(all(type(i) is str for i in found_uids))
-            self.assertEqual(set([i.uid for i in mailbox.fetch(headers_only=True, bulk=True)]), set(found_uids))
-
             # headers_only
             cnt_fetch_all_head = 0
             cnt_fetch_all_head_answered_and_flagged = 0
@@ -103,8 +94,6 @@ class MessageTest(MailboxTestCase):
                 cnt_fetch_all ==
                 cnt_fetch_all_head ==
                 cnt_fetch_all_bulk ==
-                len(found_nums) ==
-                len(found_uids) ==
                 6
             )
             self.assertTrue(
