@@ -3,7 +3,7 @@
 imap_tools 📧
 =============
 
-Work with email and mailbox by IMAP:
+Work with email by IMAP:
 
 - Parsed email message attributes
 - Query builder for searching emails
