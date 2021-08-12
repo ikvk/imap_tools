@@ -67,11 +67,15 @@ BaseMailBox.fetch - first searches email nums by criteria in current folder, the
 * *headers_only* = False, get only email headers (without text, html, attachments)
 * *bulk* = False, False - fetch each message separately per N commands - low memory consumption, slow; True - fetch all messages per 1 command - high memory consumption, fast
 
+BaseMailBox.uids - search mailbox for matching message uids in current folder
+
+* *criteria* = 'ALL', message search criteria (see examples at ./doc/imap_search_criteria.txt)
+* *charset* = 'US-ASCII', IANA charset, indicates charset of the strings that appear in the search criteria. See rfc2978
+* *miss_no_uid* = True, add None values to result when uid item not matched to pattern
+
 BaseMailBox.<action> - `copy, move, delete, flag, append <#actions-with-emails>`_
 
 BaseMailBox.folder - `folder manager <#actions-with-folders>`_
-
-BaseMailBox.uids - search mailbox for matching message uids in current folder
 
 BaseMailBox.numbers - search mailbox for matching message numbers in current folder
 
