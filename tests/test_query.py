@@ -76,9 +76,15 @@ class QueryTest(unittest.TestCase):
         self.assertEqual(A(header=H('X-Google-Smtp-Source', '123')), '(HEADER "X-Google-Smtp-Source" "123")')
         self.assertEqual(A(uid='1,2'), '(UID 1,2)')
         self.assertEqual(A(uid=['3', '4']), '(UID 3,4)')
+        self.assertEqual(A(uid=['3', '4:*']), '(UID 3,4:*)')
+        self.assertEqual(A(uid=['3', '*:5']), '(UID 3,*:5)')
+        self.assertEqual(A(uid=['*']), '(UID *)')
         self.assertEqual(A(uid=U('*', '1000')), '(UID *:1000)')
         self.assertEqual(A(uid=U('2', '*')), '(UID 2:*)')
         self.assertEqual(A(uid=U('*', '*')), '(UID *:*)')
+        self.assertEqual(A(uid=U('*')), '(UID *)')
+        self.assertEqual(A(uid=U('*', '12')), '(UID *:12)')
+        self.assertEqual(A(uid=U('345')), '(UID 345)')
 
         self.assertEqual(A(gmail_label="TestLabel"), '(X-GM-LABELS "TestLabel")')
 

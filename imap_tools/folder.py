@@ -51,14 +51,16 @@ class MailBoxFolderManager:
         check_command_status(result, MailboxFolderDeleteError)
         return result
 
-    def status(self, folder: str or bytes, options: [str] or None = None) -> dict:
+    def status(self, folder: str or bytes or None = None, options: [str] or None = None) -> dict:
         """
         Get the status of a folder
-        :param folder: mailbox folder
+        :param folder: mailbox folder, current folder if None
         :param options: [str] with values from MailBoxFolderStatusOptions.all | None - for get all options
         :return: dict with available options keys
         """
         command = 'STATUS'
+        if folder is None:
+            folder = self.get()
         if not options:
             options = tuple(MailBoxFolderStatusOptions.all)
         for opt in options:

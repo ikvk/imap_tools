@@ -12,6 +12,7 @@ from . import imap_utf7
 def clean_uids(uid_set: str or [str] or iter) -> str:
     """
     Prepare set of uid for use in IMAP commands
+    uid RE patterns are not strict and allow invalid combinations, but simple. Example: 2,4:7,9,12:*
     :param uid_set:
         str, that is comma separated uids
         Iterable, that contains str uids
@@ -20,7 +21,7 @@ def clean_uids(uid_set: str or [str] or iter) -> str:
     """
     # str
     if type(uid_set) is str:
-        if re.search(r'^(\d+,)*\d+$', uid_set):  # *optimization for already good str
+        if re.search(r'^([\d*:]+,)*[\d*:]+$', uid_set):  # *optimization for already good str
             return uid_set
         uid_set = uid_set.split(',')
     # Generator
@@ -35,7 +36,7 @@ def clean_uids(uid_set: str or [str] or iter) -> str:
     for uid in uid_set_iter:
         if type(uid) is not str:
             raise TypeError('uid "{}" is not string'.format(str(uid)))
-        if not uid.strip().isdigit():
+        if not re.match(r'^[\d*:]+$', uid.strip()):
             raise TypeError('Wrong uid: "{}"'.format(uid))
     return ','.join(i.strip() for i in uid_set)
 

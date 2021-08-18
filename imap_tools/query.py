@@ -76,22 +76,27 @@ H = Header  # Short alias
 
 class UidRange:
     """
+    * - represents the largest number in use.
+    x:y - represents sequence range, example: 4:*
     NOTE: UID range of <value>:* always includes the UID of the last message in the mailbox,
     even if <value> is higher than any assigned UID value ->
     any UID range with * indicates at least one message (with the highest numbered UID), unless the mailbox is empty.
     """
     __slots__ = ('start', 'end')
 
-    def __init__(self, start: str, end: str):
+    def __init__(self, start: str, end: str or None = None):
         self.start = str(start).strip()
         if not (self.start.isdigit() or self.start == '*'):
             raise TypeError('UidRange start arg must be str with digits or *')
-        self.end = str(end).strip()
-        if not (self.end.isdigit() or self.end == '*'):
-            raise TypeError('UidRange end arg must be str with digits or *')
+        if end is None:
+            self.end = None
+        else:
+            self.end = str(end).strip()
+            if not (self.end.isdigit() or self.end == '*'):
+                raise TypeError('UidRange end arg must be str with digits or *')
 
     def __str__(self):
-        return '{0.start}:{0.end}'.format(self)
+        return '{}{}'.format(self.start, ':{}'.format(self.end) if self.end else '')
 
 
 U = UidRange  # Short alias

@@ -1,3 +1,9 @@
+0.46.0
+======
+* MailBoxFolderManager.status folder argument now may by equal to None - status of current folder
+* utils.clean_uids now accept uid strings with uid sequence ranges, example: *:4,5:7,10
+* query.UidRange end argument now may be None, equal to None by default
+
 0.45.0
 ======
 * Renamed BaseMailBox.search -> BaseMailBox.numbers, search are deprecated now
