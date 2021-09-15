@@ -1,4 +1,5 @@
 import re
+from typing import AnyStr, Optional, Sequence, List, Dict
 
 from . import imap_utf7
 from .consts import MailBoxFolderStatusOptions
@@ -14,7 +15,7 @@ class MailBoxFolderManager:
         self.mailbox = mailbox
         self._current_folder = None
 
-    def set(self, folder: str or bytes, readonly: bool = False):
+    def set(self, folder: AnyStr, readonly: bool = False) -> tuple:
         """Select current folder"""
         result = self.mailbox.box.select(encode_folder(folder), readonly)
         check_command_status(result, MailboxFolderSelectError)
@@ -25,7 +26,7 @@ class MailBoxFolderManager:
         """Checks whether a folder exists on the server."""
         return len(self.list('', folder)) > 0
 
-    def create(self, folder: str or bytes):
+    def create(self, folder: AnyStr) -> tuple:
         """
         Create folder on the server.
         Use email box delimiter to separate folders. Example for "|" delimiter: "folder|sub folder"
@@ -34,24 +35,29 @@ class MailBoxFolderManager:
         check_command_status(result, MailboxFolderCreateError)
         return result
 
-    def get(self):
-        """Get current folder"""
+    def get(self) -> Optional[str]:
+        """
+        Get current folder
+        :return:
+            None - if folder is not selected
+            str - if folder is selected
+        """
         return self._current_folder
 
-    def rename(self, old_name: str or bytes, new_name: str or bytes):
-        """Renemae folder from old_name to new_name"""
+    def rename(self, old_name: AnyStr, new_name: AnyStr) -> tuple:
+        """Rename folder from old_name to new_name"""
         result = self.mailbox.box._simple_command(
             'RENAME', encode_folder(old_name), encode_folder(new_name))
         check_command_status(result, MailboxFolderRenameError)
         return result
 
-    def delete(self, folder: str or bytes):
+    def delete(self, folder: AnyStr) -> tuple:
         """Delete folder"""
         result = self.mailbox.box._simple_command('DELETE', encode_folder(folder))
         check_command_status(result, MailboxFolderDeleteError)
         return result
 
-    def status(self, folder: str or bytes or None = None, options: [str] or None = None) -> dict:
+    def status(self, folder: Optional[AnyStr] = None, options: Optional[Sequence[str]] = None) -> Dict[str, int]:
         """
         Get the status of a folder
         :param folder: mailbox folder, current folder if None
@@ -75,7 +81,7 @@ class MailBoxFolderManager:
         values = status_data.decode().split('(')[1].split(')')[0].split(' ')
         return {k: int(v) for k, v in pairs_to_dict(values).items() if str(v).isdigit()}
 
-    def list(self, folder: str or bytes = '', search_args: str = '*', subscribed_only: bool = False) -> list:
+    def list(self, folder: AnyStr = '', search_args: str = '*', subscribed_only: bool = False) -> List[Dict]:
         """
         Get a listing of folders on the server
         :param folder: mailbox folder, if empty - get from root
@@ -120,7 +126,7 @@ class MailBoxFolderManager:
             result.append(folder_dict)
         return result
 
-    def subscribe(self, folder: str or bytes, value: bool):
+    def subscribe(self, folder: AnyStr, value: bool) -> tuple:
         """subscribe/unsubscribe to folder"""
         method = self.mailbox.box.subscribe if value else self.mailbox.box.unsubscribe
         result = method(encode_folder(folder))

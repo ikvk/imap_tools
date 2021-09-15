@@ -8,6 +8,7 @@ Full description at RFC 3501, section 5.1.3.
 """
 
 import binascii
+from typing import Sequence, MutableSequence
 
 
 # ENCODING
@@ -16,7 +17,7 @@ def _modified_base64(value: str) -> bytes:
     return binascii.b2a_base64(value.encode('utf-16be')).rstrip(b'\n=').replace(b'/', b',')
 
 
-def _do_b64(_in: [str], r: [bytes]):
+def _do_b64(_in: Sequence[str], r: MutableSequence[bytes]):
     if _in:
         r.append(b'&' + _modified_base64(''.join(_in)) + b'-')
     del _in[:]

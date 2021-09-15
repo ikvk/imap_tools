@@ -1,3 +1,10 @@
+0.47.0
+======
+* Dropped support for python 3.3, 3.4
+* Added type annotations
+* [Breaking] utils.clean_uids - removed special case for Generator with "fetch" name for implicitly gets all uids. Use BaseMailBox.uids method instead.
+* Removed BaseMailBox deprecated stuff: fetch miss_defect arg, seen method, search method
+
 0.46.0
 ======
 * MailBoxFolderManager.status folder argument now may by equal to None - status of current folder

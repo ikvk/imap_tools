@@ -1,9 +1,10 @@
-"""Lib constants"""
 import re
 
 SHORT_MONTH_NAMES = ('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec')
 
 UID_PATTERN = re.compile(r'(^|\s+|\W)UID\s+(?P<uid>\d+)')
+
+TIMEOUT_ARG_SUPPORT_ERROR = 'imaplib.IMAP4 timeout argument supported since python 3.9'
 
 
 class MailMessageFlags:

@@ -15,8 +15,8 @@ class UtilsTest(unittest.TestCase):
     def test_clean_flags(self):
         self.assertEqual(utils.clean_flags([MailMessageFlags.FLAGGED, MailMessageFlags.SEEN]), ['\\Flagged', '\\Seen'])
         self.assertEqual(utils.clean_flags(['\\FLAGGED', '\\seen']), ['\\FLAGGED', '\\seen'])
-        self.assertEqual(utils.clean_flags(['TAG1']), ['TAG1',])
-        self.assertEqual(utils.clean_flags(['tag2']), ['tag2',])
+        self.assertEqual(utils.clean_flags(['TAG1']), ['TAG1'])
+        self.assertEqual(utils.clean_flags(['tag2']), ['tag2'])
         for flag in MailMessageFlags.all:
             self.assertEqual(utils.clean_flags(flag), ['\\' + flag.replace('\\', '', 1).capitalize()])
         with self.assertRaises(ValueError):

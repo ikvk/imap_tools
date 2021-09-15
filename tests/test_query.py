@@ -7,15 +7,6 @@ from imap_tools.query import ParamConverter, A, AND, OR, NOT, H, U
 class QueryTest(unittest.TestCase):
 
     def test_cleaners(self):
-        def fetch():
-            class Msg:
-                uid = '1'
-
-            yield Msg()
-
-        def not_fetch():
-            yield 1
-
         for cleaned_fn_name, good_vals, bad_vals in (
                 ('cleaned_bool', (True, False), (1, 'str', [], {}, type, b'1')),
                 ('cleaned_date', (dt.date.today(),), (dt.datetime.now(), 1, 's', [], {}, type, True, b'1')),
@@ -23,8 +14,8 @@ class QueryTest(unittest.TestCase):
                 ('cleaned_str', ('', 'good', 'я 你好'), (1, [], {}, type, True, b'1')),
                 ('cleaned_true', (True,), (1, 'str', [], {}, type, False, b'1')),
                 ('cleaned_uid',
-                 ('1', '1,2', ['1', '2'], [], {}, fetch(), U('8', '*')),
-                 (1, type, True, b'1', '', not_fetch())),
+                 ('1', '1,2', ['1', '2'], [], {}, U('8', '*')),
+                 (1, type, True, b'1', '')),
                 ('cleaned_header', (H('X-Google-Smtp', '123'), H('a', '1')), (1, 's', ['s', 1], {}, type, False, b'1')),
         ):
             cleaned_fn = getattr(ParamConverter, cleaned_fn_name)

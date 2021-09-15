@@ -14,7 +14,7 @@ Work with email by IMAP:
 .. image:: https://img.shields.io/pypi/dm/imap_tools.svg?style=social
 
 ===============  ===============================================================
-Python version   3.3+
+Python version   3.5+
 License          Apache-2.0
 PyPI             https://pypi.python.org/pypi/imap_tools/
 IMAP RFC         VERSION 4rev1 - https://tools.ietf.org/html/rfc3501
@@ -67,7 +67,7 @@ BaseMailBox.fetch - first searches email nums by criteria in current folder, the
 * *headers_only* = False, get only email headers (without text, html, attachments)
 * *bulk* = False, False - fetch each message separately per N commands - low memory consumption, slow; True - fetch all messages per 1 command - high memory consumption, fast
 
-BaseMailBox.uids - search mailbox for matching message uids in current folder, returns [str or None]
+BaseMailBox.uids - search mailbox for matching message uids in current folder, returns [str | None]
 
 * *criteria* = 'ALL', message search criteria, `query builder <#search-criteria>`_
 * *charset* = 'US-ASCII', indicates charset of the strings that appear in the search criteria. See rfc2978
@@ -89,7 +89,7 @@ MailMessage and MailAttachment public attributes are cached by functools.lru_cac
 .. code-block:: python
 
     for msg in mailbox.fetch():  # generator: imap_tools.MailMessage
-        msg.uid          # str or None: '123'
+        msg.uid          # str | None: '123'
         msg.subject      # str: 'some subject 你 привет'
         msg.from_        # str: 'Bartölke@ya.ru'
         msg.to           # tuple: ('iam@goo.ru', 'friend@ya.ru', )
@@ -115,7 +115,7 @@ MailMessage and MailAttachment public attributes are cached by functools.lru_cac
             att.size                 # int: 17361 bytes
 
         msg.obj              # email.message.Message: original object
-        msg.from_values      # dict or None: {'email': 'im@ya.ru', 'name': 'Ya', 'full': 'Ya <im@ya.ru>'}
+        msg.from_values      # dict | None: {'email': 'im@ya.ru', 'name': 'Ya', 'full': 'Ya <im@ya.ru>'}
         msg.to_values        # tuple: ({'email': '', 'name': '', 'full': ''},)
         msg.cc_values        # tuple: ({'email': '', 'name': '', 'full': ''},)
         msg.bcc_values       # tuple: ({'email': '', 'name': '', 'full': ''},)
@@ -221,8 +221,7 @@ First of all read about uid `at rfc3501 <https://tools.ietf.org/html/rfc3501#sec
 Action's uid_list arg may takes:
 
 * str, that is comma separated uids
-* Iterable, that contains str uids
-* Generator with "fetch" name, implicitly gets all uids
+* Sequence, that contains str uids
 
 Get uids using maibox methods: uids, fetch.
 
@@ -236,11 +235,11 @@ use 'limit' argument for fetch in this case.
         # COPY messages with uid in 23,27 from current folder to folder1
         mailbox.copy('23,27', 'folder1')
 
-        # MOVE all messages from current folder to INBOX/folder2, (implicit creation of uid list)
-        mailbox.move(mailbox.fetch(), 'INBOX/folder2')
+        # MOVE all messages from current folder to INBOX/folder2
+        mailbox.move(mailbox.uids(), 'INBOX/folder2')
 
-        # DELETE all messages from current folder, (explicit creation of uid list)
-        mailbox.delete([msg.uid for msg in mailbox.fetch()])
+        # DELETE messages with 'cat' word in its html from current folder
+        mailbox.delete([msg.uid for msg in mailbox.fetch() if 'cat' in msg.html])
 
         # FLAG unseen messages in current folder as \Seen, \Flagged and TAG1
         flags = (imap_tools.MailMessageFlags.SEEN, imap_tools.MailMessageFlags.FLAGGED, 'TAG1')
@@ -362,7 +361,9 @@ Big thanks to people who helped develop this library:
 `repodiac <https://github.com/repodiac>`_,
 `tiuub <https://github.com/tiuub>`_,
 `Yannik <https://github.com/Yannik>`_,
-`pete312 <https://github.com/pete312>`_
+`pete312 <https://github.com/pete312>`_,
+`edkedk99 <https://github.com/edkedk99>`_,
+`UlisseMini <https://github.com/UlisseMini>`_
 
 Donate
 ------

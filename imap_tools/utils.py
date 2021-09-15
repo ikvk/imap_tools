@@ -1,22 +1,21 @@
 import re
-import inspect
 import datetime
 from itertools import zip_longest
 from email.utils import getaddresses, parsedate_to_datetime
 from email.header import decode_header, Header
+from typing import AnyStr, Sequence, Union, Optional, Tuple, Iterable, Any, List, Dict
 
 from .consts import SHORT_MONTH_NAMES, MailMessageFlags
 from . import imap_utf7
 
 
-def clean_uids(uid_set: str or [str] or iter) -> str:
+def clean_uids(uid_set: Union[str, Sequence[str]]) -> str:
     """
     Prepare set of uid for use in IMAP commands
     uid RE patterns are not strict and allow invalid combinations, but simple. Example: 2,4:7,9,12:*
     :param uid_set:
         str, that is comma separated uids
         Iterable, that contains str uids
-        Generator with "fetch" name, implicitly gets all uids
     :return: str - uids, concatenated by a comma
     """
     # str
@@ -24,9 +23,6 @@ def clean_uids(uid_set: str or [str] or iter) -> str:
         if re.search(r'^([\d*:]+,)*[\d*:]+$', uid_set):  # *optimization for already good str
             return uid_set
         uid_set = uid_set.split(',')
-    # Generator
-    if inspect.isgenerator(uid_set) and getattr(uid_set, '__name__', None) == 'fetch':
-        uid_set = tuple(msg.uid for msg in uid_set if msg.uid)
     # Iterable
     try:
         uid_set_iter = iter(uid_set)
@@ -54,7 +50,7 @@ def check_command_status(command_result: tuple, exception: type, expected='OK'):
         raise exception(command_result=command_result, expected=expected)
 
 
-def decode_value(value: bytes or str, encoding=None) -> str:
+def decode_value(value: AnyStr, encoding: Optional[str] = None) -> str:
     """Converts value to utf-8 encoding"""
     if isinstance(encoding, str):
         encoding = encoding.lower()
@@ -66,7 +62,7 @@ def decode_value(value: bytes or str, encoding=None) -> str:
     return value
 
 
-def parse_email_addresses(raw_header: str or Header) -> (dict,):
+def parse_email_addresses(raw_header: Union[str, Header]) -> Tuple[dict, ...]:
     """
     Parse email addresses from header
     :param raw_header: example: '=?UTF-8?B?0J7Qu9C1=?= <name@company.ru>,\r\n "\'\\"z, z\\"\'" <imap.tools@ya.ru>'
@@ -128,21 +124,21 @@ def parse_email_date(value: str) -> datetime.datetime:
     return datetime.datetime(1900, 1, 1)
 
 
-def quote(value: str or bytes) -> str or bytes:
+def quote(value: AnyStr) -> AnyStr:
     if isinstance(value, str):
         return '"' + value.replace('\\', '\\\\').replace('"', '\\"') + '"'
     else:
         return b'"' + value.replace(b'\\', b'\\\\').replace(b'"', b'\\"') + b'"'
 
 
-def pairs_to_dict(items: list) -> dict:
+def pairs_to_dict(items: List[Any]) -> Dict[Any, Any]:
     """Example: ['MESSAGES', '3', 'UIDNEXT', '4'] -> {'MESSAGES': '3', 'UIDNEXT': '4'}"""
     if len(items) % 2 != 0:
         raise ValueError('An even-length array is expected')
     return dict((items[i * 2], items[i * 2 + 1]) for i in range(len(items) // 2))
 
 
-def chunks(iterable: iter, n: int, fill_value=None) -> iter:
+def chunks(iterable: Iterable[Any], n: int, fill_value: Optional[Any] = None) -> Iterable[Tuple[Any, ...]]:
     """
     Group data into fixed-length chunks or blocks
     Examples:
@@ -152,7 +148,7 @@ def chunks(iterable: iter, n: int, fill_value=None) -> iter:
     return zip_longest(*[iter(iterable)] * n, fillvalue=fill_value)
 
 
-def encode_folder(folder: str or bytes) -> bytes:
+def encode_folder(folder: AnyStr) -> bytes:
     """Encode folder name"""
     if isinstance(folder, bytes):
         return folder
@@ -160,7 +156,7 @@ def encode_folder(folder: str or bytes) -> bytes:
         return quote(imap_utf7.encode(folder))
 
 
-def clean_flags(flag_set: [str] or str) -> [str]:
+def clean_flags(flag_set: Union[str, Sequence[str]]) -> List[str]:
     """
     Check the correctness of the flags
     :return: list of str - flags

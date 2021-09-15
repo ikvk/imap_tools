@@ -2,10 +2,10 @@ import re
 import sys
 import imaplib
 import datetime
-import warnings
+from typing import AnyStr, Optional, List, Iterable, Sequence, Union, Tuple
 from email.errors import StartBoundaryNotFoundDefect, MultipartInvariantViolationDefect
 
-from .consts import MailMessageFlags, UID_PATTERN
+from .consts import UID_PATTERN, TIMEOUT_ARG_SUPPORT_ERROR
 from .message import MailMessage
 from .folder import MailBoxFolderManager
 from .utils import clean_uids, check_command_status, chunks, encode_folder, clean_flags, decode_value
@@ -24,7 +24,6 @@ class BaseMailBox:
     email_message_class = MailMessage
     folder_manager_class = MailBoxFolderManager
     with_headers_only_allowed_errors = (StartBoundaryNotFoundDefect, MultipartInvariantViolationDefect)
-    _timeout_arg_support_error = 'timeout argument supported since python 3.9'
 
     def __init__(self):
         self.folder = None  # folder manager
@@ -40,7 +39,7 @@ class BaseMailBox:
     def _get_mailbox_client(self) -> imaplib.IMAP4:
         raise NotImplementedError
 
-    def login(self, username: str, password: str, initial_folder: str or None = 'INBOX'):
+    def login(self, username: str, password: str, initial_folder: Optional[str] = 'INBOX') -> 'BaseMailBox':
         login_result = self.box.login(username, password)
         check_command_status(login_result, MailboxLoginError)
         self.folder = self.folder_manager_class(self)
@@ -49,12 +48,12 @@ class BaseMailBox:
         self.login_result = login_result
         return self  # return self in favor of context manager
 
-    def logout(self):
+    def logout(self) -> tuple:
         result = self.box.logout()
         check_command_status(result, MailboxLogoutError, expected='BYE')
         return result
 
-    def numbers(self, criteria: str or bytes = 'ALL', charset: str = 'US-ASCII') -> [str]:
+    def numbers(self, criteria: AnyStr = 'ALL', charset: str = 'US-ASCII') -> List[str]:
         """
         Search mailbox for matching message numbers in current folder (this is not uids)
         :param criteria: message search criteria (see examples at ./doc/imap_search_criteria.txt)
@@ -66,11 +65,7 @@ class BaseMailBox:
         check_command_status(search_result, MailboxNumbersError)
         return search_result[1][0].decode().split() if search_result[1][0] else []
 
-    def search(self, *args, **kwargs) -> [str]:
-        warnings.warn('search method are deprecated and will be removed soon, use numbers method instead')
-        return self.numbers(*args, **kwargs)
-
-    def uids(self, criteria: str or bytes = 'ALL', charset: str = 'US-ASCII', miss_no_uid=True) -> [str]:
+    def uids(self, criteria: AnyStr = 'ALL', charset: str = 'US-ASCII', miss_no_uid=True) -> List[str]:
         """
         Search mailbox for matching message uids in current folder
         :param criteria: message search criteria (see examples at ./doc/imap_search_criteria.txt)
@@ -85,6 +80,7 @@ class BaseMailBox:
         check_command_status(fetch_result, MailboxUidsError)
         result = []
         for fetch_item in fetch_result[1]:
+            fetch_item: AnyStr
             uid_match = re.search(UID_PATTERN, decode_value(fetch_item))
             if uid_match:
                 result.append(uid_match.group('uid'))
@@ -92,13 +88,13 @@ class BaseMailBox:
                 result.append(None)
         return result
 
-    def _fetch_by_one(self, message_nums: [str], message_parts: str, reverse: bool) -> iter:  # noqa
+    def _fetch_by_one(self, message_nums: Sequence[str], message_parts: str, reverse: bool) -> Iterable[list]:  # noqa
         for message_num in message_nums:
             fetch_result = self.box.fetch(message_num, message_parts)
             check_command_status(fetch_result, MailboxFetchError)
             yield fetch_result[1]
 
-    def _fetch_in_bulk(self, message_nums: [str], message_parts: str, reverse: bool) -> iter:
+    def _fetch_in_bulk(self, message_nums: Sequence[str], message_parts: str, reverse: bool) -> Iterable[list]:
         if not message_nums:
             return
         fetch_result = self.box.fetch(','.join(message_nums), message_parts)
@@ -106,16 +102,15 @@ class BaseMailBox:
         for built_fetch_item in chunks((reversed if reverse else iter)(fetch_result[1]), 2):
             yield built_fetch_item
 
-    def fetch(self, criteria: str or bytes = 'ALL', charset: str = 'US-ASCII', limit: int or slice = None,
-              miss_defect=False, miss_no_uid=True, mark_seen=True, reverse=False, headers_only=False,
-              bulk=False) -> iter:
+    def fetch(self, criteria: AnyStr = 'ALL', charset: str = 'US-ASCII', limit: Optional[Union[int, slice]] = None,
+              miss_no_uid=True, mark_seen=True, reverse=False, headers_only=False,
+              bulk=False) -> Iterable[MailMessage]:
         """
         Mail message generator in current folder by search criteria
         :param criteria: message search criteria (see examples at ./doc/imap_search_criteria.txt)
         :param charset: IANA charset, indicates charset of the strings that appear in the search criteria. See rfc2978
         :param limit: int | slice - limit number of read emails | slice emails range for read
                       useful for actions with a large number of messages, like "move" | paging
-        :param miss_defect: miss emails with defects
         :param miss_no_uid: miss emails without uid
         :param mark_seen: mark emails as seen on fetch
         :param reverse: in order from the larger date to the smaller
@@ -124,8 +119,6 @@ class BaseMailBox:
                      True  - fetch all messages per 1 command - high memory consumption, fast
         :return generator: MailMessage
         """
-        if miss_defect:
-            warnings.warn('miss_defect argument are deprecated and will be removed soon')
         message_parts = "(BODY{}[{}] UID FLAGS RFC822.SIZE)".format(
             '' if mark_seen else '.PEEK', 'HEADER' if headers_only else '')
         limit_range = slice(0, limit) if type(limit) is int else limit or slice(None)
@@ -133,12 +126,6 @@ class BaseMailBox:
         nums = tuple((reversed if reverse else iter)(self.numbers(criteria, charset)))[limit_range]
         for fetch_item in (self._fetch_in_bulk if bulk else self._fetch_by_one)(nums, message_parts, reverse):  # noqa
             mail_message = self.email_message_class(fetch_item)
-            if miss_defect and mail_message.obj.defects:
-                if headers_only:
-                    if not all(d.__class__ in self.with_headers_only_allowed_errors for d in mail_message.obj.defects):
-                        continue
-                else:
-                    continue
             if miss_no_uid and not mail_message.uid:
                 continue
             yield mail_message
@@ -148,7 +135,7 @@ class BaseMailBox:
         check_command_status(result, MailboxExpungeError)
         return result
 
-    def delete(self, uid_list) -> (tuple, tuple) or None:
+    def delete(self, uid_list: Union[str, Sequence[str]]) -> Optional[Tuple[tuple, tuple]]:
         """
         Delete email messages
         Do nothing on empty uid_list
@@ -162,7 +149,7 @@ class BaseMailBox:
         expunge_result = self.expunge()
         return store_result, expunge_result
 
-    def copy(self, uid_list, destination_folder: str or bytes) -> tuple or None:
+    def copy(self, uid_list: Union[str, Sequence[str]], destination_folder: AnyStr) -> Optional[tuple]:
         """
         Copy email messages into the specified folder
         Do nothing on empty uid_list
@@ -175,13 +162,12 @@ class BaseMailBox:
         check_command_status(copy_result, MailboxCopyError)
         return copy_result
 
-    def move(self, uid_list, destination_folder: str or bytes) -> (tuple, tuple) or None:
+    def move(self, uid_list: Union[str, Sequence[str]], destination_folder: AnyStr) -> Optional[Tuple[tuple, tuple]]:
         """
         Move email messages into the specified folder
         Do nothing on empty uid_list
         :return: None on empty uid_list, command results otherwise
         """
-        # here for avoid double fetch in uid_set
         uid_str = clean_uids(uid_list)
         if not uid_str:
             return None
@@ -189,7 +175,8 @@ class BaseMailBox:
         delete_result = self.delete(uid_str)
         return copy_result, delete_result
 
-    def flag(self, uid_list, flag_set: [str] or str, value: bool) -> (tuple, tuple) or None:
+    def flag(self, uid_list: Union[str, Sequence[str]], flag_set: Union[str, Sequence[str]], value: bool) \
+            -> Optional[Tuple[tuple, tuple]]:
         """
         Set/unset email flags
         Do nothing on empty uid_list
@@ -206,18 +193,10 @@ class BaseMailBox:
         expunge_result = self.expunge()
         return store_result, expunge_result
 
-    def seen(self, uid_list, seen_val: bool) -> (tuple, tuple) or None:
-        """
-        Mark email as read/unread
-        This is shortcut for flag method
-        """
-        warnings.warn('seen method are deprecated and will be removed soon, use flag method instead')
-        return self.flag(uid_list, MailMessageFlags.SEEN, seen_val)
-
-    def append(self, message: MailMessage or bytes,
-               folder: str or bytes = 'INBOX',
-               dt: datetime.datetime or None = None,
-               flag_set: [str] or str or None = None) -> tuple:
+    def append(self, message: Union[MailMessage, bytes],
+               folder: AnyStr = 'INBOX',
+               dt: Optional[datetime.datetime] = None,
+               flag_set: Optional[Union[str, Sequence[str]]] = None) -> tuple:
         """
         Append email messages to server
         :param message: MailMessage object or bytes
@@ -234,7 +213,7 @@ class BaseMailBox:
         typ, dat = self.box.append(
             encode_folder(folder),  # noqa
             '({})'.format(' '.join(cleaned_flags)) if cleaned_flags else None,
-            dt or datetime.datetime.now(timezone),
+            dt or datetime.datetime.now(timezone),  # noqa
             message if type(message) is bytes else message.obj.as_bytes()
         )
         append_result = (typ, dat)
@@ -252,13 +231,13 @@ class MailBoxUnencrypted(BaseMailBox):
         :param timeout: timeout in seconds for the connection attempt, since python 3.9
         """
         if timeout and sys.version_info.minor < 9:
-            raise ValueError(self._timeout_arg_support_error)
+            raise ValueError(TIMEOUT_ARG_SUPPORT_ERROR)
         self._host = host
         self._port = port
         self._timeout = timeout
         super().__init__()
 
-    def _get_mailbox_client(self):
+    def _get_mailbox_client(self) -> imaplib.IMAP4:
         if sys.version_info.minor < 9:
             return imaplib.IMAP4(self._host, self._port)
         else:
@@ -279,7 +258,7 @@ class MailBox(BaseMailBox):
         :param starttls: whether to use starttls
         """
         if timeout and sys.version_info.minor < 9:
-            raise ValueError(self._timeout_arg_support_error)
+            raise ValueError(TIMEOUT_ARG_SUPPORT_ERROR)
         self._host = host
         self._port = port
         self._timeout = timeout
@@ -289,7 +268,7 @@ class MailBox(BaseMailBox):
         self._starttls = starttls
         super().__init__()
 
-    def _get_mailbox_client(self):
+    def _get_mailbox_client(self) -> imaplib.IMAP4:
         if self._starttls:
             if self._keyfile or self._certfile:
                 raise ValueError("starttls cannot be combined with keyfile neither with certfile.")
@@ -307,7 +286,7 @@ class MailBox(BaseMailBox):
                 return imaplib.IMAP4_SSL(self._host, self._port, self._keyfile,  # noqa
                                          self._certfile, self._ssl_context, self._timeout)
 
-    def xoauth2(self, username: str, access_token: str, initial_folder: str = 'INBOX'):
+    def xoauth2(self, username: str, access_token: str, initial_folder: str = 'INBOX') -> 'BaseMailBox':
         """Authenticate to account using OAuth 2.0 mechanism"""
         auth_string = 'user={}\1auth=Bearer {}\1\1'.format(username, access_token)
         result = self.box.authenticate('XOAUTH2', lambda x: auth_string)  # noqa

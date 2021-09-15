@@ -2,9 +2,11 @@ import re
 import email
 import base64
 import imaplib
+import datetime
 from itertools import chain
 from functools import lru_cache
 from email.header import decode_header
+from typing import Tuple, Dict, Optional, List
 
 from .utils import decode_value, parse_email_addresses, parse_email_date
 from .consts import UID_PATTERN
@@ -25,7 +27,7 @@ class MailMessage:
         return cls([(b'', raw_message_data)])
 
     @staticmethod
-    def _get_message_data_parts(fetch_data) -> (bytes, bytes, [bytes]):
+    def _get_message_data_parts(fetch_data: list) -> (bytes, bytes, List[bytes]):
         """
         :param fetch_data: Message object model
         :returns (raw_message_data: bytes, raw_uid_data: bytes, raw_flag_data: [bytes])
@@ -47,7 +49,7 @@ class MailMessage:
 
     @property
     @lru_cache()
-    def uid(self) -> str or None:
+    def uid(self) -> Optional[str]:
         """Message UID"""
         # _raw_uid_data - zimbra, yandex, gmail, gmx
         # _raw_flag_data - mail.ru, ms exchange server
@@ -75,7 +77,7 @@ class MailMessage:
 
     @property
     @lru_cache()
-    def flags(self) -> (str,):
+    def flags(self) -> Tuple[str, ...]:
         """
         Message flags
         *This attribute will not be changed after "flag" actions
@@ -96,7 +98,7 @@ class MailMessage:
 
     @property
     @lru_cache()
-    def from_values(self) -> dict or None:
+    def from_values(self) -> Optional[dict]:
         """Sender (all data)"""
         result_set = parse_email_addresses(self.obj['From'] or '')
         return result_set[0] if result_set else None
@@ -109,49 +111,49 @@ class MailMessage:
 
     @property
     @lru_cache()
-    def to_values(self) -> (dict,):
+    def to_values(self) -> Tuple[dict, ...]:
         """Recipients (all data)"""
         return tuple(chain(*(parse_email_addresses(i or '') for i in self.obj.get_all('To', []))))
 
     @property
     @lru_cache()
-    def to(self) -> (str,):
+    def to(self) -> Tuple[str, ...]:
         """Recipients emails"""
         return tuple(i['email'] for i in self.to_values)
 
     @property
     @lru_cache()
-    def cc_values(self) -> (dict,):
+    def cc_values(self) -> Tuple[dict, ...]:
         """Carbon copy (all data)"""
         return tuple(chain(*(parse_email_addresses(i or '') for i in self.obj.get_all('Cc', []))))
 
     @property
     @lru_cache()
-    def cc(self) -> (str,):
+    def cc(self) -> Tuple[str, ...]:
         """Carbon copy emails"""
         return tuple(i['email'] for i in self.cc_values)
 
     @property
     @lru_cache()
-    def bcc_values(self) -> (dict,):
+    def bcc_values(self) -> Tuple[dict, ...]:
         """Blind carbon copy (all data)"""
         return tuple(chain(*(parse_email_addresses(i or '') for i in self.obj.get_all('Bcc', []))))
 
     @property
     @lru_cache()
-    def bcc(self) -> (str,):
+    def bcc(self) -> Tuple[str, ...]:
         """Blind carbon copy emails"""
         return tuple(i['email'] for i in self.bcc_values)
 
     @property
     @lru_cache()
-    def reply_to_values(self) -> (dict,):
+    def reply_to_values(self) -> Tuple[dict, ...]:
         """Reply-to emails (all data)"""
         return tuple(chain(*(parse_email_addresses(i or '') for i in self.obj.get_all('Reply-To', []))))
 
     @property
     @lru_cache()
-    def reply_to(self) -> (str,):
+    def reply_to(self) -> Tuple[str, ...]:
         """Reply-to emails"""
         return tuple(i['email'] for i in self.reply_to_values)
 
@@ -163,11 +165,8 @@ class MailMessage:
 
     @property
     @lru_cache()
-    def date(self):
-        """
-        Message sent date
-        :rtype: datetime.datetime
-        """
+    def date(self) -> datetime.datetime:
+        """Message sent date"""
         return parse_email_date(self.date_str)
 
     @property
@@ -194,7 +193,7 @@ class MailMessage:
 
     @property
     @lru_cache()
-    def headers(self) -> {str: (str,)}:
+    def headers(self) -> Dict[str, Tuple[str, ...]]:
         """
         Message headers
         Keys in result dict are in lower register (email headers are not case-sensitive)
@@ -206,7 +205,7 @@ class MailMessage:
 
     @property
     @lru_cache()
-    def attachments(self) -> ['MailAttachment']:
+    def attachments(self) -> List['MailAttachment']:
         """
         Mail message attachments list
         :return: [MailAttachment]

@@ -1,7 +1,3 @@
 Release 1.0.0 after 3 month of quiet in issues and merge requests
 
 test py versions by tox
-
-deprecated: miss_defect, seen, search
-
-typing lib - annotations, drop unsupported 3.3 - 3.5
