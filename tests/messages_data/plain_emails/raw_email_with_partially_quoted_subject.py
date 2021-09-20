@@ -1,5 +1,6 @@
 import datetime
-    
+from imap_tools import EmailAddress
+
 DATA = dict(
     subject='Re: Test: "漢字" mid "漢字" tail',
     from_='jamis@37signals.com',
@@ -13,8 +14,8 @@ DATA = dict(
     html='',
     headers={'mime-version': ('1.0 (Apple Message framework v622)',), 'content-transfer-encoding': ('base64',), 'message-id': ('<d3b8cf8e49f04480850c28713a1f473e@37signals.com>',), 'content-type': ('text/plain;\r\n  charset=EUC-KR;\r\n  format=flowed',), 'to': ('jamis@37signals.com',), 'from': ('Jamis Buck <jamis@37signals.com>',), 'subject': ('Re: Test: =?UTF-8?B?Iua8ouWtlyI=?= mid =?UTF-8?B?Iua8ouWtlyI=?= tail',), 'date': ('Mon, 2 May 2005 16:07:05 -0600',)},
     attachments=[],
-    from_values={'email': 'jamis@37signals.com', 'name': 'Jamis Buck', 'full': 'Jamis Buck <jamis@37signals.com>'},
-    to_values=({'email': 'jamis@37signals.com', 'name': '', 'full': 'jamis@37signals.com'},),
+    from_values=EmailAddress('Jamis Buck', 'jamis@37signals.com', 'Jamis Buck <jamis@37signals.com>'),
+    to_values=(EmailAddress('', 'jamis@37signals.com', 'jamis@37signals.com'),),
     cc_values=(),
     bcc_values=(),
     reply_to_values=(),

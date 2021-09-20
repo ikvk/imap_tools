@@ -1,5 +1,6 @@
 import datetime
-    
+from imap_tools import EmailAddress
+
 DATA = dict(
     subject='Re: Saying Hello',
     from_='mary@example.net',
@@ -13,9 +14,9 @@ DATA = dict(
     html='',
     headers={'from': ('Mary Smith <mary@example.net>',), 'to': ('John Doe <jdoe@machine.example>',), 'reply-to': ('"Mary Smith: Personal Account" <smith@home.example>',), 'subject': ('Re: Saying Hello',), 'date': ('Fri, 21 Nov 1997 10:01:10 -0600',), 'message-id': ('<3456@example.net>',), 'in-reply-to': ('<1234@local.machine.example>',), 'references': ('<1234@local.machine.example>',)},
     attachments=[],
-    from_values={'email': 'mary@example.net', 'name': 'Mary Smith', 'full': 'Mary Smith <mary@example.net>'},
-    to_values=({'email': 'jdoe@machine.example', 'name': 'John Doe', 'full': 'John Doe <jdoe@machine.example>'},),
+    from_values=EmailAddress('Mary Smith', 'mary@example.net', 'Mary Smith <mary@example.net>'),
+    to_values=(EmailAddress('John Doe', 'jdoe@machine.example', 'John Doe <jdoe@machine.example>'),),
     cc_values=(),
     bcc_values=(),
-    reply_to_values=({'email': 'smith@home.example', 'name': 'Mary Smith: Personal Account', 'full': 'Mary Smith: Personal Account <smith@home.example>'},),
+    reply_to_values=(EmailAddress('Mary Smith: Personal Account', 'smith@home.example', 'Mary Smith: Personal Account <smith@home.example>'),),
 )

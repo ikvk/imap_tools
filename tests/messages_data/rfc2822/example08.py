@@ -1,5 +1,6 @@
 import datetime
-    
+from imap_tools import EmailAddress
+
 DATA = dict(
     subject='Saying Hello',
     from_='jdoe@machine.example',
@@ -13,8 +14,8 @@ DATA = dict(
     html='',
     headers={'resent-from': ('Mary Smith <mary@example.net>',), 'resent-to': ('Jane Brown <j-brown@other.example>',), 'resent-date': ('Mon, 24 Nov 1997 14:22:01 -0800',), 'resent-message-id': ('<78910@example.net>',), 'from': ('John Doe <jdoe@machine.example>',), 'to': ('Mary Smith <mary@example.net>',), 'subject': ('Saying Hello',), 'date': ('Fri, 21 Nov 1997 09:55:06 -0600',), 'message-id': ('<1234@local.machine.example>',)},
     attachments=[],
-    from_values={'email': 'jdoe@machine.example', 'name': 'John Doe', 'full': 'John Doe <jdoe@machine.example>'},
-    to_values=({'email': 'mary@example.net', 'name': 'Mary Smith', 'full': 'Mary Smith <mary@example.net>'},),
+    from_values=EmailAddress('John Doe', 'jdoe@machine.example', 'John Doe <jdoe@machine.example>'),
+    to_values=(EmailAddress('Mary Smith', 'mary@example.net', 'Mary Smith <mary@example.net>'),),
     cc_values=(),
     bcc_values=(),
     reply_to_values=(),

@@ -1,5 +1,6 @@
 import datetime
-    
+from imap_tools import EmailAddress
+
 DATA = dict(
     subject='NOTE: 한국말로 하는 것',
     from_='jamis@37signals.com',
@@ -13,8 +14,8 @@ DATA = dict(
     html='',
     headers={'mime-version': ('1.0 (Apple Message framework v622)',), 'content-transfer-encoding': ('base64',), 'message-id': ('<d3b8cf8e49f0448085@0c28713a1@f473e@37signals.com>',), 'content-type': ('text/plain;\r\n  charset=EUC-KR;\r\n  format=flowed',), 'to': ('willard15georgina@jamis.backpackit.com',), 'from': ('Jamis Buck <jamis@37signals.com>',), 'subject': ('=?EUC-KR?Q?NOTE:_=C7=D1=B1=B9=B8=BB=B7=CE_=C7=CF=B4=C2_=B0=CD?=',), 'date': ('Mon, 2 May 2005 16:07:05 -0600',)},
     attachments=[],
-    from_values={'email': 'jamis@37signals.com', 'name': 'Jamis Buck', 'full': 'Jamis Buck <jamis@37signals.com>'},
-    to_values=({'email': 'willard15georgina@jamis.backpackit.com', 'name': '', 'full': 'willard15georgina@jamis.backpackit.com'},),
+    from_values=EmailAddress('Jamis Buck', 'jamis@37signals.com', 'Jamis Buck <jamis@37signals.com>'),
+    to_values=(EmailAddress('', 'willard15georgina@jamis.backpackit.com', 'willard15georgina@jamis.backpackit.com'),),
     cc_values=(),
     bcc_values=(),
     reply_to_values=(),

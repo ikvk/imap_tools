@@ -1,5 +1,6 @@
 import datetime
-    
+from imap_tools import EmailAddress
+
 DATA = dict(
     subject='Fwd: Signed email causes file attachments',
     from_='xxxxxxxxx.xxxxxxx@gmail.com',
@@ -21,9 +22,9 @@ DATA = dict(
             payload=b'0\x80\x06\t*\x86H\x86\xf7\r\x01\x07\x02\xa0\x800\x80\x02\x01\x011\x0b0\t\x06\x05+\x0e\x03\x02\x1a\x05\x000\x80\x06\t*\x86H\x86\xf7\r\x01\x07\x01\x00\x00\xa0\x82\x06\x140\x82\x02\xcd0\x82\x026\xa0\x03\x02\x01\x02\x02\x03\x0e\\\xf90\r\x06\t*\x86H\x86\xf7\r\x01\x01\x04\x05\x000b1\x0b0\t\x06\x03U\x04\x06\x13\x02ZA1%0#\x06\x03U\x04\n\x13\x1cThawte Consulting (Pty) Ltd.1,0*\x06\x03U\x04\x03\x13#Thawte Personal Freemail Issuing CA0\x1e\x17\r050329093910Z\x17\r060329093910Z0B1\x1f0\x1d\x06\x03U\x04\x03\x13\x16Thawte Freemail Member1\x1f0\x1d\x06\t*\x86H\x86\xf7\r\x01\t\x01\x16\x10smhaunch@mac.com0\x82\x01"0\r\x06\t*\x86H\x86\xf7\r\x01\x01\x01\x05\x00\x03\x82\x01\x0f\x000\x82\x01\n\x02\x82\x01\x01\x00\x9f\xdd\x1d>\xc6\x12\xdc\xb8\xdf1\x8d\xb5\xd4\xe4\x98\xac4\x0b\xcf\x03X>P\x0b\xef\xef\xf4\\\x0f\xa4w/?\xad\x19\xf2\x10qF\xc2\x13B\x0eh4\x07\xaaq\x0b\xbc\xf7\xc7\x12C\xff\xc1\x9f\t\xdf\x88aE\rQ\x05y\x9b\xd3$\xc5\xf3\xfd\xa55WeR\x18-\xa0p',
         ),
         ],
-    from_values={'email': 'xxxxxxxxx.xxxxxxx@gmail.com', 'name': 'xxxxxxxxx xxxxxxx', 'full': 'xxxxxxxxx xxxxxxx <xxxxxxxxx.xxxxxxx@gmail.com>'},
-    to_values=({'email': 'xxxxx@xxxxxxxxx.com', 'name': 'xxxxx xxxx', 'full': 'xxxxx xxxx <xxxxx@xxxxxxxxx.com>'},),
+    from_values=EmailAddress('xxxxxxxxx xxxxxxx', 'xxxxxxxxx.xxxxxxx@gmail.com', 'xxxxxxxxx xxxxxxx <xxxxxxxxx.xxxxxxx@gmail.com>'),
+    to_values=(EmailAddress('xxxxx xxxx', 'xxxxx@xxxxxxxxx.com', 'xxxxx xxxx <xxxxx@xxxxxxxxx.com>'),),
     cc_values=(),
     bcc_values=(),
-    reply_to_values=({'email': 'xxxxxxxxx.xxxxxxx@gmail.com', 'name': 'xxxxxxxxx xxxxxxx', 'full': 'xxxxxxxxx xxxxxxx <xxxxxxxxx.xxxxxxx@gmail.com>'},),
+    reply_to_values=(EmailAddress('xxxxxxxxx xxxxxxx', 'xxxxxxxxx.xxxxxxx@gmail.com', 'xxxxxxxxx xxxxxxx <xxxxxxxxx.xxxxxxx@gmail.com>'),),
 )

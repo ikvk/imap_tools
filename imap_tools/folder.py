@@ -1,11 +1,34 @@
 import re
-from typing import AnyStr, Optional, Sequence, List, Dict
+from typing import AnyStr, Optional, Sequence, List, Dict, Tuple
 
 from . import imap_utf7
 from .consts import MailBoxFolderStatusOptions
 from .utils import check_command_status, pairs_to_dict, encode_folder
 from .errors import MailboxFolderStatusValueError, MailboxFolderSelectError, MailboxFolderCreateError, \
     MailboxFolderRenameError, MailboxFolderDeleteError, MailboxFolderStatusError, MailboxFolderSubscribeError
+
+
+class FolderInfo:
+    """
+    Mailbox folder info
+        name: str - folder name
+        delim: str - delimiter, a character used to delimit levels of hierarchy in a mailbox name
+        flags: (str,) - folder flags
+    A 'NIL' delimiter means that no hierarchy exists, the name is a "flat" name.
+    """
+    __slots__ = 'name', 'delim', 'flags'
+
+    def __init__(self, name: str, delim: str, flags: Tuple[str, ...]):
+        self.name = name
+        self.delim = delim
+        self.flags = flags
+
+    def __repr__(self):
+        return "{}(name={}, delim={}, flags={})".format(
+            self.__class__.__name__, repr(self.name), repr(self.delim), repr(self.flags))
+
+    def __eq__(self, other):
+        return all(getattr(self, i) == getattr(other, i) for i in self.__slots__)
 
 
 class MailBoxFolderManager:
@@ -63,6 +86,7 @@ class MailBoxFolderManager:
         :param folder: mailbox folder, current folder if None
         :param options: [str] with values from MailBoxFolderStatusOptions.all | None - for get all options
         :return: dict with available options keys
+            example: {'MESSAGES': 41, 'RECENT': 0, 'UIDNEXT': 11996, 'UIDVALIDITY': 1, 'UNSEEN': 5}
         """
         command = 'STATUS'
         if folder is None:
@@ -81,7 +105,7 @@ class MailBoxFolderManager:
         values = status_data.decode().split('(')[1].split(')')[0].split(' ')
         return {k: int(v) for k, v in pairs_to_dict(values).items() if str(v).isdigit()}
 
-    def list(self, folder: AnyStr = '', search_args: str = '*', subscribed_only: bool = False) -> List[Dict]:
+    def list(self, folder: AnyStr = '', search_args: str = '*', subscribed_only: bool = False) -> List[FolderInfo]:
         """
         Get a listing of folders on the server
         :param folder: mailbox folder, if empty - get from root
@@ -89,12 +113,7 @@ class MailBoxFolderManager:
             * is a wildcard, and matches zero or more characters at this position
             % is similar to * but it does not match a hierarchy delimiter
         :param subscribed_only: bool - get only subscribed folders
-        :return: [dict(
-            name: str - folder name,
-            delim: str - delimiter, a character used to delimit levels of hierarchy in a mailbox name
-            flags: tuple(str) - folder flags,
-        )]
-        A 'NIL' delimiter means that no hierarchy exists, the name is a "flat" name.
+        :return: [FolderInfo]
         """
         folder_item_re = re.compile(r'\((?P<flags>[\S ]*)\) (?P<delim>[\S]+) (?P<name>.+)')
         command = 'LSUB' if subscribed_only else 'LIST'
@@ -110,20 +129,23 @@ class MailBoxFolderManager:
                 if not folder_match:
                     continue
                 folder_dict = folder_match.groupdict()
-                if folder_dict['name'].startswith('"') and folder_dict['name'].endswith('"'):
-                    folder_dict['name'] = folder_dict['name'][1:-1]
+                name = folder_dict['name']
+                if name.startswith('"') and name.endswith('"'):
+                    name = name[1:-1]
             elif type(folder_item) is tuple:
                 # when name has " or \ chars
                 folder_match = re.search(folder_item_re, imap_utf7.decode(folder_item[0]))
                 if not folder_match:
                     continue
                 folder_dict = folder_match.groupdict()
-                folder_dict['name'] = imap_utf7.decode(folder_item[1])
+                name = imap_utf7.decode(folder_item[1])
             else:
                 continue
-            folder_dict['flags'] = tuple(folder_dict['flags'].split())  # noqa
-            folder_dict['delim'] = folder_dict['delim'].replace('"', '')
-            result.append(folder_dict)
+            result.append(FolderInfo(
+                name=name,
+                delim=folder_dict['delim'].replace('"', ''),
+                flags=tuple(folder_dict['flags'].split())  # noqa,
+            ))
         return result
 
     def subscribe(self, folder: AnyStr, value: bool) -> tuple:

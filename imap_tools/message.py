@@ -8,7 +8,7 @@ from functools import lru_cache
 from email.header import decode_header
 from typing import Tuple, Dict, Optional, List
 
-from .utils import decode_value, parse_email_addresses, parse_email_date
+from .utils import decode_value, parse_email_addresses, parse_email_date, EmailAddress
 from .consts import UID_PATTERN
 
 
@@ -98,7 +98,7 @@ class MailMessage:
 
     @property
     @lru_cache()
-    def from_values(self) -> Optional[dict]:
+    def from_values(self) -> Optional[EmailAddress]:
         """Sender (all data)"""
         result_set = parse_email_addresses(self.obj['From'] or '')
         return result_set[0] if result_set else None
@@ -107,11 +107,11 @@ class MailMessage:
     @lru_cache()
     def from_(self) -> str:
         """Sender email"""
-        return self.from_values['email'] if self.from_values else ''
+        return self.from_values.email if self.from_values else ''
 
     @property
     @lru_cache()
-    def to_values(self) -> Tuple[dict, ...]:
+    def to_values(self) -> Tuple[EmailAddress, ...]:
         """Recipients (all data)"""
         return tuple(chain(*(parse_email_addresses(i or '') for i in self.obj.get_all('To', []))))
 
@@ -119,11 +119,11 @@ class MailMessage:
     @lru_cache()
     def to(self) -> Tuple[str, ...]:
         """Recipients emails"""
-        return tuple(i['email'] for i in self.to_values)
+        return tuple(i.email for i in self.to_values)
 
     @property
     @lru_cache()
-    def cc_values(self) -> Tuple[dict, ...]:
+    def cc_values(self) -> Tuple[EmailAddress, ...]:
         """Carbon copy (all data)"""
         return tuple(chain(*(parse_email_addresses(i or '') for i in self.obj.get_all('Cc', []))))
 
@@ -131,11 +131,11 @@ class MailMessage:
     @lru_cache()
     def cc(self) -> Tuple[str, ...]:
         """Carbon copy emails"""
-        return tuple(i['email'] for i in self.cc_values)
+        return tuple(i.email for i in self.cc_values)
 
     @property
     @lru_cache()
-    def bcc_values(self) -> Tuple[dict, ...]:
+    def bcc_values(self) -> Tuple[EmailAddress, ...]:
         """Blind carbon copy (all data)"""
         return tuple(chain(*(parse_email_addresses(i or '') for i in self.obj.get_all('Bcc', []))))
 
@@ -143,11 +143,11 @@ class MailMessage:
     @lru_cache()
     def bcc(self) -> Tuple[str, ...]:
         """Blind carbon copy emails"""
-        return tuple(i['email'] for i in self.bcc_values)
+        return tuple(i.email for i in self.bcc_values)
 
     @property
     @lru_cache()
-    def reply_to_values(self) -> Tuple[dict, ...]:
+    def reply_to_values(self) -> Tuple[EmailAddress, ...]:
         """Reply-to emails (all data)"""
         return tuple(chain(*(parse_email_addresses(i or '') for i in self.obj.get_all('Reply-To', []))))
 
@@ -155,7 +155,7 @@ class MailMessage:
     @lru_cache()
     def reply_to(self) -> Tuple[str, ...]:
         """Reply-to emails"""
-        return tuple(i['email'] for i in self.reply_to_values)
+        return tuple(i.email for i in self.reply_to_values)
 
     @property
     @lru_cache()

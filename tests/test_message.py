@@ -4,7 +4,7 @@ import unittest
 import datetime
 from tests.utils import MailboxTestCase
 
-from imap_tools import MailMessage, MailMessageFlags
+from imap_tools import MailMessage, MailMessageFlags, EmailAddress
 
 
 def _load_module(full_path: str):
@@ -57,7 +57,7 @@ class MessageTest(MailboxTestCase):
                 self.assertIn(type(message.uid), (str, none_type))
                 self.assertIs(type(message.subject), str)
                 self.assertIs(type(message.from_), str)
-                self.assertIn(type(message.from_values), (dict, none_type))
+                self.assertIn(type(message.from_values), (EmailAddress, none_type))
                 self.assertIs(type(message.date), datetime.datetime)
                 self.assertIs(type(message.date_str), str)
                 self.assertIs(type(message.text), str)
@@ -72,7 +72,7 @@ class MessageTest(MailboxTestCase):
                         self.assertIs(type(i), str)
                     self.assertIs(type(getattr(message, '{}_values'.format(addr_field))), tuple)
                     for i in getattr(message, '{}_values'.format(addr_field)):
-                        self.assertIs(type(i), dict)
+                        self.assertIs(type(i), EmailAddress)
 
                 self.assertIs(type(message.flags), tuple)
                 for i in message.flags:

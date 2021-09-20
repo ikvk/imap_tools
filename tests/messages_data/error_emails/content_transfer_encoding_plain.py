@@ -1,5 +1,6 @@
 import datetime
-    
+from imap_tools import EmailAddress
+
 DATA = dict(
     subject='bookkeeping Get in on IGTS asap.',
     from_='baocqccyw@hq.lindsayelec.com',
@@ -13,9 +14,9 @@ DATA = dict(
     html='',
     headers={'return-path': ('<baocqccyw@hq.lindsayelec.com>', '<baocqccyw@hq.lindsayelec.com>'), 'delivered-to': ('em-ca-bruceg-spam@em.ca', 'em-ca-em-ca-bruceg@em.ca'), 'received': ('(qmail 32184 invoked by uid 700); 28 Mar 2005 01:14:54 -0000', '(qmail 32179 invoked by uid 115); 28 Mar 2005 01:14:54 -0000', 'from baocqccyw@hq.lindsayelec.com by churchill by uid 64011 with qmail-scanner-1.22 \r\n (clamdscan: 0.75-1. spamassassin: 2.63.  Clear:RC:0(200.141.184.56):. \r\n Processed in 10.454045 secs); 28 Mar 2005 01:14:54 -0000', 'from dial.suednet.com.br (HELO hq.lindsayelec.com) (200.141.184.56)\r\n  by churchill.factcomp.com with SMTP; 28 Mar 2005 01:14:42 -0000'), 'from': ('shavonda Cabral <baocqccyw@hq.lindsayelec.com>',), 'to': ('<em-ca-bruceg@em.ca>',), 'subject': ('bookkeeping Get in on IGTS asap.',), 'date': ('Sun, 27 Mar 2005 19:11:59 -0600',), 'reply-to': ('<baocqccyw@hq.lindsayelec.com>',), 'mime-version': ('1.0',), 'x-virus-status': ('Scanned by norton',), 'message-id': ('<41314357824.13240873.93296@oxygen-k19.hq.lindsayelec.com>',), 'content-type': ('text/plain; charset=us-ascii',), 'content-transfer-encoding': ('plain',), 'content-length': ('5102',), 'lines': ('125',)},
     attachments=[],
-    from_values={'email': 'baocqccyw@hq.lindsayelec.com', 'name': 'shavonda Cabral', 'full': 'shavonda Cabral <baocqccyw@hq.lindsayelec.com>'},
-    to_values=({'email': 'em-ca-bruceg@em.ca', 'name': '', 'full': 'em-ca-bruceg@em.ca'},),
+    from_values=EmailAddress('shavonda Cabral', 'baocqccyw@hq.lindsayelec.com', 'shavonda Cabral <baocqccyw@hq.lindsayelec.com>'),
+    to_values=(EmailAddress('', 'em-ca-bruceg@em.ca', 'em-ca-bruceg@em.ca'),),
     cc_values=(),
     bcc_values=(),
-    reply_to_values=({'email': 'baocqccyw@hq.lindsayelec.com', 'name': '', 'full': 'baocqccyw@hq.lindsayelec.com'},),
+    reply_to_values=(EmailAddress('', 'baocqccyw@hq.lindsayelec.com', 'baocqccyw@hq.lindsayelec.com'),),
 )

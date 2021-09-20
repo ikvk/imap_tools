@@ -1,5 +1,6 @@
 import datetime
-    
+from imap_tools import EmailAddress
+
 DATA = dict(
     subject='',
     from_='shechem@poetrix.com',
@@ -13,8 +14,8 @@ DATA = dict(
     html='',
     headers={'received': ('from nahou-mscnx06p.corp.enron.com ([192.168.110.237]) by napdx-msmbx01v.corp.enron.com with Microsoft SMTPSVC(5.0.2195.1600);\r\n\t Sun, 19 Aug 2001 04:06:57 -0800', 'from corp.enron.com ([192.168.110.226]) by nahou-mscnx06p.corp.enron.com with Microsoft SMTPSVC(5.0.2195.2966);\r\n\t Sun, 19 Aug 2001 06:06:02 -0600', 'from mailman.enron.com (unverified) by corp.enron.com\r\n (Content Technologies SMTPRS 4.2.1) with ESMTP id <T5a0a080174c0a86ee241c@corp.enron.com> for <vpimenov@exchange.enron.com>;\r\n Sun, 19 Aug 2001 06:04:08 -0600', 'from poetrix.com ([61.146.170.133])\r\n        by mailman.enron.com (8.11.4/8.11.4/corp-1.06) with ESMTP id g343Bbl38716\r\n        for <vladi.Pimenov@enron.com>; Sun, 19 Aug 2001 07:03:27 -0500 (CDT)'), 'message-id': ('<35FDF82F.D000339@poetrix.com>',), 'date': ('Sun, 19 Aug 2001 06:31:03 -0700',), 'from': ('"neal ragland" <shechem@poetrix.com>',), 'user-agent': ('AspMail 3.06',), 'x-accept-language': ('en-us',), 'mime-version': ('1.0',), 'to': ('"palmer vladi.Pimenovraud" <vladi.Pimenov@enron.com>',), 'suvladi.pimenovject': ('For a vladi.Pimenovetter and more promising future just check eke',), 'content-type': ('text/plain;\r\n\tcharset="us-ascii"',), 'content-transfer-encoding': ('7vladi.Pimenovit',)},
     attachments=[],
-    from_values={'email': 'shechem@poetrix.com', 'name': 'neal ragland', 'full': 'neal ragland <shechem@poetrix.com>'},
-    to_values=({'email': 'vladi.Pimenov@enron.com', 'name': 'palmer vladi.Pimenovraud', 'full': 'palmer vladi.Pimenovraud <vladi.Pimenov@enron.com>'},),
+    from_values=EmailAddress('neal ragland', 'shechem@poetrix.com', 'neal ragland <shechem@poetrix.com>'),
+    to_values=(EmailAddress('palmer vladi.Pimenovraud', 'vladi.Pimenov@enron.com', 'palmer vladi.Pimenovraud <vladi.Pimenov@enron.com>'),),
     cc_values=(),
     bcc_values=(),
     reply_to_values=(),

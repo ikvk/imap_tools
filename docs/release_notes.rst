@@ -1,3 +1,8 @@
+0.48.0
+======
+* [Breaking] MailMessage.<*>_values methods now returns EmailAddress instead dict
+* [Breaking] MailBoxFolderManager.list new returns FolderInfo instead dict
+
 0.47.0
 ======
 * Dropped support for python 3.3, 3.4

@@ -1,5 +1,6 @@
 import datetime
-    
+from imap_tools import EmailAddress
+
 DATA = dict(
     subject='Redacted',
     from_='redacted@flashmail.net',
@@ -13,8 +14,8 @@ DATA = dict(
     html='<p>foo</p>\n',
     headers={'from': ('<redacted@flashmail.net>',), 'subject': ('Redacted',), 'to': ('<redacted@Enron.com>',), 'message-id': ('<105647271315.NCV17523@x263.net>',), 'mime-version': ('1.0',), 'content-type': ('multipart/alternative; boundary="----_001_5973_47T00ZN9.15SY2428"',), 'references': ('<foo@bar.net>', '<baz@bar.net>, <invalid.   ')},
     attachments=[],
-    from_values={'email': 'redacted@flashmail.net', 'name': '', 'full': 'redacted@flashmail.net'},
-    to_values=({'email': 'redacted@Enron.com', 'name': '', 'full': 'redacted@Enron.com'},),
+    from_values=EmailAddress('', 'redacted@flashmail.net', 'redacted@flashmail.net'),
+    to_values=(EmailAddress('', 'redacted@Enron.com', 'redacted@Enron.com'),),
     cc_values=(),
     bcc_values=(),
     reply_to_values=(),

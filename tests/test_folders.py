@@ -19,11 +19,11 @@ class FoldersTest(MailboxTestCase):
             # LIST
             folder_list = mailbox.folder.list(mailbox.folder_test)
             check_folder_set = {mailbox.folder_test_base, mailbox.folder_test_temp1, mailbox.folder_test_temp2}
-            self.assertTrue(check_folder_set.issubset(set([i['name'] for i in folder_list])))
+            self.assertTrue(check_folder_set.issubset(set([i.name for i in folder_list])))
             for folder in folder_list:
-                self.assertIs(type(folder['delim']), str)
-                self.assertIs(type(folder['name']), str)
-                for flag in folder['flags']:
+                self.assertIs(type(folder.name), str)
+                self.assertIs(type(folder.delim), str)
+                for flag in folder.flags:
                     self.assertIs(type(flag), str)
 
             # SET, GET
@@ -32,7 +32,7 @@ class FoldersTest(MailboxTestCase):
 
             # CREATE
             mailbox.folder.create(mailbox.folder_test_new)
-            folder_list_names = [i['name'] for i in mailbox.folder.list(mailbox.folder_test)]
+            folder_list_names = [i.name for i in mailbox.folder.list(mailbox.folder_test)]
             self.assertTrue(mailbox.folder_test_new in folder_list_names)
 
             # EXISTS
@@ -40,13 +40,13 @@ class FoldersTest(MailboxTestCase):
 
             # RENAME
             mailbox.folder.rename(mailbox.folder_test_new, mailbox.folder_test_new1)
-            folder_list_names = [i['name'] for i in mailbox.folder.list(mailbox.folder_test)]
+            folder_list_names = [i.name for i in mailbox.folder.list(mailbox.folder_test)]
             self.assertTrue(mailbox.folder_test_new1 in folder_list_names)
             self.assertFalse(mailbox.folder_test_new in folder_list_names)
 
             # DELETE
             mailbox.folder.delete(mailbox.folder_test_new1)
-            folder_list_names = [i['name'] for i in mailbox.folder.list(mailbox.folder_test)]
+            folder_list_names = [i.name for i in mailbox.folder.list(mailbox.folder_test)]
             self.assertFalse(mailbox.folder_test_new1 in folder_list_names)
 
             # STATUS
@@ -57,12 +57,12 @@ class FoldersTest(MailboxTestCase):
             # SUBSCRIBE
             if mailbox.mailbox_name not in ('MAIL_RU',):
                 mailbox.folder.subscribe(mailbox.folder_test_temp2, False)
-                self.assertIn(mailbox.folder_test_temp2, [i['name'] for i in mailbox.folder.list()])
+                self.assertIn(mailbox.folder_test_temp2, [i.name for i in mailbox.folder.list()])
                 self.assertNotIn(mailbox.folder_test_temp2,
-                                 [i['name'] for i in mailbox.folder.list(subscribed_only=1)])
+                                 [i.name for i in mailbox.folder.list(subscribed_only=1)])
                 mailbox.folder.subscribe(mailbox.folder_test_temp2, True)
                 self.assertIn(mailbox.folder_test_temp2,
-                              [i['name'] for i in mailbox.folder.list(subscribed_only=1)])
+                              [i.name for i in mailbox.folder.list(subscribed_only=1)])
 
             # error
             if mailbox.mailbox_name not in ('YAHOO',):

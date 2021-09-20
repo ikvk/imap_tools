@@ -1,5 +1,6 @@
 import datetime
-    
+from imap_tools import EmailAddress
+
 DATA = dict(
     subject='Daily',
     from_='status@sender.com',
@@ -21,9 +22,9 @@ DATA = dict(
             payload=b'12',
         ),
         ],
-    from_values={'email': 'status@sender.com', 'name': 'Sender', 'full': 'Sender <status@sender.com>'},
-    to_values=({'email': 'my.name@domain.com', 'name': 'My Name', 'full': 'My Name <my.name@domain.com>'}, {'email': 'other.name@domain.com', 'name': 'Other Name', 'full': 'Other Name <other.name@domain.com>'}),
-    cc_values=({'email': 'third.name@domain.com', 'name': 'Third Name', 'full': 'Third Name <third.name@domain.com>'}, {'email': 'quoted-mailing-list-one@domain.com', 'name': 'Quoted Mailing List One', 'full': 'Quoted Mailing List One <quoted-mailing-list-one@domain.com>'}, {'email': 'quoted-mailing-list-two@domain.com', 'name': 'Quoted Mailing List Two', 'full': 'Quoted Mailing List Two <quoted-mailing-list-two@domain.com>'}),
-    bcc_values=({'email': 'my.name@domain.com', 'name': 'My Name', 'full': 'My Name <my.name@domain.com>'}, {'email': 'list1-one-name@domain.com', 'name': 'Mailing List One - One Name', 'full': 'Mailing List One - One Name <list1-one-name@domain.com>'}, {'email': 'list2-second-name@domain.com', 'name': 'Mailing List Two - Second Name', 'full': 'Mailing List Two - Second Name <list2-second-name@domain.com>'}),
+    from_values=EmailAddress('Sender', 'status@sender.com', 'Sender <status@sender.com>'),
+    to_values=(EmailAddress('My Name', 'my.name@domain.com', 'My Name <my.name@domain.com>'), EmailAddress('Other Name', 'other.name@domain.com', 'Other Name <other.name@domain.com>')),
+    cc_values=(EmailAddress('Third Name', 'third.name@domain.com', 'Third Name <third.name@domain.com>'), EmailAddress('Quoted Mailing List One', 'quoted-mailing-list-one@domain.com', 'Quoted Mailing List One <quoted-mailing-list-one@domain.com>'), EmailAddress('Quoted Mailing List Two', 'quoted-mailing-list-two@domain.com', 'Quoted Mailing List Two <quoted-mailing-list-two@domain.com>')),
+    bcc_values=(EmailAddress('My Name', 'my.name@domain.com', 'My Name <my.name@domain.com>'), EmailAddress('Mailing List One - One Name', 'list1-one-name@domain.com', 'Mailing List One - One Name <list1-one-name@domain.com>'), EmailAddress('Mailing List Two - Second Name', 'list2-second-name@domain.com', 'Mailing List Two - Second Name <list2-second-name@domain.com>')),
     reply_to_values=(),
 )

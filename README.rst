@@ -115,11 +115,12 @@ MailMessage and MailAttachment public attributes are cached by functools.lru_cac
             att.size                 # int: 17361 bytes
 
         msg.obj              # email.message.Message: original object
-        msg.from_values      # dict | None: {'email': 'im@ya.ru', 'name': 'Ya', 'full': 'Ya <im@ya.ru>'}
-        msg.to_values        # tuple: ({'email': '', 'name': '', 'full': ''},)
-        msg.cc_values        # tuple: ({'email': '', 'name': '', 'full': ''},)
-        msg.bcc_values       # tuple: ({'email': '', 'name': '', 'full': ''},)
-        msg.reply_to_values  # tuple: ({'email': '', 'name': '', 'full': ''},)
+        msg.from_values      # imap_tools.EmailAddress | None
+        msg.to_values        # tuple: (imap_tools.EmailAddress,)
+        msg.cc_values        # tuple: (imap_tools.EmailAddress,)
+        msg.bcc_values       # tuple: (imap_tools.EmailAddress,)
+        msg.reply_to_values  # tuple: (imap_tools.EmailAddress,)
+        # EmailAddress(name='Ya', email='im@ya.ru', full='Ya <im@ya.ru>')
 
 Search criteria
 ^^^^^^^^^^^^^^^
@@ -258,7 +259,7 @@ Actions with folders
 
         # LIST: get all subfolders of the specified folder (root by default)
         for f in mailbox.folder.list('INBOX'):
-            print(f)  # {'name': 'INBOX|cats', 'delim': '|', 'flags': ('\\Unmarked', '\\HasChildren')}
+            print(f)  # FolderInfo(name='INBOX|cats', delim='|', flags=('\\Unmarked', '\\HasChildren'))
 
         # SET: select folder for work
         mailbox.folder.set('INBOX')
@@ -287,6 +288,8 @@ Actions with folders
 
 Exceptions
 ^^^^^^^^^^
+
+Most lib server actions raises exception if result is marked as not success.
 
 Custom lib exceptions here: `errors.py <https://github.com/ikvk/imap_tools/blob/master/imap_tools/errors.py>`_.
 

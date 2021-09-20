@@ -1,5 +1,6 @@
 import datetime
-    
+from imap_tools import EmailAddress
+
 DATA = dict(
     subject='/home/svn/public/minebox revision 214',
     from_='tim@powerupdev.comconcierge',
@@ -13,9 +14,9 @@ DATA = dict(
     html='',
     headers={'delivered-to': ('tim@powerupdev.com',), 'return-path': ('<www-data@mangaverde.net>',), 'to': ('tim@powerupdev.com concierge@powerupdev.com',), 'from': ('tim@powerupdev.com concierge@powerupdev.com',), 'subject': ('/home/svn/public/minebox revision 214',), 'reply-to': ('tim@powerupdev.com concierge@powerupdev.com',), 'message-id': ('<20071022234523.5BD8E86D2@mangaverde.net>',), 'date': ('Mon, 22 Oct 2007 23:45:23 +0000 (UTC)',)},
     attachments=[],
-    from_values={'email': 'tim@powerupdev.comconcierge', 'name': '', 'full': 'tim@powerupdev.comconcierge'},
-    to_values=({'email': 'tim@powerupdev.comconcierge', 'name': '', 'full': 'tim@powerupdev.comconcierge'}, {'email': '@powerupdev.com', 'name': '', 'full': '@powerupdev.com'}),
+    from_values=EmailAddress('', 'tim@powerupdev.comconcierge', 'tim@powerupdev.comconcierge'),
+    to_values=(EmailAddress('', 'tim@powerupdev.comconcierge', 'tim@powerupdev.comconcierge'), EmailAddress('', '@powerupdev.com', '@powerupdev.com')),
     cc_values=(),
     bcc_values=(),
-    reply_to_values=({'email': 'tim@powerupdev.comconcierge', 'name': '', 'full': 'tim@powerupdev.comconcierge'}, {'email': '@powerupdev.com', 'name': '', 'full': '@powerupdev.com'}),
+    reply_to_values=(EmailAddress('', 'tim@powerupdev.comconcierge', 'tim@powerupdev.comconcierge'), EmailAddress('', '@powerupdev.com', '@powerupdev.com')),
 )

@@ -1,5 +1,6 @@
 import datetime
-    
+from imap_tools import EmailAddress
+
 DATA = dict(
     subject='',
     from_='john.q.public@example.com',
@@ -13,9 +14,9 @@ DATA = dict(
     html='',
     headers={'from': ('"Joe Q. Public" <john.q.public@example.com>',), 'to': ('Mary Smith <mary@x.test>, jdoe@example.org, Who? <one@y.test>',), 'cc': ('<boss@nil.test>, "Giant; \\"Big\\" Box" <sysservices@example.net>',), 'date': ('Tue, 1 Jul 2003 10:52:37 +0200',), 'message-id': ('<5678.21-Nov-1997@example.com>',)},
     attachments=[],
-    from_values={'email': 'john.q.public@example.com', 'name': 'Joe Q. Public', 'full': 'Joe Q. Public <john.q.public@example.com>'},
-    to_values=({'email': 'mary@x.test', 'name': 'Mary Smith', 'full': 'Mary Smith <mary@x.test>'}, {'email': 'jdoe@example.org', 'name': '', 'full': 'jdoe@example.org'}, {'email': 'one@y.test', 'name': 'Who?', 'full': 'Who? <one@y.test>'}),
-    cc_values=({'email': 'boss@nil.test', 'name': '', 'full': 'boss@nil.test'}, {'email': 'sysservices@example.net', 'name': 'Giant; "Big" Box', 'full': 'Giant; "Big" Box <sysservices@example.net>'}),
+    from_values=EmailAddress('Joe Q. Public', 'john.q.public@example.com', 'Joe Q. Public <john.q.public@example.com>'),
+    to_values=(EmailAddress('Mary Smith', 'mary@x.test', 'Mary Smith <mary@x.test>'), EmailAddress('', 'jdoe@example.org', 'jdoe@example.org'), EmailAddress('Who?', 'one@y.test', 'Who? <one@y.test>')),
+    cc_values=(EmailAddress('', 'boss@nil.test', 'boss@nil.test'), EmailAddress('Giant; "Big" Box', 'sysservices@example.net', 'Giant; "Big" Box <sysservices@example.net>')),
     bcc_values=(),
     reply_to_values=(),
 )

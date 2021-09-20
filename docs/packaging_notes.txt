@@ -10,7 +10,7 @@ https://packaging.python.org/tutorials/packaging-projects/
     https://docs.python.org/3/distutils/packageindex.html#pypirc
 
 2. Install/update:
-    setuptools, wheel, pip, twine
+    pip, setuptools, twine, wheel
 
 3. Generating distribution archives
     cd C:\kvk\develop\Python\imap_tools\

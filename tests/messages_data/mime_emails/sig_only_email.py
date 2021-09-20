@@ -1,5 +1,6 @@
 import datetime
-    
+from imap_tools import EmailAddress
+
 DATA = dict(
     subject='Re: Testing multipart/signed',
     from_='test@test.lindsaar.net',
@@ -21,8 +22,8 @@ DATA = dict(
             payload=b'-----BEGIN PGP SIGNATURE-----\r\nVersion: GnuPG v1.4.6 (GNU/Linux)\r\n\r\niD8DB1111Iu7dfRchrkBInkRArniAKCue17JOxXBiAZHwLy3uFacU+pmhwCgwzhf\r\nV5YSPv2xmYOA6mJ6oVaasseQ=\r\n=T7p9\r\n-----END PGP SIGNATURE-----\r\n',
         ),
         ],
-    from_values={'email': 'test@test.lindsaar.net', 'name': 'Test', 'full': 'Test <test@test.lindsaar.net>'},
-    to_values=({'email': 'mikel@test.lindsaar.net', 'name': 'Mikel', 'full': 'Mikel <mikel@test.lindsaar.net>'},),
+    from_values=EmailAddress('Test', 'test@test.lindsaar.net', 'Test <test@test.lindsaar.net>'),
+    to_values=(EmailAddress('Mikel', 'mikel@test.lindsaar.net', 'Mikel <mikel@test.lindsaar.net>'),),
     cc_values=(),
     bcc_values=(),
     reply_to_values=(),

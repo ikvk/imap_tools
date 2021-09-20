@@ -62,11 +62,28 @@ def decode_value(value: AnyStr, encoding: Optional[str] = None) -> str:
     return value
 
 
-def parse_email_addresses(raw_header: Union[str, Header]) -> Tuple[dict, ...]:
+class EmailAddress:
+    """Parsed email address info"""
+    __slots__ = 'name', 'email', 'full'
+
+    def __init__(self, name: str, email: str, full: str):
+        self.name = name
+        self.email = email
+        self.full = full
+
+    def __repr__(self):
+        return "{}(name={}, email={}, full={})".format(
+            self.__class__.__name__, repr(self.name), repr(self.email), repr(self.full))
+
+    def __eq__(self, other):
+        return all(getattr(self, i) == getattr(other, i) for i in self.__slots__)
+
+
+def parse_email_addresses(raw_header: Union[str, Header]) -> Tuple[EmailAddress, ...]:
     """
     Parse email addresses from header
     :param raw_header: example: '=?UTF-8?B?0J7Qu9C1=?= <name@company.ru>,\r\n "\'\\"z, z\\"\'" <imap.tools@ya.ru>'
-    :return: tuple(dict(name: str, email: str, full: str))
+    :return: (EmailAddress, ...)
     """
     result = []
     if type(raw_header) is Header:
@@ -76,11 +93,11 @@ def parse_email_addresses(raw_header: Union[str, Header]) -> Tuple[dict, ...]:
         email = email.strip()
         if not (name or email):
             continue
-        result.append({
-            'email': email if '@' in email else '',
-            'name': name,
-            'full': '{} <{}>'.format(name, email) if name and email else name or email
-        })
+        result.append(EmailAddress(
+            name=name,
+            email=email if '@' in email else '',
+            full='{} <{}>'.format(name, email) if name and email else name or email
+        ))
     return tuple(result)
 
 

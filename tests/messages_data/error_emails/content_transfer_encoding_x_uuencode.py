@@ -1,5 +1,6 @@
 import datetime
-    
+from imap_tools import EmailAddress
+
 DATA = dict(
     subject='PGP Comments on RTO West Release of Dec. 14',
     from_='lpeters@PACIFIER.COM',
@@ -21,8 +22,8 @@ DATA = dict(
             payload=b'',
         ),
         ],
-    from_values={'email': 'lpeters@PACIFIER.COM', 'name': 'Lon L. Peters', 'full': 'Lon L. Peters <lpeters@PACIFIER.COM>'},
-    to_values=({'email': 'RRGA-L@LIST.RTOWEST.ORG', 'name': '', 'full': 'RRGA-L@LIST.RTOWEST.ORG'},),
+    from_values=EmailAddress('Lon L. Peters', 'lpeters@PACIFIER.COM', 'Lon L. Peters <lpeters@PACIFIER.COM>'),
+    to_values=(EmailAddress('', 'RRGA-L@LIST.RTOWEST.ORG', 'RRGA-L@LIST.RTOWEST.ORG'),),
     cc_values=(),
     bcc_values=(),
     reply_to_values=(),

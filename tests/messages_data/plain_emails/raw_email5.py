@@ -1,5 +1,6 @@
 import datetime
-    
+from imap_tools import EmailAddress
+
 DATA = dict(
     subject='',
     from_='xxx@xxxx.xxx',
@@ -13,8 +14,8 @@ DATA = dict(
     html='',
     headers={'return-path': ('<xxx@xxxx.xxx>',), 'received': ('from xxx.xxxx.xxx by xxx.xxxx.xxx with ESMTP id C1B953B4CB6 for <xxxxx@Exxx.xxxx.xxx>; Tue, 10 May 2005 15:27:05 -0500', 'from SMS-GTYxxx.xxxx.xxx by xxx.xxxx.xxx with ESMTP id ca for <xxxxx@Exxx.xxxx.xxx>; Tue, 10 May 2005 15:27:04 -0500', 'from xxx.xxxx.xxx by SMS-GTYxxx.xxxx.xxx with ESMTP id j4AKR3r23323 for <xxxxx@Exxx.xxxx.xxx>; Tue, 10 May 2005 15:27:03 -0500'), 'date': ('Tue, 10 May 2005 15:27:03 -0500',), 'from': ('xxx@xxxx.xxx',), 'sender': ('xxx@xxxx.xxx',), 'to': ('xxxxxxxxxxx@xxxx.xxxx.xxx',), 'message-id': ('<xxx@xxxx.xxx>',), 'x-original-to': ('xxxxxxxxxxx@xxxx.xxxx.xxx',), 'delivered-to': ('xxx@xxxx.xxx',), 'importance': ('normal',)},
     attachments=[],
-    from_values={'email': 'xxx@xxxx.xxx', 'name': '', 'full': 'xxx@xxxx.xxx'},
-    to_values=({'email': 'xxxxxxxxxxx@xxxx.xxxx.xxx', 'name': '', 'full': 'xxxxxxxxxxx@xxxx.xxxx.xxx'},),
+    from_values=EmailAddress('', 'xxx@xxxx.xxx', 'xxx@xxxx.xxx'),
+    to_values=(EmailAddress('', 'xxxxxxxxxxx@xxxx.xxxx.xxx', 'xxxxxxxxxxx@xxxx.xxxx.xxx'),),
     cc_values=(),
     bcc_values=(),
     reply_to_values=(),

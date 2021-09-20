@@ -1,5 +1,6 @@
 import datetime
-    
+from imap_tools import EmailAddress
+
 DATA = dict(
     subject='',
     from_='pete@silly.example',
@@ -13,8 +14,8 @@ DATA = dict(
     html='',
     headers={'from': ('Pete <pete@silly.example>',), 'to': ('A Group:Chris Jones <c@a.test>,joe@where.test,John <jdoe@one.test>;',), 'cc': ('Undisclosed recipients:;',), 'date': ('Thu, 13 Feb 1969 23:32:54 -0330',), 'message-id': ('<testabcd.1234@silly.example>',)},
     attachments=[],
-    from_values={'email': 'pete@silly.example', 'name': 'Pete', 'full': 'Pete <pete@silly.example>'},
-    to_values=({'email': 'c@a.test', 'name': 'Chris Jones', 'full': 'Chris Jones <c@a.test>'}, {'email': 'joe@where.test', 'name': '', 'full': 'joe@where.test'}, {'email': 'jdoe@one.test', 'name': 'John', 'full': 'John <jdoe@one.test>'}),
+    from_values=EmailAddress('Pete', 'pete@silly.example', 'Pete <pete@silly.example>'),
+    to_values=(EmailAddress('Chris Jones', 'c@a.test', 'Chris Jones <c@a.test>'), EmailAddress('', 'joe@where.test', 'joe@where.test'), EmailAddress('John', 'jdoe@one.test', 'John <jdoe@one.test>')),
     cc_values=(),
     bcc_values=(),
     reply_to_values=(),
