@@ -1,5 +1,5 @@
 import re
-from typing import AnyStr, Optional, Sequence, List, Dict, Tuple
+from typing import AnyStr, Optional, Iterable, List, Dict, Tuple
 
 from . import imap_utf7
 from .consts import MailBoxFolderStatusOptions
@@ -80,7 +80,7 @@ class MailBoxFolderManager:
         check_command_status(result, MailboxFolderDeleteError)
         return result
 
-    def status(self, folder: Optional[AnyStr] = None, options: Optional[Sequence[str]] = None) -> Dict[str, int]:
+    def status(self, folder: Optional[AnyStr] = None, options: Optional[Iterable[str]] = None) -> Dict[str, int]:
         """
         Get the status of a folder
         :param folder: mailbox folder, current folder if None

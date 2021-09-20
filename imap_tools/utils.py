@@ -3,13 +3,13 @@ import datetime
 from itertools import zip_longest
 from email.utils import getaddresses, parsedate_to_datetime
 from email.header import decode_header, Header
-from typing import AnyStr, Sequence, Union, Optional, Tuple, Iterable, Any, List, Dict
+from typing import AnyStr, Union, Optional, Tuple, Iterable, Any, List, Dict
 
 from .consts import SHORT_MONTH_NAMES, MailMessageFlags
 from . import imap_utf7
 
 
-def clean_uids(uid_set: Union[str, Sequence[str]]) -> str:
+def clean_uids(uid_set: Union[str, Iterable[str]]) -> str:
     """
     Prepare set of uid for use in IMAP commands
     uid RE patterns are not strict and allow invalid combinations, but simple. Example: 2,4:7,9,12:*
@@ -173,7 +173,7 @@ def encode_folder(folder: AnyStr) -> bytes:
         return quote(imap_utf7.encode(folder))
 
 
-def clean_flags(flag_set: Union[str, Sequence[str]]) -> List[str]:
+def clean_flags(flag_set: Union[str, Iterable[str]]) -> List[str]:
     """
     Check the correctness of the flags
     :return: list of str - flags

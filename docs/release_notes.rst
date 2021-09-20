@@ -1,3 +1,7 @@
+0.48.1
+======
+* fix type annotations
+
 0.48.0
 ======
 * [Breaking] MailMessage.<*>_values methods now returns EmailAddress instead dict

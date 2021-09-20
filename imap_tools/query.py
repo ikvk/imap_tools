@@ -3,7 +3,7 @@ import datetime
 import itertools
 import functools
 import collections
-from typing import Iterable, Optional, Dict, Any, List, Union, Sequence
+from typing import Iterable, Optional, Dict, Any, List, Union
 
 from .consts import SHORT_MONTH_NAMES
 from .utils import clean_uids, quote
@@ -166,7 +166,7 @@ class ParamConverter:
         return int(value)
 
     @staticmethod
-    def cleaned_uid(key: str, value: Union[str, Sequence[str], UidRange]) -> str:
+    def cleaned_uid(key: str, value: Union[str, Iterable[str], UidRange]) -> str:
         # range
         if isinstance(value, UidRange):
             return str(value)

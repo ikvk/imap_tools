@@ -2,6 +2,7 @@ import re
 import sys
 import imaplib
 import datetime
+from collections import UserString
 from typing import AnyStr, Optional, List, Iterable, Sequence, Union, Tuple
 from email.errors import StartBoundaryNotFoundDefect, MultipartInvariantViolationDefect
 
@@ -16,6 +17,8 @@ from .errors import MailboxStarttlsError, MailboxLoginError, MailboxLogoutError,
 # Maximal line length when calling readline(). This is to prevent reading arbitrary length lines.
 # 20Mb is enough for search response with about 2 000 000 message numbers
 imaplib._MAXLINE = 20 * 1024 * 1024  # 20Mb
+
+Criteria = Union[AnyStr, UserString]
 
 
 class BaseMailBox:
@@ -53,7 +56,7 @@ class BaseMailBox:
         check_command_status(result, MailboxLogoutError, expected='BYE')
         return result
 
-    def numbers(self, criteria: AnyStr = 'ALL', charset: str = 'US-ASCII') -> List[str]:
+    def numbers(self, criteria: Criteria = 'ALL', charset: str = 'US-ASCII') -> List[str]:
         """
         Search mailbox for matching message numbers in current folder (this is not uids)
         :param criteria: message search criteria (see examples at ./doc/imap_search_criteria.txt)
@@ -65,7 +68,7 @@ class BaseMailBox:
         check_command_status(search_result, MailboxNumbersError)
         return search_result[1][0].decode().split() if search_result[1][0] else []
 
-    def uids(self, criteria: AnyStr = 'ALL', charset: str = 'US-ASCII', miss_no_uid=True) -> List[str]:
+    def uids(self, criteria: Criteria = 'ALL', charset: str = 'US-ASCII', miss_no_uid=True) -> List[str]:
         """
         Search mailbox for matching message uids in current folder
         :param criteria: message search criteria (see examples at ./doc/imap_search_criteria.txt)
@@ -102,7 +105,7 @@ class BaseMailBox:
         for built_fetch_item in chunks((reversed if reverse else iter)(fetch_result[1]), 2):
             yield built_fetch_item
 
-    def fetch(self, criteria: AnyStr = 'ALL', charset: str = 'US-ASCII', limit: Optional[Union[int, slice]] = None,
+    def fetch(self, criteria: Criteria = 'ALL', charset: str = 'US-ASCII', limit: Optional[Union[int, slice]] = None,
               miss_no_uid=True, mark_seen=True, reverse=False, headers_only=False,
               bulk=False) -> Iterable[MailMessage]:
         """
@@ -135,7 +138,7 @@ class BaseMailBox:
         check_command_status(result, MailboxExpungeError)
         return result
 
-    def delete(self, uid_list: Union[str, Sequence[str]]) -> Optional[Tuple[tuple, tuple]]:
+    def delete(self, uid_list: Union[str, Iterable[str]]) -> Optional[Tuple[tuple, tuple]]:
         """
         Delete email messages
         Do nothing on empty uid_list
@@ -149,7 +152,7 @@ class BaseMailBox:
         expunge_result = self.expunge()
         return store_result, expunge_result
 
-    def copy(self, uid_list: Union[str, Sequence[str]], destination_folder: AnyStr) -> Optional[tuple]:
+    def copy(self, uid_list: Union[str, Iterable[str]], destination_folder: AnyStr) -> Optional[tuple]:
         """
         Copy email messages into the specified folder
         Do nothing on empty uid_list
@@ -162,7 +165,7 @@ class BaseMailBox:
         check_command_status(copy_result, MailboxCopyError)
         return copy_result
 
-    def move(self, uid_list: Union[str, Sequence[str]], destination_folder: AnyStr) -> Optional[Tuple[tuple, tuple]]:
+    def move(self, uid_list: Union[str, Iterable[str]], destination_folder: AnyStr) -> Optional[Tuple[tuple, tuple]]:
         """
         Move email messages into the specified folder
         Do nothing on empty uid_list
@@ -175,7 +178,7 @@ class BaseMailBox:
         delete_result = self.delete(uid_str)
         return copy_result, delete_result
 
-    def flag(self, uid_list: Union[str, Sequence[str]], flag_set: Union[str, Sequence[str]], value: bool) \
+    def flag(self, uid_list: Union[str, Iterable[str]], flag_set: Union[str, Iterable[str]], value: bool) \
             -> Optional[Tuple[tuple, tuple]]:
         """
         Set/unset email flags
@@ -196,7 +199,7 @@ class BaseMailBox:
     def append(self, message: Union[MailMessage, bytes],
                folder: AnyStr = 'INBOX',
                dt: Optional[datetime.datetime] = None,
-               flag_set: Optional[Union[str, Sequence[str]]] = None) -> tuple:
+               flag_set: Optional[Union[str, Iterable[str]]] = None) -> tuple:
         """
         Append email messages to server
         :param message: MailMessage object or bytes
