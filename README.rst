@@ -366,7 +366,8 @@ Big thanks to people who helped develop this library:
 `Yannik <https://github.com/Yannik>`_,
 `pete312 <https://github.com/pete312>`_,
 `edkedk99 <https://github.com/edkedk99>`_,
-`UlisseMini <https://github.com/UlisseMini>`_
+`UlisseMini <https://github.com/UlisseMini>`_,
+`Nicarex <https://github.com/Nicarex>`_
 
 Donate
 ------
