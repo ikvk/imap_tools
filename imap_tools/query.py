@@ -2,53 +2,11 @@
 import datetime
 import itertools
 import functools
-import collections
+from collections import OrderedDict, UserString
 from typing import Iterable, Optional, Dict, Any, List, Union
 
 from .consts import SHORT_MONTH_NAMES
 from .utils import clean_uids, quote
-
-
-class LogicOperator(collections.UserString):
-    def __init__(self, *converted_strings, **unconverted_dict):
-        self.converted_strings = converted_strings
-        for val in converted_strings:
-            if not any(isinstance(val, t) for t in (str, collections.UserString)):
-                raise TypeError('Unexpected type "{}" for converted part, str like obj expected'.format(type(val)))
-        self.converted_params = ParamConverter(unconverted_dict).convert()
-        if not any((self.converted_strings, self.converted_params)):
-            raise ValueError('{} expects params'.format(self.__class__.__name__))
-        super().__init__(self.combine_params())
-
-    def combine_params(self) -> str:
-        """combine self.converted_strings and self.converted_params to IMAP search criteria format"""
-        raise NotImplementedError
-
-    @staticmethod
-    def prefix_join(operator: str, params: Iterable[str]) -> str:
-        """Join params by prefix notation rules, enclose in parenthesis"""
-        return '({})'.format(functools.reduce(lambda a, b: '{}{} {}'.format(operator, a, b), params))
-
-
-class AND(LogicOperator):
-    """When multiple keys are specified, the result is the intersection of all the messages that match those keys."""
-
-    def combine_params(self) -> str:
-        return self.prefix_join('', itertools.chain(self.converted_strings, self.converted_params))
-
-
-class OR(LogicOperator):
-    """OR <search-key1> <search-key2> Messages that match either search key."""
-
-    def combine_params(self) -> str:
-        return self.prefix_join('OR ', itertools.chain(self.converted_strings, self.converted_params))
-
-
-class NOT(LogicOperator):
-    """NOT <search-key> Messages that do not match the specified search key."""
-
-    def combine_params(self) -> str:
-        return 'NOT {}'.format(self.prefix_join('', itertools.chain(self.converted_strings, self.converted_params)))
 
 
 class Header:
@@ -89,6 +47,81 @@ class UidRange:
 
     def __str__(self):
         return '{}{}'.format(self.start, ':{}'.format(self.end) if self.end else '')
+
+
+class LogicOperator(UserString):
+    def __init__(
+            self,
+            *converted_strings,
+            answered: Optional[bool] = None,
+            seen: Optional[bool] = None,
+            flagged: Optional[bool] = None,
+            draft: Optional[bool] = None,
+            deleted: Optional[bool] = None,
+            keyword: Optional[Union[str, List[str]]] = None,
+            no_keyword: Optional[Union[str, List[str]]] = None,
+            from_: Optional[Union[str, List[str]]] = None,
+            to: Optional[Union[str, List[str]]] = None,
+            subject: Optional[Union[str, List[str]]] = None,
+            body: Optional[Union[str, List[str]]] = None,
+            text: Optional[Union[str, List[str]]] = None,
+            bcc: Optional[Union[str, List[str]]] = None,
+            cc: Optional[Union[str, List[str]]] = None,
+            date: Optional[Union[datetime.date, List[datetime.date]]] = None,
+            date_gte: Optional[Union[datetime.date, List[datetime.date]]] = None,
+            date_lt: Optional[Union[datetime.date, List[datetime.date]]] = None,
+            sent_date: Optional[Union[datetime.date, List[datetime.date]]] = None,
+            sent_date_gte: Optional[Union[datetime.date, List[datetime.date]]] = None,
+            sent_date_lt: Optional[Union[datetime.date, List[datetime.date]]] = None,
+            size_gt: Optional[int] = None,
+            size_lt: Optional[int] = None,
+            new: Optional[bool] = None,
+            old: Optional[bool] = None,
+            recent: Optional[bool] = None,
+            all: Optional[bool] = None,  # noqa
+            uid: Optional[Union[str, Iterable[str], UidRange]] = None,
+            header: Optional[Header] = None,
+            gmail_label: Optional[Union[str, List[str]]] = None,
+    ):
+        self.converted_strings = converted_strings
+        for val in converted_strings:
+            if not any(isinstance(val, t) for t in (str, UserString)):
+                raise TypeError('Unexpected type "{}" for converted part, str like obj expected'.format(type(val)))
+        unconverted_dict = OrderedDict({k: v for k, v in locals().items() if k in SEARCH_KEYS and v is not None})
+        self.converted_params = ParamConverter(unconverted_dict).convert()
+        if not any((self.converted_strings, self.converted_params)):
+            raise ValueError('{} expects params'.format(self.__class__.__name__))
+        super().__init__(self.combine_params())
+
+    def combine_params(self) -> str:
+        """combine self.converted_strings and self.converted_params to IMAP search criteria format"""
+        raise NotImplementedError
+
+    @staticmethod
+    def prefix_join(operator: str, params: Iterable[str]) -> str:
+        """Join params by prefix notation rules, enclose in parenthesis"""
+        return '({})'.format(functools.reduce(lambda a, b: '{}{} {}'.format(operator, a, b), params))
+
+
+class AND(LogicOperator):
+    """When multiple keys are specified, the result is the intersection of all the messages that match those keys."""
+
+    def combine_params(self) -> str:
+        return self.prefix_join('', itertools.chain(self.converted_strings, self.converted_params))
+
+
+class OR(LogicOperator):
+    """OR <search-key1> <search-key2> Messages that match either search key."""
+
+    def combine_params(self) -> str:
+        return self.prefix_join('OR ', itertools.chain(self.converted_strings, self.converted_params))
+
+
+class NOT(LogicOperator):
+    """NOT <search-key> Messages that do not match the specified search key."""
+
+    def combine_params(self) -> str:
+        return 'NOT {}'.format(self.prefix_join('', itertools.chain(self.converted_strings, self.converted_params)))
 
 
 class ParamConverter:
@@ -330,6 +363,8 @@ class ParamConverter:
     def convert_gmail_label(self, key, value) -> str:
         return 'X-GM-LABELS {}'.format(quote(self.cleaned_str(key, value)))
 
+
+SEARCH_KEYS = tuple(i.replace('convert_', '') for i in dir(ParamConverter) if 'convert_' in i)
 
 # Short alias set:
 A = AND

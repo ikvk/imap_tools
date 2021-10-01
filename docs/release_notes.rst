@@ -1,3 +1,8 @@
+0.49.0
+======
+* Fixed message.MailAttachment.size wrong size bug
+* query.LogicOperator (and subclasses AND, OR, NOT) now have type annotated named search keys
+
 0.48.1
 ======
 * fix type annotations

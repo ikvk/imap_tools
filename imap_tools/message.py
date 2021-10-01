@@ -279,4 +279,4 @@ class MailAttachment:
     @lru_cache()
     def size(self) -> int:
         """Attachment size, bytes count"""
-        return len(bytes(self.part))
+        return len(self.payload)

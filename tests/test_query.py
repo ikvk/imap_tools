@@ -84,16 +84,16 @@ class QueryTest(unittest.TestCase):
         self.assertEqual(ParamConverter.format_date(dt.date(2000, 12, 15)), '15-Dec-2000')
 
     def test_logic_operators(self):
-        self.assertEqual(AND(text='hello', new=True), '(TEXT "hello" NEW)')
-        self.assertEqual(OR(text='hello', new=True), '(OR TEXT "hello" NEW)')
-        self.assertEqual(NOT(text='hello', new=True), 'NOT (TEXT "hello" NEW)')
+        self.assertEqual(AND(text='hello', new=True), '(NEW TEXT "hello")')
+        self.assertEqual(OR(text='hello', new=True), '(OR NEW TEXT "hello")')
+        self.assertEqual(NOT(text='hello', new=True), 'NOT (NEW TEXT "hello")')
         self.assertEqual(A(AND(to='one@mail.ru'), AND(to='two@mail.ru')), '((TO "one@mail.ru") (TO "two@mail.ru"))')
         self.assertEqual(
             OR(date=[dt.date(2019, 10, 1), dt.date(2019, 10, 10), dt.date(2019, 10, 15), dt.date(2019, 10, 20)]),
             '(OR OR OR ON 1-Oct-2019 ON 10-Oct-2019 ON 15-Oct-2019 ON 20-Oct-2019)')
         self.assertEqual(
             A(OR(from_='from@ya.ru', text='"the text"'), NOT(OR(A(answered=False), A(new=True))), to='to@ya.ru'),
-            '((OR FROM "from@ya.ru" TEXT "\\"the text\\"") NOT ((OR (UNANSWERED) (NEW))) TO "to@ya.ru")')
+            '((OR TEXT "\\"the text\\"" FROM "from@ya.ru") NOT ((OR (UNANSWERED) (NEW))) TO "to@ya.ru")')
 
     def test_header(self):
         header = H('key1', 'val1')
