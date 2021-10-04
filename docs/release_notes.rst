@@ -1,3 +1,7 @@
+0.49.1
+======
+* Fix support for python 3.5
+
 0.49.0
 ======
 * Fixed message.MailAttachment.size wrong size bug
@@ -5,7 +9,7 @@
 
 0.48.1
 ======
-* fix type annotations
+* Fix type annotations
 
 0.48.0
 ======

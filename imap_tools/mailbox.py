@@ -83,8 +83,8 @@ class BaseMailBox:
         check_command_status(fetch_result, MailboxUidsError)
         result = []
         for fetch_item in fetch_result[1]:
-            fetch_item: AnyStr
-            uid_match = re.search(UID_PATTERN, decode_value(fetch_item))
+            # fetch_item: AnyStr  # todo uncomment after drop 3.5
+            uid_match = re.search(UID_PATTERN, decode_value(fetch_item))  # noqa
             if uid_match:
                 result.append(uid_match.group('uid'))
             elif not miss_no_uid:

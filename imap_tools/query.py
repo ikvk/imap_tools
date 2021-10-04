@@ -81,8 +81,7 @@ class LogicOperator(UserString):
             all: Optional[bool] = None,  # noqa
             uid: Optional[Union[str, Iterable[str], UidRange]] = None,
             header: Optional[Header] = None,
-            gmail_label: Optional[Union[str, List[str]]] = None,
-    ):
+            gmail_label: Optional[Union[str, List[str]]] = None):  # todo newline after drop 3.5
         self.converted_strings = converted_strings
         for val in converted_strings:
             if not any(isinstance(val, t) for t in (str, UserString)):
