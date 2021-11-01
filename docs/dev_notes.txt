@@ -30,6 +30,10 @@ self.obj = email.message_from_bytes(raw_message_data, _class=EmailMessage) мо�
 утилиты https://docs.python.org/release/3.8.1/library/email.utils.html
 
 
+TLS
+===
+все тестовые ящики: TLS not supported by server
+
 icons
 =====
 📨 📬 📪 📭 📫 ✉ 📧 🖂 🖃 🖅 📩
