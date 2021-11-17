@@ -1,3 +1,8 @@
+0.50.0
+======
+* Fix MailboxLoginError was never raise
+* ParamConverter.convert now order search keys by alphabet - guarantees a repeatable result for query builder
+
 0.49.1
 ======
 * Fix support for python 3.5

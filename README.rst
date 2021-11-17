@@ -368,7 +368,9 @@ Big thanks to people who helped develop this library:
 `edkedk99 <https://github.com/edkedk99>`_,
 `UlisseMini <https://github.com/UlisseMini>`_,
 `Nicarex <https://github.com/Nicarex>`_,
-`RanjithNair1980 <https://github.com/RanjithNair1980>`_
+`RanjithNair1980 <https://github.com/RanjithNair1980>`_,
+`NickC-NZ <https://github.com/NickC-NZ>`_,
+`mweinelt <https://github.com/mweinelt>`_
 
 Donate
 ------

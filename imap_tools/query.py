@@ -2,7 +2,7 @@
 import datetime
 import itertools
 import functools
-from collections import OrderedDict, UserString
+from collections import UserString
 from typing import Iterable, Optional, Dict, Any, List, Union
 
 from .consts import SHORT_MONTH_NAMES
@@ -86,7 +86,7 @@ class LogicOperator(UserString):
         for val in converted_strings:
             if not any(isinstance(val, t) for t in (str, UserString)):
                 raise TypeError('Unexpected type "{}" for converted part, str like obj expected'.format(type(val)))
-        unconverted_dict = OrderedDict({k: v for k, v in locals().items() if k in SEARCH_KEYS and v is not None})
+        unconverted_dict = {k: v for k, v in locals().items() if k in SEARCH_KEYS and v is not None}
         self.converted_params = ParamConverter(unconverted_dict).convert()
         if not any((self.converted_strings, self.converted_params)):
             raise ValueError('{} expects params'.format(self.__class__.__name__))
@@ -154,7 +154,7 @@ class ParamConverter:
         :return: params in IMAP format
         """
         converted = []
-        for key, raw_val in self.params.items():
+        for key, raw_val in sorted(self.params.items(), key=lambda x: x[0]):
             for val in self._gen_values(key, raw_val):
                 convert_func = getattr(self, 'convert_{}'.format(key), None)
                 if not convert_func:

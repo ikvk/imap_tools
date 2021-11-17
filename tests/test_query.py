@@ -93,7 +93,7 @@ class QueryTest(unittest.TestCase):
             '(OR OR OR ON 1-Oct-2019 ON 10-Oct-2019 ON 15-Oct-2019 ON 20-Oct-2019)')
         self.assertEqual(
             A(OR(from_='from@ya.ru', text='"the text"'), NOT(OR(A(answered=False), A(new=True))), to='to@ya.ru'),
-            '((OR TEXT "\\"the text\\"" FROM "from@ya.ru") NOT ((OR (UNANSWERED) (NEW))) TO "to@ya.ru")')
+            '((OR FROM "from@ya.ru" TEXT "\\"the text\\"") NOT ((OR (UNANSWERED) (NEW))) TO "to@ya.ru")')
 
     def test_header(self):
         header = H('key1', 'val1')

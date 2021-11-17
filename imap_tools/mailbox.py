@@ -43,8 +43,9 @@ class BaseMailBox:
         raise NotImplementedError
 
     def login(self, username: str, password: str, initial_folder: Optional[str] = 'INBOX') -> 'BaseMailBox':
-        login_result = self.box.login(username, password)
+        login_result = self.box._simple_command('LOGIN', username, self.box._quote(password))  # noqa
         check_command_status(login_result, MailboxLoginError)
+        self.box.state = 'AUTH'  # logic from self.box.login
         self.folder = self.folder_manager_class(self)
         if initial_folder is not None:
             self.folder.set(initial_folder)
