@@ -1,6 +1,6 @@
 My PayPal 💰
-    https://paypal.me/KaukinVK
-    KaukinVK@ya.ru
+    | https://paypal.me/KaukinVK
+    | KaukinVK@ya.ru
 
 Star imap_tools project ⭐
     https://github.com/ikvk/imap_tools
