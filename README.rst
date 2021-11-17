@@ -5,11 +5,13 @@ imap_tools 📧
 
 Work with email by IMAP:
 
+- Basic message operations: fetch, uids, numbers
 - Parsed email message attributes
 - Query builder for searching emails
 - Actions with emails: copy, delete, flag, move, append
 - Actions with folders: list, set, get, create, exists, rename, subscribe, delete, status
-- No dependencies
+- Exceptions on failed operations
+- No external dependencies
 
 .. image:: https://img.shields.io/pypi/dm/imap_tools.svg?style=social
 
