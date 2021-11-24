@@ -89,7 +89,7 @@ class QueryTest(unittest.TestCase):
         self.assertEqual(NOT(text='hello', new=True), 'NOT (NEW TEXT "hello")')
         self.assertEqual(A(AND(to='one@mail.ru'), AND(to='two@mail.ru')), '((TO "one@mail.ru") (TO "two@mail.ru"))')
         self.assertEqual(
-            OR(date=[dt.date(2019, 10, 1), dt.date(2019, 10, 10), dt.date(2019, 10, 15), dt.date(2019, 10, 20)]),
+            OR(date=[dt.date(2019, 10, 20), dt.date(2019, 10, 10), dt.date(2019, 10, 15), dt.date(2019, 10, 1)]),
             '(OR OR OR ON 1-Oct-2019 ON 10-Oct-2019 ON 15-Oct-2019 ON 20-Oct-2019)')
         self.assertEqual(
             A(OR(from_='from@ya.ru', text='"the text"'), NOT(OR(A(answered=False), A(new=True))), to='to@ya.ru'),

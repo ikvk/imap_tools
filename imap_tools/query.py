@@ -155,7 +155,7 @@ class ParamConverter:
         """
         converted = []
         for key, raw_val in sorted(self.params.items(), key=lambda x: x[0]):
-            for val in self._gen_values(key, raw_val):
+            for val in sorted(self._gen_values(key, raw_val)):
                 convert_func = getattr(self, 'convert_{}'.format(key), None)
                 if not convert_func:
                     raise KeyError('"{}" is an invalid parameter.'.format(key))

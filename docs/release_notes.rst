@@ -1,3 +1,8 @@
+0.50.1
+======
+* Fix ParamConverter.convert order search keys with values list
+* Added tox config for test all supported versions
+
 0.50.0
 ======
 * Fix MailboxLoginError was never raise
