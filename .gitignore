@@ -1,11 +1,11 @@
 *.orig
 __pycache__
 MANIFEST
+/.idea/
+/.tox
+/*.egg-info/
+/examples/check.py
+/tests/credentials.ini
 /build/
 /dist/
-/imap_tools.egg-info/
-/tests/credentials.ini
-/examples/check.py
-/.python-version
-/.idea/
 /venv/
