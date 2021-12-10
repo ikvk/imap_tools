@@ -143,7 +143,7 @@ class ParamConverter:
         else:
             try:
                 # multiple values
-                for i in iter(value):
+                for i in value:
                     yield i
             except TypeError:
                 # single value

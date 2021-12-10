@@ -4,14 +4,20 @@ import datetime
 from imap_tools.errors import ImapToolsError, UnexpectedCommandStatusError, MailboxCopyError
 from imap_tools.consts import MailMessageFlags
 from imap_tools.utils import clean_flags, chunks, quote, pairs_to_dict, decode_value, check_command_status, \
-    parse_email_date, parse_email_addresses, EmailAddress
+    parse_email_date, parse_email_addresses, EmailAddress, clean_uids
 
 
 class UtilsTest(unittest.TestCase):
 
     def test_clean_uids(self):
-        # *clean_uids tested enough in test_query.py
-        pass
+        # *clean_uids also implicitly tested in test_query.py
+        self.assertEqual(clean_uids('11'), '11')
+        self.assertEqual(clean_uids('1,2'), '1,2')
+        self.assertEqual(clean_uids('1,2:*'), '1,2:*')
+        with self.assertRaises(TypeError):
+            clean_uids(1)  # noqa
+        with self.assertRaises(TypeError):
+            clean_uids(dict(a=1))  # noqa
 
     def test_clean_flags(self):
         self.assertEqual(clean_flags([MailMessageFlags.FLAGGED, MailMessageFlags.SEEN]), ['\\Flagged', '\\Seen'])

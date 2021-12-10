@@ -23,13 +23,8 @@ def clean_uids(uid_set: Union[str, Iterable[str]]) -> str:
         if re.search(r'^([\d*:]+,)*[\d*:]+$', uid_set):  # *optimization for already good str
             return uid_set
         uid_set = uid_set.split(',')
-    # Iterable
-    try:
-        uid_set_iter = iter(uid_set)
-    except TypeError:
-        raise TypeError('Wrong uid_set arg type: "{}"'.format(type(uid_set)))
     # check uid types
-    for uid in uid_set_iter:
+    for uid in uid_set:
         if type(uid) is not str:
             raise TypeError('uid "{}" is not string'.format(str(uid)))
         if not re.match(r'^[\d*:]+$', uid.strip()):
@@ -158,6 +153,8 @@ def pairs_to_dict(items: List[Any]) -> Dict[Any, Any]:
 def chunks(iterable: Iterable[Any], n: int, fill_value: Optional[Any] = None) -> Iterable[Tuple[Any, ...]]:
     """
     Group data into fixed-length chunks or blocks
+        [iter(iterable)]*n creates one iterator, repeated n times in the list
+        izip_longest then effectively performs a round-robin of "each" (same) iterator
     Examples:
         chunks('ABCDEFGH', 3, '?') --> [('A', 'B', 'C'), ('D', 'E', 'F'), ('G', 'H', '?')]
         chunks([1, 2, 3, 4, 5], 2) --> [(1, 2), (3, 4), (5, None)]

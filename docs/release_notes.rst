@@ -1,3 +1,9 @@
+0.50.2
+======
+* query.ParamConverter._gen_values minor improvement
+* utils.clean_uids minor improvement
+* Added test for utils.clean_uids
+
 0.50.1
 ======
 * Fix ParamConverter.convert order search keys with values list

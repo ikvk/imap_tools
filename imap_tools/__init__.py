@@ -10,4 +10,4 @@ from .consts import MailMessageFlags, MailBoxFolderStatusOptions
 from .utils import EmailAddress
 from .errors import *
 
-__version__ = '0.50.1'
+__version__ = '0.50.2'
