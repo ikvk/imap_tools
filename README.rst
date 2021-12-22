@@ -255,6 +255,9 @@ use 'limit' argument for fetch in this case.
 
 Actions with folders
 ^^^^^^^^^^^^^^^^^^^^
+
+BaseMailBox.login has initial_folder arg, that is "INBOX" by default, use None for not set folder on login.
+
 .. code-block:: python
 
     with MailBox('imap.mail.com').login('test@mail.com', 'pwd') as mailbox:
