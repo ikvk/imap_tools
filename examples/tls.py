@@ -1,3 +1,12 @@
+"""
+
+If you want to use really secure connection, you MUST read this articles:
+
+https://docs.python.org/3/library/imaplib.html#imaplib.IMAP4_SSL
+https://docs.python.org/3/library/ssl.html#ssl-security
+
+"""
+
 import ssl
 
 from imap_tools import MailBox
