@@ -1,3 +1,6 @@
+from typing import Any
+
+
 class ImapToolsError(Exception):
     """Base lib error"""
 
@@ -9,7 +12,7 @@ class MailboxFolderStatusValueError(ImapToolsError):
 class UnexpectedCommandStatusError(ImapToolsError):
     """Unexpected status in IMAP command response"""
 
-    def __init__(self, command_result: tuple, expected: str):
+    def __init__(self, command_result: tuple, expected: Any):
         """
         :param command_result: imap command result
         :param expected: expected command status
@@ -87,4 +90,8 @@ class MailboxFlagError(UnexpectedCommandStatusError):
 
 
 class MailboxAppendError(UnexpectedCommandStatusError):
+    pass
+
+
+class MailboxTaggedResponseError(UnexpectedCommandStatusError):
     pass

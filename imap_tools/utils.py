@@ -36,7 +36,7 @@ def check_command_status(command_result: tuple, exception: type, expected='OK'):
     """
     Check that IMAP command responses status equals <expected> status
     If not, raise specified <exception>
-    :param command_result: imap command result
+    :param command_result: imap command result: tuple(typ, data)
     :param exception: exception subclass of UnexpectedCommandStatusError, that raises
     :param expected: expected command status
     """

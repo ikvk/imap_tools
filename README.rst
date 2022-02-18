@@ -10,6 +10,7 @@ Work with email by IMAP:
 - Query builder for searching emails
 - Actions with emails: copy, delete, flag, move, append
 - Actions with folders: list, set, get, create, exists, rename, subscribe, delete, status
+- Supports IDLE command
 - Exceptions on failed operations
 - No external dependencies
 
@@ -290,6 +291,36 @@ BaseMailBox.login has initial_folder arg, that is "INBOX" by default, use None f
         # STATUS: get folder status info
         stat = mailbox.folder.status('some_folder')
         print(stat)  # {'MESSAGES': 41, 'RECENT': 0, 'UIDNEXT': 11996, 'UIDVALIDITY': 1, 'UNSEEN': 5}
+
+IDLE workflow
+^^^^^^^^^^^^^
+
+IDLE logic a in mailbox.idle manager, its methods are in the table below:
+
+======== =================================================================== ==========================
+Method   Description                                                         Arguments
+======== =================================================================== ==========================
+start    Switch on mailbox IDLE mode
+poll     Poll for IDLE responses                                             timeout: Optional[float]
+stop     Switch off mailbox IDLE mode
+wait     Switch on IDLE, poll responses, switch off IDLE, return responses   timeout: Optional[float]
+======== =================================================================== ==========================
+
+.. code-block:: python
+
+    import time
+    from imap_tools import MailBox, A
+
+    # waiting for updates 60 sec, print unseen immediately if any update
+    with MailBox('imap.my.moon').login('acc', 'pwd', 'INBOX') as mailbox:
+        responses = mailbox.idle.wait(timeout=60)
+        if responses:
+            for msg in mailbox.fetch(A(seen=False)):
+                print(msg.date, msg.subject)
+        else:
+            print('no updates in 60 sec')
+
+Read docstrings and see `detailed examples <https://github.com/ikvk/imap_tools/blob/master/examples/idle.py>`_.
 
 Exceptions
 ^^^^^^^^^^

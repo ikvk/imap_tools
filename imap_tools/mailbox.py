@@ -4,15 +4,15 @@ import imaplib
 import datetime
 from collections import UserString
 from typing import AnyStr, Optional, List, Iterable, Sequence, Union, Tuple
-from email.errors import StartBoundaryNotFoundDefect, MultipartInvariantViolationDefect
 
 from .consts import UID_PATTERN, TIMEOUT_ARG_SUPPORT_ERROR
 from .message import MailMessage
 from .folder import MailBoxFolderManager
+from .idle import IdleManager
 from .utils import clean_uids, check_command_status, chunks, encode_folder, clean_flags, decode_value
 from .errors import MailboxStarttlsError, MailboxLoginError, MailboxLogoutError, MailboxNumbersError, \
     MailboxFetchError, MailboxExpungeError, MailboxDeleteError, MailboxCopyError, MailboxFlagError, \
-    MailboxAppendError, MailboxUidsError
+    MailboxAppendError, MailboxUidsError, MailboxTaggedResponseError
 
 # Maximal line length when calling readline(). This is to prevent reading arbitrary length lines.
 # 20Mb is enough for search response with about 2 000 000 message numbers
@@ -26,10 +26,11 @@ class BaseMailBox:
 
     email_message_class = MailMessage
     folder_manager_class = MailBoxFolderManager
-    with_headers_only_allowed_errors = (StartBoundaryNotFoundDefect, MultipartInvariantViolationDefect)
+    idle_manager_class = IdleManager
 
     def __init__(self):
         self.folder = None  # folder manager
+        self.idle = None  # idle manager
         self.login_result = None
         self.box = self._get_mailbox_client()
 
@@ -42,11 +43,25 @@ class BaseMailBox:
     def _get_mailbox_client(self) -> imaplib.IMAP4:
         raise NotImplementedError
 
+    def consume_until_tagged_response(self, tag: bytes):
+        """Waiting for tagged response"""
+        tagged_commands = self.box.tagged_commands
+        response_set = []
+        while True:
+            response: bytes = self.box._get_response()  # noqa, example: b'IJDH3 OK IDLE Terminated'
+            if tagged_commands[tag]:
+                break
+            response_set.append(response)
+        result = tagged_commands.pop(tag)
+        check_command_status(result, MailboxTaggedResponseError)
+        return result, response_set
+
     def login(self, username: str, password: str, initial_folder: Optional[str] = 'INBOX') -> 'BaseMailBox':
         login_result = self.box._simple_command('LOGIN', username, self.box._quote(password))  # noqa
         check_command_status(login_result, MailboxLoginError)
         self.box.state = 'AUTH'  # logic from self.box.login
         self.folder = self.folder_manager_class(self)
+        self.idle = self.idle_manager_class(self)
         if initial_folder is not None:
             self.folder.set(initial_folder)
         self.login_result = login_result

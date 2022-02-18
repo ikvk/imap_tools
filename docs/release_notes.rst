@@ -1,3 +1,10 @@
+0.51.0
+======
+* Added idle manager for work with IDLE: mailbox.idle.<[start,poll,stop,wait]>
+* Added BaseMailBox.consume_until_tagged_response method: waiting for tagged response
+* Added new exception: MailboxTaggedResponseError
+* Removed unused stuff: BaseMailBox.with_headers_only_allowed_errors
+
 0.50.2
 ======
 * query.ParamConverter._gen_values minor improvement
