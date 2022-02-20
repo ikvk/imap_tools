@@ -308,7 +308,6 @@ wait     Switch on IDLE, poll responses, switch off IDLE, return responses   tim
 
 .. code-block:: python
 
-    import time
     from imap_tools import MailBox, A
 
     # waiting for updates 60 sec, print unseen immediately if any update
