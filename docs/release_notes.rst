@@ -1,3 +1,7 @@
+0.51.1
+======
+* Fix IdleManager
+
 0.51.0
 ======
 * Added idle manager for work with IDLE: mailbox.idle.<[start,poll,stop,wait]>

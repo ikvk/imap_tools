@@ -52,7 +52,7 @@ class IdleManager:
         self._idle_tag = self.mailbox.box._command('IDLE')  # b'KLIG3'
         result = self.mailbox.box._get_response()
         check_command_status((result, 'IDLE start'), MailboxTaggedResponseError, expected=None)
-        return self  # return self in favor of context manager, expected result is None => not save it
+        return result
 
     def stop(self):
         """Switch off mailbox IDLE mode"""
@@ -94,7 +94,6 @@ class IdleManager:
                     except (socket.timeout, socket.error):
                         break
                     except imaplib.IMAP4.abort:  # noqa
-                        import traceback
                         etype, evalue, etraceback = sys.exc_info()
                         if "EOF" in evalue.args[0]:
                             break
@@ -118,10 +117,11 @@ class IdleManager:
         :param timeout: for poll method
         :return: poll response
         """
-        with self.start() as idle:
+        with self as idle:
             return idle.poll(timeout=timeout)
 
     def __enter__(self):
+        self.start()
         return self
 
     def __exit__(self, exc_type, exc_value, exc_traceback):

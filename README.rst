@@ -10,7 +10,7 @@ Work with email by IMAP:
 - Query builder for searching emails
 - Actions with emails: copy, delete, flag, move, append
 - Actions with folders: list, set, get, create, exists, rename, subscribe, delete, status
-- Supports IDLE command
+- IDLE commands: start, poll, stop, wait
 - Exceptions on failed operations
 - No external dependencies
 
@@ -308,7 +308,6 @@ wait     Switch on IDLE, poll responses, switch off IDLE, return responses   tim
 
 .. code-block:: python
 
-    import time
     from imap_tools import MailBox, A
 
     # waiting for updates 60 sec, print unseen immediately if any update
