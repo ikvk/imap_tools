@@ -1,10 +1,15 @@
 import re
+import sys
 
 SHORT_MONTH_NAMES = ('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec')
 
 UID_PATTERN = re.compile(r'(^|\s+|\W)UID\s+(?P<uid>\d+)')
 
-TIMEOUT_ARG_SUPPORT_ERROR = 'imaplib.IMAP4 timeout argument supported since python 3.9'
+
+def check_timeout_arg_support(timeout):
+    """If timeout arg not supports - raise ValueError"""
+    if timeout is not None and sys.version_info.minor < 9:
+        raise ValueError('imaplib.IMAP4 timeout argument supported since python 3.9')
 
 
 class MailMessageFlags:
