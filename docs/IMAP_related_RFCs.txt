@@ -1,0 +1,36 @@
+IMAP related RFCs
+
+    2177 - IDLE Extension: https://tools.ietf.org/html/rfc2177
+    2342 - NAMESPACE Extension: https://tools.ietf.org/html/rfc2342
+    2971 - ID Extension: https://tools.ietf.org/html/rfc2971
+    3348 - CHILDREN Extension: https://tools.ietf.org/html/rfc3348
+    3501 - IMAP 4rev1: https://tools.ietf.org/html/rfc3501
+    3502 - MULTIAPPEND Extension: https://tools.ietf.org/html/rfc3502
+    3516 - Binary Content Extension: https://tools.ietf.org/html/rfc3516
+    3691 - UNSELECT Extension: https://tools.ietf.org/html/rfc3691
+    4314 - Access Control List Extension: https://tools.ietf.org/html/rfc4314
+    4315 - UIDPLUS Extension: https://tools.ietf.org/html/rfc4315
+    4469 - CATENATE Extension: https://tools.ietf.org/html/rfc4469
+    4731 - ESEARCH Extension: https://tools.ietf.org/search/rfc4731
+    4978 - COMPRESS Extension: https://tools.ietf.org/html/rfc4978
+    5032 - WITHIN Search Extension: https://tools.ietf.org/html/rfc5032
+    5161 - ENABLE Extension: https://tools.ietf.org/html/rfc5161
+    5182 - Last SEARCH Result: https://tools.ietf.org/html/rfc5182
+    5255 - Internationalization: https://tools.ietf.org/html/rfc5255
+    5258 - LIST Command Extensions: https://tools.ietf.org/html/rfc5258
+    5267 - Contexts for IMAP4 (ESORT and CONTEXT): https://tools.ietf.org/html/rfc5267
+    5464 - METADATA Extension: https://tools.ietf.org/html/rfc5464
+    5465 - NOTIFY Extension: https://tools.ietf.org/html/rfc5465
+    5530 - Response Codes: https://tools.ietf.org/html/rfc5530
+    5819 - STATUS Information in Extended LIST: https://tools.ietf.org/html/rfc5819
+    5957 - Display-Based Address SORT: https://tools.ietf.org/html/rfc5957
+    6154 - LIST Extension for Special-Use Mailboxes: https://tools.ietf.org/html/rfc6154
+    6186 - SRV Records for Email Services: https://tools.ietf.org/html/rfc6186
+    6203 - Fuzzy Search Extension: https://tools.ietf.org/html/rfc6203
+    6851 - MOVE Extension: https://tools.ietf.org/html/rfc6851
+    6855 - IMAP Support for UTF-8: https://tools.ietf.org/html/rfc6855
+    6858 - IMAP Downgrading for Internationalized Email: https://tools.ietf.org/html/rfc6858
+    7162 - CONDSTORE and QRESYNC Extensions: https://tools.ietf.org/html/rfc7162
+    7377 - Multimailbox SEARCH Extension: https://tools.ietf.org/html/rfc7377
+    7817 - TLS Server Identity Check Procedure for Email-Related Protocols: https://tools.ietf.org/html/rfc7817
+    7888 - Non-synchronizing Literals: https://tools.ietf.org/html/rfc7888

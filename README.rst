@@ -20,8 +20,7 @@ Work with email by IMAP:
 Python version   3.5+
 License          Apache-2.0
 PyPI             https://pypi.python.org/pypi/imap_tools/
-IMAP RFC         VERSION 4rev1 - https://tools.ietf.org/html/rfc3501
-EMAIL RFC        Internet Message Format - https://tools.ietf.org/html/rfc2822
+RFC              `IMAP4.1 <https://tools.ietf.org/html/rfc3501>`_, `EMAIL <https://tools.ietf.org/html/rfc3501>`_, `IMAP related RFCs <https://github.com/ikvk/imap_tools/blob/master/examples/docs/IMAP_related_RFCs.txt>`_
 ===============  ===============================================================
 
 .. contents::
@@ -295,7 +294,7 @@ BaseMailBox.login has initial_folder arg, that is "INBOX" by default, use None f
 IDLE workflow
 ^^^^^^^^^^^^^
 
-IDLE logic a in mailbox.idle manager, its methods are in the table below:
+IDLE logic are in mailbox.idle manager, its methods are in the table below:
 
 ======== =================================================================== ==========================
 Method   Description                                                         Arguments
