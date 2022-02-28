@@ -20,7 +20,7 @@ Work with email by IMAP:
 Python version   3.5+
 License          Apache-2.0
 PyPI             https://pypi.python.org/pypi/imap_tools/
-RFC              `IMAP4.1 <https://tools.ietf.org/html/rfc3501>`_, `EMAIL <https://tools.ietf.org/html/rfc3501>`_, `IMAP related RFCs <https://github.com/ikvk/imap_tools/blob/master/examples/docs/IMAP_related_RFCs.txt>`_
+RFC              `IMAP4.1 <https://tools.ietf.org/html/rfc3501>`_, `EMAIL <https://tools.ietf.org/html/rfc3501>`_, `IMAP related RFCs <https://github.com/ikvk/imap_tools/blob/master/docs/IMAP_related_RFCs.txt>`_
 ===============  ===============================================================
 
 .. contents::
