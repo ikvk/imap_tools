@@ -9,7 +9,14 @@ class IdleTest(MailboxTestCase):
         for mailbox_name, mailbox in self.mailbox_set.items():
             if mailbox.mailbox_name in ('MAIL_RU', 'YAHOO'):
                 continue
-            mailbox.idle.wait(timeout=1)
+            responses1 = mailbox.idle.wait(timeout=0.5)
+            self.assertIs(type(responses1), list)
+
+            mailbox.idle.start()
+            responses2 = mailbox.idle.poll(0.5)
+            mailbox.idle.stop()
+            self.assertIs(type(responses2), list)
+
             self.assertEqual(len(tuple(mailbox.fetch(limit=1))), 1)
 
 

@@ -1,6 +1,7 @@
 import time
 from imap_tools import MailBox, A
 
+# 1
 # SIMPLE
 # waiting for msg in 60 sec, then print unseen if any update
 with MailBox('imap.far.mars').login('acc', 'pwd') as mailbox:
@@ -15,6 +16,7 @@ with MailBox('imap.far.mars').login('acc', 'pwd') as mailbox:
     else:
         print('no any updates')
 
+# 2
 # reliable console notificator
 import time, socket, imaplib, traceback
 from imap_tools import A, MailBox, MailboxLoginError, MailboxLogoutError
@@ -43,3 +45,16 @@ while not done:
             socket.herror, socket.gaierror, socket.timeout) as e:
         print(f'## Error\n{e}\n{traceback.format_exc()}\nreconnect in a minute...')
         time.sleep(60)
+
+# 3
+# context manager
+from imap_tools import MailBox, A
+
+with MailBox('imap.sun.mw').login('acc', 'pwd', 'INBOX') as mailbox:
+    with mailbox.idle as idle:
+        responses = idle.poll(timeout=10)
+    if responses:
+        for msg in mailbox.fetch(A(seen=False)):
+            print(msg.date, msg.subject)
+    else:
+        print('no any updates')
