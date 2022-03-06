@@ -5,11 +5,12 @@ import datetime
 from collections import UserString
 from typing import AnyStr, Optional, List, Iterable, Sequence, Union, Tuple
 
-from .consts import UID_PATTERN, check_timeout_arg_support
+from .consts import UID_PATTERN
 from .message import MailMessage
 from .folder import MailBoxFolderManager
 from .idle import IdleManager
-from .utils import clean_uids, check_command_status, chunks, encode_folder, clean_flags, decode_value
+from .utils import clean_uids, check_command_status, chunks, encode_folder, clean_flags, decode_value, \
+    check_timeout_arg_support
 from .errors import MailboxStarttlsError, MailboxLoginError, MailboxLogoutError, MailboxNumbersError, \
     MailboxFetchError, MailboxExpungeError, MailboxDeleteError, MailboxCopyError, MailboxFlagError, \
     MailboxAppendError, MailboxUidsError, MailboxTaggedResponseError
