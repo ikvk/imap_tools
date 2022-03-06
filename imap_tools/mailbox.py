@@ -5,11 +5,12 @@ import datetime
 from collections import UserString
 from typing import AnyStr, Optional, List, Iterable, Sequence, Union, Tuple
 
-from .consts import UID_PATTERN, TIMEOUT_ARG_SUPPORT_ERROR
+from .consts import UID_PATTERN
 from .message import MailMessage
 from .folder import MailBoxFolderManager
 from .idle import IdleManager
-from .utils import clean_uids, check_command_status, chunks, encode_folder, clean_flags, decode_value
+from .utils import clean_uids, check_command_status, chunks, encode_folder, clean_flags, decode_value, \
+    check_timeout_arg_support
 from .errors import MailboxStarttlsError, MailboxLoginError, MailboxLogoutError, MailboxNumbersError, \
     MailboxFetchError, MailboxExpungeError, MailboxDeleteError, MailboxCopyError, MailboxFlagError, \
     MailboxAppendError, MailboxUidsError, MailboxTaggedResponseError
@@ -19,6 +20,8 @@ from .errors import MailboxStarttlsError, MailboxLoginError, MailboxLogoutError,
 imaplib._MAXLINE = 20 * 1024 * 1024  # 20Mb
 
 Criteria = Union[AnyStr, UserString]
+
+PYTHON_VERSION_MINOR = sys.version_info.minor
 
 
 class BaseMailBox:
@@ -224,7 +227,7 @@ class BaseMailBox:
         :param flag_set: email message flags, no flags by default. System flags at consts.MailMessageFlags.all
         :return: command results
         """
-        if sys.version_info.minor < 6:
+        if PYTHON_VERSION_MINOR < 6:
             timezone = datetime.timezone(datetime.timedelta(hours=0))
         else:
             timezone = datetime.datetime.now().astimezone().tzinfo  # system timezone
@@ -239,6 +242,16 @@ class BaseMailBox:
         check_command_status(append_result, MailboxAppendError)
         return append_result
 
+    def xoauth2(self, username: str, access_token: str, initial_folder: str = 'INBOX') -> 'BaseMailBox':
+        """Authenticate to account using OAuth 2.0 mechanism"""
+        auth_string = 'user={}\1auth=Bearer {}\1\1'.format(username, access_token)
+        result = self.box.authenticate('XOAUTH2', lambda x: auth_string)  # noqa
+        check_command_status(result, MailboxLoginError)
+        self.folder = self.folder_manager_class(self)
+        self.folder.set(initial_folder)
+        self.login_result = result
+        return self
+
 
 class MailBoxUnencrypted(BaseMailBox):
     """Working with the email box through IMAP4"""
@@ -249,15 +262,14 @@ class MailBoxUnencrypted(BaseMailBox):
         :param port: port number
         :param timeout: timeout in seconds for the connection attempt, since python 3.9
         """
-        if timeout and sys.version_info.minor < 9:
-            raise ValueError(TIMEOUT_ARG_SUPPORT_ERROR)
+        check_timeout_arg_support(timeout)
         self._host = host
         self._port = port
         self._timeout = timeout
         super().__init__()
 
     def _get_mailbox_client(self) -> imaplib.IMAP4:
-        if sys.version_info.minor < 9:
+        if PYTHON_VERSION_MINOR < 9:
             return imaplib.IMAP4(self._host, self._port)
         else:
             return imaplib.IMAP4(self._host, self._port, self._timeout)  # noqa
@@ -266,7 +278,7 @@ class MailBoxUnencrypted(BaseMailBox):
 class MailBox(BaseMailBox):
     """Working with the email box through IMAP4 over SSL connection"""
 
-    def __init__(self, host='', port=993, timeout=None, keyfile=None, certfile=None, ssl_context=None, starttls=False):
+    def __init__(self, host='', port=993, timeout=None, keyfile=None, certfile=None, ssl_context=None):
         """
         :param host: host's name (default: localhost)
         :param port: port number
@@ -274,43 +286,46 @@ class MailBox(BaseMailBox):
         :param keyfile: PEM formatted file that contains your private key (deprecated)
         :param certfile: PEM formatted certificate chain file (deprecated)
         :param ssl_context: SSLContext object that contains your certificate chain and private key
-        :param starttls: whether to use starttls
         """
-        if timeout and sys.version_info.minor < 9:
-            raise ValueError(TIMEOUT_ARG_SUPPORT_ERROR)
+        check_timeout_arg_support(timeout)
         self._host = host
         self._port = port
         self._timeout = timeout
         self._keyfile = keyfile
         self._certfile = certfile
         self._ssl_context = ssl_context
-        self._starttls = starttls
         super().__init__()
 
     def _get_mailbox_client(self) -> imaplib.IMAP4:
-        if self._starttls:
-            if self._keyfile or self._certfile:
-                raise ValueError("starttls cannot be combined with keyfile neither with certfile.")
-            if sys.version_info.minor < 9:
-                client = imaplib.IMAP4(self._host, self._port)
-            else:
-                client = imaplib.IMAP4(self._host, self._port, self._timeout)  # noqa
-            result = client.starttls(self._ssl_context)
-            check_command_status(result, MailboxStarttlsError)
-            return client
+        if PYTHON_VERSION_MINOR < 9:
+            return imaplib.IMAP4_SSL(self._host, self._port, self._keyfile, self._certfile, self._ssl_context)
         else:
-            if sys.version_info.minor < 9:
-                return imaplib.IMAP4_SSL(self._host, self._port, self._keyfile, self._certfile, self._ssl_context)
-            else:
-                return imaplib.IMAP4_SSL(self._host, self._port, self._keyfile,  # noqa
-                                         self._certfile, self._ssl_context, self._timeout)
+            return imaplib.IMAP4_SSL(self._host, self._port, self._keyfile, self._certfile, self._ssl_context,
+                                     self._timeout)
 
-    def xoauth2(self, username: str, access_token: str, initial_folder: str = 'INBOX') -> 'BaseMailBox':
-        """Authenticate to account using OAuth 2.0 mechanism"""
-        auth_string = 'user={}\1auth=Bearer {}\1\1'.format(username, access_token)
-        result = self.box.authenticate('XOAUTH2', lambda x: auth_string)  # noqa
-        check_command_status(result, MailboxLoginError)
-        self.folder = self.folder_manager_class(self)
-        self.folder.set(initial_folder)
-        self.login_result = result
-        return self
+
+class MailBoxTls(BaseMailBox):
+    """Working with the email box through IMAP4 with STARTTLS"""
+
+    def __init__(self, host='', port=993, timeout=None, ssl_context=None):
+        """
+        :param host: host's name (default: localhost)
+        :param port: port number
+        :param timeout: timeout in seconds for the connection attempt, since python 3.9
+        :param ssl_context: SSLContext object that contains your certificate chain and private key
+        """
+        check_timeout_arg_support(timeout)
+        self._host = host
+        self._port = port
+        self._timeout = timeout
+        self._ssl_context = ssl_context
+        super().__init__()
+
+    def _get_mailbox_client(self) -> imaplib.IMAP4:
+        if PYTHON_VERSION_MINOR < 9:
+            client = imaplib.IMAP4(self._host, self._port)
+        else:
+            client = imaplib.IMAP4(self._host, self._port, self._timeout)  # noqa
+        result = client.starttls(self._ssl_context)
+        check_command_status(result, MailboxStarttlsError)
+        return client

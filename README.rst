@@ -53,10 +53,9 @@ Info about lib are at: *this page*, issues, pull requests, examples, source, sta
     subjects = [msg.subject for msg in mailbox.fetch(AND(all=True))]
     mailbox.logout()
 
-MailBox(BaseMailBox), MailBoxUnencrypted(BaseMailBox) - for create mailbox instance.
+MailBox, MailBoxTls, MailBoxUnencrypted - for create mailbox client. `TLS example <https://github.com/ikvk/imap_tools/blob/master/examples/tls.py>`_.
 
-BaseMailBox.login, MailBox.xoauth2 - authentication functions. TLS connection
-`example <https://github.com/ikvk/imap_tools/blob/master/examples/tls.py>`_.
+BaseMailBox.login, MailBox.xoauth2 - authentication functions.
 
 BaseMailBox.fetch - first searches email nums by criteria in current folder, then fetch and yields `MailMessage <#email-attributes>`_:
 
@@ -78,6 +77,8 @@ BaseMailBox.uids - search mailbox for matching message uids in current folder, r
 BaseMailBox.<action> - `copy, move, delete, flag, append <#actions-with-emails>`_
 
 BaseMailBox.folder - `folder manager <#actions-with-folders>`_
+
+BaseMailBox.idle - `idle manager <#idle-workflow>`_
 
 BaseMailBox.numbers - search mailbox for matching message numbers in current folder, returns [str]
 

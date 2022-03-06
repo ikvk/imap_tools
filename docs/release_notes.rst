@@ -1,3 +1,7 @@
+0.52.0
+======
+* [Breaking] STARTTLS logic moved to MailBoxTls
+
 0.51.1
 ======
 * Fix IdleManager

@@ -1,4 +1,5 @@
 import re
+import sys
 import datetime
 from itertools import zip_longest
 from email.utils import getaddresses, parsedate_to_datetime
@@ -184,3 +185,9 @@ def clean_flags(flag_set: Union[str, Iterable[str]]) -> List[str]:
         if flag.upper() not in upper_sys_flags and flag.startswith('\\'):
             raise ValueError('Non system flag must not start with "\\"')
     return flag_set
+
+
+def check_timeout_arg_support(timeout):
+    """If timeout arg not supports - raise ValueError"""
+    if timeout is not None and sys.version_info.minor < 9:
+        raise ValueError('imaplib.IMAP4 timeout argument supported since python 3.9')
