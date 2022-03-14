@@ -128,7 +128,7 @@ MailMessage and MailAttachment public attributes are cached by functools.lru_cac
 Search criteria
 ^^^^^^^^^^^^^^^
 
-You can use 3 arg types for "criteria" argument of MailBox methods: fetch, uids, numbers:
+You can use 3 types for "criteria" argument of MailBox methods: fetch, uids, numbers:
 
 .. code-block:: python
 
