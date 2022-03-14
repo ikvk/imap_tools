@@ -82,7 +82,7 @@ BaseMailBox.idle - `idle manager <#idle-workflow>`_
 
 BaseMailBox.numbers - search mailbox for matching message numbers in current folder, returns [str]
 
-BaseMailBox.box - imaplib.IMAP4/IMAP4_SSL client instance.
+BaseMailBox.client - imaplib.IMAP4/IMAP4_SSL client instance.
 
 Email attributes
 ^^^^^^^^^^^^^^^^
@@ -128,20 +128,17 @@ MailMessage and MailAttachment public attributes are cached by functools.lru_cac
 Search criteria
 ^^^^^^^^^^^^^^^
 
-This chapter about "criteria" and "charset" arguments of MailBox methods: fetch, uids, numbers
-
-You can use 3 approaches to build search criteria:
+You can use 3 arg types for "criteria" argument of MailBox methods: fetch, uids, numbers:
 
 .. code-block:: python
 
-    from imap_tools import AND, OR, NOT
+    from imap_tools import AND
 
     mailbox.fetch(AND(subject='weather'))  # query, the str-like object
     mailbox.fetch('TEXT "hello"')          # str
     mailbox.fetch(b'TEXT "\xd1\x8f"')      # bytes, *charset arg is ignored
 
-The "charset" is argument used for encode criteria to this encoding.
-You can pass the criteria as bytes in the desired encoding - in this case, the encoding will be ignored.
+Use "charset" argument for encode criteria to the desired encoding. If "criteria" is bytes - encoding will be ignored.
 
 .. code-block:: python
 
@@ -257,7 +254,7 @@ use 'limit' argument for fetch in this case.
 Actions with folders
 ^^^^^^^^^^^^^^^^^^^^
 
-BaseMailBox.login has initial_folder arg, that is "INBOX" by default, use None for not set folder on login.
+BaseMailBox.login/xoauth2 has initial_folder arg, that is "INBOX" by default, use None for not set folder on login.
 
 .. code-block:: python
 

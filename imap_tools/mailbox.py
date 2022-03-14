@@ -32,10 +32,10 @@ class BaseMailBox:
     idle_manager_class = IdleManager
 
     def __init__(self):
-        self.folder = None  # folder manager
-        self.idle = None  # idle manager
+        self.client = self._get_mailbox_client()
+        self.folder = self.folder_manager_class(self)
+        self.idle = self.idle_manager_class(self)
         self.login_result = None
-        self.box = self._get_mailbox_client()
 
     def __enter__(self):
         return self
@@ -48,10 +48,10 @@ class BaseMailBox:
 
     def consume_until_tagged_response(self, tag: bytes):
         """Waiting for tagged response"""
-        tagged_commands = self.box.tagged_commands
+        tagged_commands = self.client.tagged_commands
         response_set = []
         while True:
-            response: bytes = self.box._get_response()  # noqa, example: b'IJDH3 OK IDLE Terminated'
+            response: bytes = self.client._get_response()  # noqa, example: b'IJDH3 OK IDLE Terminated'
             if tagged_commands[tag]:
                 break
             response_set.append(response)
@@ -60,18 +60,26 @@ class BaseMailBox:
         return result, response_set
 
     def login(self, username: str, password: str, initial_folder: Optional[str] = 'INBOX') -> 'BaseMailBox':
-        login_result = self.box._simple_command('LOGIN', username, self.box._quote(password))  # noqa
+        login_result = self.client._simple_command('LOGIN', username, self.client._quote(password))  # noqa
         check_command_status(login_result, MailboxLoginError)
-        self.box.state = 'AUTH'  # logic from self.box.login
-        self.folder = self.folder_manager_class(self)
-        self.idle = self.idle_manager_class(self)
+        self.client.state = 'AUTH'  # logic from self.client.login
         if initial_folder is not None:
             self.folder.set(initial_folder)
         self.login_result = login_result
         return self  # return self in favor of context manager
 
+    def xoauth2(self, username: str, access_token: str, initial_folder: Optional[str] = 'INBOX') -> 'BaseMailBox':
+        """Authenticate to account using OAuth 2.0 mechanism"""
+        auth_string = 'user={}\1auth=Bearer {}\1\1'.format(username, access_token)
+        result = self.client.authenticate('XOAUTH2', lambda x: auth_string)  # noqa
+        check_command_status(result, MailboxLoginError)
+        if initial_folder is not None:
+            self.folder.set(initial_folder)
+        self.login_result = result
+        return self
+
     def logout(self) -> tuple:
-        result = self.box.logout()
+        result = self.client.logout()
         check_command_status(result, MailboxLogoutError, expected='BYE')
         return result
 
@@ -83,7 +91,7 @@ class BaseMailBox:
         :return email message numbers
         """
         encoded_criteria = criteria if type(criteria) is bytes else str(criteria).encode(charset)
-        search_result = self.box.search(charset, encoded_criteria)
+        search_result = self.client.search(charset, encoded_criteria)
         check_command_status(search_result, MailboxNumbersError)
         return search_result[1][0].decode().split() if search_result[1][0] else []
 
@@ -98,7 +106,7 @@ class BaseMailBox:
         nums = self.numbers(criteria, charset)
         if not nums:
             return []
-        fetch_result = self.box.fetch(','.join(nums), "(UID)")
+        fetch_result = self.client.fetch(','.join(nums), "(UID)")
         check_command_status(fetch_result, MailboxUidsError)
         result = []
         for fetch_item in fetch_result[1]:
@@ -112,14 +120,14 @@ class BaseMailBox:
 
     def _fetch_by_one(self, message_nums: Sequence[str], message_parts: str, reverse: bool) -> Iterable[list]:  # noqa
         for message_num in message_nums:
-            fetch_result = self.box.fetch(message_num, message_parts)
+            fetch_result = self.client.fetch(message_num, message_parts)
             check_command_status(fetch_result, MailboxFetchError)
             yield fetch_result[1]
 
     def _fetch_in_bulk(self, message_nums: Sequence[str], message_parts: str, reverse: bool) -> Iterable[list]:
         if not message_nums:
             return
-        fetch_result = self.box.fetch(','.join(message_nums), message_parts)
+        fetch_result = self.client.fetch(','.join(message_nums), message_parts)
         check_command_status(fetch_result, MailboxFetchError)
         for built_fetch_item in chunks((reversed if reverse else iter)(fetch_result[1]), 2):
             yield built_fetch_item
@@ -153,7 +161,7 @@ class BaseMailBox:
             yield mail_message
 
     def expunge(self) -> tuple:
-        result = self.box.expunge()
+        result = self.client.expunge()
         check_command_status(result, MailboxExpungeError)
         return result
 
@@ -166,7 +174,7 @@ class BaseMailBox:
         uid_str = clean_uids(uid_list)
         if not uid_str:
             return None
-        store_result = self.box.uid('STORE', uid_str, '+FLAGS', r'(\Deleted)')
+        store_result = self.client.uid('STORE', uid_str, '+FLAGS', r'(\Deleted)')
         check_command_status(store_result, MailboxDeleteError)
         expunge_result = self.expunge()
         return store_result, expunge_result
@@ -180,7 +188,7 @@ class BaseMailBox:
         uid_str = clean_uids(uid_list)
         if not uid_str:
             return None
-        copy_result = self.box.uid('COPY', uid_str, encode_folder(destination_folder))  # noqa
+        copy_result = self.client.uid('COPY', uid_str, encode_folder(destination_folder))  # noqa
         check_command_status(copy_result, MailboxCopyError)
         return copy_result
 
@@ -208,7 +216,7 @@ class BaseMailBox:
         uid_str = clean_uids(uid_list)
         if not uid_str:
             return None
-        store_result = self.box.uid(
+        store_result = self.client.uid(
             'STORE', uid_str, ('+' if value else '-') + 'FLAGS',
             '({})'.format(' '.join(clean_flags(flag_set))))
         check_command_status(store_result, MailboxFlagError)
@@ -232,7 +240,7 @@ class BaseMailBox:
         else:
             timezone = datetime.datetime.now().astimezone().tzinfo  # system timezone
         cleaned_flags = clean_flags(flag_set or [])
-        typ, dat = self.box.append(
+        typ, dat = self.client.append(
             encode_folder(folder),  # noqa
             '({})'.format(' '.join(cleaned_flags)) if cleaned_flags else None,
             dt or datetime.datetime.now(timezone),  # noqa
@@ -241,16 +249,6 @@ class BaseMailBox:
         append_result = (typ, dat)
         check_command_status(append_result, MailboxAppendError)
         return append_result
-
-    def xoauth2(self, username: str, access_token: str, initial_folder: str = 'INBOX') -> 'BaseMailBox':
-        """Authenticate to account using OAuth 2.0 mechanism"""
-        auth_string = 'user={}\1auth=Bearer {}\1\1'.format(username, access_token)
-        result = self.box.authenticate('XOAUTH2', lambda x: auth_string)  # noqa
-        check_command_status(result, MailboxLoginError)
-        self.folder = self.folder_manager_class(self)
-        self.folder.set(initial_folder)
-        self.login_result = result
-        return self
 
 
 class MailBoxUnencrypted(BaseMailBox):

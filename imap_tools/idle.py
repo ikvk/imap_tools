@@ -49,14 +49,14 @@ class IdleManager:
 
     def start(self):
         """Switch on mailbox IDLE mode"""
-        self._idle_tag = self.mailbox.box._command('IDLE')  # b'KLIG3'
-        result = self.mailbox.box._get_response()
+        self._idle_tag = self.mailbox.client._command('IDLE')  # b'KLIG3'
+        result = self.mailbox.client._get_response()
         check_command_status((result, 'IDLE start'), MailboxTaggedResponseError, expected=None)
         return result
 
     def stop(self):
         """Switch off mailbox IDLE mode"""
-        self.mailbox.box.send(b"DONE\r\n")
+        self.mailbox.client.send(b"DONE\r\n")
         return self.mailbox.consume_until_tagged_response(self._idle_tag)
 
     def poll(self, timeout: Optional[float]) -> List[bytes]:
@@ -79,7 +79,7 @@ class IdleManager:
                     'rfc2177 are advised to terminate the IDLE '
                     'and re-issue it at least every 29 minutes to avoid being logged off.'
                 )
-        sock = self.mailbox.box.sock
+        sock = self.mailbox.client.sock
         old_timeout = sock.gettimeout()
         # make socket non-blocking so the timeout can be implemented for this call
         sock.settimeout(None)
@@ -90,7 +90,7 @@ class IdleManager:
             if events:
                 while True:
                     try:
-                        line = self.mailbox.box._get_line()
+                        line = self.mailbox.client._get_line()
                     except (socket.timeout, socket.error):
                         break
                     except imaplib.IMAP4.abort:  # noqa

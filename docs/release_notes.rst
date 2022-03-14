@@ -1,3 +1,9 @@
+0.53.0
+======
+* [Breaking] BaseMailBox.box client instance renamed to BaseMailBox.client
+* Fixed BaseMailBox.xoauth2 consistency with BaseMailBox.login
+* BaseMailBox.folder/idle managers now instantiates in __init__
+
 0.52.0
 ======
 * [Breaking] STARTTLS logic moved to MailBoxTls
