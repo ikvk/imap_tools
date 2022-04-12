@@ -403,7 +403,7 @@ Big thanks to people who helped develop this library:
 `RanjithNair1980 <https://github.com/RanjithNair1980>`_,
 `NickC-NZ <https://github.com/NickC-NZ>`_,
 `mweinelt <https://github.com/mweinelt>`_
-
+`FrancescoMalluzzo <https://github.com/FrancescoMalluzzo>`_
 Donate
 ------
 
