@@ -243,13 +243,13 @@ use 'limit' argument for fetch in this case.
         mailbox.delete([msg.uid for msg in mailbox.fetch() if 'cat' in msg.html])
 
         # FLAG unseen messages in current folder as \Seen, \Flagged and TAG1
-        flags = (imap_tools.MailMessageFlags.SEEN, imap_tools.MailMessageFlags.FLAGGED, 'TAG1')
+        flags = (imap_tools.consts.SEEN, imap_tools.consts.FLAGGED, 'TAG1')
         mailbox.flag(mailbox.uids(AND(seen=False)), flags, True)
 
         # APPEND: add message to mailbox directly, to INBOX folder with \Seen flag and now date
         with open('/tmp/message.eml', 'rb') as f:
             msg = imap_tools.MailMessage.from_bytes(f.read())  # *or use bytes instead MailMessage
-        mailbox.append(msg, 'INBOX', dt=None, flag_set=[imap_tools.MailMessageFlags.SEEN])
+        mailbox.append(msg, 'INBOX', dt=None, flag_set=[imap_tools.consts.SEEN])
 
 Actions with folders
 ^^^^^^^^^^^^^^^^^^^^
