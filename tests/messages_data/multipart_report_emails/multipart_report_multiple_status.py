@@ -38,9 +38,9 @@ DATA = dict(
             payload=b"<!DOCTYPE html>\n<html>\n<head>\n<title>HomeRun - Your Friend Farida Malik wants you to join run.com/o.45b0d380.gif' width='1' />\n</td>\n</tr>\n</table>\n</td>\n</tr>\n</table>\n</div>\n</body>\n</html>\n",
         ),
         ],
-    from_values=EmailAddress('Mail Administrator', 'Postmaster@ci.com', 'Mail Administrator <Postmaster@ci.com>'),
-    to_values=(EmailAddress('', 'notification+promo@blah.com', 'notification+promo@blah.com'),),
+    from_values=EmailAddress(name='Mail Administrator', email='Postmaster@ci.com'),
+    to_values=(EmailAddress(name='', email='notification+promo@blah.com'),),
     cc_values=(),
     bcc_values=(),
-    reply_to_values=(EmailAddress('', 'Postmaster@ci.com', 'Postmaster@ci.com'),),
+    reply_to_values=(EmailAddress(name='', email='Postmaster@ci.com'),),
 )

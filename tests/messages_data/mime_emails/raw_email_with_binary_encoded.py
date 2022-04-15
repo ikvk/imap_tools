@@ -22,9 +22,9 @@ DATA = dict(
             payload=b'BINARY_CONTENT_GOES_HERE',
         ),
         ],
-    from_values=EmailAddress('Mikel Lindsaar', 'email_test@me.nowhere', 'Mikel Lindsaar <email_test@me.nowhere>'),
-    to_values=(EmailAddress('', 'mikel@me.nowhere', 'mikel@me.nowhere'),),
+    from_values=EmailAddress(name='Mikel Lindsaar', email='email_test@me.nowhere'),
+    to_values=(EmailAddress(name='', email='mikel@me.nowhere'),),
     cc_values=(),
     bcc_values=(),
-    reply_to_values=(EmailAddress('Mikel Lindsaar', 'email_test@me.nowhere', 'Mikel Lindsaar <email_test@me.nowhere>'),),
+    reply_to_values=(EmailAddress(name='Mikel Lindsaar', email='email_test@me.nowhere'),),
 )

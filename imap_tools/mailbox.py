@@ -60,6 +60,7 @@ class BaseMailBox:
         return result, response_set
 
     def login(self, username: str, password: str, initial_folder: Optional[str] = 'INBOX') -> 'BaseMailBox':
+        """Authenticate to account"""
         login_result = self.client._simple_command('LOGIN', username, self.client._quote(password))  # noqa
         check_command_status(login_result, MailboxLoginError)
         self.client.state = 'AUTH'  # logic from self.client.login
@@ -79,6 +80,7 @@ class BaseMailBox:
         return self
 
     def logout(self) -> tuple:
+        """Informs the server that the client is done with the connection"""
         result = self.client.logout()
         check_command_status(result, MailboxLogoutError, expected='BYE')
         return result

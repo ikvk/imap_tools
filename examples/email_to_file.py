@@ -1,6 +1,6 @@
 """
 
-If you want to save message as .eml file, work with MailMessage.obj
+If you want to save message as .eml file, work with MailMessage.obj - it is email.message.EmailMessage
 
 python email lib docs:
 

@@ -1,3 +1,9 @@
+0.54.0
+======
+* EmailAddress full is property now, parse_email_addresses fixed
+* Added MailBoxTls into __init__
+* Fixed tls.py example, rename examples, added basic.py example
+
 0.53.0
 ======
 * [Breaking] BaseMailBox.box client instance renamed to BaseMailBox.client

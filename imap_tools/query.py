@@ -10,6 +10,7 @@ from .utils import clean_uids, quote
 
 
 class Header:
+    """Header value for search by header key"""
     __slots__ = ('name', 'value')
 
     def __init__(self, name: str, value: str):
@@ -26,6 +27,7 @@ class Header:
 
 class UidRange:
     """
+    UID range value for search by uid key
     * - represents the largest number in use.
     x:y - represents sequence range, example: 4:*
     NOTE: UID range of <value>:* always includes the UID of the last message in the mailbox,
@@ -52,7 +54,7 @@ class UidRange:
 class LogicOperator(UserString):
     def __init__(
             self,
-            *converted_strings,
+            *converted_strings: Union[str, UserString],
             answered: Optional[bool] = None,
             seen: Optional[bool] = None,
             flagged: Optional[bool] = None,
@@ -98,26 +100,26 @@ class LogicOperator(UserString):
 
     @staticmethod
     def prefix_join(operator: str, params: Iterable[str]) -> str:
-        """Join params by prefix notation rules, enclose in parenthesis"""
+        """Join params by prefix notation rules, enclose group in parenthesis"""
         return '({})'.format(functools.reduce(lambda a, b: '{}{} {}'.format(operator, a, b), params))
 
 
 class AND(LogicOperator):
-    """When multiple keys are specified, the result is the intersection of all the messages that match those keys."""
+    """Combines conditions by logical AND"""
 
     def combine_params(self) -> str:
         return self.prefix_join('', itertools.chain(self.converted_strings, self.converted_params))
 
 
 class OR(LogicOperator):
-    """OR <search-key1> <search-key2> Messages that match either search key."""
+    """Combines conditions by logical OR"""
 
     def combine_params(self) -> str:
         return self.prefix_join('OR ', itertools.chain(self.converted_strings, self.converted_params))
 
 
 class NOT(LogicOperator):
-    """NOT <search-key> Messages that do not match the specified search key."""
+    """Inverts the result of a logical expression"""
 
     def combine_params(self) -> str:
         return 'NOT {}'.format(self.prefix_join('', itertools.chain(self.converted_strings, self.converted_params)))

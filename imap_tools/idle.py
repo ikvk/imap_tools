@@ -112,7 +112,7 @@ class IdleManager:
         Logic, step by step:
         1. Start idle mode
         2. Poll idle response
-        3. Stop idle mode
+        3. Stop idle mode on response
         4. Return poll results
         :param timeout: for poll method
         :return: poll response

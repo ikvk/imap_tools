@@ -60,16 +60,19 @@ def decode_value(value: AnyStr, encoding: Optional[str] = None) -> str:
 
 class EmailAddress:
     """Parsed email address info"""
-    __slots__ = 'name', 'email', 'full'
+    __slots__ = 'name', 'email'
 
-    def __init__(self, name: str, email: str, full: str):
+    def __init__(self, name: str, email: str):
         self.name = name
         self.email = email
-        self.full = full
+
+    @property
+    def full(self):
+        return '{} <{}>'.format(self.name, self.email) if self.name and self.email else self.name or self.email
 
     def __repr__(self):
-        return "{}(name={}, email={}, full={})".format(
-            self.__class__.__name__, repr(self.name), repr(self.email), repr(self.full))
+        return "{}(name={}, email={})".format(
+            self.__class__.__name__, repr(self.name), repr(self.email))
 
     def __eq__(self, other):
         return all(getattr(self, i) == getattr(other, i) for i in self.__slots__)
@@ -90,9 +93,8 @@ def parse_email_addresses(raw_header: Union[str, Header]) -> Tuple[EmailAddress,
         if not (name or email):
             continue
         result.append(EmailAddress(
-            name=name,
+            name=name or (email if '@' not in email else ''),
             email=email if '@' in email else '',
-            full='{} <{}>'.format(name, email) if name and email else name or email
         ))
     return tuple(result)
 

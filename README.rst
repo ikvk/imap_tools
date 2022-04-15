@@ -43,19 +43,16 @@ Info about lib are at: *this page*, issues, pull requests, examples, source, sta
 
     from imap_tools import MailBox, AND
 
-    # get list of email subjects from INBOX folder
+    # Get date, subject and body len of all emails from INBOX folder
     with MailBox('imap.mail.com').login('test@mail.com', 'pwd') as mailbox:
-        subjects = [msg.subject for msg in mailbox.fetch()]
+        for msg in mailbox.fetch():
+            print(msg.date, msg.subject, len(msg.text or msg.html))
 
-    # get list of email subjects from INBOX folder - equivalent verbose version
-    mailbox = MailBox('imap.mail.com')
-    mailbox.login('test@mail.com', 'pwd', initial_folder='INBOX')  # or mailbox.folder.set instead 3d arg
-    subjects = [msg.subject for msg in mailbox.fetch(AND(all=True))]
-    mailbox.logout()
+`Description of this^ example <https://github.com/ikvk/imap_tools/blob/master/examples/basic.py>`_.
 
 MailBox, MailBoxTls, MailBoxUnencrypted - for create mailbox client. `TLS example <https://github.com/ikvk/imap_tools/blob/master/examples/tls.py>`_.
 
-BaseMailBox.login, MailBox.xoauth2 - authentication functions.
+BaseMailBox.login, MailBox.xoauth2, BaseMailBox.logout - authentication functions, they support context manager.
 
 BaseMailBox.fetch - first searches email nums by criteria in current folder, then fetch and yields `MailMessage <#email-attributes>`_:
 
@@ -123,7 +120,7 @@ MailMessage and MailAttachment public attributes are cached by functools.lru_cac
         msg.cc_values        # tuple: (imap_tools.EmailAddress,)
         msg.bcc_values       # tuple: (imap_tools.EmailAddress,)
         msg.reply_to_values  # tuple: (imap_tools.EmailAddress,)
-        # EmailAddress(name='Ya', email='im@ya.ru', full='Ya <im@ya.ru>')
+        # EmailAddress(name='Ya', email='im@ya.ru')  # "full" property = 'Ya <im@ya.ru>'
 
 Search criteria
 ^^^^^^^^^^^^^^^
@@ -148,13 +145,13 @@ Query builder implements all search logic described in `rfc3501 <https://tools.i
 It uses this classes:
 
 ========  =====  ========================================== ======================================
-Class     Alias  Usage                                      Arguments
+Class     Alias  Description                                Arguments
 ========  =====  ========================================== ======================================
-AND       A      combines keys by logical "AND" condition   Search keys (see table below) | str
-OR        O      combines keys by logical "OR" condition    Search keys (see table below) | str
-NOT       N      invert the result of a logical expression  AND/OR instances | str
-Header    H      for search by headers                      name: str, value: str
-UidRange  U      for search by UID range                    start: str, end: str
+AND       A      Combine conditions by logical "AND"        Search keys (see table below) | str
+OR        O      Combine conditions by logical "OR"         Search keys (see table below) | str
+NOT       N      Invert the result of a logical expression  AND/OR instances | str
+Header    H      Header value for search by header key      name: str, value: str
+UidRange  U      UID range value for search by uid key      start: str, end: str
 ========  =====  ========================================== ======================================
 
 See `query examples <https://github.com/ikvk/imap_tools/blob/master/examples/search.py>`_. A few examples:
@@ -224,7 +221,7 @@ Action's uid_list arg may takes:
 * str, that is comma separated uids
 * Sequence, that contains str uids
 
-Get uids using maibox methods: uids, fetch.
+To get uids, use the maibox methods: uids, fetch.
 
 For actions with a large number of messages imap command may be too large and will cause exception at server side,
 use 'limit' argument for fetch in this case.
@@ -294,14 +291,14 @@ IDLE workflow
 
 IDLE logic are in mailbox.idle manager, its methods are in the table below:
 
-======== =================================================================== ==========================
-Method   Description                                                         Arguments
-======== =================================================================== ==========================
+======== ============================================================================== ==========================
+Method   Description                                                                    Arguments
+======== ============================================================================== ==========================
 start    Switch on mailbox IDLE mode
-poll     Poll for IDLE responses                                             timeout: Optional[float]
+poll     Poll for IDLE responses                                                        timeout: Optional[float]
 stop     Switch off mailbox IDLE mode
-wait     Switch on IDLE, poll responses, switch off IDLE, return responses   timeout: Optional[float]
-======== =================================================================== ==========================
+wait     Switch on IDLE, poll responses, switch off IDLE on response, return responses  timeout: Optional[float]
+======== ============================================================================== ==========================
 
 .. code-block:: python
 
@@ -402,7 +399,8 @@ Big thanks to people who helped develop this library:
 `Nicarex <https://github.com/Nicarex>`_,
 `RanjithNair1980 <https://github.com/RanjithNair1980>`_,
 `NickC-NZ <https://github.com/NickC-NZ>`_,
-`mweinelt <https://github.com/mweinelt>`_
+`mweinelt <https://github.com/mweinelt>`_,
+`lucbouge <https://github.com/lucbouge>`_
 
 Donate
 ------

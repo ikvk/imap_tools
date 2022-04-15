@@ -34,6 +34,101 @@ TLS
 ===
 все тестовые ящики: TLS not supported by server
 
+
 icons
 =====
 📨 📬 📪 📭 📫 ✉ 📧 🖂 🖃 🖅 📩
+
+
+code
+====
+def eml_to_python_structs(eml_path: str):
+    from imap_tools import MailMessage
+    with open(eml_path, 'rb') as f:
+        bytes_data = f.read()
+    msg = MailMessage.from_bytes(bytes_data)
+    att_key = '__@@@att@@@__'
+    result = """
+import datetime
+from imap_tools import EmailAddress
+
+DATA = dict(
+    subject={},
+    from_={},
+    to={},
+    cc={},
+    bcc={},
+    reply_to={},
+    date={},
+    date_str={},
+    text={},
+    html={},
+    headers={},
+    attachments={}
+    from_values={},
+    to_values={},
+    cc_values={},
+    bcc_values={},
+    reply_to_values={},
+)
+    """.format(
+        repr(msg.subject),
+        repr(msg.from_),
+        repr(msg.to),
+        repr(msg.cc),
+        repr(msg.bcc),
+        repr(msg.reply_to),
+        repr(msg.date),
+        repr(msg.date_str),
+        repr(msg.text),
+        repr(msg.html),  # .strip('\'')
+        msg.headers,
+        att_key,
+        repr(msg.from_values),
+        repr(msg.to_values),
+        repr(msg.cc_values),
+        repr(msg.bcc_values),
+        repr(msg.reply_to_values),
+    )
+    att_res = ''
+    for att in msg.attachments:
+        att_res += '''
+        dict(
+            filename={},
+            content_id={},
+            content_disposition={},
+            content_type={},
+            payload={},
+        ),
+        '''.format(
+            repr(att.filename),
+            repr(att.content_id),
+            repr(att.content_disposition),
+            repr(att.content_type),
+            att.payload,
+        )
+    att_res = '[{}],'.format(att_res)
+    result = result.replace(att_key, att_res)
+    return result.strip()
+
+
+def build_python_structs_from_emls():
+    import os
+    PATH = 'C:/kvk/develop/Python/imap_tools/tests/messages'
+    path_set = []
+    for root, subdirs, files in os.walk(PATH):
+        for file_name in files:
+            full_path = '{}/{}'.format(root, file_name).replace('\\', '/')
+            if full_path.lower().endswith('.eml'):
+                path_set.append(full_path)
+
+    for full_path in path_set:
+        new_full_path = (full_path[:-4] + '.py').replace(PATH, f'{PATH}_data')
+        print(full_path)
+        print(new_full_path)
+        print()
+        # if any(i in full_path for i in ['forwarded_message.eml', 'attachment_7bit.eml', 'text_with_content_id.eml']):
+        #     continue
+        eml_python_structs = eml_to_python_structs(full_path)
+        with open(new_full_path, 'wb') as f:
+            f.write(eml_python_structs.encode())
