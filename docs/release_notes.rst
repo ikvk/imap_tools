@@ -1,7 +1,11 @@
+0.55.0
+======
+* Fixed query builder bug with key - "header" and value - [Header]
+
 0.54.0
 ======
 * EmailAddress full is property now, parse_email_addresses fixed
-* Added MailBoxTls into __init__
+* Added MailBoxTls into __init__.py
 * Fixed tls.py example, rename examples, added basic.py example
 
 0.53.0

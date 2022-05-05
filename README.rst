@@ -1,27 +1,32 @@
 .. http://docutils.sourceforge.net/docs/user/rst/quickref.html
 
+.. |nbsp| unicode:: 0xA0
+   :trim:
+
 imap_tools 📧
 =============
 
-Work with email by IMAP:
+High level lib for work with email by IMAP:
 
 - Basic message operations: fetch, uids, numbers
 - Parsed email message attributes
-- Query builder for searching emails
+- Query builder for search criteria
 - Actions with emails: copy, delete, flag, move, append
 - Actions with folders: list, set, get, create, exists, rename, subscribe, delete, status
 - IDLE commands: start, poll, stop, wait
 - Exceptions on failed operations
-- No external dependencies
+- No external dependencies, tested
 
 .. image:: https://img.shields.io/pypi/dm/imap_tools.svg?style=social
 
-===============  ===============================================================
+===============  ================================================================================================
 Python version   3.5+
 License          Apache-2.0
 PyPI             https://pypi.python.org/pypi/imap_tools/
-RFC              `IMAP4.1 <https://tools.ietf.org/html/rfc3501>`_, `EMAIL <https://tools.ietf.org/html/rfc3501>`_, `IMAP related RFCs <https://github.com/ikvk/imap_tools/blob/master/docs/IMAP_related_RFCs.txt>`_
-===============  ===============================================================
+RFC              `IMAP4.1 <https://tools.ietf.org/html/rfc3501>`_,
+                 `EMAIL <https://tools.ietf.org/html/rfc3501>`_,
+                 `IMAP related RFCs <https://github.com/ikvk/imap_tools/blob/master/docs/IMAP_related_RFCs.txt>`_
+===============  ================================================================================================
 
 .. contents::
 
@@ -172,9 +177,9 @@ See `query examples <https://github.com/ikvk/imap_tools/blob/master/examples/sea
 
 Search key table. Key types marked with `*` can accepts a sequence of values like list, tuple, set or generator.
 
-=============  ===============  ======================  =================================================================
+=============  ===============  ======================  ================================================================
 Key            Types            Results                 Description
-=============  ===============  ======================  =================================================================
+=============  ===============  ======================  ================================================================
 answered       bool             `ANSWERED/UNANSWERED`   with/without the Answered flag
 seen           bool             `SEEN/UNSEEN`           with/without the Seen flag
 flagged        bool             `FLAGGED/UNFLAGGED`     with/without the Flagged flag
@@ -204,7 +209,7 @@ all            True             ALL                     all, criteria by default
 uid            iter(str)/str/U  UID 1,2,17              corresponding to the specified unique identifier set
 header         H(str, str)*     HEADER "A-Spam" "5.8"   have a header that contains the specified str in the text
 gmail_label    str*             X-GM-LABELS "label1"    have this gmail label.
-=============  ===============  ======================  =================================================================
+=============  ===============  ======================  ================================================================
 
 Server side search notes:
 
@@ -291,14 +296,14 @@ IDLE workflow
 
 IDLE logic are in mailbox.idle manager, its methods are in the table below:
 
-======== ============================================================================== ==========================
+======== ============================================================================== ================================
 Method   Description                                                                    Arguments
-======== ============================================================================== ==========================
+======== ============================================================================== ================================
 start    Switch on mailbox IDLE mode
-poll     Poll for IDLE responses                                                        timeout: Optional[float]
+poll     Poll for IDLE responses                                                        timeout: |nbsp| Optional[float]
 stop     Switch off mailbox IDLE mode
-wait     Switch on IDLE, poll responses, switch off IDLE on response, return responses  timeout: Optional[float]
-======== ============================================================================== ==========================
+wait     Switch on IDLE, poll responses, switch off IDLE on response, return responses  timeout: |nbsp| Optional[float]
+======== ============================================================================== ================================
 
 .. code-block:: python
 
@@ -400,9 +405,9 @@ Big thanks to people who helped develop this library:
 `RanjithNair1980 <https://github.com/RanjithNair1980>`_,
 `NickC-NZ <https://github.com/NickC-NZ>`_,
 `mweinelt <https://github.com/mweinelt>`_,
-`lucbouge <https://github.com/lucbouge>`_
+`lucbouge <https://github.com/lucbouge>`_,
+`JacquelinCharbonnel <https://github.com/JacquelinCharbonnel>`_
 
 Donate
 ------
-
-💰 You may `donate <https://github.com/ikvk/imap_tools/blob/master/docs/donate.rst>`_, if this library helped you.
+`✋ I want to help this library <https://github.com/ikvk/imap_tools/blob/master/docs/donate.rst>`_

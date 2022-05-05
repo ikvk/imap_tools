@@ -24,6 +24,9 @@ class Header:
     def __str__(self):
         return '{0.name}: {0.value}'.format(self)
 
+    def __lt__(self, other):
+        return '{0.name}{0.value}'.format(self) < '{0.name}{0.value}'.format(other)
+
 
 class UidRange:
     """
@@ -82,7 +85,7 @@ class LogicOperator(UserString):
             recent: Optional[bool] = None,
             all: Optional[bool] = None,  # noqa
             uid: Optional[Union[str, Iterable[str], UidRange]] = None,
-            header: Optional[Header] = None,
+            header: Optional[Union[Header, List[Header]]] = None,
             gmail_label: Optional[Union[str, List[str]]] = None):  # todo newline after drop 3.5
         self.converted_strings = converted_strings
         for val in converted_strings:
