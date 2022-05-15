@@ -1,3 +1,23 @@
+0.55.0
+======
+* Fixed query builder bug with key - "header" and value - [Header]
+
+0.54.0
+======
+* EmailAddress full is property now, parse_email_addresses fixed
+* Added MailBoxTls into __init__.py
+* Fixed tls.py example, rename examples, added basic.py example
+
+0.53.0
+======
+* [Breaking] BaseMailBox.box client instance renamed to BaseMailBox.client
+* Fixed BaseMailBox.xoauth2 consistency with BaseMailBox.login
+* BaseMailBox.folder/idle managers now instantiates in __init__
+
+0.52.0
+======
+* [Breaking] STARTTLS logic moved to MailBoxTls
+
 0.51.1
 ======
 * Fix IdleManager

@@ -5,11 +5,12 @@ import datetime
 from collections import UserString
 from typing import AnyStr, Optional, List, Iterable, Sequence, Union, Tuple
 
-from .consts import UID_PATTERN, TIMEOUT_ARG_SUPPORT_ERROR
+from .consts import UID_PATTERN
 from .message import MailMessage
 from .folder import MailBoxFolderManager
 from .idle import IdleManager
-from .utils import clean_uids, check_command_status, chunks, encode_folder, clean_flags, decode_value
+from .utils import clean_uids, check_command_status, chunks, encode_folder, clean_flags, decode_value, \
+    check_timeout_arg_support
 from .errors import MailboxStarttlsError, MailboxLoginError, MailboxLogoutError, MailboxNumbersError, \
     MailboxFetchError, MailboxExpungeError, MailboxDeleteError, MailboxCopyError, MailboxFlagError, \
     MailboxAppendError, MailboxUidsError, MailboxTaggedResponseError
@@ -20,6 +21,8 @@ imaplib._MAXLINE = 20 * 1024 * 1024  # 20Mb
 
 Criteria = Union[AnyStr, UserString]
 
+PYTHON_VERSION_MINOR = sys.version_info.minor
+
 
 class BaseMailBox:
     """Working with the email box"""
@@ -29,10 +32,10 @@ class BaseMailBox:
     idle_manager_class = IdleManager
 
     def __init__(self):
-        self.folder = None  # folder manager
-        self.idle = None  # idle manager
+        self.client = self._get_mailbox_client()
+        self.folder = self.folder_manager_class(self)
+        self.idle = self.idle_manager_class(self)
         self.login_result = None
-        self.box = self._get_mailbox_client()
 
     def __enter__(self):
         return self
@@ -45,10 +48,10 @@ class BaseMailBox:
 
     def consume_until_tagged_response(self, tag: bytes):
         """Waiting for tagged response"""
-        tagged_commands = self.box.tagged_commands
+        tagged_commands = self.client.tagged_commands
         response_set = []
         while True:
-            response: bytes = self.box._get_response()  # noqa, example: b'IJDH3 OK IDLE Terminated'
+            response: bytes = self.client._get_response()  # noqa, example: b'IJDH3 OK IDLE Terminated'
             if tagged_commands[tag]:
                 break
             response_set.append(response)
@@ -57,18 +60,28 @@ class BaseMailBox:
         return result, response_set
 
     def login(self, username: str, password: str, initial_folder: Optional[str] = 'INBOX') -> 'BaseMailBox':
-        login_result = self.box._simple_command('LOGIN', username, self.box._quote(password))  # noqa
+        """Authenticate to account"""
+        login_result = self.client._simple_command('LOGIN', username, self.client._quote(password))  # noqa
         check_command_status(login_result, MailboxLoginError)
-        self.box.state = 'AUTH'  # logic from self.box.login
-        self.folder = self.folder_manager_class(self)
-        self.idle = self.idle_manager_class(self)
+        self.client.state = 'AUTH'  # logic from self.client.login
         if initial_folder is not None:
             self.folder.set(initial_folder)
         self.login_result = login_result
         return self  # return self in favor of context manager
 
+    def xoauth2(self, username: str, access_token: str, initial_folder: Optional[str] = 'INBOX') -> 'BaseMailBox':
+        """Authenticate to account using OAuth 2.0 mechanism"""
+        auth_string = 'user={}\1auth=Bearer {}\1\1'.format(username, access_token)
+        result = self.client.authenticate('XOAUTH2', lambda x: auth_string)  # noqa
+        check_command_status(result, MailboxLoginError)
+        if initial_folder is not None:
+            self.folder.set(initial_folder)
+        self.login_result = result
+        return self
+
     def logout(self) -> tuple:
-        result = self.box.logout()
+        """Informs the server that the client is done with the connection"""
+        result = self.client.logout()
         check_command_status(result, MailboxLogoutError, expected='BYE')
         return result
 
@@ -80,7 +93,7 @@ class BaseMailBox:
         :return email message numbers
         """
         encoded_criteria = criteria if type(criteria) is bytes else str(criteria).encode(charset)
-        search_result = self.box.search(charset, encoded_criteria)
+        search_result = self.client.search(charset, encoded_criteria)
         check_command_status(search_result, MailboxNumbersError)
         return search_result[1][0].decode().split() if search_result[1][0] else []
 
@@ -95,7 +108,7 @@ class BaseMailBox:
         nums = self.numbers(criteria, charset)
         if not nums:
             return []
-        fetch_result = self.box.fetch(','.join(nums), "(UID)")
+        fetch_result = self.client.fetch(','.join(nums), "(UID)")
         check_command_status(fetch_result, MailboxUidsError)
         result = []
         for fetch_item in fetch_result[1]:
@@ -109,14 +122,14 @@ class BaseMailBox:
 
     def _fetch_by_one(self, message_nums: Sequence[str], message_parts: str, reverse: bool) -> Iterable[list]:  # noqa
         for message_num in message_nums:
-            fetch_result = self.box.fetch(message_num, message_parts)
+            fetch_result = self.client.fetch(message_num, message_parts)
             check_command_status(fetch_result, MailboxFetchError)
             yield fetch_result[1]
 
     def _fetch_in_bulk(self, message_nums: Sequence[str], message_parts: str, reverse: bool) -> Iterable[list]:
         if not message_nums:
             return
-        fetch_result = self.box.fetch(','.join(message_nums), message_parts)
+        fetch_result = self.client.fetch(','.join(message_nums), message_parts)
         check_command_status(fetch_result, MailboxFetchError)
         for built_fetch_item in chunks((reversed if reverse else iter)(fetch_result[1]), 2):
             yield built_fetch_item
@@ -150,7 +163,7 @@ class BaseMailBox:
             yield mail_message
 
     def expunge(self) -> tuple:
-        result = self.box.expunge()
+        result = self.client.expunge()
         check_command_status(result, MailboxExpungeError)
         return result
 
@@ -163,7 +176,7 @@ class BaseMailBox:
         uid_str = clean_uids(uid_list)
         if not uid_str:
             return None
-        store_result = self.box.uid('STORE', uid_str, '+FLAGS', r'(\Deleted)')
+        store_result = self.client.uid('STORE', uid_str, '+FLAGS', r'(\Deleted)')
         check_command_status(store_result, MailboxDeleteError)
         expunge_result = self.expunge()
         return store_result, expunge_result
@@ -177,7 +190,7 @@ class BaseMailBox:
         uid_str = clean_uids(uid_list)
         if not uid_str:
             return None
-        copy_result = self.box.uid('COPY', uid_str, encode_folder(destination_folder))  # noqa
+        copy_result = self.client.uid('COPY', uid_str, encode_folder(destination_folder))  # noqa
         check_command_status(copy_result, MailboxCopyError)
         return copy_result
 
@@ -205,7 +218,7 @@ class BaseMailBox:
         uid_str = clean_uids(uid_list)
         if not uid_str:
             return None
-        store_result = self.box.uid(
+        store_result = self.client.uid(
             'STORE', uid_str, ('+' if value else '-') + 'FLAGS',
             '({})'.format(' '.join(clean_flags(flag_set))))
         check_command_status(store_result, MailboxFlagError)
@@ -224,12 +237,12 @@ class BaseMailBox:
         :param flag_set: email message flags, no flags by default. System flags at consts.MailMessageFlags.all
         :return: command results
         """
-        if sys.version_info.minor < 6:
+        if PYTHON_VERSION_MINOR < 6:
             timezone = datetime.timezone(datetime.timedelta(hours=0))
         else:
             timezone = datetime.datetime.now().astimezone().tzinfo  # system timezone
         cleaned_flags = clean_flags(flag_set or [])
-        typ, dat = self.box.append(
+        typ, dat = self.client.append(
             encode_folder(folder),  # noqa
             '({})'.format(' '.join(cleaned_flags)) if cleaned_flags else None,
             dt or datetime.datetime.now(timezone),  # noqa
@@ -249,15 +262,14 @@ class MailBoxUnencrypted(BaseMailBox):
         :param port: port number
         :param timeout: timeout in seconds for the connection attempt, since python 3.9
         """
-        if timeout and sys.version_info.minor < 9:
-            raise ValueError(TIMEOUT_ARG_SUPPORT_ERROR)
+        check_timeout_arg_support(timeout)
         self._host = host
         self._port = port
         self._timeout = timeout
         super().__init__()
 
     def _get_mailbox_client(self) -> imaplib.IMAP4:
-        if sys.version_info.minor < 9:
+        if PYTHON_VERSION_MINOR < 9:
             return imaplib.IMAP4(self._host, self._port)
         else:
             return imaplib.IMAP4(self._host, self._port, self._timeout)  # noqa
@@ -266,7 +278,7 @@ class MailBoxUnencrypted(BaseMailBox):
 class MailBox(BaseMailBox):
     """Working with the email box through IMAP4 over SSL connection"""
 
-    def __init__(self, host='', port=993, timeout=None, keyfile=None, certfile=None, ssl_context=None, starttls=False):
+    def __init__(self, host='', port=993, timeout=None, keyfile=None, certfile=None, ssl_context=None):
         """
         :param host: host's name (default: localhost)
         :param port: port number
@@ -274,43 +286,46 @@ class MailBox(BaseMailBox):
         :param keyfile: PEM formatted file that contains your private key (deprecated)
         :param certfile: PEM formatted certificate chain file (deprecated)
         :param ssl_context: SSLContext object that contains your certificate chain and private key
-        :param starttls: whether to use starttls
         """
-        if timeout and sys.version_info.minor < 9:
-            raise ValueError(TIMEOUT_ARG_SUPPORT_ERROR)
+        check_timeout_arg_support(timeout)
         self._host = host
         self._port = port
         self._timeout = timeout
         self._keyfile = keyfile
         self._certfile = certfile
         self._ssl_context = ssl_context
-        self._starttls = starttls
         super().__init__()
 
     def _get_mailbox_client(self) -> imaplib.IMAP4:
-        if self._starttls:
-            if self._keyfile or self._certfile:
-                raise ValueError("starttls cannot be combined with keyfile neither with certfile.")
-            if sys.version_info.minor < 9:
-                client = imaplib.IMAP4(self._host, self._port)
-            else:
-                client = imaplib.IMAP4(self._host, self._port, self._timeout)  # noqa
-            result = client.starttls(self._ssl_context)
-            check_command_status(result, MailboxStarttlsError)
-            return client
+        if PYTHON_VERSION_MINOR < 9:
+            return imaplib.IMAP4_SSL(self._host, self._port, self._keyfile, self._certfile, self._ssl_context)
         else:
-            if sys.version_info.minor < 9:
-                return imaplib.IMAP4_SSL(self._host, self._port, self._keyfile, self._certfile, self._ssl_context)
-            else:
-                return imaplib.IMAP4_SSL(self._host, self._port, self._keyfile,  # noqa
-                                         self._certfile, self._ssl_context, self._timeout)
+            return imaplib.IMAP4_SSL(self._host, self._port, self._keyfile, self._certfile, self._ssl_context,
+                                     self._timeout)
 
-    def xoauth2(self, username: str, access_token: str, initial_folder: str = 'INBOX') -> 'BaseMailBox':
-        """Authenticate to account using OAuth 2.0 mechanism"""
-        auth_string = 'user={}\1auth=Bearer {}\1\1'.format(username, access_token)
-        result = self.box.authenticate('XOAUTH2', lambda x: auth_string)  # noqa
-        check_command_status(result, MailboxLoginError)
-        self.folder = self.folder_manager_class(self)
-        self.folder.set(initial_folder)
-        self.login_result = result
-        return self
+
+class MailBoxTls(BaseMailBox):
+    """Working with the email box through IMAP4 with STARTTLS"""
+
+    def __init__(self, host='', port=993, timeout=None, ssl_context=None):
+        """
+        :param host: host's name (default: localhost)
+        :param port: port number
+        :param timeout: timeout in seconds for the connection attempt, since python 3.9
+        :param ssl_context: SSLContext object that contains your certificate chain and private key
+        """
+        check_timeout_arg_support(timeout)
+        self._host = host
+        self._port = port
+        self._timeout = timeout
+        self._ssl_context = ssl_context
+        super().__init__()
+
+    def _get_mailbox_client(self) -> imaplib.IMAP4:
+        if PYTHON_VERSION_MINOR < 9:
+            client = imaplib.IMAP4(self._host, self._port)
+        else:
+            client = imaplib.IMAP4(self._host, self._port, self._timeout)  # noqa
+        result = client.starttls(self._ssl_context)
+        check_command_status(result, MailboxStarttlsError)
+        return client

@@ -22,9 +22,9 @@ DATA = dict(
             payload=b'12',
         ),
         ],
-    from_values=EmailAddress('Sender', 'status@sender.com', 'Sender <status@sender.com>'),
-    to_values=(EmailAddress('My Name', 'my.name@domain.com', 'My Name <my.name@domain.com>'), EmailAddress('Other Name', 'other.name@domain.com', 'Other Name <other.name@domain.com>')),
-    cc_values=(EmailAddress('Third Name', 'third.name@domain.com', 'Third Name <third.name@domain.com>'), EmailAddress('Quoted Mailing List One', 'quoted-mailing-list-one@domain.com', 'Quoted Mailing List One <quoted-mailing-list-one@domain.com>'), EmailAddress('Quoted Mailing List Two', 'quoted-mailing-list-two@domain.com', 'Quoted Mailing List Two <quoted-mailing-list-two@domain.com>')),
-    bcc_values=(EmailAddress('My Name', 'my.name@domain.com', 'My Name <my.name@domain.com>'), EmailAddress('Mailing List One - One Name', 'list1-one-name@domain.com', 'Mailing List One - One Name <list1-one-name@domain.com>'), EmailAddress('Mailing List Two - Second Name', 'list2-second-name@domain.com', 'Mailing List Two - Second Name <list2-second-name@domain.com>')),
+    from_values=EmailAddress(name='Sender', email='status@sender.com'),
+    to_values=(EmailAddress(name='My Name', email='my.name@domain.com'), EmailAddress(name='Other Name', email='other.name@domain.com')),
+    cc_values=(EmailAddress(name='Third Name', email='third.name@domain.com'), EmailAddress(name='Quoted Mailing List One', email='quoted-mailing-list-one@domain.com'), EmailAddress(name='Quoted Mailing List Two', email='quoted-mailing-list-two@domain.com')),
+    bcc_values=(EmailAddress(name='My Name', email='my.name@domain.com'), EmailAddress(name='Mailing List One - One Name', email='list1-one-name@domain.com'), EmailAddress(name='Mailing List Two - Second Name', email='list2-second-name@domain.com')),
     reply_to_values=(),
 )

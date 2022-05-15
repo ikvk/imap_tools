@@ -65,6 +65,7 @@ class QueryTest(unittest.TestCase):
         self.assertEqual(A(all=True), '(ALL)')
 
         self.assertEqual(A(header=H('X-Google-Smtp-Source', '123')), '(HEADER "X-Google-Smtp-Source" "123")')
+        self.assertEqual(A(header=[H('b', '1'), H('a', '2')]), '(HEADER "a" "2" HEADER "b" "1")')
         self.assertEqual(A(uid='1,2'), '(UID 1,2)')
         self.assertEqual(A(uid=['3', '4']), '(UID 3,4)')
         self.assertEqual(A(uid=['3', '4:*']), '(UID 3,4:*)')

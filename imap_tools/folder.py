@@ -40,7 +40,7 @@ class MailBoxFolderManager:
 
     def set(self, folder: AnyStr, readonly: bool = False) -> tuple:
         """Select current folder"""
-        result = self.mailbox.box.select(encode_folder(folder), readonly)
+        result = self.mailbox.client.select(encode_folder(folder), readonly)
         check_command_status(result, MailboxFolderSelectError)
         self._current_folder = folder
         return result
@@ -54,7 +54,7 @@ class MailBoxFolderManager:
         Create folder on the server.
         Use email box delimiter to separate folders. Example for "|" delimiter: "folder|sub folder"
         """
-        result = self.mailbox.box._simple_command('CREATE', encode_folder(folder))
+        result = self.mailbox.client._simple_command('CREATE', encode_folder(folder))
         check_command_status(result, MailboxFolderCreateError)
         return result
 
@@ -69,14 +69,14 @@ class MailBoxFolderManager:
 
     def rename(self, old_name: AnyStr, new_name: AnyStr) -> tuple:
         """Rename folder from old_name to new_name"""
-        result = self.mailbox.box._simple_command(
+        result = self.mailbox.client._simple_command(
             'RENAME', encode_folder(old_name), encode_folder(new_name))
         check_command_status(result, MailboxFolderRenameError)
         return result
 
     def delete(self, folder: AnyStr) -> tuple:
         """Delete folder"""
-        result = self.mailbox.box._simple_command('DELETE', encode_folder(folder))
+        result = self.mailbox.client._simple_command('DELETE', encode_folder(folder))
         check_command_status(result, MailboxFolderDeleteError)
         return result
 
@@ -96,10 +96,10 @@ class MailBoxFolderManager:
         for opt in options:
             if opt not in MailBoxFolderStatusOptions.all:
                 raise MailboxFolderStatusValueError(str(opt))
-        status_result = self.mailbox.box._simple_command(
+        status_result = self.mailbox.client._simple_command(
             command, encode_folder(folder), '({})'.format(' '.join(options)))
         check_command_status(status_result, MailboxFolderStatusError)
-        result = self.mailbox.box._untagged_response(status_result[0], status_result[1], command)
+        result = self.mailbox.client._untagged_response(status_result[0], status_result[1], command)
         check_command_status(result, MailboxFolderStatusError)
         status_data = [i for i in result[1] if type(i) is bytes][0]  # may contain tuples with encoded names
         values = status_data.decode().split('(')[1].split(')')[0].split(' ')
@@ -117,9 +117,9 @@ class MailBoxFolderManager:
         """
         folder_item_re = re.compile(r'\((?P<flags>[\S ]*)\) (?P<delim>[\S]+) (?P<name>.+)')
         command = 'LSUB' if subscribed_only else 'LIST'
-        typ, data = self.mailbox.box._simple_command(
+        typ, data = self.mailbox.client._simple_command(
             command, encode_folder(folder), encode_folder(search_args))
-        typ, data = self.mailbox.box._untagged_response(typ, data, command)
+        typ, data = self.mailbox.client._untagged_response(typ, data, command)
         result = []
         for folder_item in data:
             if not folder_item:
@@ -150,7 +150,7 @@ class MailBoxFolderManager:
 
     def subscribe(self, folder: AnyStr, value: bool) -> tuple:
         """subscribe/unsubscribe to folder"""
-        method = self.mailbox.box.subscribe if value else self.mailbox.box.unsubscribe
+        method = self.mailbox.client.subscribe if value else self.mailbox.client.unsubscribe
         result = method(encode_folder(folder))
         check_command_status(result, MailboxFolderSubscribeError)
         return result

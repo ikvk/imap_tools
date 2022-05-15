@@ -22,9 +22,9 @@ DATA = dict(
             payload=b"Bonjour.\n\nUne nouvelle demande vous a \xc3\xa9t\xc3\xa9 transmise via le formulaire de contact du site www.saintnazaire.fr\n\nVotre message : onjour,\n\nJe voulais vous alerter que le pizza\xc3\xafolo du camion ambulant PASTA PIZZA de Vill\xc3\xa8s Martin du dimanche ne porte pas de masques pour confectionner ses pizzas et pour parler \xc3\xa0 ses clients; pas de gel hydroalcooloique non plus; travaillant dans les h\xc3\xb4pitaux je suis constern\xc3\xa9e de voir encore des professionnels et en contact avec un public de ne pas respecter le port du masque; il contamine ses produits, les clients ...\nCe n'est pas normal de ne pas contr\xc3\xb4ler ces professionnels ambulants.\n\nMerci beaucoup\n\n\n\nMerci.\n",
         ),
         ],
-    from_values=EmailAddress('email-test.fr', 'ne-pas-repondre@email-test.fr', 'email-test.fr <ne-pas-repondre@email-test.fr>'),
-    to_values=(EmailAddress('Courrier', 'service.courrier@mairie-email-test.fr', 'Courrier <service.courrier@mairie-email-test.fr>'),),
+    from_values=EmailAddress(name='email-test.fr', email='ne-pas-repondre@email-test.fr'),
+    to_values=(EmailAddress(name='Courrier', email='service.courrier@mairie-email-test.fr'),),
     cc_values=(),
     bcc_values=(),
-    reply_to_values=(EmailAddress('HELOU', 'emmanuellehelou@orange.fr', 'HELOU <emmanuellehelou@orange.fr>'),),
+    reply_to_values=(EmailAddress(name='HELOU', email='emmanuellehelou@orange.fr'),),
 )

@@ -109,26 +109,26 @@ class UtilsTest(unittest.TestCase):
     def test_parse_email_addresses(self):
         self.assertEqual(
             parse_email_addresses('=?UTF-8?B?0J7Qu9C1=?= <name@company.ru>,\r\n "\'\\"z, z\\"\'" <ya@ya.ru>\f'),
-            (EmailAddress('Оле', 'name@company.ru', 'Оле <name@company.ru>'),
-             EmailAddress('\'"z, z"\'', 'ya@ya.ru', '\'"z, z"\' <ya@ya.ru>'))
+            (EmailAddress('Оле', 'name@company.ru'),
+             EmailAddress('\'"z, z"\'', 'ya@ya.ru'))
         )
         self.assertEqual(
             parse_email_addresses(' <ivan@mail.ru>'),
-            (EmailAddress('', 'ivan@mail.ru', 'ivan@mail.ru'),)
+            (EmailAddress('', 'ivan@mail.ru'),)
         )
         self.assertEqual(
             parse_email_addresses('ivan'),
-            (EmailAddress('', '', 'ivan'),)  # *в этом случае ivan считается email-ом
+            (EmailAddress('ivan', ''),)
         )
         self.assertEqual(
             parse_email_addresses('你好 <chan@mail.ru>'),
-            (EmailAddress('你好', 'chan@mail.ru', '你好 <chan@mail.ru>'),)
+            (EmailAddress('你好', 'chan@mail.ru'),)
         )
         self.assertEqual(
             parse_email_addresses(' "hi" <bad_mail.wow> '),
-            (EmailAddress('hi', '', 'hi <bad_mail.wow>'),)
+            (EmailAddress('hi', ''),)
         )
         self.assertEqual(
             parse_email_addresses('=?utf-8?Q?ATO.RU?= <subscriptions@ato.ru>'),
-            (EmailAddress('ATO.RU', 'subscriptions@ato.ru', 'ATO.RU <subscriptions@ato.ru>'),)
+            (EmailAddress('ATO.RU', 'subscriptions@ato.ru'),)
         )

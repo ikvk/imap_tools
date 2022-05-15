@@ -1,27 +1,32 @@
 .. http://docutils.sourceforge.net/docs/user/rst/quickref.html
 
+.. |nbsp| unicode:: 0xA0
+   :trim:
+
 imap_tools 📧
 =============
 
-Work with email by IMAP:
+High level lib for work with email by IMAP:
 
 - Basic message operations: fetch, uids, numbers
 - Parsed email message attributes
-- Query builder for searching emails
+- Query builder for search criteria
 - Actions with emails: copy, delete, flag, move, append
 - Actions with folders: list, set, get, create, exists, rename, subscribe, delete, status
 - IDLE commands: start, poll, stop, wait
 - Exceptions on failed operations
-- No external dependencies
+- No external dependencies, tested
 
 .. image:: https://img.shields.io/pypi/dm/imap_tools.svg?style=social
 
-===============  ===============================================================
+===============  ================================================================================================
 Python version   3.5+
 License          Apache-2.0
 PyPI             https://pypi.python.org/pypi/imap_tools/
-RFC              `IMAP4.1 <https://tools.ietf.org/html/rfc3501>`_, `EMAIL <https://tools.ietf.org/html/rfc3501>`_, `IMAP related RFCs <https://github.com/ikvk/imap_tools/blob/master/docs/IMAP_related_RFCs.txt>`_
-===============  ===============================================================
+RFC              `IMAP4.1 <https://tools.ietf.org/html/rfc3501>`_,
+                 `EMAIL <https://tools.ietf.org/html/rfc3501>`_,
+                 `IMAP related RFCs <https://github.com/ikvk/imap_tools/blob/master/docs/IMAP_related_RFCs.txt>`_
+===============  ================================================================================================
 
 .. contents::
 
@@ -43,20 +48,16 @@ Info about lib are at: *this page*, issues, pull requests, examples, source, sta
 
     from imap_tools import MailBox, AND
 
-    # get list of email subjects from INBOX folder
+    # Get date, subject and body len of all emails from INBOX folder
     with MailBox('imap.mail.com').login('test@mail.com', 'pwd') as mailbox:
-        subjects = [msg.subject for msg in mailbox.fetch()]
+        for msg in mailbox.fetch():
+            print(msg.date, msg.subject, len(msg.text or msg.html))
 
-    # get list of email subjects from INBOX folder - equivalent verbose version
-    mailbox = MailBox('imap.mail.com')
-    mailbox.login('test@mail.com', 'pwd', initial_folder='INBOX')  # or mailbox.folder.set instead 3d arg
-    subjects = [msg.subject for msg in mailbox.fetch(AND(all=True))]
-    mailbox.logout()
+`Description of this^ example <https://github.com/ikvk/imap_tools/blob/master/examples/basic.py>`_.
 
-MailBox(BaseMailBox), MailBoxUnencrypted(BaseMailBox) - for create mailbox instance.
+MailBox, MailBoxTls, MailBoxUnencrypted - for create mailbox client. `TLS example <https://github.com/ikvk/imap_tools/blob/master/examples/tls.py>`_.
 
-BaseMailBox.login, MailBox.xoauth2 - authentication functions. TLS connection
-`example <https://github.com/ikvk/imap_tools/blob/master/examples/tls.py>`_.
+BaseMailBox.login, MailBox.xoauth2, BaseMailBox.logout - authentication functions, they support context manager.
 
 BaseMailBox.fetch - first searches email nums by criteria in current folder, then fetch and yields `MailMessage <#email-attributes>`_:
 
@@ -79,9 +80,11 @@ BaseMailBox.<action> - `copy, move, delete, flag, append <#actions-with-emails>`
 
 BaseMailBox.folder - `folder manager <#actions-with-folders>`_
 
+BaseMailBox.idle - `idle manager <#idle-workflow>`_
+
 BaseMailBox.numbers - search mailbox for matching message numbers in current folder, returns [str]
 
-BaseMailBox.box - imaplib.IMAP4/IMAP4_SSL client instance.
+BaseMailBox.client - imaplib.IMAP4/IMAP4_SSL client instance.
 
 Email attributes
 ^^^^^^^^^^^^^^^^
@@ -122,25 +125,22 @@ MailMessage and MailAttachment public attributes are cached by functools.lru_cac
         msg.cc_values        # tuple: (imap_tools.EmailAddress,)
         msg.bcc_values       # tuple: (imap_tools.EmailAddress,)
         msg.reply_to_values  # tuple: (imap_tools.EmailAddress,)
-        # EmailAddress(name='Ya', email='im@ya.ru', full='Ya <im@ya.ru>')
+        # EmailAddress(name='Ya', email='im@ya.ru')  # "full" property = 'Ya <im@ya.ru>'
 
 Search criteria
 ^^^^^^^^^^^^^^^
 
-This chapter about "criteria" and "charset" arguments of MailBox methods: fetch, uids, numbers
-
-You can use 3 approaches to build search criteria:
+You can use 3 types for "criteria" argument of MailBox methods: fetch, uids, numbers:
 
 .. code-block:: python
 
-    from imap_tools import AND, OR, NOT
+    from imap_tools import AND
 
     mailbox.fetch(AND(subject='weather'))  # query, the str-like object
     mailbox.fetch('TEXT "hello"')          # str
     mailbox.fetch(b'TEXT "\xd1\x8f"')      # bytes, *charset arg is ignored
 
-The "charset" is argument used for encode criteria to this encoding.
-You can pass the criteria as bytes in the desired encoding - in this case, the encoding will be ignored.
+Use "charset" argument for encode criteria to the desired encoding. If "criteria" is bytes - encoding will be ignored.
 
 .. code-block:: python
 
@@ -150,13 +150,13 @@ Query builder implements all search logic described in `rfc3501 <https://tools.i
 It uses this classes:
 
 ========  =====  ========================================== ======================================
-Class     Alias  Usage                                      Arguments
+Class     Alias  Description                                Arguments
 ========  =====  ========================================== ======================================
-AND       A      combines keys by logical "AND" condition   Search keys (see table below) | str
-OR        O      combines keys by logical "OR" condition    Search keys (see table below) | str
-NOT       N      invert the result of a logical expression  AND/OR instances | str
-Header    H      for search by headers                      name: str, value: str
-UidRange  U      for search by UID range                    start: str, end: str
+AND       A      Combine conditions by logical "AND"        Search keys (see table below) | str
+OR        O      Combine conditions by logical "OR"         Search keys (see table below) | str
+NOT       N      Invert the result of a logical expression  AND/OR instances | str
+Header    H      Header value for search by header key      name: str, value: str
+UidRange  U      UID range value for search by uid key      start: str, end: str
 ========  =====  ========================================== ======================================
 
 See `query examples <https://github.com/ikvk/imap_tools/blob/master/examples/search.py>`_. A few examples:
@@ -177,9 +177,9 @@ See `query examples <https://github.com/ikvk/imap_tools/blob/master/examples/sea
 
 Search key table. Key types marked with `*` can accepts a sequence of values like list, tuple, set or generator.
 
-=============  ===============  ======================  =================================================================
+=============  ===============  ======================  ================================================================
 Key            Types            Results                 Description
-=============  ===============  ======================  =================================================================
+=============  ===============  ======================  ================================================================
 answered       bool             `ANSWERED/UNANSWERED`   with/without the Answered flag
 seen           bool             `SEEN/UNSEEN`           with/without the Seen flag
 flagged        bool             `FLAGGED/UNFLAGGED`     with/without the Flagged flag
@@ -209,7 +209,7 @@ all            True             ALL                     all, criteria by default
 uid            iter(str)/str/U  UID 1,2,17              corresponding to the specified unique identifier set
 header         H(str, str)*     HEADER "A-Spam" "5.8"   have a header that contains the specified str in the text
 gmail_label    str*             X-GM-LABELS "label1"    have this gmail label.
-=============  ===============  ======================  =================================================================
+=============  ===============  ======================  ================================================================
 
 Server side search notes:
 
@@ -226,7 +226,7 @@ Action's uid_list arg may takes:
 * str, that is comma separated uids
 * Sequence, that contains str uids
 
-Get uids using maibox methods: uids, fetch.
+To get uids, use the maibox methods: uids, fetch.
 
 For actions with a large number of messages imap command may be too large and will cause exception at server side,
 use 'limit' argument for fetch in this case.
@@ -256,7 +256,7 @@ use 'limit' argument for fetch in this case.
 Actions with folders
 ^^^^^^^^^^^^^^^^^^^^
 
-BaseMailBox.login has initial_folder arg, that is "INBOX" by default, use None for not set folder on login.
+BaseMailBox.login/xoauth2 has initial_folder arg, that is "INBOX" by default, use None for not set folder on login.
 
 .. code-block:: python
 
@@ -296,14 +296,14 @@ IDLE workflow
 
 IDLE logic are in mailbox.idle manager, its methods are in the table below:
 
-======== =================================================================== ==========================
-Method   Description                                                         Arguments
-======== =================================================================== ==========================
+======== ============================================================================== ================================
+Method   Description                                                                    Arguments
+======== ============================================================================== ================================
 start    Switch on mailbox IDLE mode
-poll     Poll for IDLE responses                                             timeout: Optional[float]
+poll     Poll for IDLE responses                                                        timeout: |nbsp| Optional[float]
 stop     Switch off mailbox IDLE mode
-wait     Switch on IDLE, poll responses, switch off IDLE, return responses   timeout: Optional[float]
-======== =================================================================== ==========================
+wait     Switch on IDLE, poll responses, switch off IDLE on response, return responses  timeout: |nbsp| Optional[float]
+======== ============================================================================== ================================
 
 .. code-block:: python
 
@@ -404,9 +404,10 @@ Big thanks to people who helped develop this library:
 `Nicarex <https://github.com/Nicarex>`_,
 `RanjithNair1980 <https://github.com/RanjithNair1980>`_,
 `NickC-NZ <https://github.com/NickC-NZ>`_,
-`mweinelt <https://github.com/mweinelt>`_
+`mweinelt <https://github.com/mweinelt>`_,
+`lucbouge <https://github.com/lucbouge>`_,
+`JacquelinCharbonnel <https://github.com/JacquelinCharbonnel>`_
 
 Donate
 ------
-
-💰 You may `donate <https://github.com/ikvk/imap_tools/blob/master/docs/donate.rst>`_, if this library helped you.
+`✋ I want to help this library <https://github.com/ikvk/imap_tools/blob/master/docs/donate.rst>`_

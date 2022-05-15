@@ -1,4 +1,5 @@
 import re
+import sys
 import datetime
 from itertools import zip_longest
 from email.utils import getaddresses, parsedate_to_datetime
@@ -59,16 +60,19 @@ def decode_value(value: AnyStr, encoding: Optional[str] = None) -> str:
 
 class EmailAddress:
     """Parsed email address info"""
-    __slots__ = 'name', 'email', 'full'
+    __slots__ = 'name', 'email'
 
-    def __init__(self, name: str, email: str, full: str):
+    def __init__(self, name: str, email: str):
         self.name = name
         self.email = email
-        self.full = full
+
+    @property
+    def full(self):
+        return '{} <{}>'.format(self.name, self.email) if self.name and self.email else self.name or self.email
 
     def __repr__(self):
-        return "{}(name={}, email={}, full={})".format(
-            self.__class__.__name__, repr(self.name), repr(self.email), repr(self.full))
+        return "{}(name={}, email={})".format(
+            self.__class__.__name__, repr(self.name), repr(self.email))
 
     def __eq__(self, other):
         return all(getattr(self, i) == getattr(other, i) for i in self.__slots__)
@@ -89,9 +93,8 @@ def parse_email_addresses(raw_header: Union[str, Header]) -> Tuple[EmailAddress,
         if not (name or email):
             continue
         result.append(EmailAddress(
-            name=name,
+            name=name or (email if '@' not in email else ''),
             email=email if '@' in email else '',
-            full='{} <{}>'.format(name, email) if name and email else name or email
         ))
     return tuple(result)
 
@@ -184,3 +187,9 @@ def clean_flags(flag_set: Union[str, Iterable[str]]) -> List[str]:
         if flag.upper() not in upper_sys_flags and flag.startswith('\\'):
             raise ValueError('Non system flag must not start with "\\"')
     return flag_set
+
+
+def check_timeout_arg_support(timeout):
+    """If timeout arg not supports - raise ValueError"""
+    if timeout is not None and sys.version_info.minor < 9:
+        raise ValueError('imaplib.IMAP4 timeout argument supported since python 3.9')
