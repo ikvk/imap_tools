@@ -49,7 +49,7 @@ class IdleManager:
 
     def start(self):
         """Switch on mailbox IDLE mode"""
-        self._idle_tag = self.mailbox.client._command('IDLE')  # b'KLIG3'
+        self._idle_tag = self.mailbox.client._command('IDLE')  # example: b'KLIG3'
         result = self.mailbox.client._get_response()
         check_command_status((result, 'IDLE start'), MailboxTaggedResponseError, expected=None)
         return result
@@ -71,6 +71,11 @@ class IdleManager:
         result examples:
             [b'* 36 EXISTS', b'* 1 RECENT']
             [b'* 7 EXISTS']
+
+        socket.settimeout modes:
+            0 - non-blocking
+            int - timeout mode
+            None - blocking
         """
         if timeout is not None:
             timeout = float(timeout)
@@ -82,8 +87,7 @@ class IdleManager:
         sock = self.mailbox.client.sock
         old_timeout = sock.gettimeout()
         # make socket non-blocking so the timeout can be implemented for this call
-        sock.settimeout(None)
-        sock.setblocking(0)
+        sock.settimeout(0)
         try:
             response_set = []
             events = get_socket_poller(sock, timeout)
@@ -103,9 +107,7 @@ class IdleManager:
                         response_set.append(line)
             return response_set
         finally:
-            sock.setblocking(1)
-            if old_timeout is not None:
-                sock.settimeout(old_timeout)
+            sock.settimeout(old_timeout)
 
     def wait(self, timeout: Optional[float]) -> List[bytes]:
         """

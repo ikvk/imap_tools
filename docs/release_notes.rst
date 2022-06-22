@@ -1,3 +1,7 @@
+0.56.0
+======
+* Simplify IdleManager.poll
+
 0.55.0
 ======
 * Fixed query builder bug with key - "header" and value - [Header]
