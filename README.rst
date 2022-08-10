@@ -42,7 +42,7 @@ Guide
 Basic
 ^^^^^
 
-Info about lib are at: *this page*, issues, pull requests, examples, source, stackoverflow.com
+Info about lib are at: *this page*, docstrings, issues, pull requests, examples, source, stackoverflow.com
 
 .. code-block:: python
 
