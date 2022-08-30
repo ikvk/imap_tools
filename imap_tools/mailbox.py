@@ -69,6 +69,27 @@ class BaseMailBox:
         self.login_result = login_result
         return self  # return self in favor of context manager
 
+    def login_utf8(self, username: str, password: str, initial_folder: Optional[str] = 'INBOX') -> 'BaseMailBox':
+        """Authenicate to an account with a UTF-8 username and/or password"""
+
+        # rfc2595 section 6 - PLAIN SASL mechanism
+        encoded = (
+                b"\0"
+                + username.encode("utf8")
+                + b"\0"
+                + password.encode("utf8")
+        )
+
+        # Assumption is the server supports AUTH=PLAIN capability
+        login_result = self.client.authenticate("PLAIN", lambda x: encoded)
+        check_command_status(login_result, MailboxLoginError)
+
+        if initial_folder is not None:
+            self.folder.set(initial_folder)
+        self.login_result = login_result
+
+        return self
+
     def xoauth2(self, username: str, access_token: str, initial_folder: Optional[str] = 'INBOX') -> 'BaseMailBox':
         """Authenticate to account using OAuth 2.0 mechanism"""
         auth_string = 'user={}\1auth=Bearer {}\1\1'.format(username, access_token)
