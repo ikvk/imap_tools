@@ -3,7 +3,7 @@ import sys
 import imaplib
 import datetime
 from collections import UserString
-from typing import AnyStr, Optional, List, Iterable, Sequence, Union, Tuple
+from typing import AnyStr, Optional, List, Iterable, Sequence, Union, Tuple, Iterator
 
 from .consts import UID_PATTERN
 from .message import MailMessage
@@ -70,24 +70,15 @@ class BaseMailBox:
         return self  # return self in favor of context manager
 
     def login_utf8(self, username: str, password: str, initial_folder: Optional[str] = 'INBOX') -> 'BaseMailBox':
-        """Authenicate to an account with a UTF-8 username and/or password"""
-
+        """Authenticate to an account with a UTF-8 username and/or password"""
         # rfc2595 section 6 - PLAIN SASL mechanism
-        encoded = (
-                b"\0"
-                + username.encode("utf8")
-                + b"\0"
-                + password.encode("utf8")
-        )
-
+        encoded = (b"\0" + username.encode("utf8") + b"\0" + password.encode("utf8"))
         # Assumption is the server supports AUTH=PLAIN capability
         login_result = self.client.authenticate("PLAIN", lambda x: encoded)
         check_command_status(login_result, MailboxLoginError)
-
         if initial_folder is not None:
             self.folder.set(initial_folder)
         self.login_result = login_result
-
         return self
 
     def xoauth2(self, username: str, access_token: str, initial_folder: Optional[str] = 'INBOX') -> 'BaseMailBox':
@@ -141,13 +132,13 @@ class BaseMailBox:
                 result.append(None)
         return result
 
-    def _fetch_by_one(self, message_nums: Sequence[str], message_parts: str, reverse: bool) -> Iterable[list]:  # noqa
+    def _fetch_by_one(self, message_nums: Sequence[str], message_parts: str, reverse: bool) -> Iterator[list]:  # noqa
         for message_num in message_nums:
             fetch_result = self.client.fetch(message_num, message_parts)
             check_command_status(fetch_result, MailboxFetchError)
             yield fetch_result[1]
 
-    def _fetch_in_bulk(self, message_nums: Sequence[str], message_parts: str, reverse: bool) -> Iterable[list]:
+    def _fetch_in_bulk(self, message_nums: Sequence[str], message_parts: str, reverse: bool) -> Iterator[list]:
         if not message_nums:
             return
         fetch_result = self.client.fetch(','.join(message_nums), message_parts)
@@ -157,7 +148,7 @@ class BaseMailBox:
 
     def fetch(self, criteria: Criteria = 'ALL', charset: str = 'US-ASCII', limit: Optional[Union[int, slice]] = None,
               miss_no_uid=True, mark_seen=True, reverse=False, headers_only=False,
-              bulk=False) -> Iterable[MailMessage]:
+              bulk=False) -> Iterator[MailMessage]:
         """
         Mail message generator in current folder by search criteria
         :param criteria: message search criteria (see examples at ./doc/imap_search_criteria.txt)

@@ -14,7 +14,7 @@ High level lib for work with email by IMAP:
 - Actions with emails: copy, delete, flag, move, append
 - Actions with folders: list, set, get, create, exists, rename, subscribe, delete, status
 - IDLE commands: start, poll, stop, wait
-- Exceptions on failed operations
+- Exceptions on failed IMAP operations
 - No external dependencies, tested
 
 .. image:: https://img.shields.io/pypi/dm/imap_tools.svg?style=social
@@ -57,7 +57,7 @@ Info about lib are at: *this page*, docstrings, issues, pull requests, examples,
 
 MailBox, MailBoxTls, MailBoxUnencrypted - for create mailbox client. `TLS example <https://github.com/ikvk/imap_tools/blob/master/examples/tls.py>`_.
 
-BaseMailBox.login, MailBox.xoauth2, BaseMailBox.logout - authentication functions, they support context manager.
+BaseMailBox.login, BaseMailBox.login_utf8, MailBox.xoauth2, BaseMailBox.logout - authentication functions, they support context manager.
 
 BaseMailBox.fetch - first searches email nums by criteria in current folder, then fetch and yields `MailMessage <#email-attributes>`_:
 
@@ -406,7 +406,8 @@ Big thanks to people who helped develop this library:
 `NickC-NZ <https://github.com/NickC-NZ>`_,
 `mweinelt <https://github.com/mweinelt>`_,
 `lucbouge <https://github.com/lucbouge>`_,
-`JacquelinCharbonnel <https://github.com/JacquelinCharbonnel>`_
+`JacquelinCharbonnel <https://github.com/JacquelinCharbonnel>`_,
+`stumpylog <https://github.com/stumpylog>`_
 
 Donate
 ------

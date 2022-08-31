@@ -3,7 +3,7 @@ import datetime
 import itertools
 import functools
 from collections import UserString
-from typing import Iterable, Optional, Dict, Any, List, Union
+from typing import Iterable, Optional, Dict, Any, List, Union, Iterator
 
 from .consts import SHORT_MONTH_NAMES
 from .utils import clean_uids, quote
@@ -103,7 +103,7 @@ class LogicOperator(UserString):
 
     @staticmethod
     def prefix_join(operator: str, params: Iterable[str]) -> str:
-        """Join params by prefix notation rules, enclose group in parenthesis"""
+        """Join params by prefix notation rules, enclose group in parentheses"""
         return '({})'.format(functools.reduce(lambda a, b: '{}{} {}'.format(operator, a, b), params))
 
 
@@ -140,7 +140,7 @@ class ParamConverter:
     def __init__(self, params: Dict[str, Any]):
         self.params = params
 
-    def _gen_values(self, key: str, value: Any) -> Iterable[Any]:
+    def _gen_values(self, key: str, value: Any) -> Iterator[Any]:
         """Values generator"""
         # single value
         if key not in self.multi_key_allowed or isinstance(value, str):

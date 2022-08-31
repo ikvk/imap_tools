@@ -1,3 +1,7 @@
+0.57.0
+======
+* Added BaseMailBox.login_utf8 - Authenticate to an account with a UTF-8 username and/or password
+
 0.56.0
 ======
 * Simplify IdleManager.poll
