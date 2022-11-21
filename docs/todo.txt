@@ -1,4 +1,3 @@
-Release 1.0.0 after 3 month of quiet in issues and merge requests
 
 https://stackoverflow.com/questions/72942311/ some to docs?
     The second problem is that you need to use imap_tools.MailBox.
@@ -15,8 +14,15 @@ https://stackoverflow.com/questions/72942311/ some to docs?
     and MailboxUnencrypted corresponds to imaplib.IMAP4 with no security applied.
     I imagine it's this way so the most common one (Mailbox) is a safe default.
 
-rambler mbox
-
-GMX Mail Электронная почта
+add servers for tests
+    rambler
+    GMX Mail
+    OUTLOOK fix auth
 
 MailBoxUnencrypted
+
+google auth
+    https://github.com/ikvk/imap_tools/issues/176
+    https://helpdesk.bitrix24.ru/open/9976753/
+    https://answers.microsoft.com/en-us/windowslive/forum/all/gmail-account-failing-server-imapgmailcom/543553b0-113d-4b62-9adb-d0b4508914d5
+    https://support.google.com/accounts/answer/185833

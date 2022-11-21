@@ -1,3 +1,7 @@
+1.0.0
+=====
+* No constructive issues or merge requests a long time (since 5 May 2022).
+
 0.57.0
 ======
 * Added BaseMailBox.login_utf8 - Authenticate to an account with a UTF-8 username and/or password
