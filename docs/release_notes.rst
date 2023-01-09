@@ -1,6 +1,6 @@
 1.0.0
 =====
-* No constructive issues or merge requests a long time (since 5 May 2022).
+* 21 Nov 2022: No constructive issues or merge requests a long time (since 5 May 2022).
 
 0.57.0
 ======

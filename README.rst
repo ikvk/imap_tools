@@ -57,7 +57,7 @@ Info about lib are at: *this page*, docstrings, issues, pull requests, examples,
 
 MailBox, MailBoxTls, MailBoxUnencrypted - for create mailbox client. `TLS example <https://github.com/ikvk/imap_tools/blob/master/examples/tls.py>`_.
 
-BaseMailBox.login, BaseMailBox.login_utf8, MailBox.xoauth2, BaseMailBox.logout - authentication functions, they support context manager.
+BaseMailBox.<auth> - login, login_utf8, xoauth2, logout - authentication functions, they support context manager.
 
 BaseMailBox.fetch - first searches email nums by criteria in current folder, then fetch and yields `MailMessage <#email-attributes>`_:
 

@@ -26,3 +26,7 @@ google auth
     https://helpdesk.bitrix24.ru/open/9976753/
     https://answers.microsoft.com/en-us/windowslive/forum/all/gmail-account-failing-server-imapgmailcom/543553b0-113d-4b62-9adb-d0b4508914d5
     https://support.google.com/accounts/answer/185833
+
+_utf7 to __init__.py
+
+limit=slice(n,n+100) to docs ?
