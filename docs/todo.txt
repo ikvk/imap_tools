@@ -30,3 +30,8 @@ google auth
 _utf7 to __init__.py
 
 limit=slice(n,n+100) to docs ?
+
+https://github.com/sts0210/imap_tools/commit/36c0189600170fe573fa40620b09b53d0102d2e2
+     Encode folder before trying to move mail. Necessary for example when …
+    …the folder has umlauts as in "Gelöschte Elemente"
+    странно
