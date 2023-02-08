@@ -16,6 +16,7 @@ IMAP related RFCs
     5032 - WITHIN Search Extension: https://tools.ietf.org/html/rfc5032
     5161 - ENABLE Extension: https://tools.ietf.org/html/rfc5161
     5182 - Last SEARCH Result: https://tools.ietf.org/html/rfc5182
+    5228 - Sieve: An Email Filtering Language: https://www.rfc-editor.org/rfc/rfc5228
     5255 - Internationalization: https://tools.ietf.org/html/rfc5255
     5258 - LIST Command Extensions: https://tools.ietf.org/html/rfc5258
     5267 - Contexts for IMAP4 (ESORT and CONTEXT): https://tools.ietf.org/html/rfc5267
