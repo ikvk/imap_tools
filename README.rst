@@ -138,7 +138,7 @@ You can use 3 types for "criteria" argument of MailBox methods: fetch, uids, num
 
     mailbox.fetch(AND(subject='weather'))  # query, the str-like object
     mailbox.fetch('TEXT "hello"')          # str
-    mailbox.fetch(b'TEXT "\xd1\x8f"')      # bytes, *charset arg is ignored
+    mailbox.fetch(b'TEXT "\xd1\x8f"')      # bytes
 
 Use "charset" argument for encode criteria to the desired encoding. If "criteria" is bytes - encoding will be ignored.
 
@@ -208,7 +208,7 @@ recent         True             RECENT                  have the Recent flag set
 all            True             ALL                     all, criteria by default
 uid            iter(str)/str/U  UID 1,2,17              corresponding to the specified unique identifier set
 header         H(str, str)*     HEADER "A-Spam" "5.8"   have a header that contains the specified str in the text
-gmail_label    str*             X-GM-LABELS "label1"    have this gmail label.
+gmail_label    str*             X-GM-LABELS "label1"    have this gmail label
 =============  ===============  ======================  ================================================================
 
 Server side search notes:
@@ -219,7 +219,7 @@ Server side search notes:
 Actions with emails
 ^^^^^^^^^^^^^^^^^^^
 
-First of all read about uid `at rfc3501 <https://tools.ietf.org/html/rfc3501#section-2.3.1.1>`_.
+First of all read about UID `at rfc3501 <https://tools.ietf.org/html/rfc3501#section-2.3.1.1>`_.
 
 Action's uid_list arg may takes:
 
