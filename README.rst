@@ -64,7 +64,6 @@ BaseMailBox.fetch - first searches email nums by criteria in current folder, the
 * *criteria* = 'ALL', message search criteria, `query builder <#search-criteria>`_
 * *charset* = 'US-ASCII', indicates charset of the strings that appear in the search criteria. See rfc2978
 * *limit* = None, limit on the number of read emails, useful for actions with a large number of messages, like "move"
-* *miss_no_uid* = True, miss emails without uid
 * *mark_seen* = True, mark emails as seen on fetch
 * *reverse* = False, in order from the larger date to the smaller
 * *headers_only* = False, get only email headers (without text, html, attachments)
@@ -407,7 +406,8 @@ Big thanks to people who helped develop this library:
 `mweinelt <https://github.com/mweinelt>`_,
 `lucbouge <https://github.com/lucbouge>`_,
 `JacquelinCharbonnel <https://github.com/JacquelinCharbonnel>`_,
-`stumpylog <https://github.com/stumpylog>`_
+`stumpylog <https://github.com/stumpylog>`_,
+`dimitrisstr <https://github.com/dimitrisstr>`_
 
 Help the project
 ----------------

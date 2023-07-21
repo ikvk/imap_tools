@@ -1,3 +1,8 @@
+1.1.0
+=====
+* Using BaseMailBox.uids in BaseMailBox.fetch instead BaseMailBox.numbers - for reliable parallel work with mailbox [#202]
+* [Breaking] Removed miss_no_uid argument from BaseMailBox.fetch as not actual
+
 1.0.0
 =====
 * 21 Nov 2022: No constructive issues or merge requests a long time (since 5 May 2022).

@@ -132,30 +132,28 @@ class BaseMailBox:
                 result.append(None)
         return result
 
-    def _fetch_by_one(self, message_nums: Sequence[str], message_parts: str, reverse: bool) -> Iterator[list]:  # noqa
-        for message_num in message_nums:
-            fetch_result = self.client.fetch(message_num, message_parts)
+    def _fetch_by_one(self, uid_list: Sequence[str], message_parts: str, reverse: bool) -> Iterator[list]:  # noqa
+        for uid in uid_list:
+            fetch_result = self.client.uid('fetch', uid, message_parts)
             check_command_status(fetch_result, MailboxFetchError)
             yield fetch_result[1]
 
-    def _fetch_in_bulk(self, message_nums: Sequence[str], message_parts: str, reverse: bool) -> Iterator[list]:
-        if not message_nums:
+    def _fetch_in_bulk(self, uid_list: Sequence[str], message_parts: str, reverse: bool) -> Iterator[list]:
+        if not uid_list:
             return
-        fetch_result = self.client.fetch(','.join(message_nums), message_parts)
+        fetch_result = self.client.uid('fetch', ','.join(uid_list), message_parts)
         check_command_status(fetch_result, MailboxFetchError)
         for built_fetch_item in chunks((reversed if reverse else iter)(fetch_result[1]), 2):
             yield built_fetch_item
 
     def fetch(self, criteria: Criteria = 'ALL', charset: str = 'US-ASCII', limit: Optional[Union[int, slice]] = None,
-              miss_no_uid=True, mark_seen=True, reverse=False, headers_only=False,
-              bulk=False) -> Iterator[MailMessage]:
+              mark_seen=True, reverse=False, headers_only=False, bulk=False) -> Iterator[MailMessage]:
         """
         Mail message generator in current folder by search criteria
         :param criteria: message search criteria (see examples at ./doc/imap_search_criteria.txt)
         :param charset: IANA charset, indicates charset of the strings that appear in the search criteria. See rfc2978
         :param limit: int | slice - limit number of read emails | slice emails range for read
                       useful for actions with a large number of messages, like "move" | paging
-        :param miss_no_uid: miss emails without uid
         :param mark_seen: mark emails as seen on fetch
         :param reverse: in order from the larger date to the smaller
         :param headers_only: get only email headers (without text, html, attachments)
@@ -167,12 +165,9 @@ class BaseMailBox:
             '' if mark_seen else '.PEEK', 'HEADER' if headers_only else '')
         limit_range = slice(0, limit) if type(limit) is int else limit or slice(None)
         assert type(limit_range) is slice
-        nums = tuple((reversed if reverse else iter)(self.numbers(criteria, charset)))[limit_range]
-        for fetch_item in (self._fetch_in_bulk if bulk else self._fetch_by_one)(nums, message_parts, reverse):  # noqa
-            mail_message = self.email_message_class(fetch_item)
-            if miss_no_uid and not mail_message.uid:
-                continue
-            yield mail_message
+        uids = tuple((reversed if reverse else iter)(self.uids(criteria, charset, True)))[limit_range]
+        for fetch_item in (self._fetch_in_bulk if bulk else self._fetch_by_one)(uids, message_parts, reverse):  # noqa
+            yield self.email_message_class(fetch_item)
 
     def expunge(self) -> tuple:
         result = self.client.expunge()
