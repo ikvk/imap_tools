@@ -73,7 +73,6 @@ BaseMailBox.uids - search mailbox for matching message uids in current folder, r
 
 * *criteria* = 'ALL', message search criteria, `query builder <#search-criteria>`_
 * *charset* = 'US-ASCII', indicates charset of the strings that appear in the search criteria. See rfc2978
-* *miss_no_uid* = True, not add None values to result when uid item not matched to pattern
 
 BaseMailBox.<action> - `copy, move, delete, flag, append <#actions-with-emails>`_
 

@@ -1,16 +1,13 @@
-import re
 import sys
 import imaplib
 import datetime
 from collections import UserString
 from typing import AnyStr, Optional, List, Iterable, Sequence, Union, Tuple, Iterator
 
-from .consts import UID_PATTERN
 from .message import MailMessage
 from .folder import MailBoxFolderManager
 from .idle import IdleManager
-from .utils import clean_uids, check_command_status, chunks, encode_folder, clean_flags, decode_value, \
-    check_timeout_arg_support
+from .utils import clean_uids, check_command_status, chunks, encode_folder, clean_flags, check_timeout_arg_support
 from .errors import MailboxStarttlsError, MailboxLoginError, MailboxLogoutError, MailboxNumbersError, \
     MailboxFetchError, MailboxExpungeError, MailboxDeleteError, MailboxCopyError, MailboxFlagError, \
     MailboxAppendError, MailboxUidsError, MailboxTaggedResponseError
@@ -100,6 +97,8 @@ class BaseMailBox:
     def numbers(self, criteria: Criteria = 'ALL', charset: str = 'US-ASCII') -> List[str]:
         """
         Search mailbox for matching message numbers in current folder (this is not uids)
+        Message Sequence Number Message Attribute - to accessing messages by relative position in the mailbox,
+        it also can be used in mathematical calculations, see rfc3501.
         :param criteria: message search criteria (see examples at ./doc/imap_search_criteria.txt)
         :param charset: IANA charset, indicates charset of the strings that appear in the search criteria. See rfc2978
         :return email message numbers
@@ -109,32 +108,17 @@ class BaseMailBox:
         check_command_status(search_result, MailboxNumbersError)
         return search_result[1][0].decode().split() if search_result[1][0] else []
 
-    def uids(self, criteria: Criteria = 'ALL', charset: str = 'US-ASCII', miss_no_uid=True) -> List[str]:
+    def uids(self, criteria: Criteria = 'ALL', charset: str = 'US-ASCII') -> List[str]:
         """
         Search mailbox for matching message uids in current folder
         :param criteria: message search criteria (see examples at ./doc/imap_search_criteria.txt)
         :param charset: IANA charset, indicates charset of the strings that appear in the search criteria. See rfc2978
         :return: email message uids
         """
-        # encoded_criteria = criteria if type(criteria) is bytes else str(criteria).encode(charset)
-        # uid_result = self.client.uid('SEARCH', 'CHARSET', charset, encoded_criteria)
-        # check_command_status(uid_result, MailboxUidsError)
-        # return uid_result[1][0].decode().split() if uid_result[1][0] else []
-
-        nums = self.numbers(criteria, charset)
-        if not nums:
-            return []
-        fetch_result = self.client.fetch(','.join(nums), "(UID)")
-        check_command_status(fetch_result, MailboxUidsError)
-        result = []
-        for fetch_item in fetch_result[1]:
-            # fetch_item: AnyStr  # todo uncomment after drop 3.5
-            uid_match = re.search(UID_PATTERN, decode_value(fetch_item))  # noqa
-            if uid_match:
-                result.append(uid_match.group('uid'))
-            elif not miss_no_uid:
-                result.append(None)
-        return result
+        encoded_criteria = criteria if type(criteria) is bytes else str(criteria).encode(charset)
+        uid_result = self.client.uid('SEARCH', 'CHARSET', charset, encoded_criteria)
+        check_command_status(uid_result, MailboxUidsError)
+        return uid_result[1][0].decode().split() if uid_result[1][0] else []
 
     def _fetch_by_one(self, uid_list: Sequence[str], message_parts: str, reverse: bool) -> Iterator[list]:  # noqa
         for uid in uid_list:
@@ -169,7 +153,7 @@ class BaseMailBox:
             '' if mark_seen else '.PEEK', 'HEADER' if headers_only else '')
         limit_range = slice(0, limit) if type(limit) is int else limit or slice(None)
         assert type(limit_range) is slice
-        uids = tuple((reversed if reverse else iter)(self.uids(criteria, charset, True)))[limit_range]
+        uids = tuple((reversed if reverse else iter)(self.uids(criteria, charset)))[limit_range]
         for fetch_item in (self._fetch_in_bulk if bulk else self._fetch_by_one)(uids, message_parts, reverse):  # noqa
             yield self.email_message_class(fetch_item)
 
