@@ -114,9 +114,13 @@ class BaseMailBox:
         Search mailbox for matching message uids in current folder
         :param criteria: message search criteria (see examples at ./doc/imap_search_criteria.txt)
         :param charset: IANA charset, indicates charset of the strings that appear in the search criteria. See rfc2978
-        :param miss_no_uid: not add None values to result when uid item not matched to pattern
         :return: email message uids
         """
+        # encoded_criteria = criteria if type(criteria) is bytes else str(criteria).encode(charset)
+        # uid_result = self.client.uid('SEARCH', 'CHARSET', charset, encoded_criteria)
+        # check_command_status(uid_result, MailboxUidsError)
+        # return uid_result[1][0].decode().split() if uid_result[1][0] else []
+
         nums = self.numbers(criteria, charset)
         if not nums:
             return []
