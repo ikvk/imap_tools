@@ -3,7 +3,8 @@ import unittest
 import configparser
 from imap_tools import MailBox
 
-TEST_MAILBOX_NAME_SET = {'YANDEX', 'ZIMBRA', 'MAIL_RU', 'YAHOO'}  # 'GOOGLE','OUTLOOK',
+# 'GOOGLE', 'YANDEX', 'ZIMBRA', 'MAIL_RU', 'YAHOO', 'OUTLOOK'
+TEST_MAILBOX_NAME_SET = {'YANDEX', 'ZIMBRA', 'MAIL_RU', 'YAHOO', 'OUTLOOK'}
 
 
 def get_test_mailbox_config(mailbox_name: str) -> dict:

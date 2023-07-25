@@ -29,12 +29,21 @@ class MailboxTest(MailboxTestCase):
             found_msgs = tuple(mailbox.fetch(bulk=1, headers_only=1))
             self.assertEqual(len(found_msgs), self.base_test_msg_cnt)
 
+            # FETCH nonexistent
+            nonexistent_criteria = A(uid=['1000000000'])
+            nonexistent_msgs1 = tuple(mailbox.fetch(nonexistent_criteria, bulk=False))
+            self.assertEqual(len(nonexistent_msgs1), 0)
+            nonexistent_msgs2 = tuple(mailbox.fetch(nonexistent_criteria, bulk=True))
+            self.assertEqual(len(nonexistent_msgs2), 0)
+
             # NUMBERS
             found_nums = mailbox.numbers()
+            self.assertTrue(bool(found_nums))
             self.assertTrue(all(type(i) is str for i in found_nums))
 
             # UIDS
             found_uids = mailbox.uids()
+            self.assertTrue(bool(found_uids))
             self.assertTrue(all(type(i) is str for i in found_uids))
             self.assertEqual(set([i.uid for i in mailbox.fetch(headers_only=True, bulk=True)]), set(found_uids))
 
