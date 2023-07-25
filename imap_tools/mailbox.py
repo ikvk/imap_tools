@@ -124,7 +124,7 @@ class BaseMailBox:
         for uid in uid_list:
             fetch_result = self.client.uid('fetch', uid, message_parts)
             check_command_status(fetch_result, MailboxFetchError)
-            if not fetch_result[1][0] or fetch_result[1][0] is None:
+            if not fetch_result[1] or fetch_result[1][0] is None:
                 continue
             yield fetch_result[1]
 
@@ -133,6 +133,8 @@ class BaseMailBox:
             return
         fetch_result = self.client.uid('fetch', ','.join(uid_list), message_parts)
         check_command_status(fetch_result, MailboxFetchError)
+        if not fetch_result[1] or fetch_result[1][0] is None:
+            return
         for built_fetch_item in chunks((reversed if reverse else iter)(fetch_result[1]), 2):
             yield built_fetch_item
 
