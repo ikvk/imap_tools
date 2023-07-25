@@ -124,6 +124,8 @@ class BaseMailBox:
         for uid in uid_list:
             fetch_result = self.client.uid('fetch', uid, message_parts)
             check_command_status(fetch_result, MailboxFetchError)
+            if not fetch_result[1][0] or fetch_result[1][0] is None:
+                continue
             yield fetch_result[1]
 
     def _fetch_in_bulk(self, uid_list: Sequence[str], message_parts: str, reverse: bool) -> Iterator[list]:
