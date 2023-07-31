@@ -406,7 +406,8 @@ Big thanks to people who helped develop this library:
 `lucbouge <https://github.com/lucbouge>`_,
 `JacquelinCharbonnel <https://github.com/JacquelinCharbonnel>`_,
 `stumpylog <https://github.com/stumpylog>`_,
-`dimitrisstr <https://github.com/dimitrisstr>`_
+`dimitrisstr <https://github.com/dimitrisstr>`_,
+`abionics <https://github.com/abionics>`_
 
 Help the project
 ----------------
