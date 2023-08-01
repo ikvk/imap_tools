@@ -24,6 +24,7 @@ setuptools.setup(
     author_email='KaukinVK@ya.ru',
     description='Work with email by IMAP',
     keywords=['imap', 'imap-client', 'python3', 'python', 'email'],
+    package_data={"imap_tools": ["py.typed"]},
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: Apache Software License",
