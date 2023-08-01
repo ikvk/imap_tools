@@ -32,7 +32,7 @@ class FolderInfo:
 
 
 class MailBoxFolderManager:
-    """Operations with mail box folders"""
+    """Operations with mailbox folders"""
 
     def __init__(self, mailbox):
         self.mailbox = mailbox
