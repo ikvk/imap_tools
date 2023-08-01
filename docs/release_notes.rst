@@ -1,3 +1,8 @@
+1.2.0
+=====
+* Fixed MailBoxFolderManager.status bug for folders with brackets
+* Added py.typed for mypy lib
+
 1.1.0
 =====
 * Using BaseMailBox.uids in BaseMailBox.fetch instead BaseMailBox.numbers - for reliable parallel work with mailbox [#202]
