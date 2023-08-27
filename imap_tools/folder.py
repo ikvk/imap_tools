@@ -32,7 +32,7 @@ class FolderInfo:
 
 
 class MailBoxFolderManager:
-    """Operations with mail box folders"""
+    """Operations with mailbox folders"""
 
     def __init__(self, mailbox):
         self.mailbox = mailbox
@@ -102,7 +102,7 @@ class MailBoxFolderManager:
         result = self.mailbox.client._untagged_response(status_result[0], status_result[1], command)
         check_command_status(result, MailboxFolderStatusError)
         status_data = [i for i in result[1] if type(i) is bytes][0]  # may contain tuples with encoded names
-        values = status_data.decode().split('(')[1].split(')')[0].split(' ')
+        values = status_data.decode().split('(')[-1].split(')')[0].split(' ')
         return {k: int(v) for k, v in pairs_to_dict(values).items() if str(v).isdigit()}
 
     def list(self, folder: AnyStr = '', search_args: str = '*', subscribed_only: bool = False) -> List[FolderInfo]:

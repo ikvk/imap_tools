@@ -55,7 +55,7 @@ class FoldersTest(MailboxTestCase):
                 self.assertIs(type(status_val), int)
 
             # SUBSCRIBE
-            if mailbox.mailbox_name not in ('MAIL_RU',):
+            if mailbox.mailbox_name not in ('MAIL_RU', 'YAHOO'):
                 mailbox.folder.subscribe(mailbox.folder_test_temp2, False)
                 self.assertIn(mailbox.folder_test_temp2, [i.name for i in mailbox.folder.list()])
                 self.assertNotIn(mailbox.folder_test_temp2,

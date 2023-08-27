@@ -1,3 +1,26 @@
+1.2.0
+=====
+* Fixed MailBoxFolderManager.status bug for folders with brackets
+* Added py.typed for mypy lib
+
+1.1.0
+=====
+* Using BaseMailBox.uids in BaseMailBox.fetch instead BaseMailBox.numbers - for reliable parallel work with mailbox [#202]
+* [Breaking] Removed miss_no_uid argument from BaseMailBox.uids as not actual. It may change uids ordering.
+* [Breaking] Removed miss_no_uid argument from BaseMailBox.fetch as not actual
+
+1.0.0
+=====
+* 21 Nov 2022: No constructive issues or merge requests a long time (since 5 May 2022).
+
+0.57.0
+======
+* Added BaseMailBox.login_utf8 - Authenticate to an account with a UTF-8 username and/or password
+
+0.56.0
+======
+* Simplify IdleManager.poll
+
 0.55.0
 ======
 * Fixed query builder bug with key - "header" and value - [Header]

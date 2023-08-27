@@ -1,16 +1,13 @@
-import re
 import sys
 import imaplib
 import datetime
 from collections import UserString
-from typing import AnyStr, Optional, List, Iterable, Sequence, Union, Tuple
+from typing import AnyStr, Optional, List, Iterable, Sequence, Union, Tuple, Iterator
 
-from .consts import UID_PATTERN
 from .message import MailMessage
 from .folder import MailBoxFolderManager
 from .idle import IdleManager
-from .utils import clean_uids, check_command_status, chunks, encode_folder, clean_flags, decode_value, \
-    check_timeout_arg_support
+from .utils import clean_uids, check_command_status, chunks, encode_folder, clean_flags, check_timeout_arg_support
 from .errors import MailboxStarttlsError, MailboxLoginError, MailboxLogoutError, MailboxNumbersError, \
     MailboxFetchError, MailboxExpungeError, MailboxDeleteError, MailboxCopyError, MailboxFlagError, \
     MailboxAppendError, MailboxUidsError, MailboxTaggedResponseError
@@ -69,6 +66,18 @@ class BaseMailBox:
         self.login_result = login_result
         return self  # return self in favor of context manager
 
+    def login_utf8(self, username: str, password: str, initial_folder: Optional[str] = 'INBOX') -> 'BaseMailBox':
+        """Authenticate to an account with a UTF-8 username and/or password"""
+        # rfc2595 section 6 - PLAIN SASL mechanism
+        encoded = (b"\0" + username.encode("utf8") + b"\0" + password.encode("utf8"))
+        # Assumption is the server supports AUTH=PLAIN capability
+        login_result = self.client.authenticate("PLAIN", lambda x: encoded)
+        check_command_status(login_result, MailboxLoginError)
+        if initial_folder is not None:
+            self.folder.set(initial_folder)
+        self.login_result = login_result
+        return self
+
     def xoauth2(self, username: str, access_token: str, initial_folder: Optional[str] = 'INBOX') -> 'BaseMailBox':
         """Authenticate to account using OAuth 2.0 mechanism"""
         auth_string = 'user={}\1auth=Bearer {}\1\1'.format(username, access_token)
@@ -88,6 +97,8 @@ class BaseMailBox:
     def numbers(self, criteria: Criteria = 'ALL', charset: str = 'US-ASCII') -> List[str]:
         """
         Search mailbox for matching message numbers in current folder (this is not uids)
+        Message Sequence Number Message Attribute - to accessing messages by relative position in the mailbox,
+        it also can be used in mathematical calculations, see rfc3501.
         :param criteria: message search criteria (see examples at ./doc/imap_search_criteria.txt)
         :param charset: IANA charset, indicates charset of the strings that appear in the search criteria. See rfc2978
         :return email message numbers
@@ -97,53 +108,44 @@ class BaseMailBox:
         check_command_status(search_result, MailboxNumbersError)
         return search_result[1][0].decode().split() if search_result[1][0] else []
 
-    def uids(self, criteria: Criteria = 'ALL', charset: str = 'US-ASCII', miss_no_uid=True) -> List[str]:
+    def uids(self, criteria: Criteria = 'ALL', charset: str = 'US-ASCII') -> List[str]:
         """
         Search mailbox for matching message uids in current folder
         :param criteria: message search criteria (see examples at ./doc/imap_search_criteria.txt)
         :param charset: IANA charset, indicates charset of the strings that appear in the search criteria. See rfc2978
-        :param miss_no_uid: not add None values to result when uid item not matched to pattern
         :return: email message uids
         """
-        nums = self.numbers(criteria, charset)
-        if not nums:
-            return []
-        fetch_result = self.client.fetch(','.join(nums), "(UID)")
-        check_command_status(fetch_result, MailboxUidsError)
-        result = []
-        for fetch_item in fetch_result[1]:
-            # fetch_item: AnyStr  # todo uncomment after drop 3.5
-            uid_match = re.search(UID_PATTERN, decode_value(fetch_item))  # noqa
-            if uid_match:
-                result.append(uid_match.group('uid'))
-            elif not miss_no_uid:
-                result.append(None)
-        return result
+        encoded_criteria = criteria if type(criteria) is bytes else str(criteria).encode(charset)
+        uid_result = self.client.uid('SEARCH', 'CHARSET', charset, encoded_criteria)
+        check_command_status(uid_result, MailboxUidsError)
+        return uid_result[1][0].decode().split() if uid_result[1][0] else []
 
-    def _fetch_by_one(self, message_nums: Sequence[str], message_parts: str, reverse: bool) -> Iterable[list]:  # noqa
-        for message_num in message_nums:
-            fetch_result = self.client.fetch(message_num, message_parts)
+    def _fetch_by_one(self, uid_list: Sequence[str], message_parts: str, reverse: bool) -> Iterator[list]:  # noqa
+        for uid in uid_list:
+            fetch_result = self.client.uid('fetch', uid, message_parts)
             check_command_status(fetch_result, MailboxFetchError)
+            if not fetch_result[1] or fetch_result[1][0] is None:
+                continue
             yield fetch_result[1]
 
-    def _fetch_in_bulk(self, message_nums: Sequence[str], message_parts: str, reverse: bool) -> Iterable[list]:
-        if not message_nums:
+    def _fetch_in_bulk(self, uid_list: Sequence[str], message_parts: str, reverse: bool) -> Iterator[list]:
+        if not uid_list:
             return
-        fetch_result = self.client.fetch(','.join(message_nums), message_parts)
+        fetch_result = self.client.uid('fetch', ','.join(uid_list), message_parts)
         check_command_status(fetch_result, MailboxFetchError)
+        if not fetch_result[1] or fetch_result[1][0] is None:
+            return
         for built_fetch_item in chunks((reversed if reverse else iter)(fetch_result[1]), 2):
             yield built_fetch_item
 
     def fetch(self, criteria: Criteria = 'ALL', charset: str = 'US-ASCII', limit: Optional[Union[int, slice]] = None,
-              miss_no_uid=True, mark_seen=True, reverse=False, headers_only=False,
-              bulk=False) -> Iterable[MailMessage]:
+              mark_seen=True, reverse=False, headers_only=False, bulk=False) -> Iterator[MailMessage]:
         """
         Mail message generator in current folder by search criteria
         :param criteria: message search criteria (see examples at ./doc/imap_search_criteria.txt)
         :param charset: IANA charset, indicates charset of the strings that appear in the search criteria. See rfc2978
         :param limit: int | slice - limit number of read emails | slice emails range for read
                       useful for actions with a large number of messages, like "move" | paging
-        :param miss_no_uid: miss emails without uid
         :param mark_seen: mark emails as seen on fetch
         :param reverse: in order from the larger date to the smaller
         :param headers_only: get only email headers (without text, html, attachments)
@@ -155,12 +157,9 @@ class BaseMailBox:
             '' if mark_seen else '.PEEK', 'HEADER' if headers_only else '')
         limit_range = slice(0, limit) if type(limit) is int else limit or slice(None)
         assert type(limit_range) is slice
-        nums = tuple((reversed if reverse else iter)(self.numbers(criteria, charset)))[limit_range]
-        for fetch_item in (self._fetch_in_bulk if bulk else self._fetch_by_one)(nums, message_parts, reverse):  # noqa
-            mail_message = self.email_message_class(fetch_item)
-            if miss_no_uid and not mail_message.uid:
-                continue
-            yield mail_message
+        uids = tuple((reversed if reverse else iter)(self.uids(criteria, charset)))[limit_range]
+        for fetch_item in (self._fetch_in_bulk if bulk else self._fetch_by_one)(uids, message_parts, reverse):  # noqa
+            yield self.email_message_class(fetch_item)
 
     def expunge(self) -> tuple:
         result = self.client.expunge()

@@ -14,7 +14,7 @@ High level lib for work with email by IMAP:
 - Actions with emails: copy, delete, flag, move, append
 - Actions with folders: list, set, get, create, exists, rename, subscribe, delete, status
 - IDLE commands: start, poll, stop, wait
-- Exceptions on failed operations
+- Exceptions on failed IMAP operations
 - No external dependencies, tested
 
 .. image:: https://img.shields.io/pypi/dm/imap_tools.svg?style=social
@@ -24,7 +24,7 @@ Python version   3.5+
 License          Apache-2.0
 PyPI             https://pypi.python.org/pypi/imap_tools/
 RFC              `IMAP4.1 <https://tools.ietf.org/html/rfc3501>`_,
-                 `EMAIL <https://tools.ietf.org/html/rfc3501>`_,
+                 `EMAIL <https://tools.ietf.org/html/rfc2822>`_,
                  `IMAP related RFCs <https://github.com/ikvk/imap_tools/blob/master/docs/IMAP_related_RFCs.txt>`_
 ===============  ================================================================================================
 
@@ -42,7 +42,7 @@ Guide
 Basic
 ^^^^^
 
-Info about lib are at: *this page*, issues, pull requests, examples, source, stackoverflow.com
+Info about lib are at: *this page*, docstrings, issues, pull requests, examples, source, stackoverflow.com
 
 .. code-block:: python
 
@@ -57,14 +57,13 @@ Info about lib are at: *this page*, issues, pull requests, examples, source, sta
 
 MailBox, MailBoxTls, MailBoxUnencrypted - for create mailbox client. `TLS example <https://github.com/ikvk/imap_tools/blob/master/examples/tls.py>`_.
 
-BaseMailBox.login, MailBox.xoauth2, BaseMailBox.logout - authentication functions, they support context manager.
+BaseMailBox.<auth> - login, login_utf8, xoauth2, logout - authentication functions, they support context manager.
 
 BaseMailBox.fetch - first searches email nums by criteria in current folder, then fetch and yields `MailMessage <#email-attributes>`_:
 
 * *criteria* = 'ALL', message search criteria, `query builder <#search-criteria>`_
 * *charset* = 'US-ASCII', indicates charset of the strings that appear in the search criteria. See rfc2978
 * *limit* = None, limit on the number of read emails, useful for actions with a large number of messages, like "move"
-* *miss_no_uid* = True, miss emails without uid
 * *mark_seen* = True, mark emails as seen on fetch
 * *reverse* = False, in order from the larger date to the smaller
 * *headers_only* = False, get only email headers (without text, html, attachments)
@@ -74,7 +73,6 @@ BaseMailBox.uids - search mailbox for matching message uids in current folder, r
 
 * *criteria* = 'ALL', message search criteria, `query builder <#search-criteria>`_
 * *charset* = 'US-ASCII', indicates charset of the strings that appear in the search criteria. See rfc2978
-* *miss_no_uid* = True, not add None values to result when uid item not matched to pattern
 
 BaseMailBox.<action> - `copy, move, delete, flag, append <#actions-with-emails>`_
 
@@ -138,7 +136,7 @@ You can use 3 types for "criteria" argument of MailBox methods: fetch, uids, num
 
     mailbox.fetch(AND(subject='weather'))  # query, the str-like object
     mailbox.fetch('TEXT "hello"')          # str
-    mailbox.fetch(b'TEXT "\xd1\x8f"')      # bytes, *charset arg is ignored
+    mailbox.fetch(b'TEXT "\xd1\x8f"')      # bytes
 
 Use "charset" argument for encode criteria to the desired encoding. If "criteria" is bytes - encoding will be ignored.
 
@@ -208,7 +206,7 @@ recent         True             RECENT                  have the Recent flag set
 all            True             ALL                     all, criteria by default
 uid            iter(str)/str/U  UID 1,2,17              corresponding to the specified unique identifier set
 header         H(str, str)*     HEADER "A-Spam" "5.8"   have a header that contains the specified str in the text
-gmail_label    str*             X-GM-LABELS "label1"    have this gmail label.
+gmail_label    str*             X-GM-LABELS "label1"    have this gmail label
 =============  ===============  ======================  ================================================================
 
 Server side search notes:
@@ -219,7 +217,7 @@ Server side search notes:
 Actions with emails
 ^^^^^^^^^^^^^^^^^^^
 
-First of all read about uid `at rfc3501 <https://tools.ietf.org/html/rfc3501#section-2.3.1.1>`_.
+First of all read about UID `at rfc3501 <https://tools.ietf.org/html/rfc3501#section-2.3.1.1>`_.
 
 Action's uid_list arg may takes:
 
@@ -406,8 +404,14 @@ Big thanks to people who helped develop this library:
 `NickC-NZ <https://github.com/NickC-NZ>`_,
 `mweinelt <https://github.com/mweinelt>`_,
 `lucbouge <https://github.com/lucbouge>`_,
-`JacquelinCharbonnel <https://github.com/JacquelinCharbonnel>`_
+`JacquelinCharbonnel <https://github.com/JacquelinCharbonnel>`_,
+`stumpylog <https://github.com/stumpylog>`_,
+`dimitrisstr <https://github.com/dimitrisstr>`_,
+`abionics <https://github.com/abionics>`_
 
-Donate
-------
-`✋ I want to help this library <https://github.com/ikvk/imap_tools/blob/master/docs/donate.rst>`_
+Help the project
+----------------
+1. Found a bug or figure out how to improve the library - open issue or merge request 🎯
+2. Do not know how to improve library - try to help other open projects that you use ✋
+3. Nowhere to put your money - spend it on your family, friends, loved ones, or people around you 💰
+4. Star the project ⭐

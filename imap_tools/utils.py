@@ -4,7 +4,7 @@ import datetime
 from itertools import zip_longest
 from email.utils import getaddresses, parsedate_to_datetime
 from email.header import decode_header, Header
-from typing import AnyStr, Union, Optional, Tuple, Iterable, Any, List, Dict
+from typing import AnyStr, Union, Optional, Tuple, Iterable, Any, List, Dict, Iterator
 
 from .consts import SHORT_MONTH_NAMES, MailMessageFlags
 from . import imap_utf7
@@ -153,7 +153,7 @@ def pairs_to_dict(items: List[Any]) -> Dict[Any, Any]:
     return dict((items[i * 2], items[i * 2 + 1]) for i in range(len(items) // 2))
 
 
-def chunks(iterable: Iterable[Any], n: int, fill_value: Optional[Any] = None) -> Iterable[Tuple[Any, ...]]:
+def chunks(iterable: Iterable[Any], n: int, fill_value: Optional[Any] = None) -> Iterator[Tuple[Any, ...]]:
     """
     Group data into fixed-length chunks or blocks
         [iter(iterable)]*n creates one iterator, repeated n times in the list
