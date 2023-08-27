@@ -21,3 +21,15 @@ https://packaging.python.org/tutorials/packaging-projects/
 
 5. Uploading the distribution archives:
     C:\python\venv\imap_tools\Scripts\python.exe -m twine upload dist/*
+
+
+Mirror
+======
+1. cd to repo
+    cd C:\kvk\develop\Python\imap_tools\
+2. Cleaning old references to remote branches
+    git fetch --prune
+3. Push
+    git push --prune git@gitflic.ru:ikvk/imap-tools.git +refs/remotes/origin/*:refs/heads/* +refs/tags/*:refs/tags/*
+
+https://dev.to/sourcelevel/how-to-properly-mirror-a-git-repository-19d9
