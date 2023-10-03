@@ -69,7 +69,7 @@ BaseMailBox.fetch - first searches email nums by criteria in current folder, the
 * *headers_only* = False, get only email headers (without text, html, attachments)
 * *bulk* = False, False - fetch each message separately per N commands - low memory consumption, slow; True - fetch all messages per 1 command - high memory consumption, fast
 
-BaseMailBox.uids - search mailbox for matching message uids in current folder, returns [str | None]
+BaseMailBox.uids - search mailbox for matching message uids in current folder, returns [str]
 
 * *criteria* = 'ALL', message search criteria, `query builder <#search-criteria>`_
 * *charset* = 'US-ASCII', indicates charset of the strings that appear in the search criteria. See rfc2978
@@ -92,7 +92,7 @@ MailMessage and MailAttachment public attributes are cached by functools.lru_cac
 .. code-block:: python
 
     for msg in mailbox.fetch():  # generator: imap_tools.MailMessage
-        msg.uid          # str | None: '123'
+        msg.uid          # str: '123'
         msg.subject      # str: 'some subject 你 привет'
         msg.from_        # str: 'Bartölke@ya.ru'
         msg.to           # tuple: ('iam@goo.ru', 'friend@ya.ru', )
