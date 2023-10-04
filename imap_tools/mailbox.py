@@ -270,8 +270,10 @@ class MailBoxUnencrypted(BaseMailBox):
     def _get_mailbox_client(self) -> imaplib.IMAP4:
         if PYTHON_VERSION_MINOR < 9:
             return imaplib.IMAP4(self._host, self._port)
+        elif PYTHON_VERSION_MINOR < 12:
+            return imaplib.IMAP4(self._host, self._port, self._timeout)
         else:
-            return imaplib.IMAP4(self._host, self._port, self._timeout)  # noqa
+            return imaplib.IMAP4(self._host, self._port, timeout=self._timeout)
 
 
 class MailBox(BaseMailBox):
@@ -285,6 +287,8 @@ class MailBox(BaseMailBox):
         :param keyfile: PEM formatted file that contains your private key (deprecated)
         :param certfile: PEM formatted certificate chain file (deprecated)
         :param ssl_context: SSLContext object that contains your certificate chain and private key
+        Since Python 3.9 timeout argument added
+        Since Python 3.12 keyfile and certfile arguments are deprecated, ssl_context and timeout must be keyword args
         """
         check_timeout_arg_support(timeout)
         self._host = host
@@ -298,9 +302,11 @@ class MailBox(BaseMailBox):
     def _get_mailbox_client(self) -> imaplib.IMAP4:
         if PYTHON_VERSION_MINOR < 9:
             return imaplib.IMAP4_SSL(self._host, self._port, self._keyfile, self._certfile, self._ssl_context)
+        elif PYTHON_VERSION_MINOR < 12:
+            return imaplib.IMAP4_SSL(
+                self._host, self._port, self._keyfile, self._certfile, self._ssl_context, self._timeout)
         else:
-            return imaplib.IMAP4_SSL(self._host, self._port, self._keyfile, self._certfile, self._ssl_context,
-                                     self._timeout)
+            return imaplib.IMAP4_SSL(self._host, self._port, ssl_context=self._ssl_context, timeout=self._timeout)
 
 
 class MailBoxTls(BaseMailBox):
@@ -323,8 +329,10 @@ class MailBoxTls(BaseMailBox):
     def _get_mailbox_client(self) -> imaplib.IMAP4:
         if PYTHON_VERSION_MINOR < 9:
             client = imaplib.IMAP4(self._host, self._port)
+        elif PYTHON_VERSION_MINOR < 12:
+            client = imaplib.IMAP4(self._host, self._port, self._timeout)
         else:
-            client = imaplib.IMAP4(self._host, self._port, self._timeout)  # noqa
+            client = imaplib.IMAP4(self._host, self._port, timeout=self._timeout)
         result = client.starttls(self._ssl_context)
         check_command_status(result, MailboxStarttlsError)
         return client

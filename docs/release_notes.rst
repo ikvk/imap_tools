@@ -1,3 +1,7 @@
+1.3.0
+=====
+* Added support for python 3.12 - Since 3.12 keyfile and certfile arguments are deprecated for imaplib.IMAP4_SSL, ssl_context and timeout must be keyword arguments
+
 1.2.0
 =====
 * Fixed MailBoxFolderManager.status bug for folders with brackets

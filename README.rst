@@ -407,7 +407,8 @@ Big thanks to people who helped develop this library:
 `JacquelinCharbonnel <https://github.com/JacquelinCharbonnel>`_,
 `stumpylog <https://github.com/stumpylog>`_,
 `dimitrisstr <https://github.com/dimitrisstr>`_,
-`abionics <https://github.com/abionics>`_
+`abionics <https://github.com/abionics>`_,
+`link2xt <https://github.com/link2xt>`_
 
 Help the project
 ----------------
