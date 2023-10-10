@@ -188,7 +188,13 @@ class MailMessage:
             if part.get_content_maintype() == 'multipart' or part.get_filename():
                 continue
             if part.get_content_type() == 'text/html':
-                return decode_value(part.get_payload(decode=True), part.get_content_charset())
+                html = decode_value(part.get_payload(decode=True), part.get_content_charset())
+                meta_ct_match = re.search('<\s*meta .*?content-type.*?>', html, re.IGNORECASE | re.DOTALL)
+                if meta_ct_match:
+                    meta = meta_ct_match.group(0)
+                    meta_new = re.sub('charset\s*=\s*[a-zA-Z0-9_:.+-]+', 'charset=utf-8', meta, 1, re.IGNORECASE)
+                    html = html.replace(meta, meta_new)
+                return html
         return ''
 
     @property
