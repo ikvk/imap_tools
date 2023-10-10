@@ -8,7 +8,7 @@ from functools import lru_cache
 from email.header import decode_header
 from typing import Tuple, Dict, Optional, List
 
-from .utils import decode_value, parse_email_addresses, parse_email_date, EmailAddress
+from .utils import decode_value, parse_email_addresses, parse_email_date, EmailAddress, replace_html_ct_charset
 from .consts import UID_PATTERN
 
 
@@ -189,12 +189,7 @@ class MailMessage:
                 continue
             if part.get_content_type() == 'text/html':
                 html = decode_value(part.get_payload(decode=True), part.get_content_charset())
-                meta_ct_match = re.search('<\s*meta .*?content-type.*?>', html, re.IGNORECASE | re.DOTALL)
-                if meta_ct_match:
-                    meta = meta_ct_match.group(0)
-                    meta_new = re.sub('charset\s*=\s*[a-zA-Z0-9_:.+-]+', 'charset=utf-8', meta, 1, re.IGNORECASE)
-                    html = html.replace(meta, meta_new)
-                return html
+                return replace_html_ct_charset(html, 'utf-8')
         return ''
 
     @property

@@ -4,7 +4,7 @@ import datetime
 from imap_tools.errors import ImapToolsError, UnexpectedCommandStatusError, MailboxCopyError
 from imap_tools.consts import MailMessageFlags
 from imap_tools.utils import clean_flags, chunks, quote, pairs_to_dict, decode_value, check_command_status, \
-    parse_email_date, parse_email_addresses, EmailAddress, clean_uids
+    parse_email_date, parse_email_addresses, EmailAddress, clean_uids, replace_html_ct_charset
 
 
 class UtilsTest(unittest.TestCase):
@@ -132,3 +132,34 @@ class UtilsTest(unittest.TestCase):
             parse_email_addresses('=?utf-8?Q?ATO.RU?= <subscriptions@ato.ru>'),
             (EmailAddress('ATO.RU', 'subscriptions@ato.ru'),)
         )
+
+    def test_replace_html_ct_charset(self):
+        target = 'charset=utf-8'
+
+        data1 = """
+          <head>
+            <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+            <meta http-equiv="content-type" content="text/html; charset=windows-1251">
+            <meta name="author" content="cat charset=windows-123">
+          </head>
+        """
+        res1 = replace_html_ct_charset(data1, 'utf-8')
+        print(res1)
+        self.assertIn(target, res1)
+        self.assertTrue(res1.count(target) == 1)
+
+        data2 = """
+          <head>
+            <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+            < 
+            META 
+             http-EQUIV="
+             Content-TYPE " content="text/html; charset 
+             = 
+             WINDOWS-1251+ ;"/>
+            <meta name="author" content="cat charset=windows-123">
+          </head>
+        """
+        res2 = replace_html_ct_charset(data2, 'utf-8')
+        self.assertIn(target, res2)
+        self.assertTrue(res2.count(target) == 1)

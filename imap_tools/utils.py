@@ -193,3 +193,13 @@ def check_timeout_arg_support(timeout):
     """If timeout arg not supports - raise ValueError"""
     if timeout is not None and sys.version_info.minor < 9:
         raise ValueError('imaplib.IMAP4 timeout argument supported since python 3.9')
+
+
+def replace_html_ct_charset(html: str, new_charset: str) -> str:
+    """Replace charset in META tag with content-type attribute in HTML text"""
+    meta_ct_match = re.search(r'<\s*meta .*?content-type.*?>', html, re.IGNORECASE | re.DOTALL)
+    if meta_ct_match:
+        meta = meta_ct_match.group(0)
+        meta_new = re.sub(r'charset\s*=\s*[a-zA-Z0-9_:.+-]+', 'charset={}'.format(new_charset), meta, 1, re.IGNORECASE)
+        html = html.replace(meta, meta_new)
+    return html

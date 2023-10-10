@@ -1,6 +1,7 @@
 1.4.0
 =====
 * [Breaking] MailMessage.html replacing charset to utf-8 in html meta for consistency
+* Added utils.replace_html_ct_charset
 
 1.3.0
 =====
