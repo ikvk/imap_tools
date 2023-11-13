@@ -4,6 +4,7 @@ SHORT_MONTH_NAMES = ('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Se
 
 UID_PATTERN = re.compile(r'(^|\s+|\W)UID\s+(?P<uid>\d+)')
 
+CODECS_OFFICIAL_REPLACEMENT_CHAR = '�'
 
 class MailMessageFlags:
     """

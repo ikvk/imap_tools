@@ -59,7 +59,7 @@ MailBox, MailBoxTls, MailBoxUnencrypted - for create mailbox client. `TLS exampl
 
 BaseMailBox.<auth> - login, login_utf8, xoauth2, logout - authentication functions, they support context manager.
 
-BaseMailBox.fetch - first searches email nums by criteria in current folder, then fetch and yields `MailMessage <#email-attributes>`_:
+BaseMailBox.fetch - first searches email uids by criteria in current folder, then fetch and yields `MailMessage <#email-attributes>`_, args:
 
 * *criteria* = 'ALL', message search criteria, `query builder <#search-criteria>`_
 * *charset* = 'US-ASCII', indicates charset of the strings that appear in the search criteria. See rfc2978
@@ -69,7 +69,7 @@ BaseMailBox.fetch - first searches email nums by criteria in current folder, the
 * *headers_only* = False, get only email headers (without text, html, attachments)
 * *bulk* = False, False - fetch each message separately per N commands - low memory consumption, slow; True - fetch all messages per 1 command - high memory consumption, fast
 
-BaseMailBox.uids - search mailbox for matching message uids in current folder, returns [str]
+BaseMailBox.uids - search mailbox for matching message uids in current folder, returns [str | None], None when MailMessage.from_bytes used, args:
 
 * *criteria* = 'ALL', message search criteria, `query builder <#search-criteria>`_
 * *charset* = 'US-ASCII', indicates charset of the strings that appear in the search criteria. See rfc2978
@@ -92,7 +92,7 @@ MailMessage and MailAttachment public attributes are cached by functools.lru_cac
 .. code-block:: python
 
     for msg in mailbox.fetch():  # generator: imap_tools.MailMessage
-        msg.uid          # str: '123'
+        msg.uid          # str | None: '123'
         msg.subject      # str: 'some subject 你 привет'
         msg.from_        # str: 'Bartölke@ya.ru'
         msg.to           # tuple: ('iam@goo.ru', 'friend@ya.ru', )

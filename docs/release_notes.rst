@@ -1,3 +1,7 @@
+1.5.0
+=====
+* Fixed: MailAttachment.filename parse non-ascii filename
+
 1.4.0
 =====
 * [Breaking] MailMessage.html replacing charset to utf-8 in html meta for consistency

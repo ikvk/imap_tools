@@ -6,10 +6,11 @@ import datetime
 from itertools import chain
 from functools import lru_cache
 from email.header import decode_header
+from email.message import _parseparam, _unquotevalue  # noqa
 from typing import Tuple, Dict, Optional, List
 
 from .utils import decode_value, parse_email_addresses, parse_email_date, EmailAddress, replace_html_ct_charset
-from .consts import UID_PATTERN
+from .consts import UID_PATTERN, CODECS_OFFICIAL_REPLACEMENT_CHAR
 
 
 class MailMessage:
@@ -238,8 +239,37 @@ class MailAttachment:
             forwarded message (Content-Type = message/rfc822)
         :return: filename
         """
+        # attempt 1
         raw = self.part.get_filename() or ''
-        return ''.join(decode_value(*head_part) for head_part in decode_header(raw))
+        attempt_1_filename = ''.join(decode_value(*head_part) for head_part in decode_header(raw))
+        if CODECS_OFFICIAL_REPLACEMENT_CHAR not in attempt_1_filename:
+            return attempt_1_filename
+
+        # attempt 2 - non-ascii filename
+        for header_name, target_param_name in (('content-disposition', 'filename'), ('content-type', 'name')):
+            header_obj = self.part.get(header_name, None)
+            if not header_obj:
+                continue
+            for header_item in decode_header(header_obj):
+                if header_item[1] == 'unknown-8bit':
+                    try:
+                        # suppose encoded utf8
+                        parsed_params = _parseparam(header_item[0].decode(errors='replace'))  # ['',]
+                    except Exception:  # noqa
+                        continue
+                    for parsed_param_item in parsed_params:
+                        try:
+                            name, val = parsed_param_item.split('=', 1)
+                            name = name.strip()
+                            val = val.strip()
+                        except ValueError:
+                            # Must have been a bare attribute
+                            name = parsed_param_item.strip()
+                            val = ''
+                        if name == target_param_name and val and CODECS_OFFICIAL_REPLACEMENT_CHAR not in val:
+                            return val.strip('"')
+
+        return attempt_1_filename
 
     @property
     @lru_cache()

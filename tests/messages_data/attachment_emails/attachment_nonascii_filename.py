@@ -15,7 +15,7 @@ DATA = dict(
     headers={'mime-version': ('1.0 (Apple Message framework v730)',), 'content-type': ('multipart/mixed; boundary=Apple-Mail-13-196941151',), 'message-id': ('<9169D984-4E0B-45EF-82D4-8F5E53AD7012@example.com>',), 'from': ('foo@example.com',), 'subject': ('testing',), 'date': ('Mon, 6 Jun 2005 22:21:22 +0200',), 'to': ('blah@example.com',)},
     attachments=[
         dict(
-            filename='ci��le.txt',
+            filename='ciële.txt',
             content_id='',
             content_disposition='attachment',
             content_type='text/plain',
