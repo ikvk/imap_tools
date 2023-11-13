@@ -408,7 +408,8 @@ Big thanks to people who helped develop this library:
 `stumpylog <https://github.com/stumpylog>`_,
 `dimitrisstr <https://github.com/dimitrisstr>`_,
 `abionics <https://github.com/abionics>`_,
-`link2xt <https://github.com/link2xt>`_
+`link2xt <https://github.com/link2xt>`_,
+`Docpart <https://github.com/Docpart>`_
 
 Help the project
 ----------------
