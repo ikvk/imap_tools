@@ -1,0 +1,5 @@
+
+If you (or I am) encounter a problem accessing the repository, you can use the projects mirror:
+
+* https://github.com/ikvk
+* https://gitflic.ru/user/ikvk
