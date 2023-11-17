@@ -1,4 +1,10 @@
 
+_utf7 to __init__.py - decode_utf7 encode_utf7
+
+limit=slice(n,n+100) to docs
+
+увеличить скорость в imap_utf7.py за счет констант для ord('&')
+
 https://stackoverflow.com/questions/72942311/ some to docs?
     The second problem is that you need to use imap_tools.MailBox.
     Looking at the documentation and source at the repo it appears that the relevant classes to use are:
@@ -19,19 +25,13 @@ add servers for tests
     GMX Mail
     OUTLOOK fix auth
 
-MailBoxUnencrypted
-
 google auth
     https://github.com/ikvk/imap_tools/issues/176
     https://helpdesk.bitrix24.ru/open/9976753/
     https://answers.microsoft.com/en-us/windowslive/forum/all/gmail-account-failing-server-imapgmailcom/543553b0-113d-4b62-9adb-d0b4508914d5
     https://support.google.com/accounts/answer/185833
 
-_utf7 to __init__.py
-
-limit=slice(n,n+100) to docs ?
-
 https://github.com/sts0210/imap_tools/commit/36c0189600170fe573fa40620b09b53d0102d2e2
      Encode folder before trying to move mail. Necessary for example when …
     …the folder has umlauts as in "Gelöschte Elemente"
-    странно
+    странный фикс в ветке
