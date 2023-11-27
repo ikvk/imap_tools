@@ -18,6 +18,7 @@ IMAP related RFCs
     5182 - Last SEARCH Result: https://tools.ietf.org/html/rfc5182
     5228 - Sieve: An Email Filtering Language: https://www.rfc-editor.org/rfc/rfc5228
     5255 - Internationalization: https://tools.ietf.org/html/rfc5255
+    5256 - SORT and THREAD Extensions: https://datatracker.ietf.org/doc/html/rfc5256
     5258 - LIST Command Extensions: https://tools.ietf.org/html/rfc5258
     5267 - Contexts for IMAP4 (ESORT and CONTEXT): https://tools.ietf.org/html/rfc5267
     5464 - METADATA Extension: https://tools.ietf.org/html/rfc5464
