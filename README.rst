@@ -26,6 +26,7 @@ PyPI             https://pypi.python.org/pypi/imap_tools/
 RFC              `IMAP4.1 <https://tools.ietf.org/html/rfc3501>`_,
                  `EMAIL <https://tools.ietf.org/html/rfc2822>`_,
                  `IMAP related RFCs <https://github.com/ikvk/imap_tools/blob/master/docs/IMAP_related_RFCs.txt>`_
+Repo mirror      https://gitflic.ru/project/ikvk/imap-tools
 ===============  ================================================================================================
 
 .. contents::
