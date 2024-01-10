@@ -18,6 +18,7 @@ with MailBox('imap.far.mars').login('acc', 'pwd') as mailbox:
 
 # 2
 # reliable console notificator
+# *some mail servers do not like multiple connections, you may close web mailbox interface for reduce connection errors
 import time, socket, imaplib, traceback
 from imap_tools import A, MailBox, MailboxLoginError, MailboxLogoutError
 
