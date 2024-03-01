@@ -7,7 +7,7 @@ from itertools import chain
 from functools import lru_cache
 from email.header import decode_header
 from email.message import _parseparam, _unquotevalue  # noqa
-from typing import Tuple, Dict, Optional, List
+from typing import Tuple, Dict, Optional, List, Union
 
 from .utils import decode_value, parse_email_addresses, parse_email_date, EmailAddress, replace_html_ct_charset
 from .consts import UID_PATTERN, CODECS_OFFICIAL_REPLACEMENT_CHAR
@@ -222,6 +222,30 @@ class MailMessage:
             results.append(MailAttachment(part))
         return results
 
+    def dict(self, include: Union[Tuple[str], None] = None, exclude: Union[Tuple[str], None] = None) -> Dict:
+        result = {
+            "uid": self.uid,
+            "size_rfc822": self.size_rfc822,
+            "size": self.size,
+            "subject": self.subject,
+            "from": self.from_,
+            "to": self.to,
+            "cc": self.cc,
+            "bcc": self.bcc,
+            "reply_to": self.reply_to,
+            "date": self.date_str,
+            "text": self.text,
+            "html": self.html,
+            "headers": self.headers,
+            "attachments": [attachment.dict() for attachment in self.attachments],
+        }
+
+        if include:
+            return {key: value for key, value in result.items() if key in include}
+        if exclude:
+            return {key: value for key, value in result.items() if key not in exclude}
+        return result
+
 
 class MailAttachment:
     """An attachment for a MailMessage"""
@@ -311,3 +335,20 @@ class MailAttachment:
     def size(self) -> int:
         """Attachment size, bytes count"""
         return len(self.payload)
+
+    def dict(self, include: Union[Tuple[str], None] = None, exclude: Union[Tuple[str], None] = None) -> Dict:
+        result = {
+            "filename": self.filename,
+            "content_id": self.content_id,
+            "content_type": self.content_type,
+            "content_disposition": self.content_disposition,
+            "payload": self.payload,
+            "size": self.size,
+
+        }
+
+        if include:
+            return {key: value for key, value in result.items() if key in include}
+        if exclude:
+            return {key: value for key, value in result.items() if key not in exclude}
+        return result
