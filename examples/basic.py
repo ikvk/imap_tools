@@ -12,9 +12,9 @@ Get date, subject and body len of all emails from INBOX folder
     Select INBOX folder, cause login initial_folder arg = 'INBOX' by default (set folder may be disabled with None)
     
 3. mailbox.fetch()
-    First searches email nums by criteria in current folder, then fetch and yields MailMessage
-    criteria arg = 'ALL' by default
-    Current folder is 'INBOX' (set on login)
+    First searches email uids by criteria in current folder, then fetch and yields MailMessage
+    Criteria arg is 'ALL' by default
+    Current folder is 'INBOX' (set on login), by default it is INBOX too.
     Fetch each message separately per N commands, cause bulk arg = False by default
     Mark each fetched email as seen, cause fetch mark_seen arg = True by default
     
