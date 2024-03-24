@@ -5,6 +5,9 @@ limit=slice(n,n+100) to docs
 
 увеличить скорость в imap_utf7.py за счет констант для ord('&')
 
+FULL
+    Macro equivalent to: (FLAGS INTERNALDATE RFC822.SIZE ENVELOPE BODY)
+
 https://stackoverflow.com/questions/72942311/ some to docs?
     The second problem is that you need to use imap_tools.MailBox.
     Looking at the documentation and source at the repo it appears that the relevant classes to use are:
