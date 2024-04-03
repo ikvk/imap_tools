@@ -4,6 +4,7 @@ from tests.utils import MailboxTestCase, TEST_MAILBOX_NAME_SET, get_test_mailbox
 from imap_tools.errors import MailboxCopyError
 from imap_tools.consts import MailMessageFlags
 from imap_tools.query import A
+from imap_tools.utils import SortCriteria
 
 TEST_MESSAGE_DATA = b'From: Mikel <test@lindsaar.net>\nTo: Mikel <raasdnil@gmail.com>\nContent-Type: text/plain; charset=US-ASCII; format=flowed\nContent-Transfer-Encoding: 7bit\nMime-Version: 1.0 (Apple Message framework v929.2)\nSubject: _append_\nDate: Sat, 22 Nov 2008 11:04:59 +1100\n\nPlain email.\n'  # noqa
 
@@ -24,6 +25,12 @@ class MailboxTest(MailboxTestCase):
     def test_action(self):
         for mailbox in self.mailbox_set.values():
             mailbox.folder.set(mailbox.folder_test_base)
+
+            # SORT
+            if mailbox.mailbox_name == 'ZIMBRA':
+                found_msgs = tuple(mailbox.fetch(
+                    bulk=True, headers_only=1, sort=[SortCriteria.SIZE_ASC, SortCriteria.FROM_DESC]))
+                self.assertEqual(len(found_msgs), self.base_test_msg_cnt)
 
             # FETCH
             found_msgs = tuple(mailbox.fetch(bulk=True, headers_only=1))
