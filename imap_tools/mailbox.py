@@ -135,22 +135,19 @@ class BaseMailBox:
                 continue
             yield fetch_result[1]
 
-    def _fetch_in_bulk_all(self, uid_list: Sequence[str], message_parts: str, reverse: bool) \
+    def _fetch_in_bulk(self, uid_list: Sequence[str], message_parts: str, reverse: bool, bulk: int) \
             -> Iterator[list]:
         if not uid_list:
             return
-        fetch_result = self.client.uid('fetch', ','.join(uid_list), message_parts)
-        check_command_status(fetch_result, MailboxFetchError)
-        if not fetch_result[1] or fetch_result[1][0] is None:
-            return
-        for built_fetch_item in chunks((reversed if reverse else iter)(fetch_result[1]), 2):
-            yield built_fetch_item
 
-    def _fetch_in_bulk_by_n(self, uid_list: Sequence[str], message_parts: str, reverse: bool, bulk: int) \
-            -> Iterator[list]:
-        if not uid_list:
-            return
-        for uid_list_i in chunks_crop(uid_list, bulk):
+        if isinstance(bulk, int) and bulk >= 2:
+            uid_list_seq = chunks_crop(uid_list, bulk)
+        elif isinstance(bulk, bool):
+            uid_list_seq = (uid_list,)
+        else:
+            raise ValueError('bulk arg may be bool or int >= 2')
+
+        for uid_list_i in uid_list_seq:
             fetch_result = self.client.uid('fetch', ','.join(uid_list_i), message_parts)
             check_command_status(fetch_result, MailboxFetchError)
             if not fetch_result[1] or fetch_result[1][0] is None:
@@ -183,17 +180,10 @@ class BaseMailBox:
         limit_range = slice(0, limit) if type(limit) is int else limit or slice(None)
         assert type(limit_range) is slice
         uids = tuple((reversed if reverse else iter)(self.uids(criteria, charset, sort)))[limit_range]
-
         if bulk:
-            if isinstance(bulk, int) and bulk >= 2:
-                message_generator = self._fetch_in_bulk_by_n(uids, message_parts, reverse, bulk)
-            elif isinstance(bulk, bool):
-                message_generator = self._fetch_in_bulk_all(uids, message_parts, reverse)
-            else:
-                raise ValueError('bulk arg may be bool or int >= 2')
+            message_generator = self._fetch_in_bulk(uids, message_parts, reverse, bulk)
         else:
             message_generator = self._fetch_by_one(uids, message_parts)
-
         for fetch_item in message_generator:
             yield self.email_message_class(fetch_item)
 
