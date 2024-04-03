@@ -64,11 +64,12 @@ BaseMailBox.fetch - first searches email uids by criteria in current folder, the
 
 * *criteria* = 'ALL', message search criteria, `query builder <#search-criteria>`_
 * *charset* = 'US-ASCII', indicates charset of the strings that appear in the search criteria. See rfc2978
-* *limit* = None, limit on the number of read emails, useful for actions with a large number of messages, like "move"
+* *limit* = None, limit on the number of read emails, useful for actions with a large number of messages, like "move". May be int or slice.
 * *mark_seen* = True, mark emails as seen on fetch
 * *reverse* = False, in order from the larger date to the smaller
 * *headers_only* = False, get only email headers (without text, html, attachments)
-* *bulk* = False, False - fetch each message separately per N commands - low memory consumption, slow; True - fetch all messages per 1 command - high memory consumption, fast
+* *bulk* = False, False - fetch each message separately per N commands - low memory consumption, slow; True - fetch all messages per 1 command - high memory consumption, fast; int - fetch all messages by bulks of the specified size (20 msg, bulk=5 -> 4 commands)
+* *sort* = None, criteria for sort messages on server, use SortCriteria constants. Charset arg is important for sort
 
 BaseMailBox.uids - search mailbox for matching message uids in current folder, returns [str | None], None when MailMessage.from_bytes used, args:
 
@@ -410,7 +411,9 @@ Big thanks to people who helped develop this library:
 `dimitrisstr <https://github.com/dimitrisstr>`_,
 `abionics <https://github.com/abionics>`_,
 `link2xt <https://github.com/link2xt>`_,
-`Docpart <https://github.com/Docpart>`_
+`Docpart <https://github.com/Docpart>`_,
+`meetttttt <https://github.com/meetttttt>`_,
+`sapristi <https://github.com/sapristi>`_
 
 Help the project
 ----------------

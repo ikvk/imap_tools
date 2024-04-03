@@ -4,7 +4,7 @@ import datetime
 from imap_tools.errors import ImapToolsError, UnexpectedCommandStatusError, MailboxCopyError
 from imap_tools.consts import MailMessageFlags
 from imap_tools.utils import clean_flags, chunks, quote, pairs_to_dict, decode_value, check_command_status, \
-    parse_email_date, parse_email_addresses, EmailAddress, clean_uids, replace_html_ct_charset
+    parse_email_date, parse_email_addresses, EmailAddress, clean_uids, replace_html_ct_charset, chunks_crop
 
 
 class UtilsTest(unittest.TestCase):
@@ -35,6 +35,11 @@ class UtilsTest(unittest.TestCase):
         self.assertEqual(list(chunks([], 4)), [])
         self.assertEqual(list(chunks([1, 2], 0)), [])
         self.assertEqual(list(chunks(['0', '0'], 1)), [('0',), ('0',)])
+
+    def test_chunks_crop(self):
+        self.assertEqual(list(chunks_crop([1, 2, 3, 4, 5, 6, 7], 3)), [[1, 2, 3], [4, 5, 6], [7]])
+        self.assertEqual(list(chunks_crop([1, 2, 3, 4, 5, 6], 3)), [[1, 2, 3], [4, 5, 6]])
+        self.assertEqual(list(chunks_crop([1, ], 3)), [[1]])
 
     def test_quote(self):
         self.assertEqual(quote('str привет'), '"str привет"')

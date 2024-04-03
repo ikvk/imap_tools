@@ -1,7 +1,7 @@
 import re
 from typing import AnyStr, Optional, Iterable, List, Dict, Tuple
 
-from . import imap_utf7
+from .imap_utf7 import utf7_decode
 from .consts import MailBoxFolderStatusOptions
 from .utils import check_command_status, pairs_to_dict, encode_folder
 from .errors import MailboxFolderStatusValueError, MailboxFolderSelectError, MailboxFolderCreateError, \
@@ -125,7 +125,7 @@ class MailBoxFolderManager:
             if not folder_item:
                 continue
             if type(folder_item) is bytes:
-                folder_match = re.search(folder_item_re, imap_utf7.decode(folder_item))
+                folder_match = re.search(folder_item_re, utf7_decode(folder_item))
                 if not folder_match:
                     continue
                 folder_dict = folder_match.groupdict()
@@ -134,11 +134,11 @@ class MailBoxFolderManager:
                     name = name[1:-1]
             elif type(folder_item) is tuple:
                 # when name has " or \ chars
-                folder_match = re.search(folder_item_re, imap_utf7.decode(folder_item[0]))
+                folder_match = re.search(folder_item_re, utf7_decode(folder_item[0]))
                 if not folder_match:
                     continue
                 folder_dict = folder_match.groupdict()
-                name = imap_utf7.decode(folder_item[1])
+                name = utf7_decode(folder_item[1])
             else:
                 continue
             result.append(FolderInfo(

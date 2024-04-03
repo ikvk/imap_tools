@@ -6,6 +6,7 @@ UID_PATTERN = re.compile(r'(^|\s+|\W)UID\s+(?P<uid>\d+)')
 
 CODECS_OFFICIAL_REPLACEMENT_CHAR = '�'
 
+
 class MailMessageFlags:
     """
     System email message flags

@@ -1,3 +1,9 @@
+1.6.0
+=====
+* [Breaking] Changed: "bulk" argument at BaseMailBox.fetch now can accept int values >=2 - for control bulk size
+* Added "sort" argument to BaseMailBox.fetch and BaseMailBox.uids - for sort on server. Use SortCriteria constants
+* Renamed: utf7_encode and utf7_decode from imap_utf7.py (was encode and decode)
+
 1.5.0
 =====
 * Fixed: MailAttachment.filename parse non-ascii filename
