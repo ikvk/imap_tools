@@ -1,4 +1,6 @@
 
+fetch and uids examples
+
 FULL
     Macro equivalent to: (FLAGS INTERNALDATE RFC822.SIZE ENVELOPE BODY)
 
