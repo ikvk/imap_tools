@@ -1,3 +1,18 @@
+1.6.0
+=====
+* [Breaking] Added: BaseMailBox.fetch bulk arg now accept int values >=2 and bool
+* sort
+
+            # fetch 15419 emails example:
+            # bulk=True MemoryError
+            # bulk=1000 239
+            # bulk=False 661
+
+            # fetch 44 emails example:
+            # bulk=True 2.61
+            # bulk=10 1.78
+            # bulk=False 4.96
+
 1.5.0
 =====
 * Fixed: MailAttachment.filename parse non-ascii filename

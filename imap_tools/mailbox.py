@@ -7,7 +7,8 @@ from typing import AnyStr, Optional, List, Iterable, Sequence, Union, Tuple, Ite
 from .message import MailMessage
 from .folder import MailBoxFolderManager
 from .idle import IdleManager
-from .utils import clean_uids, check_command_status, chunks, encode_folder, clean_flags, check_timeout_arg_support
+from .utils import clean_uids, check_command_status, chunks, encode_folder, clean_flags, check_timeout_arg_support, \
+    chunks_crop
 from .errors import MailboxStarttlsError, MailboxLoginError, MailboxLogoutError, MailboxNumbersError, \
     MailboxFetchError, MailboxExpungeError, MailboxDeleteError, MailboxCopyError, MailboxFlagError, \
     MailboxAppendError, MailboxUidsError, MailboxTaggedResponseError
@@ -108,19 +109,25 @@ class BaseMailBox:
         check_command_status(search_result, MailboxNumbersError)
         return search_result[1][0].decode().split() if search_result[1][0] else []
 
-    def uids(self, criteria: Criteria = 'ALL', charset: str = 'US-ASCII') -> List[str]:
+    def uids(self, criteria: Criteria = 'ALL', charset: str = 'US-ASCII',
+             sort_criteria: Optional[Union[str, Iterable[str]]] = None) -> List[str]:
         """
         Search mailbox for matching message uids in current folder
         :param criteria: message search criteria (see examples at ./doc/imap_search_criteria.txt)
         :param charset: IANA charset, indicates charset of the strings that appear in the search criteria. See rfc2978
+        :param sort_criteria: criterias for sort messages, use SortCriteria constants
         :return: email message uids
         """
         encoded_criteria = criteria if type(criteria) is bytes else str(criteria).encode(charset)
-        uid_result = self.client.uid('SEARCH', 'CHARSET', charset, encoded_criteria)
+        if sort_criteria:
+            sort_criteria = tuple(sort_criteria) if isinstance(sort_criteria, str) else sort_criteria
+            uid_result = self.client.uid('SORT', '({})'.format(' '.join(sort_criteria)), charset, encoded_criteria)
+        else:
+            uid_result = self.client.uid('SEARCH', 'CHARSET', charset, encoded_criteria)
         check_command_status(uid_result, MailboxUidsError)
         return uid_result[1][0].decode().split() if uid_result[1][0] else []
 
-    def _fetch_by_one(self, uid_list: Sequence[str], message_parts: str, reverse: bool) -> Iterator[list]:  # noqa
+    def _fetch_by_one(self, uid_list: Sequence[str], message_parts: str) -> Iterator[list]:
         for uid in uid_list:
             fetch_result = self.client.uid('fetch', uid, message_parts)
             check_command_status(fetch_result, MailboxFetchError)
@@ -128,7 +135,8 @@ class BaseMailBox:
                 continue
             yield fetch_result[1]
 
-    def _fetch_in_bulk(self, uid_list: Sequence[str], message_parts: str, reverse: bool) -> Iterator[list]:
+    def _fetch_in_bulk_all(self, uid_list: Sequence[str], message_parts: str, reverse: bool) \
+            -> Iterator[list]:
         if not uid_list:
             return
         fetch_result = self.client.uid('fetch', ','.join(uid_list), message_parts)
@@ -138,8 +146,22 @@ class BaseMailBox:
         for built_fetch_item in chunks((reversed if reverse else iter)(fetch_result[1]), 2):
             yield built_fetch_item
 
+    def _fetch_in_bulk_by_n(self, uid_list: Sequence[str], message_parts: str, reverse: bool, bulk: int) \
+            -> Iterator[list]:
+        if not uid_list:
+            return
+        for uid_list_i in chunks_crop(uid_list, bulk):
+            print('==')
+            fetch_result = self.client.uid('fetch', ','.join(uid_list_i), message_parts)
+            check_command_status(fetch_result, MailboxFetchError)
+            if not fetch_result[1] or fetch_result[1][0] is None:
+                return
+            for built_fetch_item in chunks((reversed if reverse else iter)(fetch_result[1]), 2):
+                yield built_fetch_item
+
     def fetch(self, criteria: Criteria = 'ALL', charset: str = 'US-ASCII', limit: Optional[Union[int, slice]] = None,
-              mark_seen=True, reverse=False, headers_only=False, bulk=False) -> Iterator[MailMessage]:
+              mark_seen=True, reverse=False, headers_only=False, bulk: Union[bool, int] = False) \
+            -> Iterator[MailMessage]:
         """
         Mail message generator in current folder by search criteria
         :param criteria: message search criteria (see examples at ./doc/imap_search_criteria.txt)
@@ -149,8 +171,10 @@ class BaseMailBox:
         :param mark_seen: mark emails as seen on fetch
         :param reverse: in order from the larger date to the smaller
         :param headers_only: get only email headers (without text, html, attachments)
-        :param bulk: False - fetch each message separately per N commands - low memory consumption, slow
-                     True  - fetch all messages per 1 command - high memory consumption, fast
+        :param bulk:
+            False - fetch each message separately per N commands - low memory consumption, slow
+            True  - fetch all messages per 1 command - high memory consumption, fast. Fails on big bulk at server
+            int - fetch messages by bulks of the specified size
         :return generator: MailMessage
         """
         message_parts = "(BODY{}[{}] UID FLAGS RFC822.SIZE)".format(
@@ -158,7 +182,18 @@ class BaseMailBox:
         limit_range = slice(0, limit) if type(limit) is int else limit or slice(None)
         assert type(limit_range) is slice
         uids = tuple((reversed if reverse else iter)(self.uids(criteria, charset)))[limit_range]
-        for fetch_item in (self._fetch_in_bulk if bulk else self._fetch_by_one)(uids, message_parts, reverse):  # noqa
+
+        if bulk:
+            if isinstance(bulk, int) and bulk >= 2:
+                message_generator = self._fetch_in_bulk_by_n(uids, message_parts, reverse, bulk)
+            elif isinstance(bulk, bool):
+                message_generator = self._fetch_in_bulk_all(uids, message_parts, reverse)
+            else:
+                raise ValueError('bulk arg may be bool or int >= 2')
+        else:
+            message_generator = self._fetch_by_one(uids, message_parts)
+
+        for fetch_item in message_generator:
             yield self.email_message_class(fetch_item)
 
     def expunge(self) -> tuple:

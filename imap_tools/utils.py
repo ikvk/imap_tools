@@ -203,3 +203,55 @@ def replace_html_ct_charset(html: str, new_charset: str) -> str:
         meta_new = re.sub(r'charset\s*=\s*[a-zA-Z0-9_:.+-]+', 'charset={}'.format(new_charset), meta, 1, re.IGNORECASE)
         html = html.replace(meta, meta_new)
     return html
+
+
+def chunks_crop(lst: iter, n: int) -> iter:
+    """
+    Yield successive n-sized chunks from lst.
+    import pprint
+    pprint.pprint(list(chunks(range(10, 75), 10)))
+    [[10, 11, 12, 13, 14, 15, 16, 17, 18, 19],
+     [20, 21, 22, 23, 24, 25, 26, 27, 28, 29],
+     [30, 31, 32, 33, 34, 35, 36, 37, 38, 39],
+     [40, 41, 42, 43, 44, 45, 46, 47, 48, 49],
+     [50, 51, 52, 53, 54, 55, 56, 57, 58, 59],
+     [60, 61, 62, 63, 64, 65, 66, 67, 68, 69],
+     [70, 71, 72, 73, 74]]
+    """
+    for i in range(0, len(lst), n):
+        yield lst[i:i + n]
+
+
+class SortCriteria:
+    """
+    Sort criteria
+    https://datatracker.ietf.org/doc/html/rfc5256
+    ARRIVAL - Internal date and time of the message.
+        This differs from the ON criteria in SEARCH, which uses just the internal date.
+    CC - [IMAP] addr-mailbox of the first "cc" address.
+    DATE - Sent date and time, as described in section 2.2.
+    FROM - [IMAP] addr-mailbox of the first "From" address.
+    SIZE - Size of the message in octets.
+    SUBJECT - Base subject text.
+    TO - [IMAP] addr-mailbox of the first "To" address.
+    """
+    ARRIVAL_DT_ASC = 'ARRIVAL'
+    CC_ASC = 'CC'
+    DATE_ASC = 'DATE'
+    FROM_ASC = 'FROM'
+    SIZE_ASC = 'SIZE'
+    SUBJECT_ASC = 'SUBJECT'
+    TO_ASC = 'TO'
+
+    ARRIVAL_DT_DESC = 'REVERSE ARRIVAL'
+    CC_DESC = 'REVERSE CC'
+    DATE_DESC = 'REVERSE DATE'
+    FROM_DESC = 'REVERSE FROM'
+    SIZE_DESC = 'REVERSE SIZE'
+    SUBJECT_DESC = 'REVERSE SUBJECT'
+    TO_DESC = 'REVERSE TO'
+
+    all = (
+        ARRIVAL_DT_ASC, CC_ASC, DATE_ASC, FROM_ASC, SIZE_ASC, SUBJECT_ASC, TO_ASC,
+        ARRIVAL_DT_DESC, CC_DESC, DATE_DESC, FROM_DESC, SIZE_DESC, SUBJECT_DESC, TO_DESC,
+    )

@@ -8,7 +8,7 @@ from .mailbox import BaseMailBox, MailBox, MailBoxUnencrypted, MailBoxTls
 from .message import MailMessage, MailAttachment
 from .folder import MailBoxFolderManager, FolderInfo
 from .consts import MailMessageFlags, MailBoxFolderStatusOptions
-from .utils import EmailAddress
+from .utils import EmailAddress, SortCriteria
 from .errors import *
 
-__version__ = '1.5.0'
+__version__ = '1.6.0'
