@@ -411,7 +411,9 @@ Big thanks to people who helped develop this library:
 `dimitrisstr <https://github.com/dimitrisstr>`_,
 `abionics <https://github.com/abionics>`_,
 `link2xt <https://github.com/link2xt>`_,
-`Docpart <https://github.com/Docpart>`_
+`Docpart <https://github.com/Docpart>`_,
+`meetttttt <https://github.com/meetttttt>`_,
+`sapristi <https://github.com/sapristi>`_
 
 Help the project
 ----------------
