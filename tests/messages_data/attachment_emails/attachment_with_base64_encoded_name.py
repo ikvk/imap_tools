@@ -10,9 +10,9 @@ DATA = dict(
     reply_to=('xxxxxxxxx.xxxxxxx@gmail.com',),
     date=datetime.datetime(2005, 5, 8, 14, 9, 11, tzinfo=datetime.timezone(datetime.timedelta(-1, 68400))),
     date_str='Sun, 8 May 2005 14:09:11 -0500',
-    text='We should not include these files or vcards as attachments.\n\n---------- Forwarded message ----------\nFrom: xxxxx xxxxxx <xxxxxxxx@xxx.com>\nDate: May 8, 2005 1:17 PM\nSubject: Signed email causes file attachments\nTo: xxxxxxx@xxxxxxxxxx.com\n\n\nHi,\n\nTest attachments with Base64 encoded filename.\n\n',
+    text='We should not include these files or vcards as attachments.\r\n\r\n---------- Forwarded message ----------\r\nFrom: xxxxx xxxxxx <xxxxxxxx@xxx.com>\r\nDate: May 8, 2005 1:17 PM\r\nSubject: Signed email causes file attachments\r\nTo: xxxxxxx@xxxxxxxxxx.com\r\n\r\n\r\nHi,\r\n\r\nTest attachments with Base64 encoded filename.\r\n\r\n',
     html='',
-    headers={'return-path': ('<xxxxxxxxx.xxxxxxx@gmail.com>',), 'message-id': ('<e85734b90505081209eaaa17b@mail.gmail.com>',), 'date': ('Sun, 8 May 2005 14:09:11 -0500',), 'from': ('xxxxxxxxx xxxxxxx <xxxxxxxxx.xxxxxxx@gmail.com>',), 'reply-to': ('xxxxxxxxx xxxxxxx <xxxxxxxxx.xxxxxxx@gmail.com>',), 'to': ('xxxxx xxxx <xxxxx@xxxxxxxxx.com>',), 'subject': ('Fwd: Signed email causes file attachments',), 'in-reply-to': ('<F6E2D0B4-CC35-4A91-BA4C-C7C712B10C13@mac.com>',), 'mime-version': ('1.0',), 'content-type': ('multipart/mixed; \n\tboundary="----=_Part_5028_7368284.1115579351471"',), 'references': ('<F6E2D0B4-CC35-4A91-BA4C-C7C712B10C13@mac.com>',)},
+    headers={'return-path': ('<xxxxxxxxx.xxxxxxx@gmail.com>',), 'message-id': ('<e85734b90505081209eaaa17b@mail.gmail.com>',), 'date': ('Sun, 8 May 2005 14:09:11 -0500',), 'from': ('xxxxxxxxx xxxxxxx <xxxxxxxxx.xxxxxxx@gmail.com>',), 'reply-to': ('xxxxxxxxx xxxxxxx <xxxxxxxxx.xxxxxxx@gmail.com>',), 'to': ('xxxxx xxxx <xxxxx@xxxxxxxxx.com>',), 'subject': ('Fwd: Signed email causes file attachments',), 'in-reply-to': ('<F6E2D0B4-CC35-4A91-BA4C-C7C712B10C13@mac.com>',), 'mime-version': ('1.0',), 'content-type': ('multipart/mixed; \r\n\tboundary="----=_Part_5028_7368284.1115579351471"',), 'references': ('<F6E2D0B4-CC35-4A91-BA4C-C7C712B10C13@mac.com>',)},
     attachments=[
         dict(
             filename='This is a test.pdf',
