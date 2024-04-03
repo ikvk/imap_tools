@@ -7,7 +7,7 @@ from email.header import decode_header, Header
 from typing import AnyStr, Union, Optional, Tuple, Iterable, Any, List, Dict, Iterator
 
 from .consts import SHORT_MONTH_NAMES, MailMessageFlags
-from . import imap_utf7
+from .imap_utf7 import utf7_encode
 
 
 def clean_uids(uid_set: Union[str, Iterable[str]]) -> str:
@@ -170,7 +170,7 @@ def encode_folder(folder: AnyStr) -> bytes:
     if isinstance(folder, bytes):
         return folder
     else:
-        return quote(imap_utf7.encode(folder))
+        return quote(utf7_encode(folder))
 
 
 def clean_flags(flag_set: Union[str, Iterable[str]]) -> List[str]:

@@ -110,20 +110,20 @@ class BaseMailBox:
         return search_result[1][0].decode().split() if search_result[1][0] else []
 
     def uids(self, criteria: Criteria = 'ALL', charset: str = 'US-ASCII',
-             sort_criteria: Optional[Union[str, Iterable[str]]] = None) -> List[str]:
+             sort: Optional[Union[str, Iterable[str]]] = None) -> List[str]:
         """
         Search mailbox for matching message uids in current folder
         :param criteria: message search criteria (see examples at ./doc/imap_search_criteria.txt)
         :param charset: IANA charset, indicates charset of the strings that appear in the search criteria. See rfc2978
-        :param sort_criteria: criterias for sort messages, use SortCriteria constants
+        :param sort: criteria for sort messages on server, use SortCriteria constants. Charset arg is important for sort
         :return: email message uids
         """
         encoded_criteria = criteria if type(criteria) is bytes else str(criteria).encode(charset)
-        if sort_criteria:
-            sort_criteria = tuple(sort_criteria) if isinstance(sort_criteria, str) else sort_criteria
-            uid_result = self.client.uid('SORT', '({})'.format(' '.join(sort_criteria)), charset, encoded_criteria)
+        if sort:
+            sort = (sort,) if isinstance(sort, str) else sort
+            uid_result = self.client.uid('SORT', '({})'.format(' '.join(sort)), charset, encoded_criteria)
         else:
-            uid_result = self.client.uid('SEARCH', 'CHARSET', charset, encoded_criteria)
+            uid_result = self.client.uid('SEARCH', 'CHARSET', charset, encoded_criteria)  # *charset are opt here
         check_command_status(uid_result, MailboxUidsError)
         return uid_result[1][0].decode().split() if uid_result[1][0] else []
 
@@ -151,7 +151,6 @@ class BaseMailBox:
         if not uid_list:
             return
         for uid_list_i in chunks_crop(uid_list, bulk):
-            print('==')
             fetch_result = self.client.uid('fetch', ','.join(uid_list_i), message_parts)
             check_command_status(fetch_result, MailboxFetchError)
             if not fetch_result[1] or fetch_result[1][0] is None:
@@ -160,7 +159,8 @@ class BaseMailBox:
                 yield built_fetch_item
 
     def fetch(self, criteria: Criteria = 'ALL', charset: str = 'US-ASCII', limit: Optional[Union[int, slice]] = None,
-              mark_seen=True, reverse=False, headers_only=False, bulk: Union[bool, int] = False) \
+              mark_seen=True, reverse=False, headers_only=False, bulk: Union[bool, int] = False,
+              sort: Optional[Union[str, Iterable[str]]] = None) \
             -> Iterator[MailMessage]:
         """
         Mail message generator in current folder by search criteria
@@ -175,13 +175,14 @@ class BaseMailBox:
             False - fetch each message separately per N commands - low memory consumption, slow
             True  - fetch all messages per 1 command - high memory consumption, fast. Fails on big bulk at server
             int - fetch messages by bulks of the specified size
+        :param sort: criteria for sort messages on server, use SortCriteria constants. Charset arg is important for sort
         :return generator: MailMessage
         """
         message_parts = "(BODY{}[{}] UID FLAGS RFC822.SIZE)".format(
             '' if mark_seen else '.PEEK', 'HEADER' if headers_only else '')
         limit_range = slice(0, limit) if type(limit) is int else limit or slice(None)
         assert type(limit_range) is slice
-        uids = tuple((reversed if reverse else iter)(self.uids(criteria, charset)))[limit_range]
+        uids = tuple((reversed if reverse else iter)(self.uids(criteria, charset, sort)))[limit_range]
 
         if bulk:
             if isinstance(bulk, int) and bulk >= 2:

@@ -1,10 +1,4 @@
 
-_utf7 to __init__.py - decode_utf7 encode_utf7
-
-limit=slice(n,n+100) to docs
-
-увеличить скорость в imap_utf7.py за счет констант для ord('&')
-
 https://stackoverflow.com/questions/72942311/ some to docs?
     The second problem is that you need to use imap_tools.MailBox.
     Looking at the documentation and source at the repo it appears that the relevant classes to use are:

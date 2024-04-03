@@ -1,6 +1,6 @@
 import unittest
 
-from imap_tools import imap_utf7
+from imap_tools.imap_utf7 import utf7_encode, utf7_decode 
 
 
 class ImapUtf7Test(unittest.TestCase):
@@ -18,17 +18,17 @@ class ImapUtf7Test(unittest.TestCase):
 
     def test_encode(self):
         for string, code in self.data:
-            self.assertEqual(imap_utf7.encode(string), code)
+            self.assertEqual(utf7_encode(string), code)
 
     def test_decode(self):
         for string, code in self.data:
-            self.assertEqual(string, imap_utf7.decode(code))
+            self.assertEqual(string, utf7_decode(code))
 
     def test_printable_chars(self):
         for code in range(32, 127):
             if code == 38:  # &
                 continue
-            self.assertEqual(bytes((code,)), imap_utf7.encode(chr(code)))
-            self.assertEqual(chr(code), imap_utf7.decode(bytes((code,))))
-        self.assertEqual(imap_utf7.encode('&'), b'&-')
-        self.assertEqual(imap_utf7.decode(b'&-'), '&')
+            self.assertEqual(bytes((code,)), utf7_encode(chr(code)))
+            self.assertEqual(chr(code), utf7_decode(bytes((code,))))
+        self.assertEqual(utf7_encode('&'), b'&-')
+        self.assertEqual(utf7_decode(b'&-'), '&')

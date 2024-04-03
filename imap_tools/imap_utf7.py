@@ -23,7 +23,7 @@ def _do_b64(_in: Iterable[str], r: MutableSequence[bytes]):
     del _in[:]
 
 
-def encode(value: str) -> bytes:
+def utf7_encode(value: str) -> bytes:
     res = []
     _in = []
     for char in value:
@@ -46,7 +46,7 @@ def _modified_unbase64(value: bytearray) -> str:
     return binascii.a2b_base64(value.replace(b',', b'/') + b'===').decode('utf-16be')
 
 
-def decode(value: bytes) -> str:
+def utf7_decode(value: bytes) -> str:
     res = []
     decode_arr = bytearray()
     for char in value:

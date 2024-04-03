@@ -1,17 +1,8 @@
 1.6.0
 =====
-* [Breaking] Added: BaseMailBox.fetch bulk arg now accept int values >=2 and bool
-* sort
-
-            # fetch 15419 emails example:
-            # bulk=True MemoryError
-            # bulk=1000 239
-            # bulk=False 661
-
-            # fetch 44 emails example:
-            # bulk=True 2.61
-            # bulk=10 1.78
-            # bulk=False 4.96
+* [Breaking] Changed: "bulk" argument at BaseMailBox.fetch now can accept int values >=2 - for control bulk size
+* Added "sort" argument to BaseMailBox.fetch and BaseMailBox.uids - for sort on server. Use SortCriteria constants
+* Renamed: utf7_encode and utf7_decode from imap_utf7.py (was encode and decode)
 
 1.5.0
 =====

@@ -26,7 +26,9 @@ class MailboxTest(MailboxTestCase):
             mailbox.folder.set(mailbox.folder_test_base)
 
             # FETCH
-            found_msgs = tuple(mailbox.fetch(bulk=1, headers_only=1))
+            found_msgs = tuple(mailbox.fetch(bulk=True, headers_only=1))
+            self.assertEqual(len(found_msgs), self.base_test_msg_cnt)
+            found_msgs = tuple(mailbox.fetch(bulk=3, headers_only=1))
             self.assertEqual(len(found_msgs), self.base_test_msg_cnt)
 
             # FETCH nonexistent
@@ -79,7 +81,7 @@ class MailboxTest(MailboxTestCase):
             mailbox.folder.set(mailbox.folder_test_temp2)
             mailbox.flag(mailbox.uids(), MailMessageFlags.FLAGGED, True)
             self.assertTrue(
-                all([MailMessageFlags.FLAGGED in msg.flags for msg in mailbox.fetch(bulk=1, headers_only=1)]))
+                all([MailMessageFlags.FLAGGED in msg.flags for msg in mailbox.fetch(bulk=True, headers_only=1)]))
 
             # DELETE
             mailbox.folder.set(mailbox.folder_test_temp2)
