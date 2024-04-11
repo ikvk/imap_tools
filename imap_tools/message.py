@@ -222,6 +222,9 @@ class MailMessage:
             results.append(MailAttachment(part))
         return results
 
+    def __repr__(self) -> str:
+        return f"<imap_tools.message.MailMessage '{self.subject}'>"
+
 
 class MailAttachment:
     """An attachment for a MailMessage"""
