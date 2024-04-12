@@ -1,4 +1,9 @@
 
+__str__
+    For more back compat - f string is bad. In next release I will make __str__ as:
+    'date from subj'
+    thomwiggers
+
 fetch and uids examples
 
 FULL
