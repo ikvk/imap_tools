@@ -75,6 +75,7 @@ BaseMailBox.uids - search mailbox for matching message uids in current folder, r
 
 * *criteria* = 'ALL', message search criteria, `query builder <#search-criteria>`_
 * *charset* = 'US-ASCII', indicates charset of the strings that appear in the search criteria. See rfc2978
+* *sort* = None, criteria for sort messages on server, use SortCriteria constants. Charset arg is important for sort
 
 BaseMailBox.<action> - `copy, move, delete, flag, append <#actions-with-emails>`_
 
