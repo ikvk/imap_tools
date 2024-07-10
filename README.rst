@@ -90,6 +90,9 @@ BaseMailBox.client - imaplib.IMAP4/IMAP4_SSL client instance.
 Email attributes
 ^^^^^^^^^^^^^^^^
 
+Email message has 2 basic body variants: text and html.
+Sender can choose to include: one, other, both or neither(rare in practice).
+
 MailMessage and MailAttachment public attributes are cached by functools.lru_cache
 
 .. code-block:: python
@@ -131,7 +134,7 @@ MailMessage and MailAttachment public attributes are cached by functools.lru_cac
 Search criteria
 ^^^^^^^^^^^^^^^
 
-You can pass *"criteria"* argument to 3 methods of MailBox: *fetch, uids, numbers*. Criteria can be of three types:
+The *"criteria"* argument is used at *fetch, uids, numbers* methods of MailBox. Criteria can be of three types:
 
 .. code-block:: python
 
@@ -176,6 +179,11 @@ See `query examples <https://github.com/ikvk/imap_tools/blob/master/examples/sea
     # python note: you can't do: A(text='two', NOT(subject='one'))
     A(NOT(subject='one'), text='two')  # use kwargs after logic classes (args)
 
+Server side search notes:
+
+* For string search keys a message matches if the string is a substring of the field. The matching is case-insensitive.
+* When searching by dates - email's time and timezone are disregarding.
+
 Search key table. Key types marked with `*` can accepts a sequence of values like list, tuple, set or generator.
 
 =============  ===============  ======================  ================================================================
@@ -211,11 +219,6 @@ uid            iter(str)/str/U  UID 1,2,17              corresponding to the spe
 header         H(str, str)*     HEADER "A-Spam" "5.8"   have a header that contains the specified str in the text
 gmail_label    str*             X-GM-LABELS "label1"    have this gmail label
 =============  ===============  ======================  ================================================================
-
-Server side search notes:
-
-* For string search keys a message matches if the string is a substring of the field. The matching is case-insensitive.
-* When searching by dates - email's time and timezone are disregarding.
 
 Actions with emails
 ^^^^^^^^^^^^^^^^^^^
@@ -414,7 +417,8 @@ Big thanks to people who helped develop this library:
 `link2xt <https://github.com/link2xt>`_,
 `Docpart <https://github.com/Docpart>`_,
 `meetttttt <https://github.com/meetttttt>`_,
-`sapristi <https://github.com/sapristi>`_
+`sapristi <https://github.com/sapristi>`_,
+`thomwiggers <https://github.com/thomwiggers>`_
 
 Help the project
 ----------------

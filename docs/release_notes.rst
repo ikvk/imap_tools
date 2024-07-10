@@ -1,3 +1,9 @@
+1.7.0
+=====
+* Moved: SortCriteria to consts
+* Added: __str__ to MailMessage
+* Added: docs info
+
 1.6.0
 =====
 * [Breaking] Changed: "bulk" argument at BaseMailBox.fetch now can accept int values >=2 - for control bulk size

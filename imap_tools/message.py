@@ -27,6 +27,10 @@ class MailMessage:
         """Alternative constructor"""
         return cls([(b'', raw_message_data)])
 
+    def __str__(self):
+        repl = '[\t\n\r\f\v]'
+        return '{}, {}, {}'.format(self.date, re.sub(repl, '', self.from_), re.sub(repl, '', self.subject))
+
     @staticmethod
     def _get_message_data_parts(fetch_data: list) -> (bytes, bytes, List[bytes]):
         """

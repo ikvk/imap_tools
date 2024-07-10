@@ -1,32 +1,6 @@
 
-move SortCriteria to consts
-
-+ important hints to readme each part
-
-__str__
-    For more back compat - f string is bad. In next release I will make __str__ as:
-    'date from subj'
-    thomwiggers
-
-fetch and uids examples?
-
 FULL
     Macro equivalent to: (FLAGS INTERNALDATE RFC822.SIZE ENVELOPE BODY)
-
-https://stackoverflow.com/questions/72942311/ some to docs?
-    The second problem is that you need to use imap_tools.MailBox.
-    Looking at the documentation and source at the repo it appears that the relevant classes to use are:
-
-        MailBox - for a normal encrypted connection. This is what most email servers use these days, aka IMAPS (imap with SSL/TLS)
-        MailBoxTls - For a STARTTLS connection: this creates a plaintext connection then upgrades
-        it later by using a STARTTLS command in the protocol. The internet has mostly gone to the "always encrypted"
-        rather than "upgrade" paradigm, so this is not the class to use.
-        MailBoxUnencrypted - Standard IMAP without SSL/TLS. You should not use this on the public internet.
-
-    The naming is a bit confusing. MailBox corresponds to imaplib.IMAP4_SSL;
-    MailBoxTls corresponds to imaplib.IMAP4, then using startls() on the resulting connection;
-    and MailboxUnencrypted corresponds to imaplib.IMAP4 with no security applied.
-    I imagine it's this way so the most common one (Mailbox) is a safe default.
 
 add servers for tests
     rambler

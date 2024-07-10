@@ -7,8 +7,8 @@ from .query import AND, OR, NOT, Header, UidRange, A, O, N, H, U
 from .mailbox import BaseMailBox, MailBox, MailBoxUnencrypted, MailBoxTls
 from .message import MailMessage, MailAttachment
 from .folder import MailBoxFolderManager, FolderInfo
-from .consts import MailMessageFlags, MailBoxFolderStatusOptions
-from .utils import EmailAddress, SortCriteria
+from .consts import MailMessageFlags, MailBoxFolderStatusOptions, SortCriteria
+from .utils import EmailAddress
 from .errors import *
 
-__version__ = '1.6.0'
+__version__ = '1.7.0'

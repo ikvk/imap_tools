@@ -40,3 +40,38 @@ class MailBoxFolderStatusOptions:
         (UIDVALIDITY, "The unique identifier validity value of the mailbox"),
         (UNSEEN, "The number of messages which do not have the Seen flag set"),
     )
+
+
+class SortCriteria:
+    """
+    Sort criteria
+    https://datatracker.ietf.org/doc/html/rfc5256
+    ARRIVAL - Internal date and time of the message.
+        This differs from the ON criteria in SEARCH, which uses just the internal date.
+    CC - [IMAP] addr-mailbox of the first "cc" address.
+    DATE - Sent date and time, as described in section 2.2.
+    FROM - [IMAP] addr-mailbox of the first "From" address.
+    SIZE - Size of the message in octets.
+    SUBJECT - Base subject text.
+    TO - [IMAP] addr-mailbox of the first "To" address.
+    """
+    ARRIVAL_DT_ASC = 'ARRIVAL'
+    CC_ASC = 'CC'
+    DATE_ASC = 'DATE'
+    FROM_ASC = 'FROM'
+    SIZE_ASC = 'SIZE'
+    SUBJECT_ASC = 'SUBJECT'
+    TO_ASC = 'TO'
+
+    ARRIVAL_DT_DESC = 'REVERSE ARRIVAL'
+    CC_DESC = 'REVERSE CC'
+    DATE_DESC = 'REVERSE DATE'
+    FROM_DESC = 'REVERSE FROM'
+    SIZE_DESC = 'REVERSE SIZE'
+    SUBJECT_DESC = 'REVERSE SUBJECT'
+    TO_DESC = 'REVERSE TO'
+
+    all = (
+        ARRIVAL_DT_ASC, CC_ASC, DATE_ASC, FROM_ASC, SIZE_ASC, SUBJECT_ASC, TO_ASC,
+        ARRIVAL_DT_DESC, CC_DESC, DATE_DESC, FROM_DESC, SIZE_DESC, SUBJECT_DESC, TO_DESC,
+    )

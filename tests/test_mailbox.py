@@ -2,9 +2,8 @@ import unittest
 
 from tests.utils import MailboxTestCase, TEST_MAILBOX_NAME_SET, get_test_mailbox
 from imap_tools.errors import MailboxCopyError
-from imap_tools.consts import MailMessageFlags
+from imap_tools.consts import MailMessageFlags, SortCriteria
 from imap_tools.query import A
-from imap_tools.utils import SortCriteria
 
 TEST_MESSAGE_DATA = b'From: Mikel <test@lindsaar.net>\nTo: Mikel <raasdnil@gmail.com>\nContent-Type: text/plain; charset=US-ASCII; format=flowed\nContent-Transfer-Encoding: 7bit\nMime-Version: 1.0 (Apple Message framework v929.2)\nSubject: _append_\nDate: Sat, 22 Nov 2008 11:04:59 +1100\n\nPlain email.\n'  # noqa
 
