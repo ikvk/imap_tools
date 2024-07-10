@@ -90,8 +90,7 @@ BaseMailBox.client - imaplib.IMAP4/IMAP4_SSL client instance.
 Email attributes
 ^^^^^^^^^^^^^^^^
 
-Email message has 2 basic body variants: text and html.
-Sender can choose to include: one, other, both or neither(rare in practice).
+Email has 2 basic body variants: text and html. Sender can choose to include: one, other, both or neither(rare).
 
 MailMessage and MailAttachment public attributes are cached by functools.lru_cache
 
