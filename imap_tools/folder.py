@@ -115,7 +115,7 @@ class MailBoxFolderManager:
         :param subscribed_only: bool - get only subscribed folders
         :return: [FolderInfo]
         """
-        folder_item_re = re.compile(r'\((?P<flags>[\S ]*)\) (?P<delim>[\S]+) (?P<name>.+)')
+        folder_item_re = re.compile(r'\((?P<flags>[\S ]*?)\) (?P<delim>[\S]+) (?P<name>.+)')
         command = 'LSUB' if subscribed_only else 'LIST'
         typ, data = self.mailbox.client._simple_command(
             command, encode_folder(folder), encode_folder(search_args))

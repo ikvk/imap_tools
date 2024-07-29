@@ -417,7 +417,8 @@ Big thanks to people who helped develop this library:
 `Docpart <https://github.com/Docpart>`_,
 `meetttttt <https://github.com/meetttttt>`_,
 `sapristi <https://github.com/sapristi>`_,
-`thomwiggers <https://github.com/thomwiggers>`_
+`thomwiggers <https://github.com/thomwiggers>`_,
+`histogal <https://github.com/histogal>`_,
 
 Help the project
 ----------------

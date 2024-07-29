@@ -1,3 +1,7 @@
+1.7.1
+=====
+* Fixed: MailBoxFolderManager.list parse bug
+
 1.7.0
 =====
 * Moved: SortCriteria to consts
