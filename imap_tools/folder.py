@@ -132,6 +132,8 @@ class MailBoxFolderManager:
                 name = folder_dict['name']
                 if name.startswith('"') and name.endswith('"'):
                     name = name[1:-1]
+                if '\\"' in name:
+                    name = name.replace('\\"', '"')
             elif type(folder_item) is tuple:
                 # when name has " or \ chars
                 folder_match = re.search(folder_item_re, utf7_decode(folder_item[0]))
