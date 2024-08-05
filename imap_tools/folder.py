@@ -142,7 +142,7 @@ class MailBoxFolderManager:
             else:
                 continue
             result.append(FolderInfo(
-                name=name,
+                name=name.replace('\\"', '"'),
                 delim=folder_dict['delim'].replace('"', ''),
                 flags=tuple(folder_dict['flags'].split())  # noqa,
             ))

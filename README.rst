@@ -418,7 +418,7 @@ Big thanks to people who helped develop this library:
 `meetttttt <https://github.com/meetttttt>`_,
 `sapristi <https://github.com/sapristi>`_,
 `thomwiggers <https://github.com/thomwiggers>`_,
-`histogal <https://github.com/histogal>`_,
+`histogal <https://github.com/histogal>`_
 
 Help the project
 ----------------

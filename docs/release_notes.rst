@@ -1,6 +1,10 @@
+1.7.2
+=====
+* Fixed: MailBoxFolderManager.list double quotes bug
+
 1.7.1
 =====
-* Fixed: MailBoxFolderManager.list parse bug
+* Fixed: MailBoxFolderManager.list folder_item_re bug
 
 1.7.0
 =====
