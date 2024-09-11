@@ -24,7 +24,19 @@ Get date, subject and body len of all emails from INBOX folder
     msg.subject - email subject, utf8 str
     msg.text - email plain text content, utf8 str
     msg.html - email html content, utf8 str
-    
+"""
+with MailBox('imap.mail.com').login('test@mail.com', 'pwd') as mailbox:
+    for msg in mailbox.fetch():
+        print(msg.date, msg.subject, len(msg.text or msg.html))
+
+# Equivalent verbose version:
+mailbox = MailBox('imap.mail.com')
+mailbox.login('test@mail.com', 'pwd', 'INBOX')  # or use mailbox.folder.set instead initial_folder arg
+for msg in mailbox.fetch(AND(all=True)):
+    print(msg.date, msg.subject, len(msg.text or msg.html))
+mailbox.logout()
+
+"""
 Mailbox class choosing:
     MailBox
         Corresponds to imaplib.IMAP4_SSL.
@@ -38,13 +50,3 @@ Mailbox class choosing:
         Corresponds to imaplib.IMAP4 with no security applied.
         Standard IMAP without SSL/TLS. You should not use this on the public internet.
 """
-with MailBox('imap.mail.com').login('test@mail.com', 'pwd') as mailbox:
-    for msg in mailbox.fetch():
-        print(msg.date, msg.subject, len(msg.text or msg.html))
-
-# Equivalent verbose version:
-mailbox = MailBox('imap.mail.com')
-mailbox.login('test@mail.com', 'pwd', 'INBOX') # or use mailbox.folder.set instead initial_folder arg
-for msg in mailbox.fetch(AND(all=True)):
-    print(msg.date, msg.subject, len(msg.text or msg.html))
-mailbox.logout()
