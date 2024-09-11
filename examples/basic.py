@@ -25,16 +25,18 @@ Get date, subject and body len of all emails from INBOX folder
     msg.text - email plain text content, utf8 str
     msg.html - email html content, utf8 str
     
-Mailbox classes:
-    MailBox - for a normal encrypted connection. This is what most email servers use these days, aka IMAPS (imap with SSL/TLS)
-    MailBoxTls - For a STARTTLS connection: this creates a plaintext connection then upgrades
-        it later by using a STARTTLS command in the protocol. The internet has mostly gone to the "always encrypted"
-        rather than "upgrade" paradigm, so this is not the class to use.
-    MailBoxUnencrypted - Standard IMAP without SSL/TLS. You should not use this on the public internet.
-    
-    MailBox corresponds to imaplib.IMAP4_SSL;
-    MailBoxTls corresponds to imaplib.IMAP4, then using startls() on the resulting connection;
-    MailboxUnencrypted corresponds to imaplib.IMAP4 with no security applied.
+Mailbox class choosing:
+    MailBox
+        Corresponds to imaplib.IMAP4_SSL.
+        Encrypted connection with SSL/TLS. This is what most email servers use these days.
+    MailBoxTls
+        Corresponds to imaplib.IMAP4, then using startls() on the resulting connection.
+        For a STARTTLS connection: 
+        creates a plaintext connection then upgrades it later by using a STARTTLS command in the protocol. 
+        The internet has mostly gone to the "always encrypted" rather than "upgrade" paradigm.
+    MailBoxUnencrypted
+        Corresponds to imaplib.IMAP4 with no security applied.
+        Standard IMAP without SSL/TLS. You should not use this on the public internet.
 """
 with MailBox('imap.mail.com').login('test@mail.com', 'pwd') as mailbox:
     for msg in mailbox.fetch():
