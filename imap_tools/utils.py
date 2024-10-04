@@ -78,6 +78,11 @@ class EmailAddress:
         return all(getattr(self, i) == getattr(other, i) for i in self.__slots__)
 
 
+def remove_non_printable(value: str) -> str:
+    """Remove non-printable character from value"""
+    return ''.join(i for i in value if i.isprintable())
+
+
 def parse_email_addresses(raw_header: Union[str, Header]) -> Tuple[EmailAddress, ...]:
     """
     Parse email addresses from header
@@ -87,7 +92,7 @@ def parse_email_addresses(raw_header: Union[str, Header]) -> Tuple[EmailAddress,
     result = []
     if type(raw_header) is Header:
         raw_header = decode_value(*decode_header(raw_header)[0])
-    for raw_name, email in getaddresses([raw_header.replace('\r\n', '').replace('\n', '')]):
+    for raw_name, email in getaddresses([remove_non_printable(raw_header)]):
         name = decode_value(*decode_header(raw_name)[0]).strip()
         email = email.strip()
         if not (name or email):

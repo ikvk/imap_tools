@@ -1,3 +1,7 @@
+1.7.3
+=====
+* Fixed: bug in 3.12.6+ after [[3.12] [CVE-2023-27043] gh-102988: Reject malformed addresses in email.parseaddr()]
+
 1.7.2
 =====
 * Fixed: MailBoxFolderManager.list double quotes bug

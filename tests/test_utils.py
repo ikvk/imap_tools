@@ -1,13 +1,23 @@
 import unittest
 import datetime
+import unicodedata
 
 from imap_tools.errors import ImapToolsError, UnexpectedCommandStatusError, MailboxCopyError
 from imap_tools.consts import MailMessageFlags
 from imap_tools.utils import clean_flags, chunks, quote, pairs_to_dict, decode_value, check_command_status, \
-    parse_email_date, parse_email_addresses, EmailAddress, clean_uids, replace_html_ct_charset, chunks_crop
+    parse_email_date, parse_email_addresses, EmailAddress, clean_uids, replace_html_ct_charset, chunks_crop, \
+    remove_non_printable
 
 
 class UtilsTest(unittest.TestCase):
+
+    def test_remove_non_printable(self):
+        all_non_printable_chars = []
+        for i in range(0x110000):  # Диапазон всех кодовых точек Unicode
+            char = chr(i)
+            if unicodedata.category(char).startswith('C'):
+                all_non_printable_chars.append(char)
+        self.assertEqual(remove_non_printable('123{}'.format(''.join(all_non_printable_chars))), '123')
 
     def test_clean_uids(self):
         # *clean_uids also implicitly tested in test_query.py
@@ -149,7 +159,6 @@ class UtilsTest(unittest.TestCase):
           </head>
         """
         res1 = replace_html_ct_charset(data1, 'utf-8')
-        print(res1)
         self.assertIn(target, res1)
         self.assertTrue(res1.count(target) == 1)
 
