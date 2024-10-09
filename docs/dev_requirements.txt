@@ -1,4 +1,8 @@
+# build
 pip
 setuptools
 twine
 wheel
+
+# test
+tox
