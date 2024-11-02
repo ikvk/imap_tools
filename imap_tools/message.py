@@ -278,7 +278,10 @@ class MailAttachment:
     @property
     @lru_cache()
     def content_id(self) -> str:
-        return self.part.get('Content-ID', '').lstrip('<').rstrip('>')
+        if 'Content-ID' in self.part:
+            raw = self.part['Content-ID']
+            return ''.join(decode_value(*head_part) for head_part in decode_header(raw)).lstrip('<').rstrip('>')
+        return ''
 
     @property
     @lru_cache()

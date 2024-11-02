@@ -1,0 +1,21 @@
+From: sender@example.com
+To: recipient@example.com
+Subject: Пример email с вложением и Content-ID
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="boundary123"
+
+--boundary123
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+
+текстовое сообщение с вложением, у которого есть Content-ID.
+
+--boundary123
+Content-Type: image/png; name="example.png"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="example.png"
+Content-ID: Test0 =?UTF-8?B?Iua8ouWtlyI=?= mid1 =?UTF-8?B?Iua8ouWtlyI=?= tail2
+
+iVBORw0KGgoAAAANSUhEUgAAAAUA
+AAAAFQAAABN3x3XAAAAAElFTkSuQmCC
+--boundary123--

@@ -1,3 +1,7 @@
+1.7.4
+=====
+* Fixed: encoding bug at MailAttachment.content_id
+
 1.7.3
 =====
 * Fixed: bug in 3.12.6+ after [[3.12] [CVE-2023-27043] gh-102988: Reject malformed addresses in email.parseaddr()]

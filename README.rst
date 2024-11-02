@@ -419,7 +419,8 @@ Big thanks to people who helped develop this library:
 `sapristi <https://github.com/sapristi>`_,
 `thomwiggers <https://github.com/thomwiggers>`_,
 `histogal <https://github.com/histogal>`_,
-`K900 <https://github.com/K900>`_
+`K900 <https://github.com/K900>`_,
+`homoLudenus <https://github.com/homoLudenus>`_
 
 Help the project
 ----------------
