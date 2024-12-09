@@ -128,7 +128,9 @@ MailMessage and MailAttachment public attributes are cached by functools.lru_cac
         msg.cc_values        # tuple: (imap_tools.EmailAddress,)
         msg.bcc_values       # tuple: (imap_tools.EmailAddress,)
         msg.reply_to_values  # tuple: (imap_tools.EmailAddress,)
-        # EmailAddress(name='Ya', email='im@ya.ru')  # "full" property = 'Ya <im@ya.ru>'
+
+        # imap_tools.EmailAddress example:
+        # EmailAddress(name='Ya', email='im@ya.ru')  # has "full" property = 'Ya <im@ya.ru>'
 
 Search criteria
 ^^^^^^^^^^^^^^^
