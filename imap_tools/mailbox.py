@@ -1,3 +1,4 @@
+import re
 import sys
 import imaplib
 import datetime
@@ -7,6 +8,7 @@ from typing import AnyStr, Optional, List, Iterable, Sequence, Union, Tuple, Ite
 from .message import MailMessage
 from .folder import MailBoxFolderManager
 from .idle import IdleManager
+from .consts import UID_PATTERN
 from .utils import clean_uids, check_command_status, chunks, encode_folder, clean_flags, check_timeout_arg_support, \
     chunks_crop
 from .errors import MailboxStarttlsError, MailboxLoginError, MailboxLogoutError, MailboxNumbersError, \
@@ -108,6 +110,19 @@ class BaseMailBox:
         search_result = self.client.search(charset, encoded_criteria)
         check_command_status(search_result, MailboxNumbersError)
         return search_result[1][0].decode().split() if search_result[1][0] else []
+
+    def numbers_to_uids(self, numbers: List[str]) -> List[str]:
+        """Get message uids by message numbers"""
+        if not numbers:
+            return []
+        fetch_result = self.client.fetch(','.join(numbers), "(UID)")
+        check_command_status(fetch_result, MailboxFetchError)
+        result = []
+        for raw_uid_item in fetch_result[1]:
+            uid_match = re.search(UID_PATTERN, (raw_uid_item or b'').decode())
+            if uid_match:
+                result.append(uid_match.group('uid'))
+        return result
 
     def uids(self, criteria: Criteria = 'ALL', charset: str = 'US-ASCII',
              sort: Optional[Union[str, Iterable[str]]] = None) -> List[str]:

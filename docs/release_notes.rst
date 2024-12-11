@@ -1,3 +1,7 @@
+1.8.0
+=====
+* Added: BaseMailBox.numbers_to_uids - Get message uids by message numbers
+
 1.7.4
 =====
 * Fixed: encoding bug at MailAttachment.content_id

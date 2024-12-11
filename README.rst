@@ -85,6 +85,8 @@ BaseMailBox.idle - `idle manager <#idle-workflow>`_
 
 BaseMailBox.numbers - search mailbox for matching message numbers in current folder, returns [str]
 
+BaseMailBox.numbers_to_uids - Get message uids by message numbers, returns [str]
+
 BaseMailBox.client - imaplib.IMAP4/IMAP4_SSL client instance.
 
 Email attributes
@@ -422,7 +424,8 @@ Big thanks to people who helped develop this library:
 `thomwiggers <https://github.com/thomwiggers>`_,
 `histogal <https://github.com/histogal>`_,
 `K900 <https://github.com/K900>`_,
-`homoLudenus <https://github.com/homoLudenus>`_
+`homoLudenus <https://github.com/homoLudenus>`_,
+`sphh <https://github.com/sphh>`_
 
 Help the project
 ----------------

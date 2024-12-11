@@ -49,6 +49,11 @@ class MailboxTest(MailboxTestCase):
             self.assertTrue(bool(found_nums))
             self.assertTrue(all(type(i) is str for i in found_nums))
 
+            # NUMBERS_TO_UIDS
+            found_uids = mailbox.numbers_to_uids(found_nums)
+            self.assertTrue(bool(found_uids))
+            self.assertTrue(all(type(i) is str for i in found_uids))
+
             # UIDS
             found_uids = mailbox.uids()
             self.assertTrue(bool(found_uids))
