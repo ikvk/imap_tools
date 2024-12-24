@@ -56,11 +56,11 @@ Info about lib are at: *this page*, docstrings, issues, pull requests, examples,
 
 `Description of this^ example <https://github.com/ikvk/imap_tools/blob/master/examples/basic.py>`_.
 
-MailBox, MailBoxTls, MailBoxUnencrypted - for create mailbox client. `TLS example <https://github.com/ikvk/imap_tools/blob/master/examples/tls.py>`_.
+``MailBox, MailBoxTls, MailBoxUnencrypted`` - for create mailbox client. `TLS example <https://github.com/ikvk/imap_tools/blob/master/examples/tls.py>`_.
 
-BaseMailBox.<auth> - login, login_utf8, xoauth2, logout - authentication functions, they support context manager.
+``BaseMailBox.<auth>`` - login, login_utf8, xoauth2, logout - authentication functions, they support context manager.
 
-BaseMailBox.fetch - first searches email uids by criteria in current folder, then fetch and yields `MailMessage <#email-attributes>`_, args:
+``BaseMailBox.fetch`` - first searches email uids by criteria in current folder, then fetch and yields `MailMessage <#email-attributes>`_, args:
 
 * *criteria* = 'ALL', message search criteria, `query builder <#search-criteria>`_
 * *charset* = 'US-ASCII', indicates charset of the strings that appear in the search criteria. See rfc2978
@@ -71,23 +71,23 @@ BaseMailBox.fetch - first searches email uids by criteria in current folder, the
 * *bulk* = False, False - fetch each message separately per N commands - low memory consumption, slow; True - fetch all messages per 1 command - high memory consumption, fast; int - fetch all messages by bulks of the specified size, for 20 messages and bulk=5 -> 4 commands
 * *sort* = None, criteria for sort messages on server, use SortCriteria constants. Charset arg is important for sort
 
-BaseMailBox.uids - search mailbox for matching message uids in current folder, returns [str | None], None when MailMessage.from_bytes used, args:
+``BaseMailBox.uids`` - search mailbox for matching message uids in current folder, returns [str | None], None when MailMessage.from_bytes used, args:
 
 * *criteria* = 'ALL', message search criteria, `query builder <#search-criteria>`_
 * *charset* = 'US-ASCII', indicates charset of the strings that appear in the search criteria. See rfc2978
 * *sort* = None, criteria for sort messages on server, use SortCriteria constants. Charset arg is important for sort
 
-BaseMailBox.<action> - `copy, move, delete, flag, append <#actions-with-emails>`_
+``BaseMailBox.<action>`` - `copy, move, delete, flag, append <#actions-with-emails>`_
 
-BaseMailBox.folder - `folder manager <#actions-with-folders>`_
+``BaseMailBox.folder`` - `folder manager <#actions-with-folders>`_
 
-BaseMailBox.idle - `idle manager <#idle-workflow>`_
+``BaseMailBox.idle`` - `idle manager <#idle-workflow>`_
 
-BaseMailBox.numbers - search mailbox for matching message numbers in current folder, returns [str]
+``BaseMailBox.numbers`` - search mailbox for matching message numbers in current folder, returns [str]
 
-BaseMailBox.numbers_to_uids - Get message uids by message numbers, returns [str]
+``BaseMailBox.numbers_to_uids`` - Get message uids by message numbers, returns [str]
 
-BaseMailBox.client - imaplib.IMAP4/IMAP4_SSL client instance.
+``BaseMailBox.client`` - imaplib.IMAP4/IMAP4_SSL client instance.
 
 Email attributes
 ^^^^^^^^^^^^^^^^
