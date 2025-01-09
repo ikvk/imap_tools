@@ -77,11 +77,11 @@ Info about lib are at: *this page*, docstrings, issues, pull requests, examples,
 * *charset* = 'US-ASCII', indicates charset of the strings that appear in the search criteria. See rfc2978
 * *sort* = None, criteria for sort messages on server, use SortCriteria constants. Charset arg is important for sort
 
-``BaseMailBox.<action>`` - `copy, move, delete, flag, append <#actions-with-emails>`_
+``BaseMailBox.<action>`` - `copy, move, delete, flag, append <#actions-with-emails>`_ - message actions.
 
-``BaseMailBox.folder`` - `folder manager <#actions-with-folders>`_
+``BaseMailBox.folder.<action>`` - `list, set, get, create, exists, rename, subscribe, delete, status <#actions-with-folders>`_ - folder manager.
 
-``BaseMailBox.idle`` - `idle manager <#idle-workflow>`_
+``BaseMailBox.idle.<action>`` - `start, poll, stop, wait <#idle-workflow>`_ - idle manager.
 
 ``BaseMailBox.numbers`` - search mailbox for matching message numbers in current folder, returns [str]
 
