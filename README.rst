@@ -425,7 +425,8 @@ Big thanks to people who helped develop this library:
 `histogal <https://github.com/histogal>`_,
 `K900 <https://github.com/K900>`_,
 `homoLudenus <https://github.com/homoLudenus>`_,
-`sphh <https://github.com/sphh>`_
+`sphh <https://github.com/sphh>`_,
+`bh <https://github.com/bh>`_
 
 Help the project
 ----------------
