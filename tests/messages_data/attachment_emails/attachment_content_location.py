@@ -8,7 +8,7 @@ DATA = dict(
     cc=(),
     bcc=(),
     reply_to=(),
-    date=datetime.datetime(2005, 6, 6, 22, 21, 22, tzinfo=datetime.timezone(datetime.timedelta(0, 7200))),
+    date=datetime.datetime(2005, 6, 6, 22, 21, 22, tzinfo=datetime.timezone(datetime.timedelta(seconds=7200))),
     date_str='Mon, 6 Jun 2005 22:21:22 +0200',
     text='This is the first part.\r\n',
     html='',

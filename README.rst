@@ -20,7 +20,7 @@ High level lib for work with email by IMAP:
 .. image:: https://img.shields.io/pypi/dm/imap_tools.svg?style=social
 
 ===============  ================================================================================================
-Python version   3.5+
+Python version   3.8+
 License          Apache-2.0
 PyPI             https://pypi.python.org/pypi/imap_tools/
 RFC              `IMAP4.1 <https://tools.ietf.org/html/rfc3501>`_,

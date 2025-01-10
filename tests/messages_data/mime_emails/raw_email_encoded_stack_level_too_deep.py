@@ -8,7 +8,7 @@ DATA = dict(
     cc=(),
     bcc=(),
     reply_to=('x.y@gmail.com',),
-    date=datetime.datetime(2005, 6, 28, 1, 2, 11, tzinfo=datetime.timezone(datetime.timedelta(-1, 61200))),
+    date=datetime.datetime(2005, 6, 28, 1, 2, 11, tzinfo=datetime.timezone(datetime.timedelta(days=-1, seconds=61200))),
     date_str='Tue, 28 Jun 2005 01:02:11 -0700',
     text='Nicolas Fouché has accepted your invitation to Gmail and has chosen the \r\nbrand new address x.y@gmail.com. Be one of the first to email Nicolas \r\nat this new Gmail address--just hit reply and send Nicolas a message. \r\nx.y@gmail.com has also been automatically added to your contact list \r\nso you can stay in touch with Gmail. \r\n\r\n\r\nThanks, \r\n\r\nThe Gmail Team\r\n',
     html='<html>\r\n<font face="Arial, Helvetica, sans-serif">\r\n<p>Nicolas Fouché has accepted your invitation to Gmail and has\r\n  chosen the brand new address x.y@gmail.com. Be one of the first to email \r\n  Nicolas at this new Gmail address--just hit reply and send \r\n  Nicolas a message. x.y@gmail.com has also been automatically added to\r\n  your contact list so you can stay in touch with Gmail.\r\n</p>\r\n<p><br>\r\n  Thanks, </p>\r\n<p> The Gmail Team</p>\r\n</font>\r\n</html>\r\n',

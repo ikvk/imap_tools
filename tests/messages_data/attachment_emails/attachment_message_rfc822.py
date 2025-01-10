@@ -8,9 +8,9 @@ DATA = dict(
     cc=(),
     bcc=(),
     reply_to=(),
-    date=datetime.datetime(2005, 6, 6, 22, 21, 22, tzinfo=datetime.timezone(datetime.timedelta(0, 7200))),
+    date=datetime.datetime(2005, 6, 6, 22, 21, 22, tzinfo=datetime.timezone(datetime.timedelta(seconds=7200))),
     date_str='Mon, 6 Jun 2005 22:21:22 +0200',
-    text='This is the first part.\r\n',
+    text='This is the first part.\r\nJust attaching another PDF, here, to see what the message looks like,\r\nand to see if I can figure out what is going wrong here.\r\n',
     html='',
     headers={'mime-version': ('1.0 (Apple Message framework v730)',), 'content-type': ('multipart/mixed; boundary=Apple-Mail-13-196941151',), 'message-id': ('<9169D984-4E0B-45EF-82D4-8F5E53AD7012@example.com>',), 'from': ('foo@example.com',), 'subject': ('testing',), 'date': ('Mon, 6 Jun 2005 22:21:22 +0200',), 'to': ('blah@example.com',)},
     attachments=[

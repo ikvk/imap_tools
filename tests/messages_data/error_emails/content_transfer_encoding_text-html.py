@@ -8,7 +8,7 @@ DATA = dict(
     cc=('rait@bruce-guenter.dyndns.org',),
     bcc=(),
     reply_to=('abhijit.862153drinnan@datavalet.com',),
-    date=datetime.datetime(2005, 5, 6, 15, 55, 1, tzinfo=datetime.timezone(datetime.timedelta(0, 14400))),
+    date=datetime.datetime(2005, 5, 6, 15, 55, 1, tzinfo=datetime.timezone(datetime.timedelta(seconds=14400))),
     date_str='Fri, 06 May 2005 15:55:01 +0400',
     text='',
     html='Hello,<p>\r\n\r\nYou have qualified for the lowest rate in years.<br>\r\nYou could get over $400,000 for as little as $500 a month.<br>\r\nLow rates are fixed no matter what.<p>\r\n\r\nPlease visit the link below to verify your information:<br>\r\n<a href="http://www.lenxzc.com/index2.php?refid=malx">Approval Form</a><p>\r\n\r\nBest Regards,<br>\r\nchianfong cuthbert, Account Manager<br>\r\nReynolds Associates, LLC<p>\r\n<p>\r\n--------------------<br>\r\nif you received this in error: <a href="http://www.lenxzc.com/r.php">re-m0-ve</a>\r\n',

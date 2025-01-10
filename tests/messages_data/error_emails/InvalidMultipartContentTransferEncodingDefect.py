@@ -8,7 +8,7 @@ DATA = dict(
     cc=(),
     bcc=(),
     reply_to=(),
-    date=datetime.datetime(2021, 4, 20, 12, 31, 24, tzinfo=datetime.timezone(datetime.timedelta(0, 18000))),
+    date=datetime.datetime(2021, 4, 20, 12, 31, 24, tzinfo=datetime.timezone(datetime.timedelta(seconds=18000))),
     date_str='Tue, 20 Apr 2021 12:31:24 +0500',
     text='MVT\r\nU68925/20.VQBCE.UFA\r\nAD0706/0729 EA1029 LBD\r\nDL/0126\r\n',
     html='',

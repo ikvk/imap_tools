@@ -8,7 +8,7 @@ DATA = dict(
     cc=(),
     bcc=(),
     reply_to=('xxxx@xxxx.com',),
-    date=datetime.datetime(2005, 5, 10, 11, 26, 39, tzinfo=datetime.timezone(datetime.timedelta(-1, 64800))),
+    date=datetime.datetime(2005, 5, 10, 11, 26, 39, tzinfo=datetime.timezone(datetime.timedelta(days=-1, seconds=64800))),
     date_str='Tue, 10 May 2005 11:26:39 -0600',
     text='Just attaching another PDF, here, to see what the message looks like,\r\nand to see if I can figure out what is going wrong here.\r\n',
     html='',

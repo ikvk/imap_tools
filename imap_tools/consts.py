@@ -1,10 +1,13 @@
 import re
+import sys
 
 SHORT_MONTH_NAMES = ('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec')
 
 UID_PATTERN = re.compile(r'(^|\s+|\W)UID\s+(?P<uid>\d+)')
 
 CODECS_OFFICIAL_REPLACEMENT_CHAR = '�'
+
+PYTHON_VERSION_MINOR = int(sys.version_info.minor)
 
 
 class MailMessageFlags:

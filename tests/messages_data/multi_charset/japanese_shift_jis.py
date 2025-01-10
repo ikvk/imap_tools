@@ -8,7 +8,7 @@ DATA = dict(
     cc=(),
     bcc=(),
     reply_to=(),
-    date=datetime.datetime(2014, 5, 28, 17, 18, 19, tzinfo=datetime.timezone(datetime.timedelta(0, 32400))),
+    date=datetime.datetime(2014, 5, 28, 17, 18, 19, tzinfo=datetime.timezone(datetime.timedelta(seconds=32400))),
     date_str='Wed, 28 May 2014 17:18:19 +0900 (JST)',
     text='あいうえお\r\n\r\nこのメールはテスト用のメールです。\r\n\r\n今後ともよろしくお願い申し上げます！\r\n',
     html='',

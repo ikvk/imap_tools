@@ -8,7 +8,7 @@ DATA = dict(
     cc=(),
     bcc=(),
     reply_to=(),
-    date=datetime.datetime(2007, 6, 4, 15, 1, 31, tzinfo=datetime.timezone(datetime.timedelta(-1, 61200))),
+    date=datetime.datetime(2007, 6, 4, 15, 1, 31, tzinfo=datetime.timezone(datetime.timedelta(days=-1, seconds=61200))),
     date_str='Mon, 4 Jun 2007 15:01:31 -0700',
     text='This is random text, not what has been signed below, ie, this sig\r\nemail is not signed correctly.\r\n',
     html='',

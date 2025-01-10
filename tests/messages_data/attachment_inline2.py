@@ -8,7 +8,7 @@ DATA = dict(
     cc=(),
     bcc=(),
     reply_to=(),
-    date=datetime.datetime(2020, 10, 21, 11, 34, 9, tzinfo=datetime.timezone(datetime.timedelta(0, 28800))),
+    date=datetime.datetime(2020, 10, 21, 11, 34, 9, tzinfo=datetime.timezone(datetime.timedelta(seconds=28800))),
     date_str='Wed, 21 Oct 2020 11:34:09 +0800',
     text='',
     html='<meta http-equiv="Content-Type" content="text/html; charset=utf-8"><div><img src="cid:F76361FC@E3C5215F.31AC8F5F.png" style="" id="img_insert_160325124624005018289219499459"><br><br></div>',

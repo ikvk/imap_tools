@@ -205,7 +205,13 @@ def replace_html_ct_charset(html: str, new_charset: str) -> str:
     meta_ct_match = re.search(r'<\s*meta .*?content-type.*?>', html, re.IGNORECASE | re.DOTALL)
     if meta_ct_match:
         meta = meta_ct_match.group(0)
-        meta_new = re.sub(r'charset\s*=\s*[a-zA-Z0-9_:.+-]+', 'charset={}'.format(new_charset), meta, 1, re.IGNORECASE)
+        meta_new = re.sub(
+            pattern=r'charset\s*=\s*[a-zA-Z0-9_:.+-]+',
+            repl='charset={}'.format(new_charset),
+            string=meta,
+            count=1,
+            flags=re.IGNORECASE
+        )
         html = html.replace(meta, meta_new)
     return html
 

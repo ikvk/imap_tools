@@ -8,7 +8,7 @@ DATA = dict(
     cc=('boss@nil.test', 'sysservices@example.net'),
     bcc=(),
     reply_to=(),
-    date=datetime.datetime(2003, 7, 1, 10, 52, 37, tzinfo=datetime.timezone(datetime.timedelta(0, 7200))),
+    date=datetime.datetime(2003, 7, 1, 10, 52, 37, tzinfo=datetime.timezone(datetime.timedelta(seconds=7200))),
     date_str='Tue, 1 Jul 2003 10:52:37 +0200',
     text='Hi everyone.\r\n',
     html='',

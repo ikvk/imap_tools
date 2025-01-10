@@ -8,7 +8,7 @@ DATA = dict(
     cc=(),
     bcc=(),
     reply_to=(),
-    date=datetime.datetime(2005, 5, 10, 15, 27, 3, tzinfo=datetime.timezone(datetime.timedelta(-1, 68400))),
+    date=datetime.datetime(2005, 5, 10, 15, 27, 3, tzinfo=datetime.timezone(datetime.timedelta(days=-1, seconds=68400))),
     date_str='Tue, 10 May 2005 15:27:03 -0500',
     text="Test test. Hi. Waving. m\r\n\r\n----------------------------------------------------------------\r\nSent via Bell Mobility's Text Messaging service. \r\nEnvoyé par le service de messagerie texte de Bell Mobilité.\r\n----------------------------------------------------------------\r\n",
     html='',

@@ -8,7 +8,7 @@ DATA = dict(
     cc=(),
     bcc=(),
     reply_to=(),
-    date=datetime.datetime(2004, 11, 7, 18, 23, 56, tzinfo=datetime.timezone(datetime.timedelta(-1, 75600))),
+    date=datetime.datetime(2004, 11, 7, 18, 23, 56, tzinfo=datetime.timezone(datetime.timedelta(days=-1, seconds=75600))),
     date_str='Sun, 07 Nov 2004 18:23:56 -0300',
     text="If you're in need of a good RX site for online purchases, we are your answer.\r\n\r\nWith Tens of Thousands of happy customers who saved huge, you can't go wrong.\r\n\r\nhttp://magyar8stator.com/26 Lots More Info Here\r\n\r\nAbove URL is for more info & if you are interested.",
     html='If you\'re in need of a good RX site for online purchases, we are your answer.<br>\r\n<br>\r\nWith Tens of Thousands of happy customers who saved huge, you can\'t go wrong.<br>\r\n<br>\r\n<a href="http://magyar8stator.com/26">Lots More Info Here</a><br>\r\n<br>\r\n<br>\r\nAbove URL is for more info & if you are interested.<br>\r\n\r\n\r\n\r\n',

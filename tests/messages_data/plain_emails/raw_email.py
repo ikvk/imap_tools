@@ -8,7 +8,7 @@ DATA = dict(
     cc=(),
     bcc=(),
     reply_to=(),
-    date=datetime.datetime(2005, 5, 2, 16, 7, 5, tzinfo=datetime.timezone(datetime.timedelta(-1, 64800))),
+    date=datetime.datetime(2005, 5, 2, 16, 7, 5, tzinfo=datetime.timezone(datetime.timedelta(days=-1, seconds=64800))),
     date_str='Mon, 2 May 2005 16:07:05 -0600',
     text='대부분의 마찬가지로, 우리는 하나님을 믿습니다.\r\n\r\n제 이름은 Jamis입니다.',
     html='',

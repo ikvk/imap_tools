@@ -5,6 +5,7 @@ import datetime
 from tests.utils import MailboxTestCase
 
 from imap_tools import MailMessage, MailMessageFlags, EmailAddress
+from imap_tools.consts import PYTHON_VERSION_MINOR
 
 
 def _load_module(full_path: str):
@@ -116,6 +117,10 @@ class MessageTest(MailboxTestCase):
                         eml_path_set.append(full_path)
 
         for eml_path in eml_path_set:
+            # *there are many parser improvements at 3.13
+            fixed_in_py313 = ('missing_body.eml', 'bad_date_header.eml', 'raw_email_with_at_display_name.eml')
+            if any(i in eml_path for i in fixed_in_py313) and PYTHON_VERSION_MINOR == 13:
+                continue
             py_path = eml_path.replace('/messages/', '/messages_data/')[:-4] + '.py'
             eml_data_module = _load_module(py_path)
             expected_data = eml_data_module.DATA  # noqa

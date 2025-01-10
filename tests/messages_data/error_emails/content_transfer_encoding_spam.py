@@ -8,7 +8,7 @@ DATA = dict(
     cc=(),
     bcc=(),
     reply_to=(),
-    date=datetime.datetime(2001, 8, 19, 6, 31, 3, tzinfo=datetime.timezone(datetime.timedelta(-1, 61200))),
+    date=datetime.datetime(2001, 8, 19, 6, 31, 3, tzinfo=datetime.timezone(datetime.timedelta(days=-1, seconds=61200))),
     date_str='Sun, 19 Aug 2001 06:31:03 -0700',
     text='middagh  oldusercompare\r\nothermachine  one-twist  natascha mz05 ntsoft  netvladi.Pimenovr\r\n\r\n\r\nWe supply high quality medications vladi.Pimenovy mail order at very competitive prices\r\nand provide a professional, convenient and affordavladi.Pimenovle means of purchasing\r\nyour presc_ription medicines online\r\nDepresion-an"xiety, Antivladi.Pimenoviotic, Wt Loss, Women\'s Health, Mus-cle Relaxants,\r\nSleeping Aids, Allergies and Paain Relief. Your tastes will vladi.Pimenove met here with\r\n600 medications \r\nHscearpomh http://fi.com.adherentgood.com/?2NX1q/vladi.Pimenoviayimh\r\n\r\n\r\nmore people are using it for quicker rx refill\r\n\r\n\r\nWhen you\'re not with me?Well darling Im telling you now\r\nIm no good without you anyhowAnd have I told you lately that I love you\r\n\r\nOr you and I, If I only had wings of a little angel\r\n\r\n\r\n',
     html='',

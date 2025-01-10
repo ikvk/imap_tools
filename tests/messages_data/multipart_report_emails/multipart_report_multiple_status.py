@@ -8,9 +8,9 @@ DATA = dict(
     cc=(),
     bcc=(),
     reply_to=('Postmaster@ci.com',),
-    date=datetime.datetime(2010, 6, 29, 10, 42, 44, tzinfo=datetime.timezone(datetime.timedelta(-1, 68400))),
+    date=datetime.datetime(2010, 6, 29, 10, 42, 44, tzinfo=datetime.timezone(datetime.timedelta(days=-1, seconds=68400))),
     date_str='Tue, 29 Jun 2010 10:42:44 -0500',
-    text='This Message was undeliverable due to the following reason:\r\n',
+    text='This Message was undeliverable due to the following reason:\r\n<u@ci.com> has restricted SMS e-mail\r\nPlease reply to <Postmaster@ci.com>\r\nif you feel this message to be in error.Hey cingularmefarida,\n\nFarida Malik thinks you should apply to join HomeRun, your place fot., San Francisco, CA, 94123, USA',
     html="<!DOCTYPE html>\n<html>\n<head>\n<title>HomeRun - Your Friend Farida Malik wants you to join run.com/o.45b0d380.gif' width='1' />\n</td>\n</tr>\n</table>\n</td>\n</tr>\n</table>\n</div>\n</body>\n</html>\n",
     headers={'return-path': ('<>',), 'x-original-to': ('notification+promo@blah.com',), 'delivered-to': ('notification+promo@blah.com',), 'received': ('from schemailmta04.ci.com (schemailmta04.ci.com [209.183.37.58])\r\n    by blah.com (Postfix) with ESMTP id 24EF419F546\r\n    for <notification+promo@blah.com>; Tue, 29 Jun 2010 15:42:46 +0000 (UTC)',), 'to': ('notification+promo@blah.com',), 'from': ('Mail Administrator <Postmaster@ci.com>',), 'reply-to': ('<Postmaster@ci.com>',), 'subject': ('Mail System Error - Returned Mail',), 'date': ('Tue, 29 Jun 2010 10:42:44 -0500',), 'message-id': ('<20100629154244.OZPA15102.schemailmta04.ci.com@schemailmta04>',), 'mime-version': ('1.0',), 'content-type': ('multipart/report;\r\n        report-type=delivery-status;\r\n        Boundary="===========================_ _= 6078796(15102)1277826164"',), 'x-cloudmark-analysis': ('v=1.0 c=1 a=q8OS1GolVHwA:10 a=ev1gGZlfZ-EA:10 a=HQ-Cukr2AAAA:8 a=qihIh-XuXL65y3o_mUgA:9 a=mUL5bUDOV_-gjcCZylcY5Lz4jjsA:4 a=iQvSWfByulMA:10 a=ni8l3qMSI1sA:10 a=WHDNLAQ519cA:10 a=Fry9e7MVxuJdODrS104A:9 a=JYo4OF_E9TqbHrUN2TvLdggtx2cA:4 a=S0jCPnXDAAAA:8 a=pXkHMj1YAAAA:8 a=5ErcFzC0N3E7OloTRA8A:9 a=cC0RL7HlXt3RrKfnpEbxHCeM-zQA:4 a=cHEBK1Z0Lu8A:10 a=p9ZeupWRHUwA:10 a=7sPVfr_AX1EA:10',)},
     attachments=[

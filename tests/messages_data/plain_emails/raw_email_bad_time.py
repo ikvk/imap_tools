@@ -8,7 +8,7 @@ DATA = dict(
     cc=(),
     bcc=(),
     reply_to=(),
-    date=datetime.datetime(3609, 6, 30, 15, 33, 50, tzinfo=datetime.timezone(datetime.timedelta(0, 21600))),
+    date=datetime.datetime(3609, 6, 30, 15, 33, 50, tzinfo=datetime.timezone(datetime.timedelta(seconds=21600))),
     date_str='Mon, 30 Jun 3609 15:33:50 +0600',
     text='\r\nFilter2: This message has been scanned for viruses and\r\ndangerous content by MailScanner, and is\r\nbelieved to be clean.\r\n\r\n',
     html='<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">\r\n<HTML><HEAD>\r\n<META http-equiv=Content-Type content="text/html; charset=utf-8">\r\n<META content="MSHTML 6.00.2900.2180" name=GENERATOR>\r\n<STYLE></STYLE>\r\n</HEAD>\r\n<BODY bgColor=#ffffff>\r\n<br />This message has been scanned for viruses and\r\n<br />dangerous content by\r\n<a href="http://www.mailscanner.info/"><b>MailScanner</b></a>, and is\r\n<br />believed to be clean.\r\n</HTML>\r\n',

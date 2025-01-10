@@ -8,7 +8,7 @@ DATA = dict(
     cc=(),
     bcc=(),
     reply_to=(),
-    date=datetime.datetime(2009, 10, 30, 20, 7, 42, tzinfo=datetime.timezone(datetime.timedelta(0, 3600))),
+    date=datetime.datetime(2009, 10, 30, 20, 7, 42, tzinfo=datetime.timezone(datetime.timedelta(seconds=3600))),
     date_str='Fri, 30 Oct 2009 20:07:42 +0100',
     text='\r\n\r\n--\r\nJørn Støylen -- http://www.prikkprikkprikk.no\r\n924 38 051 -- jorn@prikkprikkprikk.no\r\n\r\n',
     html='',

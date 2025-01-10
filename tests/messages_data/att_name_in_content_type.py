@@ -8,7 +8,7 @@ DATA = dict(
     cc=(),
     bcc=(),
     reply_to=(),
-    date=datetime.datetime(2020, 11, 9, 14, 49, 7, tzinfo=datetime.timezone(datetime.timedelta(-1, 57600))),
+    date=datetime.datetime(2020, 11, 9, 14, 49, 7, tzinfo=datetime.timezone(datetime.timedelta(days=-1, seconds=57600))),
     date_str='Mon, 09 Nov 2020 14:49:07 -0800 (PST)',
     text='Daily Data: D09.ZPH (Averaged data)\nEmail generated: 10/11/2020 00:04:03.765\nEmail sent: 10/11/2020 00:49:03.125',
     html='',

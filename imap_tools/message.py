@@ -178,24 +178,26 @@ class MailMessage:
     @lru_cache()
     def text(self) -> str:
         """Plain text of the mail message"""
+        results = []
         for part in self.obj.walk():
             if part.get_content_maintype() == 'multipart' or part.get_filename():
                 continue
             if part.get_content_type() in ('text/plain', 'text/'):
-                return decode_value(part.get_payload(decode=True), part.get_content_charset())
-        return ''
+                results.append(decode_value(part.get_payload(decode=True), part.get_content_charset()))
+        return ''.join(results)
 
     @property
     @lru_cache()
     def html(self) -> str:
         """HTML text of the mail message"""
+        results = []
         for part in self.obj.walk():
             if part.get_content_maintype() == 'multipart' or part.get_filename():
                 continue
             if part.get_content_type() == 'text/html':
                 html = decode_value(part.get_payload(decode=True), part.get_content_charset())
-                return replace_html_ct_charset(html, 'utf-8')
-        return ''
+                results.append(replace_html_ct_charset(html, 'utf-8'))
+        return ''.join(results)
 
     @property
     @lru_cache()
@@ -232,6 +234,9 @@ class MailAttachment:
 
     def __init__(self, part):
         self.part = part
+
+    def __str__(self):
+        return '<{} | {} | {} | {}>'.format(self.filename, self.content_type, self.content_disposition, self.content_id)
 
     @property
     @lru_cache()

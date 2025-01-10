@@ -8,7 +8,7 @@ DATA = dict(
     cc=(),
     bcc=(),
     reply_to=(),
-    date=datetime.datetime(2008, 9, 20, 20, 4, 30, tzinfo=datetime.timezone(datetime.timedelta(0, 10800))),
+    date=datetime.datetime(2008, 9, 20, 20, 4, 30, tzinfo=datetime.timezone(datetime.timedelta(seconds=10800))),
     date_str='Sat, 20 Sep 2008 20:04:30 +0300 (�������� ������ ��������������)',
     text='대부분의 마찬가지로, 우리는 하나님을 믿습니다.\r\n\r\n제 이름은 Jamis입니다.',
     html='',

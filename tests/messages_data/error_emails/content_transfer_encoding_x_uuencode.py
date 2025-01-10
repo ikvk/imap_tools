@@ -8,7 +8,7 @@ DATA = dict(
     cc=(),
     bcc=(),
     reply_to=(),
-    date=datetime.datetime(2002, 1, 10, 13, 59, 53, tzinfo=datetime.timezone(datetime.timedelta(-1, 57600))),
+    date=datetime.datetime(2002, 1, 10, 13, 59, 53, tzinfo=datetime.timezone(datetime.timedelta(days=-1, seconds=57600))),
     date_str='Thu, 10 Jan 2002 13:59:53 -0800',
     text='Attached are the comments of the Public Generating Pool.\r\n--\r\n_________________________________\r\nLon L. Peters\r\nNorthwest Economic Research, Inc.\r\n6765 S.W. Preslynn Drive\r\nPortland, Oregon 97225-2668\r\n503-203-1539 (voice)\r\n503-203-1569 (fax)\r\n503-709-5942 (mobile)\r\nlpeters@pacifier.com\r\n\r\nNOTICE:  This communication and its attachments, if any, may contain\r\nsensitive, privileged, or other confidential information.  If you are\r\nnot the intended recipient or believe that you have received this\r\ncommunication in error, please notify the sender of this\r\ncommunication and delete the copy you received from all storage\r\ndevices.  In addition, please do not print, copy, retransmit,\r\nforward, disseminate, or otherwise use this communication or its\r\nattachments, if any.  Thank you.\r\n',
     html='',

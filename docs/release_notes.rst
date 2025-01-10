@@ -1,3 +1,10 @@
+1.9.0
+=====
+* Added: __str__ to MailAttachment
+* Fixed: MailMessage.text parser - text with inline attachments case
+* Fixed: MailMessage.html parser - html with inline attachments case
+* Dropped: support py3.3,py3.4,py3.5,py3.6,py3.7
+
 1.8.0
 =====
 * Added: BaseMailBox.numbers_to_uids - Get message uids by message numbers

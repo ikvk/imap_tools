@@ -1,5 +1,4 @@
 import re
-import sys
 import imaplib
 import datetime
 from collections import UserString
@@ -8,7 +7,7 @@ from typing import AnyStr, Optional, List, Iterable, Sequence, Union, Tuple, Ite
 from .message import MailMessage
 from .folder import MailBoxFolderManager
 from .idle import IdleManager
-from .consts import UID_PATTERN
+from .consts import UID_PATTERN, PYTHON_VERSION_MINOR
 from .utils import clean_uids, check_command_status, chunks, encode_folder, clean_flags, check_timeout_arg_support, \
     chunks_crop
 from .errors import MailboxStarttlsError, MailboxLoginError, MailboxLogoutError, MailboxNumbersError, \
@@ -20,8 +19,6 @@ from .errors import MailboxStarttlsError, MailboxLoginError, MailboxLogoutError,
 imaplib._MAXLINE = 20 * 1024 * 1024  # 20Mb
 
 Criteria = Union[AnyStr, UserString]
-
-PYTHON_VERSION_MINOR = sys.version_info.minor
 
 
 class BaseMailBox:

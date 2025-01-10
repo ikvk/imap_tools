@@ -8,7 +8,7 @@ DATA = dict(
     cc=(),
     bcc=(),
     reply_to=('xxxxxxxxx.xxxxxxx@gmail.com',),
-    date=datetime.datetime(2005, 5, 8, 14, 9, 11, tzinfo=datetime.timezone(datetime.timedelta(-1, 68400))),
+    date=datetime.datetime(2005, 5, 8, 14, 9, 11, tzinfo=datetime.timezone(datetime.timedelta(days=-1, seconds=68400))),
     date_str='Sun, 8 May 2005 14:09:11 -0500',
     text='We should not include these files or vcards as attachments.\r\n\r\n---------- Forwarded message ----------\r\nFrom: xxxxx xxxxxx <xxxxxxxx@xxx.com>\r\nDate: May 8, 2005 1:17 PM\r\nSubject: Signed email causes file attachments\r\nTo: xxxxxxx@xxxxxxxxxx.com\r\n\r\n\r\nHi,\r\n\r\nJust started to use my xxxxxxxx account (to set-up a GTD system,\r\nnatch) and noticed that when I send content via email the signature/\r\ncertificate from my email account gets added as a file (e.g.\r\n"smime.p7s").\r\n\r\nObviously I can uncheck the signature option in the Mail compose\r\nwindow but how often will I remember to do that?\r\n\r\nIs there any way these kind of files could be ignored, e.g. via some\r\nsort of exclusions list?\r\n',
     html='',

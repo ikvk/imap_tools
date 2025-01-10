@@ -8,7 +8,7 @@ DATA = dict(
     cc=(),
     bcc=(),
     reply_to=(),
-    date=datetime.datetime(2005, 4, 27, 14, 15, 31, tzinfo=datetime.timezone(datetime.timedelta(-1, 61200))),
+    date=datetime.datetime(2005, 4, 27, 14, 15, 31, tzinfo=datetime.timezone(datetime.timedelta(days=-1, seconds=61200))),
     date_str='Wed, 27 Apr 2005 14:15:31 -0700',
     text='\r\nXXXXX Xxxxx\r\n',
     html='',

@@ -8,7 +8,7 @@ DATA = dict(
     cc=(),
     bcc=(),
     reply_to=('carol@reply.mysurvey.com',),
-    date=datetime.datetime(2010, 12, 15, 12, 21, 20, tzinfo=datetime.timezone(datetime.timedelta(-1, 68400))),
+    date=datetime.datetime(2010, 12, 15, 12, 21, 20, tzinfo=datetime.timezone(datetime.timedelta(days=-1, seconds=68400))),
     date_str='Wed, 15 Dec 2010 12:21:20 -0500 ',
     text="You have a survey waiting!\r\n\r\n\r\nTo take the survey:\r\n\r\n\r\n==================================================================\r\nPlease do not reply to this email, as we do not process emails sent to this address. To view FAQ's or to contact us, please go to our http://www.mysurvey.com/index.cfm?action=Main.lobbyGeneral&MyContent=contact page. \r\n==================================================================   \r\nYou received this email because you (or someone in your household) registered to be a MySurvey.com member. Being a MySurvey.com member means receiving periodic email invitations to give your opinions via e-surveys as well as being eligible for special projects and product tests. If you wish to be removed from the MySurvey.com panel, please click here to http://www.mysurvey.com/index.cfm?action=Main.lobbyGeneral&myContent=unsubscribes.\r\n==================================================================\r\n",
     html='<center>\r\nhello world\r\n</center>\r\n<IMG SRC="http://mailcenterus.mysurvey.com/gems_open_tracking.cfm?indid=99323446&cmpid=10000012106&r=9772160&rundate=15-DEC-2010+12%3a15%3a09&z=435ED3AE69D35EB44716E94814CD11A9"border="0" width="1" height="1">\r\n',

@@ -8,7 +8,7 @@ DATA = dict(
     cc=(),
     bcc=(),
     reply_to=(),
-    date=datetime.datetime(2007, 11, 18, 19, 56, 7, tzinfo=datetime.timezone(datetime.timedelta(0, 39600))),
+    date=datetime.datetime(2007, 11, 18, 19, 56, 7, tzinfo=datetime.timezone(datetime.timedelta(seconds=39600))),
     date_str='Sun, 18 Nov 2007 19:56:07 +1100',
     text='Message body\r\n',
     html='',

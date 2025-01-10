@@ -8,7 +8,7 @@ DATA = dict(
     cc=(),
     bcc=(),
     reply_to=(),
-    date=datetime.datetime(2009, 10, 16, 23, 39, 34, tzinfo=datetime.timezone(datetime.timedelta(0, 39600))),
+    date=datetime.datetime(2009, 10, 16, 23, 39, 34, tzinfo=datetime.timezone(datetime.timedelta(seconds=39600))),
     date_str='Fri, 16 Oct 2009 23:39:34 +1100',
     text='testing\r\n\r\n-- \r\nhttp://lindsaar.net/\r\nRails, RSpec and Life blog....\r\n',
     html='',

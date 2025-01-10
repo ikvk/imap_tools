@@ -8,7 +8,7 @@ DATA = dict(
     cc=(),
     bcc=(),
     reply_to=('xxxxxxxxx.xxxxxxx@gmail.com',),
-    date=datetime.datetime(2005, 5, 8, 14, 9, 11, tzinfo=datetime.timezone(datetime.timedelta(-1, 68400))),
+    date=datetime.datetime(2005, 5, 8, 14, 9, 11, tzinfo=datetime.timezone(datetime.timedelta(days=-1, seconds=68400))),
     date_str='Sun, 8 May 2005 14:09:11 -0500',
     text='We should not include these files or vcards as attachments.\r\n\r\n---------- Forwarded message ----------\r\nFrom: xxxxx xxxxxx <xxxxxxxx@xxx.com>\r\nDate: May 8, 2005 1:17 PM\r\nSubject: Signed email causes file attachments\r\nTo: xxxxxxx@xxxxxxxxxx.com\r\n\r\n\r\nHi,\r\n\r\nTest attachments oddly encoded with japanese charset.\r\n\r\n',
     html='',

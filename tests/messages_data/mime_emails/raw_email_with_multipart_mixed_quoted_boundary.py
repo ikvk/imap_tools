@@ -8,7 +8,7 @@ DATA = dict(
     cc=(),
     bcc=(),
     reply_to=('email_test@me.nowhere',),
-    date=datetime.datetime(2007, 10, 21, 19, 38, 13, tzinfo=datetime.timezone(datetime.timedelta(0, 36000))),
+    date=datetime.datetime(2007, 10, 21, 19, 38, 13, tzinfo=datetime.timezone(datetime.timedelta(seconds=36000))),
     date_str='Sun, 21 Oct 2007 19:38:13 +1000',
     text='Just attaching another PDF, here, to see what the message looks like,\r\nand to see if I can figure out what is going wrong here.\r\n',
     html='',

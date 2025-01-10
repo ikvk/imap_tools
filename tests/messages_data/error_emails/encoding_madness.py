@@ -8,7 +8,7 @@ DATA = dict(
     cc=(),
     bcc=(),
     reply_to=('',),
-    date=datetime.datetime(2010, 9, 22, 2, 30, 53, tzinfo=datetime.timezone(datetime.timedelta(-1, 68400))),
+    date=datetime.datetime(2010, 9, 22, 2, 30, 53, tzinfo=datetime.timezone(datetime.timedelta(days=-1, seconds=68400))),
     date_str='Wed, 22 Sep 2010 02:30:53 -0500',
     text='Body Text',
     html='',

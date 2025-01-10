@@ -8,7 +8,7 @@ DATA = dict(
     cc=(),
     bcc=(),
     reply_to=(),
-    date=datetime.datetime(2010, 10, 13, 7, 53, 4, tzinfo=datetime.timezone(datetime.timedelta(-1, 61200))),
+    date=datetime.datetime(2010, 10, 13, 7, 53, 4, tzinfo=datetime.timezone(datetime.timedelta(days=-1, seconds=61200))),
     date_str='Wed, 13 Oct 2010 07:53:04 -0700',
     text='<?xml version="1.0" encoding="UTF-8"?>\r\n<?ADF version="1.0"?><adf>\r\n  <prospect>\r\n    <requestdate>2010-10-13T07:53:04-09:00</requestdate>\r\n    ... (not important) ...',
     html='',

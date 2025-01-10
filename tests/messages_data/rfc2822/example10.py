@@ -8,7 +8,7 @@ DATA = dict(
     cc=(),
     bcc=(),
     reply_to=(),
-    date=datetime.datetime(1969, 2, 13, 23, 32, tzinfo=datetime.timezone(datetime.timedelta(-1, 73800))),
+    date=datetime.datetime(1969, 2, 13, 23, 32, tzinfo=datetime.timezone(datetime.timedelta(days=-1, seconds=73800))),
     date_str='Thu,\r\n      13\r\n        Feb\r\n          1969\r\n      23:32\r\n               -0330 (Newfoundland Time)',
     text='Testing.\r\n',
     html='',

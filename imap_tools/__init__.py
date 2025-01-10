@@ -11,4 +11,4 @@ from .consts import MailMessageFlags, MailBoxFolderStatusOptions, SortCriteria
 from .utils import EmailAddress
 from .errors import *
 
-__version__ = '1.8.0'
+__version__ = '1.9.0'
