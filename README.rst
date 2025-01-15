@@ -187,7 +187,9 @@ Server side search notes:
 * For string search keys a message matches if the string is a substring of the field. The matching is case-insensitive.
 * When searching by dates - email's time and timezone are disregarding.
 
-Search key table. Key types marked with `*` can accepts a sequence of values like list, tuple, set or generator.
+Search key table below.
+
+Key types marked with `*` can accepts a sequence of values like list, tuple, set or generator - for join by OR.
 
 =============  ===============  ======================  ================================================================
 Key            Types            Results                 Description
