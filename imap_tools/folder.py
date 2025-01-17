@@ -1,9 +1,9 @@
 import re
-from typing import AnyStr, Optional, Iterable, List, Dict, Tuple
+from typing import Optional, Iterable, List, Dict, Tuple
 
 from .imap_utf7 import utf7_decode
 from .consts import MailBoxFolderStatusOptions
-from .utils import check_command_status, pairs_to_dict, encode_folder
+from .utils import check_command_status, pairs_to_dict, encode_folder, StrOrBytes
 from .errors import MailboxFolderStatusValueError, MailboxFolderSelectError, MailboxFolderCreateError, \
     MailboxFolderRenameError, MailboxFolderDeleteError, MailboxFolderStatusError, MailboxFolderSubscribeError
 
@@ -24,8 +24,7 @@ class FolderInfo:
         self.flags = flags
 
     def __repr__(self):
-        return "{}(name={}, delim={}, flags={})".format(
-            self.__class__.__name__, repr(self.name), repr(self.delim), repr(self.flags))
+        return f"{self.__class__.__name__}(name={repr(self.name)}, delim={repr(self.delim)}, flags={repr(self.flags)})"
 
     def __eq__(self, other):
         return all(getattr(self, i) == getattr(other, i) for i in self.__slots__)
@@ -38,7 +37,7 @@ class MailBoxFolderManager:
         self.mailbox = mailbox
         self._current_folder = None
 
-    def set(self, folder: AnyStr, readonly: bool = False) -> tuple:
+    def set(self, folder: StrOrBytes, readonly: bool = False) -> tuple:
         """Select current folder"""
         result = self.mailbox.client.select(encode_folder(folder), readonly)
         check_command_status(result, MailboxFolderSelectError)
@@ -49,7 +48,7 @@ class MailBoxFolderManager:
         """Checks whether a folder exists on the server."""
         return len(self.list('', folder)) > 0
 
-    def create(self, folder: AnyStr) -> tuple:
+    def create(self, folder: StrOrBytes) -> tuple:
         """
         Create folder on the server.
         Use email box delimiter to separate folders. Example for "|" delimiter: "folder|sub folder"
@@ -67,20 +66,20 @@ class MailBoxFolderManager:
         """
         return self._current_folder
 
-    def rename(self, old_name: AnyStr, new_name: AnyStr) -> tuple:
+    def rename(self, old_name: StrOrBytes, new_name: StrOrBytes) -> tuple:
         """Rename folder from old_name to new_name"""
         result = self.mailbox.client._simple_command(
             'RENAME', encode_folder(old_name), encode_folder(new_name))
         check_command_status(result, MailboxFolderRenameError)
         return result
 
-    def delete(self, folder: AnyStr) -> tuple:
+    def delete(self, folder: StrOrBytes) -> tuple:
         """Delete folder"""
         result = self.mailbox.client._simple_command('DELETE', encode_folder(folder))
         check_command_status(result, MailboxFolderDeleteError)
         return result
 
-    def status(self, folder: Optional[AnyStr] = None, options: Optional[Iterable[str]] = None) -> Dict[str, int]:
+    def status(self, folder: Optional[StrOrBytes] = None, options: Optional[Iterable[str]] = None) -> Dict[str, int]:
         """
         Get the status of a folder
         :param folder: mailbox folder, current folder if None
@@ -97,7 +96,7 @@ class MailBoxFolderManager:
             if opt not in MailBoxFolderStatusOptions.all:
                 raise MailboxFolderStatusValueError(str(opt))
         status_result = self.mailbox.client._simple_command(
-            command, encode_folder(folder), '({})'.format(' '.join(options)))
+            command, encode_folder(folder), f'({" ".join(options)})')
         check_command_status(status_result, MailboxFolderStatusError)
         result = self.mailbox.client._untagged_response(status_result[0], status_result[1], command)
         check_command_status(result, MailboxFolderStatusError)
@@ -105,7 +104,7 @@ class MailBoxFolderManager:
         values = status_data.decode().split('(')[-1].split(')')[0].split(' ')
         return {k: int(v) for k, v in pairs_to_dict(values).items() if str(v).isdigit()}
 
-    def list(self, folder: AnyStr = '', search_args: str = '*', subscribed_only: bool = False) -> List[FolderInfo]:
+    def list(self, folder: StrOrBytes = '', search_args: str = '*', subscribed_only: bool = False) -> List[FolderInfo]:
         """
         Get a listing of folders on the server
         :param folder: mailbox folder, if empty - get from root
@@ -148,7 +147,7 @@ class MailBoxFolderManager:
             ))
         return result
 
-    def subscribe(self, folder: AnyStr, value: bool) -> tuple:
+    def subscribe(self, folder: StrOrBytes, value: bool) -> tuple:
         """subscribe/unsubscribe to folder"""
         method = self.mailbox.client.subscribe if value else self.mailbox.client.unsubscribe
         result = method(encode_folder(folder))

@@ -4,10 +4,12 @@ import datetime
 from itertools import zip_longest
 from email.utils import getaddresses, parsedate_to_datetime
 from email.header import decode_header, Header
-from typing import AnyStr, Union, Optional, Tuple, Iterable, Any, List, Dict, Iterator
+from typing import Union, Optional, Tuple, Iterable, Any, List, Dict, Iterator
 
 from .consts import SHORT_MONTH_NAMES, MailMessageFlags
 from .imap_utf7 import utf7_encode
+
+StrOrBytes = Union[str, bytes]
 
 
 def clean_uids(uid_set: Union[str, Iterable[str]]) -> str:
@@ -27,9 +29,9 @@ def clean_uids(uid_set: Union[str, Iterable[str]]) -> str:
     # check uid types
     for uid in uid_set:
         if type(uid) is not str:
-            raise TypeError('uid "{}" is not string'.format(str(uid)))
+            raise TypeError(f'uid "{str(uid)}" is not string')
         if not re.match(r'^[\d*:]+$', uid.strip()):
-            raise TypeError('Wrong uid: "{}"'.format(uid))
+            raise TypeError(f'Wrong uid: "{uid}"')
     return ','.join(i.strip() for i in uid_set)
 
 
@@ -46,7 +48,7 @@ def check_command_status(command_result: tuple, exception: type, expected='OK'):
         raise exception(command_result=command_result, expected=expected)
 
 
-def decode_value(value: AnyStr, encoding: Optional[str] = None) -> str:
+def decode_value(value: StrOrBytes, encoding: Optional[str] = None) -> str:
     """Converts value to utf-8 encoding"""
     if isinstance(encoding, str):
         encoding = encoding.lower()
@@ -68,11 +70,10 @@ class EmailAddress:
 
     @property
     def full(self):
-        return '{} <{}>'.format(self.name, self.email) if self.name and self.email else self.name or self.email
+        return f'{self.name} <{self.email}>' if self.name and self.email else self.name or self.email
 
     def __repr__(self):
-        return "{}(name={}, email={})".format(
-            self.__class__.__name__, repr(self.name), repr(self.email))
+        return f"{self.__class__.__name__}(name={repr(self.name)}, email={repr(self.email)})"
 
     def __eq__(self, other):
         return all(getattr(self, i) == getattr(other, i) for i in self.__slots__)
@@ -124,7 +125,7 @@ def parse_email_date(value: str) -> datetime.datetime:
         group = match.groupdict()
         day, month, year = group['date'].split()
         time_values = group['time'].split(':')
-        zone_sign = int('{}1'.format(group.get('zone_sign') or '+'))
+        zone_sign = int(f'{group.get("zone_sign") or "+"}1')
         zone = group['zone']
         try:
             return datetime.datetime(
@@ -144,7 +145,7 @@ def parse_email_date(value: str) -> datetime.datetime:
     return datetime.datetime(1900, 1, 1)
 
 
-def quote(value: AnyStr) -> AnyStr:
+def quote(value: StrOrBytes) -> StrOrBytes:
     if isinstance(value, str):
         return '"' + value.replace('\\', '\\\\').replace('"', '\\"') + '"'
     else:
@@ -158,19 +159,7 @@ def pairs_to_dict(items: List[Any]) -> Dict[Any, Any]:
     return dict((items[i * 2], items[i * 2 + 1]) for i in range(len(items) // 2))
 
 
-def chunks(iterable: Iterable[Any], n: int, fill_value: Optional[Any] = None) -> Iterator[Tuple[Any, ...]]:
-    """
-    Group data into fixed-length chunks or blocks
-        [iter(iterable)]*n creates one iterator, repeated n times in the list
-        izip_longest then effectively performs a round-robin of "each" (same) iterator
-    Examples:
-        chunks('ABCDEFGH', 3, '?') --> [('A', 'B', 'C'), ('D', 'E', 'F'), ('G', 'H', '?')]
-        chunks([1, 2, 3, 4, 5], 2) --> [(1, 2), (3, 4), (5, None)]
-    """
-    return zip_longest(*[iter(iterable)] * n, fillvalue=fill_value)
-
-
-def encode_folder(folder: AnyStr) -> bytes:
+def encode_folder(folder: StrOrBytes) -> bytes:
     """Encode folder name"""
     if isinstance(folder, bytes):
         return folder
@@ -188,7 +177,7 @@ def clean_flags(flag_set: Union[str, Iterable[str]]) -> List[str]:
     upper_sys_flags = tuple(i.upper() for i in MailMessageFlags.all)
     for flag in flag_set:
         if not type(flag) is str:
-            raise ValueError('Flag - str value expected, but {} received'.format(type(flag_set)))
+            raise ValueError(f'Flag - str value expected, but {type(flag_set)} received')
         if flag.upper() not in upper_sys_flags and flag.startswith('\\'):
             raise ValueError('Non system flag must not start with "\\"')
     return flag_set
@@ -207,13 +196,25 @@ def replace_html_ct_charset(html: str, new_charset: str) -> str:
         meta = meta_ct_match.group(0)
         meta_new = re.sub(
             pattern=r'charset\s*=\s*[a-zA-Z0-9_:.+-]+',
-            repl='charset={}'.format(new_charset),
+            repl=f'charset={new_charset}',
             string=meta,
             count=1,
             flags=re.IGNORECASE
         )
         html = html.replace(meta, meta_new)
     return html
+
+
+def chunks(iterable: Iterable[Any], n: int, fill_value: Optional[Any] = None) -> Iterator[Tuple[Any, ...]]:
+    """
+    Group data into fixed-length chunks or blocks
+        [iter(iterable)]*n creates one iterator, repeated n times in the list
+        izip_longest then effectively performs a round-robin of "each" (same) iterator
+    Examples:
+        chunks('ABCDEFGH', 3, '?') --> [('A', 'B', 'C'), ('D', 'E', 'F'), ('G', 'H', '?')]
+        chunks([1, 2, 3, 4, 5], 2) --> [(1, 2), (3, 4), (5, None)]
+    """
+    return zip_longest(*[iter(iterable)] * n, fillvalue=fill_value)
 
 
 def chunks_crop(lst: iter, n: int) -> iter:

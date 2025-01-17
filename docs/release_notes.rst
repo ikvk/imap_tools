@@ -1,3 +1,10 @@
+1.9.1
+=====
+* Replaced: functools.lru_cache to functools.cached_property
+* Replaced: .format() to f''
+* Optimized: speed for imap_utf7
+* Replaced: typing.AnyStr to utils.StrOrBytes
+
 1.9.0
 =====
 * Added: __str__ to MailAttachment

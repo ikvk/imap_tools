@@ -40,6 +40,11 @@ icons
 📨 📬 📪 📭 📫 ✉ 📧 🖂 🖃 🖅 📩
 
 
+fetch
+=====
+FULL - Macro equivalent to: (FLAGS INTERNALDATE RFC822.SIZE ENVELOPE BODY)
+
+
 code
 ====
 def eml_to_python_structs(eml_path: str):

@@ -15,17 +15,17 @@ class Header:
 
     def __init__(self, name: str, value: str):
         if not isinstance(name, str):
-            raise TypeError('Header-name expected str value, "{}" received'.format(type(name)))
+            raise TypeError(f'Header-name expected str value, "{type(name)}" received')
         self.name = quote(name)
         if not isinstance(value, str):
-            raise TypeError('Header-value expected str value, "{}" received'.format(type(value)))
+            raise TypeError(f'Header-value expected str value, "{type(value)}" received')
         self.value = quote(value)
 
     def __str__(self):
-        return '{0.name}: {0.value}'.format(self)
+        return f'{self.name}: {self.value}'
 
     def __lt__(self, other):
-        return '{0.name}{0.value}'.format(self) < '{0.name}{0.value}'.format(other)
+        return f'{self.name}{self.value}' < f'{other.name}{other.value}'
 
 
 class UidRange:
@@ -51,7 +51,7 @@ class UidRange:
                 raise TypeError('UidRange end arg must be str with digits or *')
 
     def __str__(self):
-        return '{}{}'.format(self.start, ':{}'.format(self.end) if self.end else '')
+        return f'{self.start}{f":{self.end}" if self.end else ""}'
 
 
 class LogicOperator(UserString):
@@ -90,11 +90,11 @@ class LogicOperator(UserString):
         self.converted_strings = converted_strings
         for val in converted_strings:
             if not any(isinstance(val, t) for t in (str, UserString)):
-                raise TypeError('Unexpected type "{}" for converted part, str like obj expected'.format(type(val)))
+                raise TypeError(f'Unexpected type "{type(val)}" for converted part, str like obj expected')
         unconverted_dict = {k: v for k, v in locals().items() if k in SEARCH_KEYS and v is not None}
         self.converted_params = ParamConverter(unconverted_dict).convert()
         if not any((self.converted_strings, self.converted_params)):
-            raise ValueError('{} expects params'.format(self.__class__.__name__))
+            raise ValueError(f'{self.__class__.__name__} expects params')
         super().__init__(self.combine_params())
 
     def combine_params(self) -> str:
@@ -104,7 +104,7 @@ class LogicOperator(UserString):
     @staticmethod
     def prefix_join(operator: str, params: Iterable[str]) -> str:
         """Join params by prefix notation rules, enclose group in parentheses"""
-        return '({})'.format(functools.reduce(lambda a, b: '{}{} {}'.format(operator, a, b), params))
+        return f'({functools.reduce(lambda a, b: f"{operator}{a} {b}", params)})'
 
 
 class AND(LogicOperator):
@@ -125,7 +125,7 @@ class NOT(LogicOperator):
     """Inverts the result of a logical expression"""
 
     def combine_params(self) -> str:
-        return 'NOT {}'.format(self.prefix_join('', itertools.chain(self.converted_strings, self.converted_params)))
+        return f'NOT {self.prefix_join("", itertools.chain(self.converted_strings, self.converted_params))}'
 
 
 class ParamConverter:
@@ -161,45 +161,45 @@ class ParamConverter:
         converted = []
         for key, raw_val in sorted(self.params.items(), key=lambda x: x[0]):
             for val in sorted(self._gen_values(key, raw_val)):
-                convert_func = getattr(self, 'convert_{}'.format(key), None)
+                convert_func = getattr(self, f'convert_{key}', None)
                 if not convert_func:
-                    raise KeyError('"{}" is an invalid parameter.'.format(key))
+                    raise KeyError(f'"{key}" is an invalid parameter.')
                 converted.append(convert_func(key, val))
         return converted
 
     @classmethod
     def format_date(cls, value: datetime.date) -> str:
         """To avoid locale affects"""
-        return '{}-{}-{}'.format(value.day, SHORT_MONTH_NAMES[value.month - 1], value.year)
+        return f'{value.day}-{SHORT_MONTH_NAMES[value.month - 1]}-{value.year}'
 
     @staticmethod
     def cleaned_str(key: str, value: str) -> str:
         if type(value) is not str:
-            raise TypeError('"{}" expected str value, "{}" received'.format(key, type(value)))
+            raise TypeError(f'"{key}" expected str value, "{type(value)}" received')
         return str(value)
 
     @staticmethod
     def cleaned_date(key: str, value: datetime.date) -> datetime.date:
         if type(value) is not datetime.date:
-            raise TypeError('"{}" expected datetime.date value, "{}" received'.format(key, type(value)))
+            raise TypeError(f'"{key}" expected datetime.date value, "{type(value)}" received')
         return value
 
     @staticmethod
     def cleaned_bool(key: str, value: bool) -> bool:
         if type(value) is not bool:
-            raise TypeError('"{}" expected bool value, "{}" received'.format(key, type(value)))
+            raise TypeError(f'"{key}" expected bool value, "{type(value)}" received')
         return bool(value)
 
     @staticmethod
     def cleaned_true(key: str, value: bool) -> True:
         if value is not True:
-            raise TypeError('"{}" expected "True", "{}" received'.format(key, type(value)))
+            raise TypeError(f'"{key}" expected "True", "{type(value)}" received')
         return True
 
     @staticmethod
     def cleaned_uint(key: str, value: int) -> int:
         if type(value) is not int or int(value) < 0:
-            raise TypeError('"{}" expected int value >= 0, "{}" received'.format(key, type(value)))
+            raise TypeError(f'"{key}" expected int value >= 0, "{type(value)}" received')
         return int(value)
 
     @staticmethod
@@ -211,12 +211,12 @@ class ParamConverter:
         try:
             return clean_uids(value)
         except TypeError as e:
-            raise TypeError('{} parse error: {}'.format(key, str(e)))
+            raise TypeError(f'{key} parse error: {str(e)}')
 
     @staticmethod
     def cleaned_header(key: str, value: Header) -> Header:
         if not isinstance(value, Header):
-            raise TypeError('"{}" expected Header (H) value, "{}" received'.format(key, type(value)))
+            raise TypeError(f'"{key}" expected Header (H) value, "{type(value)}" received')
         return value
 
     def convert_answered(self, key, value) -> str:
@@ -241,89 +241,89 @@ class ParamConverter:
 
     def convert_keyword(self, key, value) -> str:
         """Messages with the specified keyword flag set. (KEYWORD)"""
-        return 'KEYWORD {}'.format(self.cleaned_str(key, value))
+        return f'KEYWORD {self.cleaned_str(key, value)}'
 
     def convert_no_keyword(self, key, value) -> str:
         """Messages that do not have the specified keyword flag set. (UNKEYWORD)"""
-        return 'UNKEYWORD {}'.format(self.cleaned_str(key, value))
+        return f'UNKEYWORD {self.cleaned_str(key, value)}'
 
     def convert_from_(self, key, value) -> str:
         """Messages that contain the specified string in the envelope structure's FROM field."""
-        return 'FROM {}'.format(quote(self.cleaned_str(key, value)))
+        return f'FROM {quote(self.cleaned_str(key, value))}'
 
     def convert_to(self, key, value) -> str:
         """Messages that contain the specified string in the envelope structure's TO field."""
-        return 'TO {}'.format(quote(self.cleaned_str(key, value)))
+        return f'TO {quote(self.cleaned_str(key, value))}'
 
     def convert_subject(self, key, value) -> str:
         """Messages that contain the specified string in the envelope structure's SUBJECT field."""
-        return 'SUBJECT {}'.format(quote(self.cleaned_str(key, value)))
+        return f'SUBJECT {quote(self.cleaned_str(key, value))}'
 
     def convert_body(self, key, value) -> str:
         """Messages that contain the specified string in the body of the message."""
-        return 'BODY {}'.format(quote(self.cleaned_str(key, value)))
+        return f'BODY {quote(self.cleaned_str(key, value))}'
 
     def convert_text(self, key, value) -> str:
         """Messages that contain the specified string in the header or body of the message."""
-        return 'TEXT {}'.format(quote(self.cleaned_str(key, value)))
+        return f'TEXT {quote(self.cleaned_str(key, value))}'
 
     def convert_bcc(self, key, value) -> str:
         """Messages that contain the specified string in the envelope structure's BCC field."""
-        return 'BCC {}'.format(quote(self.cleaned_str(key, value)))
+        return f'BCC {quote(self.cleaned_str(key, value))}'
 
     def convert_cc(self, key, value) -> str:
         """Messages that contain the specified string in the envelope structure's CC field."""
-        return 'CC {}'.format(quote(self.cleaned_str(key, value)))
+        return f'CC {quote(self.cleaned_str(key, value))}'
 
     def convert_date(self, key, value) -> str:
         """
         Messages whose internal date (disregarding time and timezone)
         is within the specified date. (ON)
         """
-        return 'ON {}'.format(self.format_date(self.cleaned_date(key, value)))
+        return f'ON {self.format_date(self.cleaned_date(key, value))}'
 
     def convert_date_gte(self, key, value) -> str:
         """
         Messages whose internal date (disregarding time and timezone)
         is within or later than the specified date. (SINCE)
         """
-        return 'SINCE {}'.format(self.format_date(self.cleaned_date(key, value)))
+        return f'SINCE {self.format_date(self.cleaned_date(key, value))}'
 
     def convert_date_lt(self, key, value) -> str:
         """
         Messages whose internal date (disregarding time and timezone)
         is earlier than the specified date. (BEFORE)
         """
-        return 'BEFORE {}'.format(self.format_date(self.cleaned_date(key, value)))
+        return f'BEFORE {self.format_date(self.cleaned_date(key, value))}'
 
     def convert_sent_date(self, key, value) -> str:
         """
         Messages whose [RFC-2822] Date: header (disregarding time and timezone)
         is within the specified date. (SENTON)
         """
-        return 'SENTON {}'.format(self.format_date(self.cleaned_date(key, value)))
+        return f'SENTON {self.format_date(self.cleaned_date(key, value))}'
 
     def convert_sent_date_gte(self, key, value) -> str:
         """
         Messages whose [RFC-2822] Date: header (disregarding time and timezone)
         is within or later than the specified date. (SENTSINCE)
         """
-        return 'SENTSINCE {}'.format(self.format_date(self.cleaned_date(key, value)))
+        return f'SENTSINCE {self.format_date(self.cleaned_date(key, value))}'
 
     def convert_sent_date_lt(self, key, value) -> str:
         """
         Messages whose [RFC-2822] Date: header (disregarding time and timezone)
         is earlier than the specified date. (SENTBEFORE)
         """
-        return 'SENTBEFORE {}'.format(self.format_date(self.cleaned_date(key, value)))
+        return f'SENTBEFORE {self.format_date(self.cleaned_date(key, value))}'
 
     def convert_size_gt(self, key, value) -> str:
         """Messages with an [RFC-2822] size larger than the specified number of octets. (LARGER)"""
-        return 'LARGER {}'.format(self.cleaned_uint(key, value))
+        return f'LARGER {self.cleaned_uint(key, value)}'
 
     def convert_size_lt(self, key, value) -> str:
         """Messages with an [RFC-2822] size smaller than the specified number of octets. (SMALLER)"""
-        return 'SMALLER {}'.format(self.cleaned_uint(key, value))
+        return f'SMALLER {self.cleaned_uint(key, value)}'
 
     def convert_new(self, key, value) -> str:
         """
@@ -358,14 +358,14 @@ class ParamConverter:
         If the string to search is zero-length, this matches all messages that have a header line
         with the specified field-name regardless of the contents.
         """
-        return 'HEADER {0.name} {0.value}'.format(self.cleaned_header(key, value))
+        return f'HEADER {self.cleaned_header(key, value).name} {self.cleaned_header(key, value).value}'
 
     def convert_uid(self, key, value) -> str:
         """Messages with unique identifiers corresponding to the specified unique identifier set."""
-        return 'UID {}'.format(self.cleaned_uid(key, value))
+        return f'UID {self.cleaned_uid(key, value)}'
 
     def convert_gmail_label(self, key, value) -> str:
-        return 'X-GM-LABELS {}'.format(quote(self.cleaned_str(key, value)))
+        return f'X-GM-LABELS {quote(self.cleaned_str(key, value))}'
 
 
 SEARCH_KEYS = tuple(i.replace('convert_', '') for i in dir(ParamConverter) if 'convert_' in i)

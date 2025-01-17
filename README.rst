@@ -94,7 +94,7 @@ Email attributes
 
 Email has 2 basic body variants: text and html. Sender can choose to include: one, other, both or neither(rare).
 
-MailMessage and MailAttachment public attributes are cached by functools.lru_cache
+MailMessage and MailAttachment public attributes are cached by functools.cached_property
 
 .. code-block:: python
 
@@ -428,7 +428,8 @@ Big thanks to people who helped develop this library:
 `K900 <https://github.com/K900>`_,
 `homoLudenus <https://github.com/homoLudenus>`_,
 `sphh <https://github.com/sphh>`_,
-`bh <https://github.com/bh>`_
+`bh <https://github.com/bh>`_,
+`tomasmach <https://github.com/tomasmach>`_
 
 Help the project
 ----------------

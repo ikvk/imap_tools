@@ -21,8 +21,8 @@ class UnexpectedCommandStatusError(ImapToolsError):
         self.expected = expected
 
     def __str__(self):
-        return 'Response status "{exp}" expected, but "{typ}" received. Data: {data}'.format(
-            exp=self.expected, typ=self.command_result[0], data=str(self.command_result[1]))
+        return (f'Response status "{self.expected}" expected, '
+                f'but "{self.command_result[0]}" received. Data: {str(self.command_result[1])}')
 
 
 class MailboxFolderSelectError(UnexpectedCommandStatusError):

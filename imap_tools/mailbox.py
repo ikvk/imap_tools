@@ -2,14 +2,14 @@ import re
 import imaplib
 import datetime
 from collections import UserString
-from typing import AnyStr, Optional, List, Iterable, Sequence, Union, Tuple, Iterator
+from typing import Optional, List, Iterable, Sequence, Union, Tuple, Iterator
 
 from .message import MailMessage
 from .folder import MailBoxFolderManager
 from .idle import IdleManager
 from .consts import UID_PATTERN, PYTHON_VERSION_MINOR
 from .utils import clean_uids, check_command_status, chunks, encode_folder, clean_flags, check_timeout_arg_support, \
-    chunks_crop
+    chunks_crop, StrOrBytes
 from .errors import MailboxStarttlsError, MailboxLoginError, MailboxLogoutError, MailboxNumbersError, \
     MailboxFetchError, MailboxExpungeError, MailboxDeleteError, MailboxCopyError, MailboxFlagError, \
     MailboxAppendError, MailboxUidsError, MailboxTaggedResponseError
@@ -18,7 +18,7 @@ from .errors import MailboxStarttlsError, MailboxLoginError, MailboxLogoutError,
 # 20Mb is enough for search response with about 2 000 000 message numbers
 imaplib._MAXLINE = 20 * 1024 * 1024  # 20Mb
 
-Criteria = Union[AnyStr, UserString]
+Criteria = Union[StrOrBytes, UserString]
 
 
 class BaseMailBox:
@@ -80,7 +80,7 @@ class BaseMailBox:
 
     def xoauth2(self, username: str, access_token: str, initial_folder: Optional[str] = 'INBOX') -> 'BaseMailBox':
         """Authenticate to account using OAuth 2.0 mechanism"""
-        auth_string = 'user={}\1auth=Bearer {}\1\1'.format(username, access_token)
+        auth_string = f'user={username}\1auth=Bearer {access_token}\1\1'
         result = self.client.authenticate('XOAUTH2', lambda x: auth_string)  # noqa
         check_command_status(result, MailboxLoginError)
         if initial_folder is not None:
@@ -133,7 +133,7 @@ class BaseMailBox:
         encoded_criteria = criteria if type(criteria) is bytes else str(criteria).encode(charset)
         if sort:
             sort = (sort,) if isinstance(sort, str) else sort
-            uid_result = self.client.uid('SORT', '({})'.format(' '.join(sort)), charset, encoded_criteria)
+            uid_result = self.client.uid('SORT', f'({" ".join(sort)})', charset, encoded_criteria)
         else:
             uid_result = self.client.uid('SEARCH', 'CHARSET', charset, encoded_criteria)  # *charset are opt here
         check_command_status(uid_result, MailboxUidsError)
@@ -187,8 +187,8 @@ class BaseMailBox:
         :param sort: criteria for sort messages on server, use SortCriteria constants. Charset arg is important for sort
         :return generator: MailMessage
         """
-        message_parts = "(BODY{}[{}] UID FLAGS RFC822.SIZE)".format(
-            '' if mark_seen else '.PEEK', 'HEADER' if headers_only else '')
+        message_parts = \
+            f"(BODY{'' if mark_seen else '.PEEK'}[{'HEADER' if headers_only else ''}] UID FLAGS RFC822.SIZE)"
         limit_range = slice(0, limit) if type(limit) is int else limit or slice(None)
         assert type(limit_range) is slice
         uids = tuple((reversed if reverse else iter)(self.uids(criteria, charset, sort)))[limit_range]
@@ -218,7 +218,7 @@ class BaseMailBox:
         expunge_result = self.expunge()
         return store_result, expunge_result
 
-    def copy(self, uid_list: Union[str, Iterable[str]], destination_folder: AnyStr) -> Optional[tuple]:
+    def copy(self, uid_list: Union[str, Iterable[str]], destination_folder: StrOrBytes) -> Optional[tuple]:
         """
         Copy email messages into the specified folder
         Do nothing on empty uid_list
@@ -231,7 +231,7 @@ class BaseMailBox:
         check_command_status(copy_result, MailboxCopyError)
         return copy_result
 
-    def move(self, uid_list: Union[str, Iterable[str]], destination_folder: AnyStr) -> Optional[Tuple[tuple, tuple]]:
+    def move(self, uid_list: Union[str, Iterable[str]], destination_folder: StrOrBytes) -> Optional[Tuple[tuple, tuple]]:
         """
         Move email messages into the specified folder
         Do nothing on empty uid_list
@@ -256,14 +256,13 @@ class BaseMailBox:
         if not uid_str:
             return None
         store_result = self.client.uid(
-            'STORE', uid_str, ('+' if value else '-') + 'FLAGS',
-            '({})'.format(' '.join(clean_flags(flag_set))))
+            'STORE', uid_str, ('+' if value else '-') + 'FLAGS', f'({" ".join(clean_flags(flag_set))})')
         check_command_status(store_result, MailboxFlagError)
         expunge_result = self.expunge()
         return store_result, expunge_result
 
     def append(self, message: Union[MailMessage, bytes],
-               folder: AnyStr = 'INBOX',
+               folder: StrOrBytes = 'INBOX',
                dt: Optional[datetime.datetime] = None,
                flag_set: Optional[Union[str, Iterable[str]]] = None) -> tuple:
         """
@@ -281,7 +280,7 @@ class BaseMailBox:
         cleaned_flags = clean_flags(flag_set or [])
         typ, dat = self.client.append(
             encode_folder(folder),  # noqa
-            '({})'.format(' '.join(cleaned_flags)) if cleaned_flags else None,
+            f'({" ".join(cleaned_flags)})' if cleaned_flags else None,
             dt or datetime.datetime.now(timezone),  # noqa
             message if type(message) is bytes else message.obj.as_bytes()
         )
@@ -339,10 +338,10 @@ class MailBox(BaseMailBox):
 
     def _get_mailbox_client(self) -> imaplib.IMAP4:
         if PYTHON_VERSION_MINOR < 9:
-            return imaplib.IMAP4_SSL(self._host, self._port, self._keyfile, self._certfile, self._ssl_context)
+            return imaplib.IMAP4_SSL(self._host, self._port, self._keyfile, self._certfile, self._ssl_context)  # noqa
         elif PYTHON_VERSION_MINOR < 12:
             return imaplib.IMAP4_SSL(
-                self._host, self._port, self._keyfile, self._certfile, self._ssl_context, self._timeout)
+                self._host, self._port, self._keyfile, self._certfile, self._ssl_context, self._timeout)  # noqa
         else:
             return imaplib.IMAP4_SSL(self._host, self._port, ssl_context=self._ssl_context, timeout=self._timeout)
 

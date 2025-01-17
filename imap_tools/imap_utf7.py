@@ -8,7 +8,10 @@ Full description at RFC 3501, section 5.1.3.
 """
 
 import binascii
-from typing import Iterable, MutableSequence
+from typing import MutableSequence
+
+AMPERSAND_ORD = ord('&')
+HYPHEN_ORD = ord('-')
 
 
 # ENCODING
@@ -17,10 +20,10 @@ def _modified_base64(value: str) -> bytes:
     return binascii.b2a_base64(value.encode('utf-16be')).rstrip(b'\n=').replace(b'/', b',')
 
 
-def _do_b64(_in: Iterable[str], r: MutableSequence[bytes]):
+def _do_b64(_in: MutableSequence[str], r: MutableSequence[bytes]):
     if _in:
         r.append(b'&' + _modified_base64(''.join(_in)) + b'-')
-    del _in[:]
+    _in.clear()
 
 
 def utf7_encode(value: str) -> bytes:
@@ -48,20 +51,20 @@ def _modified_unbase64(value: bytearray) -> str:
 
 def utf7_decode(value: bytes) -> str:
     res = []
-    decode_arr = bytearray()
+    encoded_chars = bytearray()
     for char in value:
-        if char == ord('&') and not decode_arr:
-            decode_arr.append(ord('&'))
-        elif char == ord('-') and decode_arr:
-            if len(decode_arr) == 1:
+        if char == AMPERSAND_ORD and not encoded_chars:
+            encoded_chars.append(AMPERSAND_ORD)
+        elif char == HYPHEN_ORD and encoded_chars:
+            if len(encoded_chars) == 1:
                 res.append('&')
             else:
-                res.append(_modified_unbase64(decode_arr[1:]))
-            decode_arr = bytearray()
-        elif decode_arr:
-            decode_arr.append(char)
+                res.append(_modified_unbase64(encoded_chars[1:]))
+            encoded_chars = bytearray()
+        elif encoded_chars:
+            encoded_chars.append(char)
         else:
             res.append(chr(char))
-    if decode_arr:
-        res.append(_modified_unbase64(decode_arr[1:]))
+    if encoded_chars:
+        res.append(_modified_unbase64(encoded_chars[1:]))
     return ''.join(res)
