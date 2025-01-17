@@ -23,7 +23,10 @@ https://packaging.python.org/tutorials/packaging-projects/
 5. Uploading the distribution archives:
     C:\python\venv\imap_tools312-64\Scripts\python.exe -m twine upload dist/*
 
-6. Mirror
+6. Create release
+    at https://github.com/ikvk/imap_tools
+
+7. Mirror
     cd to repo
         cd C:\kvk\develop\Python\imap_tools\
     Cleaning old references to remote branches
