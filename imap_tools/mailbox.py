@@ -204,60 +204,88 @@ class BaseMailBox:
         check_command_status(result, MailboxExpungeError)
         return result
 
-    def delete(self, uid_list: Union[str, Iterable[str]]) -> Optional[Tuple[tuple, tuple]]:
+    def _uid_list2uid_str_seq(self, uid_list: Union[str, Iterable[str]], bulk: Union[bool, int] = False) -> List[str]:
+        uid_str = clean_uids(uid_list)
+        if not uid_str:
+            return []
+
+        uid_list = uid_str.split(',')
+        if isinstance(bulk, int) and bulk >= 2:
+            return [clean_uids(l) for l in chunks_crop(uid_list, bulk)]
+        elif isinstance(bulk, bool):
+            return (uid_str,)
+        else:
+            raise ValueError('bulk arg may be bool or int >= 2')
+        
+    def delete(self, uid_list: Union[str, Iterable[str]], bulk: Union[bool, int] = False) -> Optional[Tuple[tuple, tuple]]:
         """
         Delete email messages
         Do nothing on empty uid_list
+        :param bulk:
+            False - delete each message separately per N commands - low memory consumption, slow
+            True  - delete all messages per 1 command - high memory consumption, fast. Fails on big bulk at server
+            int - delete messages by bulks of the specified size
         :return: None on empty uid_list, command results otherwise
         """
-        uid_str = clean_uids(uid_list)
-        if not uid_str:
-            return None
-        store_result = self.client.uid('STORE', uid_str, '+FLAGS', r'(\Deleted)')
-        check_command_status(store_result, MailboxDeleteError)
+        uid_str_seq = self._uid_list2uid_str_seq(uid_list, bulk)
+        for uid_str in uid_str_seq:
+            store_result = self.client.uid('STORE', uid_str, '+FLAGS', r'(\Deleted)')
+            check_command_status(store_result, MailboxDeleteError)
         expunge_result = self.expunge()
         return store_result, expunge_result
 
-    def copy(self, uid_list: Union[str, Iterable[str]], destination_folder: StrOrBytes) -> Optional[tuple]:
+    def copy(self, uid_list: Union[str, Iterable[str]], destination_folder: StrOrBytes, bulk: Union[bool, int] = False) -> Optional[tuple]:
         """
         Copy email messages into the specified folder
         Do nothing on empty uid_list
+        :param bulk:
+            False - copy each message separately per N commands - low memory consumption, slow
+            True  - copy all messages per 1 command - high memory consumption, fast. Fails on big bulk at server
+            int - copy messages by bulks of the specified size
         :return: None on empty uid_list, command results otherwise
         """
-        uid_str = clean_uids(uid_list)
-        if not uid_str:
-            return None
-        copy_result = self.client.uid('COPY', uid_str, encode_folder(destination_folder))  # noqa
-        check_command_status(copy_result, MailboxCopyError)
+        uid_str_seq = self._uid_list2uid_str_seq(uid_list, bulk)
+        for uid_str in uid_str_seq:
+            copy_result = self.client.uid('COPY', uid_str, encode_folder(destination_folder))  # noqa
+            check_command_status(copy_result, MailboxCopyError)
         return copy_result
 
-    def move(self, uid_list: Union[str, Iterable[str]], destination_folder: StrOrBytes) -> Optional[Tuple[tuple, tuple]]:
+    def move(self, uid_list: Union[str, Iterable[str]], destination_folder: StrOrBytes, bulk: Union[bool, int] = False) -> Optional[Tuple[tuple, tuple]]:
         """
         Move email messages into the specified folder
         Do nothing on empty uid_list
+        :param bulk:
+            False - move each message separately per N commands - low memory consumption, slow
+            True  - move all messages per 1 command - high memory consumption, fast. Fails on big bulk at server
+            int - move messages by bulks of the specified size
         :return: None on empty uid_list, command results otherwise
         """
-        uid_str = clean_uids(uid_list)
-        if not uid_str:
-            return None
-        copy_result = self.copy(uid_str, destination_folder)
-        delete_result = self.delete(uid_str)
+        uid_str_seq = self._uid_list2uid_str_seq(uid_list, bulk)
+        for uid_str in uid_str_seq:
+            copy_result = self.client.uid('COPY', uid_str, encode_folder(destination_folder))  # noqa
+            check_command_status(copy_result, MailboxCopyError)
+            delete_result = self.client.uid('STORE', uid_str, '+FLAGS', r'(\Deleted)')
+            check_command_status(delete_result, MailboxDeleteError)
+        expunge_result = self.expunge()
         return copy_result, delete_result
 
-    def flag(self, uid_list: Union[str, Iterable[str]], flag_set: Union[str, Iterable[str]], value: bool) \
+    def flag(self, uid_list: Union[str, Iterable[str]], flag_set: Union[str, Iterable[str]], value: bool, bulk: Union[bool, int] = False) \
             -> Optional[Tuple[tuple, tuple]]:
         """
         Set/unset email flags
         Do nothing on empty uid_list
         System flags contains in consts.MailMessageFlags.all
+        :param bulk:
+            False - flag each message separately per N commands - low memory consumption, slow
+            True  - flag all messages per 1 command - high memory consumption, fast. Fails on big bulk at server
+            int - flag messages by bulks of the specified size
         :return: None on empty uid_list, command results otherwise
         """
-        uid_str = clean_uids(uid_list)
-        if not uid_str:
-            return None
-        store_result = self.client.uid(
-            'STORE', uid_str, ('+' if value else '-') + 'FLAGS', f'({" ".join(clean_flags(flag_set))})')
-        check_command_status(store_result, MailboxFlagError)
+        uid_str_seq = self._uid_list2uid_str_seq(uid_list, bulk)
+        for uid_str in uid_str_seq:
+            store_result = self.client.uid(
+                'STORE', uid_str, ('+' if value else '-') + 'FLAGS', f'({" ".join(clean_flags(flag_set))})')
+            check_command_status(store_result, MailboxFlagError)
         expunge_result = self.expunge()
         return store_result, expunge_result
 
