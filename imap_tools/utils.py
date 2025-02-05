@@ -4,7 +4,7 @@ import datetime
 from itertools import zip_longest
 from email.utils import getaddresses, parsedate_to_datetime
 from email.header import decode_header, Header
-from typing import Union, Optional, Tuple, Iterable, Any, List, Dict, Iterator
+from typing import Union, Optional, Tuple, Iterable, Any, List, Dict, Iterator, Sequence
 
 from .consts import SHORT_MONTH_NAMES, MailMessageFlags
 from .imap_utf7 import utf7_encode
@@ -12,19 +12,19 @@ from .imap_utf7 import utf7_encode
 StrOrBytes = Union[str, bytes]
 
 
-def clean_uids(uid_set: Union[str, Iterable[str]]) -> str:
+def clean_uids(uid_set: Union[str, Iterable[str]]) -> List[str]:
     """
     Prepare set of uid for use in IMAP commands
     uid RE patterns are not strict and allow invalid combinations, but simple. Example: 2,4:7,9,12:*
     :param uid_set:
         str, that is comma separated uids
         Iterable, that contains str uids
-    :return: str - uids, concatenated by a comma
+    :return: list of str - cleaned uids
     """
     # str
     if type(uid_set) is str:
         if re.search(r'^([\d*:]+,)*[\d*:]+$', uid_set):  # *optimization for already good str
-            return uid_set
+            return uid_set.split(',')
         uid_set = uid_set.split(',')
     # check uid types
     for uid in uid_set:
@@ -32,7 +32,7 @@ def clean_uids(uid_set: Union[str, Iterable[str]]) -> str:
             raise TypeError(f'uid "{str(uid)}" is not string')
         if not re.match(r'^[\d*:]+$', uid.strip()):
             raise TypeError(f'Wrong uid: "{uid}"')
-    return ','.join(i.strip() for i in uid_set)
+    return [i.strip() for i in uid_set]
 
 
 def check_command_status(command_result: tuple, exception: type, expected='OK'):
@@ -205,23 +205,27 @@ def replace_html_ct_charset(html: str, new_charset: str) -> str:
     return html
 
 
-def chunks(iterable: Iterable[Any], n: int, fill_value: Optional[Any] = None) -> Iterator[Tuple[Any, ...]]:
+def chunked(iterable: Iterable[Any], n: int, fill_value: Optional[Any] = None) -> Iterator[Tuple[Any, ...]]:
     """
     Group data into fixed-length chunks or blocks
         [iter(iterable)]*n creates one iterator, repeated n times in the list
         izip_longest then effectively performs a round-robin of "each" (same) iterator
     Examples:
-        chunks('ABCDEFGH', 3, '?') --> [('A', 'B', 'C'), ('D', 'E', 'F'), ('G', 'H', '?')]
-        chunks([1, 2, 3, 4, 5], 2) --> [(1, 2), (3, 4), (5, None)]
+        chunked('ABCDEFGH', 3, '?') --> [('A', 'B', 'C'), ('D', 'E', 'F'), ('G', 'H', '?')]
+        chunked([1, 2, 3, 4, 5], 2) --> [(1, 2), (3, 4), (5, None)]
     """
     return zip_longest(*[iter(iterable)] * n, fillvalue=fill_value)
 
 
-def chunks_crop(lst: iter, n: int) -> iter:
+def chunked_crop(seq: Sequence, chunk_size: Optional[int]) -> Iterator[list]:
     """
-    Yield successive n-sized chunks from lst.
+    Yield successive n-sized chunks from seq.
+    Yield seq if chunk_size is False-like
+    :param seq: Sequence to chunks
+    :param chunk_size: chunk size
+    :return: Iterator
     import pprint
-    pprint.pprint(list(chunks(range(10, 75), 10)))
+    pprint.pprint(list(chunked_crop(range(10, 75), 10)))
     [[10, 11, 12, 13, 14, 15, 16, 17, 18, 19],
      [20, 21, 22, 23, 24, 25, 26, 27, 28, 29],
      [30, 31, 32, 33, 34, 35, 36, 37, 38, 39],
@@ -230,5 +234,10 @@ def chunks_crop(lst: iter, n: int) -> iter:
      [60, 61, 62, 63, 64, 65, 66, 67, 68, 69],
      [70, 71, 72, 73, 74]]
     """
-    for i in range(0, len(lst), n):
-        yield lst[i:i + n]
+    if not chunk_size:
+        yield seq
+        return
+    if chunk_size < 0:
+        raise ValueError('False-like or int>=0 expected')
+    for i in range(0, len(seq), chunk_size):
+        yield seq[i:i + chunk_size]

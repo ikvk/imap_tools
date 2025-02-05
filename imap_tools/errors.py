@@ -85,6 +85,10 @@ class MailboxCopyError(UnexpectedCommandStatusError):
     pass
 
 
+class MailboxMoveError(UnexpectedCommandStatusError):
+    pass
+
+
 class MailboxFlagError(UnexpectedCommandStatusError):
     pass
 

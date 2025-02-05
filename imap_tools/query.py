@@ -209,7 +209,7 @@ class ParamConverter:
             return str(value)
         # set
         try:
-            return clean_uids(value)
+            return ','.join(clean_uids(value))
         except TypeError as e:
             raise TypeError(f'{key} parse error: {str(e)}')
 

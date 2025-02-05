@@ -10,6 +10,7 @@ TEST_MESSAGE_DATA = b'From: Mikel <test@lindsaar.net>\nTo: Mikel <raasdnil@gmail
 
 class MailboxTest(MailboxTestCase):
     base_test_msg_cnt = 6
+    test_chunks_size = 4
 
     @classmethod
     def setUpClass(cls):
@@ -68,6 +69,16 @@ class MailboxTest(MailboxTestCase):
                 self.base_test_msg_cnt
             )
 
+            # APPEND
+            if mailbox.mailbox_name not in ('MAIL_RU', 'YANDEX'):
+                mailbox.folder.set('INBOX')
+                q = A(subject='_append_')
+                mailbox.delete(mailbox.uids(q))
+                self.assertEqual(len(list(mailbox.numbers(q))), 0)
+                mailbox.append(TEST_MESSAGE_DATA)
+                self.assertEqual(len(list(mailbox.numbers(q))), 1)  # YANDEX 0!=1 in test only, strange
+                mailbox.delete(mailbox.uids(q))
+
             # COPY
             mailbox.folder.set(mailbox.folder_test_base)
             mailbox.copy(mailbox.uids(), mailbox.folder_test_temp1)
@@ -99,15 +110,27 @@ class MailboxTest(MailboxTestCase):
             mailbox.delete(mailbox.uids())
             self.assertEqual(len(list(mailbox.numbers())), 0)
 
-            # APPEND
-            if mailbox.mailbox_name not in ('MAIL_RU', 'YANDEX'):
-                mailbox.folder.set('INBOX')
-                q = A(subject='_append_')
-                mailbox.delete(mailbox.uids(q))
-                self.assertEqual(len(list(mailbox.numbers(q))), 0)
-                mailbox.append(TEST_MESSAGE_DATA)
-                self.assertEqual(len(list(mailbox.numbers(q))), 1)  # YANDEX 0!=1 in test only, strange
-                mailbox.delete(mailbox.uids(q))
+            # COPY chunks
+            mailbox.folder.set(mailbox.folder_test_base)
+            mailbox.copy(mailbox.uids(), mailbox.folder_test_temp1, self.test_chunks_size)
+            self.assertEqual(len(list(mailbox.numbers())), self.base_test_msg_cnt)
+            mailbox.folder.set(mailbox.folder_test_temp1)
+            self.assertEqual(len(list(mailbox.numbers())), self.base_test_msg_cnt)
+            # MOVE chunks
+            mailbox.folder.set(mailbox.folder_test_temp1)
+            mailbox.move(mailbox.uids(), mailbox.folder_test_temp2, self.test_chunks_size)
+            self.assertEqual(len(list(mailbox.numbers())), 0)
+            mailbox.folder.set(mailbox.folder_test_temp2)
+            self.assertEqual(len(list(mailbox.numbers())), self.base_test_msg_cnt)
+            # FLAG chunks
+            mailbox.folder.set(mailbox.folder_test_temp2)
+            mailbox.flag(mailbox.uids(), MailMessageFlags.FLAGGED, True, self.test_chunks_size)
+            self.assertTrue(
+                all([MailMessageFlags.FLAGGED in msg.flags for msg in mailbox.fetch(bulk=True, headers_only=1)]))
+            # DELETE chunks
+            mailbox.folder.set(mailbox.folder_test_temp2)
+            mailbox.delete(mailbox.uids(), self.test_chunks_size)
+            self.assertEqual(len(list(mailbox.numbers())), 0)
 
 
 if __name__ == "__main__":

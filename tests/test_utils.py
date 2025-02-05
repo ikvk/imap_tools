@@ -4,8 +4,8 @@ import unicodedata
 
 from imap_tools.errors import ImapToolsError, UnexpectedCommandStatusError, MailboxCopyError
 from imap_tools.consts import MailMessageFlags
-from imap_tools.utils import clean_flags, chunks, quote, pairs_to_dict, decode_value, check_command_status, \
-    parse_email_date, parse_email_addresses, EmailAddress, clean_uids, replace_html_ct_charset, chunks_crop, \
+from imap_tools.utils import clean_flags, chunked, quote, pairs_to_dict, decode_value, check_command_status, \
+    parse_email_date, parse_email_addresses, EmailAddress, clean_uids, replace_html_ct_charset, chunked_crop, \
     remove_non_printable
 
 
@@ -21,13 +21,14 @@ class UtilsTest(unittest.TestCase):
 
     def test_clean_uids(self):
         # *clean_uids also implicitly tested in test_query.py
-        self.assertEqual(clean_uids('11'), '11')
-        self.assertEqual(clean_uids('1,2'), '1,2')
-        self.assertEqual(clean_uids('1,2:*'), '1,2:*')
-        with self.assertRaises(TypeError):
-            clean_uids(1)  # noqa
-        with self.assertRaises(TypeError):
-            clean_uids(dict(a=1))  # noqa
+        self.assertEqual(clean_uids('11'), ['11'])
+        self.assertEqual(clean_uids('1,2'), ['1', '2'])
+        self.assertEqual(clean_uids(' 1,2, 4 '), ['1', '2', '4'])
+        self.assertEqual(clean_uids('1,222'), ['1', '222'])
+        self.assertEqual(clean_uids('1,2:*'), ['1', '2:*'])
+        for i in ['', 1, 1.0, dict(a=1)]:
+            with self.assertRaises(TypeError):
+                clean_uids(i)  # noqa
 
     def test_clean_flags(self):
         self.assertEqual(clean_flags([MailMessageFlags.FLAGGED, MailMessageFlags.SEEN]), ['\\Flagged', '\\Seen'])
@@ -39,17 +40,22 @@ class UtilsTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             clean_flags([MailMessageFlags.FLAGGED, '\\CUSTOM_TAG_WITH_SLASH'])
 
-    def test_chunks(self):
-        self.assertEqual(list(chunks('ABCDE', 2, '=')), [('A', 'B'), ('C', 'D'), ('E', '=')])
-        self.assertEqual(list(chunks([1, 2, 3, 4, 5, 6], 3)), [(1, 2, 3), (4, 5, 6)])
-        self.assertEqual(list(chunks([], 4)), [])
-        self.assertEqual(list(chunks([1, 2], 0)), [])
-        self.assertEqual(list(chunks(['0', '0'], 1)), [('0',), ('0',)])
+    def test_chunked(self):
+        self.assertEqual(list(chunked('ABCDE', 2, '=')), [('A', 'B'), ('C', 'D'), ('E', '=')])
+        self.assertEqual(list(chunked([1, 2, 3, 4, 5, 6], 3)), [(1, 2, 3), (4, 5, 6)])
+        self.assertEqual(list(chunked([], 4)), [])
+        self.assertEqual(list(chunked([1, 2], 0)), [])
+        self.assertEqual(list(chunked(['0', '0'], 1)), [('0',), ('0',)])
 
-    def test_chunks_crop(self):
-        self.assertEqual(list(chunks_crop([1, 2, 3, 4, 5, 6, 7], 3)), [[1, 2, 3], [4, 5, 6], [7]])
-        self.assertEqual(list(chunks_crop([1, 2, 3, 4, 5, 6], 3)), [[1, 2, 3], [4, 5, 6]])
-        self.assertEqual(list(chunks_crop([1, ], 3)), [[1]])
+    def test_chunked_crop(self):
+        self.assertEqual(list(chunked_crop([1, 2, 3, 4, 5, 6, 7], 3)), [[1, 2, 3], [4, 5, 6], [7]])
+        self.assertEqual(list(chunked_crop([1, 2, 3, 4, 5, 6], 3)), [[1, 2, 3], [4, 5, 6]])
+        self.assertEqual(list(chunked_crop([1, ], 3)), [[1]])
+        self.assertEqual(list(chunked_crop([1], 0)), [[1]])
+        self.assertEqual(list(chunked_crop([1, 2], False)), [[1, 2]])
+        self.assertEqual(list(chunked_crop([1, 2, 3], None)), [[1, 2, 3]])
+        with self.assertRaises(ValueError):
+            list(chunked_crop([1], -1))
 
     def test_quote(self):
         self.assertEqual(quote('str привет'), '"str привет"')

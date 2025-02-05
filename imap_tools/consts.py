@@ -9,6 +9,7 @@ CODECS_OFFICIAL_REPLACEMENT_CHAR = '�'
 
 PYTHON_VERSION_MINOR = int(sys.version_info.minor)
 
+MOVE_RESULT_TAG = ('_MOVE',)  # const delete_result part for mailbox.move result, when server have MOVE in capabilities
 
 class MailMessageFlags:
     """

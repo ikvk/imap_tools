@@ -238,7 +238,7 @@ Action's uid_list arg may takes:
 To get uids, use the maibox methods: uids, fetch.
 
 For actions with a large number of messages imap command may be too large and will cause exception at server side,
-use 'limit' argument for fetch in this case.
+use ``chunks`` argument for ``copy,move,delete,flag`` OR ``limit`` argument for ``fetch`` in this case.
 
 .. code-block:: python
 
@@ -247,8 +247,8 @@ use 'limit' argument for fetch in this case.
         # COPY messages with uid in 23,27 from current folder to folder1
         mailbox.copy('23,27', 'folder1')
 
-        # MOVE all messages from current folder to INBOX/folder2
-        mailbox.move(mailbox.uids(), 'INBOX/folder2')
+        # MOVE all messages from current folder to INBOX/folder2, move by 100 emails at once
+        mailbox.move(mailbox.uids(), 'INBOX/folder2', chunks=100)
 
         # DELETE messages with 'cat' word in its html from current folder
         mailbox.delete([msg.uid for msg in mailbox.fetch() if 'cat' in msg.html])
@@ -429,7 +429,8 @@ Big thanks to people who helped develop this library:
 `homoLudenus <https://github.com/homoLudenus>`_,
 `sphh <https://github.com/sphh>`_,
 `bh <https://github.com/bh>`_,
-`tomasmach <https://github.com/tomasmach>`_
+`tomasmach <https://github.com/tomasmach>`_,
+`errror <https://github.com/errror>`_
 
 Help the project
 ----------------

@@ -7,12 +7,12 @@ from typing import Optional, List, Iterable, Sequence, Union, Tuple, Iterator
 from .message import MailMessage
 from .folder import MailBoxFolderManager
 from .idle import IdleManager
-from .consts import UID_PATTERN, PYTHON_VERSION_MINOR
-from .utils import clean_uids, check_command_status, chunks, encode_folder, clean_flags, check_timeout_arg_support, \
-    chunks_crop, StrOrBytes
+from .consts import UID_PATTERN, PYTHON_VERSION_MINOR, MOVE_RESULT_TAG
+from .utils import clean_uids, check_command_status, chunked, encode_folder, clean_flags, check_timeout_arg_support, \
+    chunked_crop, StrOrBytes
 from .errors import MailboxStarttlsError, MailboxLoginError, MailboxLogoutError, MailboxNumbersError, \
     MailboxFetchError, MailboxExpungeError, MailboxDeleteError, MailboxCopyError, MailboxFlagError, \
-    MailboxAppendError, MailboxUidsError, MailboxTaggedResponseError
+    MailboxAppendError, MailboxUidsError, MailboxTaggedResponseError, MailboxMoveError
 
 # Maximal line length when calling readline(). This is to prevent reading arbitrary length lines.
 # 20Mb is enough for search response with about 2 000 000 message numbers
@@ -153,7 +153,7 @@ class BaseMailBox:
             return
 
         if isinstance(bulk, int) and bulk >= 2:
-            uid_list_seq = chunks_crop(uid_list, bulk)
+            uid_list_seq = chunked_crop(uid_list, bulk)
         elif isinstance(bulk, bool):
             uid_list_seq = (uid_list,)
         else:
@@ -164,7 +164,7 @@ class BaseMailBox:
             check_command_status(fetch_result, MailboxFetchError)
             if not fetch_result[1] or fetch_result[1][0] is None:
                 return
-            for built_fetch_item in chunks((reversed if reverse else iter)(fetch_result[1]), 2):
+            for built_fetch_item in chunked((reversed if reverse else iter)(fetch_result[1]), 2):
                 yield built_fetch_item
 
     def fetch(self, criteria: Criteria = 'ALL', charset: str = 'US-ASCII', limit: Optional[Union[int, slice]] = None,
@@ -204,62 +204,105 @@ class BaseMailBox:
         check_command_status(result, MailboxExpungeError)
         return result
 
-    def delete(self, uid_list: Union[str, Iterable[str]]) -> Optional[Tuple[tuple, tuple]]:
+    def delete(self, uid_list: Union[str, Iterable[str]], chunks: Optional[int] = None) \
+            -> Optional[List[Tuple[tuple, tuple]]]:
         """
         Delete email messages
         Do nothing on empty uid_list
+        :param uid_list: UIDs for delete
+        :param chunks: Number of UIDs to process at once, to avoid server errors on large set. Proc all at once if None.
         :return: None on empty uid_list, command results otherwise
         """
-        uid_str = clean_uids(uid_list)
-        if not uid_str:
+        cleaned_uid_list = clean_uids(uid_list)
+        if not cleaned_uid_list:
             return None
-        store_result = self.client.uid('STORE', uid_str, '+FLAGS', r'(\Deleted)')
-        check_command_status(store_result, MailboxDeleteError)
-        expunge_result = self.expunge()
-        return store_result, expunge_result
+        results = []
+        for cleaned_uid_list_i in chunked_crop(cleaned_uid_list, chunks):
+            store_result = self.client.uid('STORE', ','.join(cleaned_uid_list_i), '+FLAGS', r'(\Deleted)')
+            check_command_status(store_result, MailboxDeleteError)
+            expunge_result = self.expunge()
+            results.append((store_result, expunge_result))
+        return results
 
-    def copy(self, uid_list: Union[str, Iterable[str]], destination_folder: StrOrBytes) -> Optional[tuple]:
+    def copy(self, uid_list: Union[str, Iterable[str]], destination_folder: StrOrBytes, chunks: Optional[int] = None) \
+            -> Optional[List[tuple]]:
         """
-        Copy email messages into the specified folder
-        Do nothing on empty uid_list
+        Copy email messages into the specified folder.
+        Do nothing on empty uid_list.
+        :param uid_list: UIDs for copy
+        :param destination_folder: Folder for email copies
+        :param chunks: Number of UIDs to process at once, to avoid server errors on large set. Proc all at once if None.
         :return: None on empty uid_list, command results otherwise
         """
-        uid_str = clean_uids(uid_list)
-        if not uid_str:
+        cleaned_uid_list = clean_uids(uid_list)
+        if not cleaned_uid_list:
             return None
-        copy_result = self.client.uid('COPY', uid_str, encode_folder(destination_folder))  # noqa
-        check_command_status(copy_result, MailboxCopyError)
-        return copy_result
+        results = []
+        for cleaned_uid_list_i in chunked_crop(cleaned_uid_list, chunks):
+            copy_result = self.client.uid(
+                'COPY', ','.join(cleaned_uid_list_i), encode_folder(destination_folder))  # noqa
+            check_command_status(copy_result, MailboxCopyError)
+            results.append(copy_result)
+        return results
 
-    def move(self, uid_list: Union[str, Iterable[str]], destination_folder: StrOrBytes) -> Optional[Tuple[tuple, tuple]]:
+    def move(self, uid_list: Union[str, Iterable[str]], destination_folder: StrOrBytes, chunks: Optional[int] = None) \
+            -> Optional[List[Tuple[tuple, tuple]]]:
         """
-        Move email messages into the specified folder
-        Do nothing on empty uid_list
+        Move email messages into the specified folder.
+        Do nothing on empty uid_list.
+        :param uid_list: UIDs for move
+        :param destination_folder: Folder for move to
+        :param chunks: Number of UIDs to process at once, to avoid server errors on large set. Proc all at once if None.
         :return: None on empty uid_list, command results otherwise
         """
-        uid_str = clean_uids(uid_list)
-        if not uid_str:
+        cleaned_uid_list = clean_uids(uid_list)
+        if not cleaned_uid_list:
             return None
-        copy_result = self.copy(uid_str, destination_folder)
-        delete_result = self.delete(uid_str)
-        return copy_result, delete_result
+        if 'MOVE' in self.client.capabilities:
+            # server side move
+            results = []
+            for cleaned_uid_list_i in chunked_crop(cleaned_uid_list, chunks):
+                move_result = self.client.uid(
+                    'MOVE', ','.join(cleaned_uid_list_i), encode_folder(destination_folder))  # noqa
+                check_command_status(move_result, MailboxMoveError)
+                results.append((move_result, MOVE_RESULT_TAG))
+            return results
+        else:
+            # client side move
+            results = []
+            for cleaned_uid_list_i in chunked_crop(cleaned_uid_list, chunks):
+                copy_result = self.copy(cleaned_uid_list_i, destination_folder)
+                delete_result = self.delete(cleaned_uid_list_i)
+                results.append((copy_result, delete_result))
+            return results
 
-    def flag(self, uid_list: Union[str, Iterable[str]], flag_set: Union[str, Iterable[str]], value: bool) \
-            -> Optional[Tuple[tuple, tuple]]:
+    def flag(self, uid_list: Union[str, Iterable[str]], flag_set: Union[str, Iterable[str]], value: bool,
+             chunks: Optional[int] = None) -> Optional[List[Tuple[tuple, tuple]]]:
         """
-        Set/unset email flags
-        Do nothing on empty uid_list
+        Set/unset email flags.
+        Do nothing on empty uid_list.
         System flags contains in consts.MailMessageFlags.all
+        :param uid_list: UIDs for set flag
+        :param flag_set: Flags for operate
+        :param value: Should the flags be set: True - yes, False - no
+        :param chunks: Number of UIDs to process at once, to avoid server errors on large set. Proc all at once if None.
         :return: None on empty uid_list, command results otherwise
         """
-        uid_str = clean_uids(uid_list)
-        if not uid_str:
+        cleaned_uid_list = clean_uids(uid_list)
+        if not cleaned_uid_list:
             return None
-        store_result = self.client.uid(
-            'STORE', uid_str, ('+' if value else '-') + 'FLAGS', f'({" ".join(clean_flags(flag_set))})')
-        check_command_status(store_result, MailboxFlagError)
-        expunge_result = self.expunge()
-        return store_result, expunge_result
+        results = []
+        for cleaned_uid_list_i in chunked_crop(cleaned_uid_list, chunks):
+            store_result = self.client.uid(
+                'STORE',
+                ','.join(cleaned_uid_list_i),
+                ('+' if value else '-') + 'FLAGS',
+                f'({" ".join(clean_flags(flag_set))})'
+            )
+            check_command_status(store_result, MailboxFlagError)
+            expunge_result = self.expunge()
+            results.append((store_result, expunge_result))
+        return results
 
     def append(self, message: Union[MailMessage, bytes],
                folder: StrOrBytes = 'INBOX',

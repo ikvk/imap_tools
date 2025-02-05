@@ -1,3 +1,13 @@
+1.10.0
+======
+* Added: support IMAP command MOVE at BaseMailBox.move
+* Added: MailboxMoveError, raises from BaseMailBox.move when MOVE command is supported
+* Added: chunks argument for BaseMailBox.(copy,move,flag,delete) methods - Number of UIDs to proc at once, to avoid server errors on large set
+* Changed: BaseMailBox.(copy,move,flag,delete) result types
+* Changed: utils.clean_uids now returns List[str]
+* Changed: utils.chunks_crop -> utils.chunked_crop, n arg renamed to chunk_size and it takes False-like vals
+* Renamed: utils.chunks -> utils.chunked
+
 1.9.1
 =====
 * Replaced: functools.lru_cache to functools.cached_property
