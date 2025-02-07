@@ -137,7 +137,7 @@ MailMessage and MailAttachment public attributes are cached by functools.cached_
 Search criteria
 ^^^^^^^^^^^^^^^
 
-The *"criteria"* argument is used at *fetch, uids, numbers* methods of MailBox. Criteria can be of three types:
+The ``criteria`` argument is used at ``fetch, uids, numbers`` methods of MailBox. Criteria can be of three types:
 
 .. code-block:: python
 
@@ -147,7 +147,7 @@ The *"criteria"* argument is used at *fetch, uids, numbers* methods of MailBox. 
     mailbox.fetch('TEXT "hello"')          # str
     mailbox.fetch(b'TEXT "\xd1\x8f"')      # bytes
 
-Use *"charset"* argument for encode criteria to the desired encoding. If criteria is bytes - encoding will be ignored.
+Use ``charset`` argument for encode criteria to the desired encoding. If criteria is bytes - encoding will be ignored.
 
 .. code-block:: python
 
