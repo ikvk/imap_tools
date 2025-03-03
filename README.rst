@@ -172,13 +172,13 @@ A few examples below. See `detailed query examples <https://github.com/ikvk/imap
 
     from imap_tools import A, AND, OR, NOT
     # AND: subject contains "cat" AND message is unseen
-    A(subject='cat', seen=False)  # '(TEXT "hello" NEW)'
+    A(subject='cat', seen=False)
     # OR: header or body contains "hello" OR date equal 2000-3-15
     OR(text='hello', date=datetime.date(2000, 3, 15))
     # NOT: date not in the date list
     NOT(OR(date=[dt.date(2019, 10, 1), dt.date(2019, 10, 10)]))
-    # PYTHON NOTE: you can't do: A(text='aa', NOT(subject='bb')), use kwargs after logic classes (args)
-    A(NOT(subject='bb'), text='aa')
+    # PYTHON NOTE: you can't do A(text='a', NOT(subject='b')), use kwargs after logic classes (args)
+    A(NOT(subject='b'), text='a')
 
 Server side search notes:
 
