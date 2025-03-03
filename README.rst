@@ -166,21 +166,19 @@ Header    H      Header value for search by header key      name: str, value: st
 UidRange  U      UID range value for search by uid key      start: str, end: str
 ========  =====  ========================================== ======================================
 
-See `query examples <https://github.com/ikvk/imap_tools/blob/master/examples/search.py>`_. A few examples:
+A few examples below. See `detailed query examples <https://github.com/ikvk/imap_tools/blob/master/examples/search.py>`_.
 
 .. code-block:: python
 
     from imap_tools import A, AND, OR, NOT
-    # AND
-    A(text='hello', new=True)  # '(TEXT "hello" NEW)'
-    # OR
-    OR(text='hello', date=datetime.date(2000, 3, 15))  # '(OR TEXT "hello" ON 15-Mar-2000)'
-    # NOT
-    NOT(text='hello', new=True)  # 'NOT (TEXT "hello" NEW)'
-    # complex
-    A(OR(from_='from@ya.ru', text='"the text"'), NOT(OR(A(answered=False), A(new=True))), to='to@ya.ru')
-    # python note: you can't do: A(text='two', NOT(subject='one'))
-    A(NOT(subject='one'), text='two')  # use kwargs after logic classes (args)
+    # AND: subject contains "cat" AND message is unseen
+    A(subject='cat', seen=False)  # '(TEXT "hello" NEW)'
+    # OR: header or body contains "hello" OR date equal 2000-3-15
+    OR(text='hello', date=datetime.date(2000, 3, 15))
+    # NOT: date not in the date list
+    NOT(OR(date=[dt.date(2019, 10, 1), dt.date(2019, 10, 10)]))
+    # PYTHON NOTE: you can't do: A(text='aa', NOT(subject='bb')), use kwargs after logic classes (args)
+    A(NOT(subject='bb'), text='aa')
 
 Server side search notes:
 

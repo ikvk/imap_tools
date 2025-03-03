@@ -11,7 +11,7 @@ NOTES:
     NOT(AND(OR(from_='11', to='22', text='33'), cc='44', bcc='55'))
 
 # python to prefix notation steps:
-1. OR(1=11, 2=22, 3=33) ->
+1. OR(from_=11, to=22, text=33) ->
     "(OR OR FROM "11" TO "22" TEXT "33")"
 2. AND("(OR OR FROM "11" TO "22" TEXT "33")", cc='44', bcc='55') ->
     "AND(OR(from_='11', to='22', text='33'), cc='44', bcc='55')"
