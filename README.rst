@@ -43,7 +43,8 @@ Guide
 Basic
 ^^^^^
 
-Info about lib are at: *this page*, docstrings, issues, pull requests, examples, source, stackoverflow.com
+Info about lib are at: *this page*, docstrings, issues, pull requests,
+`examples <https://github.com/ikvk/imap_tools/tree/master/examples>`_, source, stackoverflow.com
 
 .. code-block:: python
 
@@ -239,8 +240,10 @@ Action's uid_list arg may takes:
 
 To get uids, use the maibox methods: uids, fetch.
 
-For actions with a large number of messages imap command may be too large and will cause exception at server side,
-use ``chunks`` argument for ``copy,move,delete,flag`` OR ``limit`` argument for ``fetch`` in this case.
+For actions with large number of messages IMAP command may be too large and will cause exception at server side:
+
+* Use ``chunks`` arg at ``copy,move,delete,flag`` to specify number of UIDs to process at one IMAP command
+* Use ``limit`` arg at ``fetch`` to limit the number of messages returned
 
 .. code-block:: python
 
@@ -267,7 +270,7 @@ use ``chunks`` argument for ``copy,move,delete,flag`` OR ``limit`` argument for 
 Actions with folders
 ^^^^^^^^^^^^^^^^^^^^
 
-BaseMailBox.login/xoauth2 has initial_folder arg, that is "INBOX" by default, use None for not set folder on login.
+BaseMailBox ``login,xoauth2`` arg ``initial_folder`` is "INBOX" by default, use None for not set folder on login.
 
 .. code-block:: python
 
@@ -305,7 +308,7 @@ BaseMailBox.login/xoauth2 has initial_folder arg, that is "INBOX" by default, us
 IDLE workflow
 ^^^^^^^^^^^^^
 
-IDLE logic are in mailbox.idle manager, its methods are in the table below:
+IDLE logic are in ``mailbox.idle`` manager, its methods are in the table below:
 
 ======== ============================================================================== ================================
 Method   Description                                                                    Arguments
@@ -348,7 +351,7 @@ Contribute
 
 If you found a bug or have a question, then:
 
-1. Look for answer at: this page, issues, pull requests, examples, source, RFCs, stackoverflow.com, internet.
+1. Look for answer at: this page, issues, pull requests, `examples <https://github.com/ikvk/imap_tools/tree/master/examples>`_, source, RFCs, stackoverflow.com, internet.
 2. And only then - create merge request or issue.
 
 Reasons
