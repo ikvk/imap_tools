@@ -59,7 +59,7 @@ Info about lib are at: *this page*, docstrings, issues, pull requests,
 
 ``MailBox, MailBoxTls, MailBoxUnencrypted`` - for create mailbox client. `TLS example <https://github.com/ikvk/imap_tools/blob/master/examples/tls.py>`_.
 
-``BaseMailBox.<auth>`` - login, login_utf8, xoauth2, logout - authentication functions, they support context manager.
+``BaseMailBox.<auth>`` - ``login, login_utf8, xoauth2, logout`` - authentication functions, support context manager.
 
 ``BaseMailBox.fetch`` - first searches email uids by criteria in current folder, then fetch and yields `MailMessage <#email-attributes>`_, args:
 
@@ -69,10 +69,10 @@ Info about lib are at: *this page*, docstrings, issues, pull requests,
 * *mark_seen* = True, mark emails as seen on fetch
 * *reverse* = False, in order from the larger date to the smaller
 * *headers_only* = False, get only email headers (without text, html, attachments)
-* *bulk* = False, False - fetch each message separately per N commands - low memory consumption, slow; True - fetch all messages per 1 command - high memory consumption, fast; int - fetch all messages by bulks of the specified size, for 20 messages and bulk=5 -> 4 commands
+* *bulk* = False, False - fetch each message separately per N commands - low memory consumption, slow; True - fetch all messages per 1 command - high memory consumption, fast; int - fetch all messages by bulks of the specified size, for 20 messages and bulk=5 -> 4 IMAP commands
 * *sort* = None, criteria for sort messages on server, use SortCriteria constants. Charset arg is important for sort
 
-``BaseMailBox.uids`` - search mailbox for matching message uids in current folder, returns [str | None], None when MailMessage.from_bytes used, args:
+``BaseMailBox.uids`` - search mailbox for matching message uids in current folder, returns List[str], args:
 
 * *criteria* = 'ALL', message search criteria, `query builder <#search-criteria>`_
 * *charset* = 'US-ASCII', indicates charset of the strings that appear in the search criteria. See rfc2978
