@@ -57,7 +57,7 @@ Info about lib are at: *this page*, docstrings, issues, pull requests,
 
 `Description of this^ example <https://github.com/ikvk/imap_tools/blob/master/examples/basic.py>`_.
 
-``MailBox, MailBoxTls, MailBoxUnencrypted`` - for create mailbox client. `TLS example <https://github.com/ikvk/imap_tools/blob/master/examples/tls.py>`_.
+``MailBox, MailBoxStartTls, MailBoxUnencrypted`` - for create mailbox client. `TLS example <https://github.com/ikvk/imap_tools/blob/master/examples/tls.py>`_.
 
 ``BaseMailBox.<auth>`` - ``login, login_utf8, xoauth2, logout`` - authentication functions, support context manager.
 
@@ -435,7 +435,8 @@ Big thanks to people who helped develop this library:
 `sphh <https://github.com/sphh>`_,
 `bh <https://github.com/bh>`_,
 `tomasmach <https://github.com/tomasmach>`_,
-`errror <https://github.com/errror>`_
+`errror <https://github.com/errror>`_,
+`hurricane-dorian <https://github.com/hurricane-dorian>`_
 
 Help the project
 ----------------

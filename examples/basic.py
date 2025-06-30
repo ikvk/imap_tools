@@ -41,7 +41,7 @@ Mailbox class choosing:
     MailBox
         Corresponds to imaplib.IMAP4_SSL.
         Encrypted connection with SSL/TLS. This is what most email servers use these days.
-    MailBoxTls
+    MailBoxStartTls
         Corresponds to imaplib.IMAP4, then using startls() on the resulting connection.
         For a STARTTLS connection: 
         creates a plaintext connection then upgrades it later by using a STARTTLS command in the protocol. 

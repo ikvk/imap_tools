@@ -4,11 +4,11 @@
 # License: Apache-2.0
 
 from .query import AND, OR, NOT, Header, UidRange, A, O, N, H, U
-from .mailbox import BaseMailBox, MailBox, MailBoxUnencrypted, MailBoxTls
+from .mailbox import BaseMailBox, MailBox, MailBoxUnencrypted, MailBoxStartTls
 from .message import MailMessage, MailAttachment
 from .folder import MailBoxFolderManager, FolderInfo
 from .consts import MailMessageFlags, MailBoxFolderStatusOptions, SortCriteria
 from .utils import EmailAddress
 from .errors import *
 
-__version__ = '1.10.0'
+__version__ = '1.11.0'

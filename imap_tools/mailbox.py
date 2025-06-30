@@ -332,32 +332,8 @@ class BaseMailBox:
         return append_result
 
 
-class MailBoxUnencrypted(BaseMailBox):
-    """Working with the email box through IMAP4"""
-
-    def __init__(self, host='', port=143, timeout=None):
-        """
-        :param host: host's name (default: localhost)
-        :param port: port number
-        :param timeout: timeout in seconds for the connection attempt, since python 3.9
-        """
-        check_timeout_arg_support(timeout)
-        self._host = host
-        self._port = port
-        self._timeout = timeout
-        super().__init__()
-
-    def _get_mailbox_client(self) -> imaplib.IMAP4:
-        if PYTHON_VERSION_MINOR < 9:
-            return imaplib.IMAP4(self._host, self._port)
-        elif PYTHON_VERSION_MINOR < 12:
-            return imaplib.IMAP4(self._host, self._port, self._timeout)
-        else:
-            return imaplib.IMAP4(self._host, self._port, timeout=self._timeout)
-
-
 class MailBox(BaseMailBox):
-    """Working with the email box through IMAP4 over SSL connection"""
+    """Working with the email box through IMAP4 over SSL/TLS connection with imaplib.IMAP4_SSL"""
 
     def __init__(self, host='', port=993, timeout=None, keyfile=None, certfile=None, ssl_context=None):
         """
@@ -389,10 +365,34 @@ class MailBox(BaseMailBox):
             return imaplib.IMAP4_SSL(self._host, self._port, ssl_context=self._ssl_context, timeout=self._timeout)
 
 
-class MailBoxTls(BaseMailBox):
-    """Working with the email box through IMAP4 with STARTTLS"""
+class MailBoxUnencrypted(BaseMailBox):
+    """Working with the email box through IMAP4 without encryption. Do NOT use it on the public internet!"""
 
-    def __init__(self, host='', port=993, timeout=None, ssl_context=None):
+    def __init__(self, host='', port=143, timeout=None):
+        """
+        :param host: host's name (default: localhost)
+        :param port: port number
+        :param timeout: timeout in seconds for the connection attempt, since python 3.9
+        """
+        check_timeout_arg_support(timeout)
+        self._host = host
+        self._port = port
+        self._timeout = timeout
+        super().__init__()
+
+    def _get_mailbox_client(self) -> imaplib.IMAP4:
+        if PYTHON_VERSION_MINOR < 9:
+            return imaplib.IMAP4(self._host, self._port)
+        elif PYTHON_VERSION_MINOR < 12:
+            return imaplib.IMAP4(self._host, self._port, self._timeout)
+        else:
+            return imaplib.IMAP4(self._host, self._port, timeout=self._timeout)
+
+
+class MailBoxStartTls(BaseMailBox):
+    """Working with the email box through IMAP4 with imaplib.IMAP4 + STARTTLS"""
+
+    def __init__(self, host='', port=143, timeout=None, ssl_context=None):
         """
         :param host: host's name (default: localhost)
         :param port: port number
@@ -407,6 +407,8 @@ class MailBoxTls(BaseMailBox):
         super().__init__()
 
     def _get_mailbox_client(self) -> imaplib.IMAP4:
+        if self._port == 993:
+            raise ValueError("Port 993 requires IMAP4_SSL. Use MailBox class for SSL/TLS connection.")
         if PYTHON_VERSION_MINOR < 9:
             client = imaplib.IMAP4(self._host, self._port)
         elif PYTHON_VERSION_MINOR < 12:

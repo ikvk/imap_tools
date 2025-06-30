@@ -1,3 +1,9 @@
+1.11.0
+======
+* Renamed: MailBoxTls -> MailBoxStartTls
+* Changed: MailBoxStartTls now uses 143 port by default
+* Changed: MailBoxStartTls now not works with 993 port (ValueError)
+
 1.10.0
 ======
 * Added: support IMAP command MOVE at BaseMailBox.move
