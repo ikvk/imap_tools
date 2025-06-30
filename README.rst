@@ -55,9 +55,9 @@ Info about lib are at: *this page*, docstrings, issues, pull requests,
         for msg in mailbox.fetch():
             print(msg.date, msg.subject, len(msg.text or msg.html))
 
-`Description of this^ example <https://github.com/ikvk/imap_tools/blob/master/examples/basic.py>`_.
+`Description of basic example^, that you should to read <https://github.com/ikvk/imap_tools/blob/master/examples/basic.py>`_.
 
-``MailBox, MailBoxStartTls, MailBoxUnencrypted`` - for create mailbox client. `TLS example <https://github.com/ikvk/imap_tools/blob/master/examples/tls.py>`_.
+``MailBox, MailBoxStartTls, MailBoxUnencrypted`` - for create mailbox client. `STARTTLS example <https://github.com/ikvk/imap_tools/blob/master/examples/starttls.py>`_.
 
 ``BaseMailBox.<auth>`` - ``login, login_utf8, xoauth2, logout`` - authentication functions, support context manager.
 

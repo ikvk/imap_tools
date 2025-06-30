@@ -29,12 +29,18 @@ with MailBox('imap.mail.com').login('test@mail.com', 'pwd') as mailbox:
     for msg in mailbox.fetch():
         print(msg.date, msg.subject, len(msg.text or msg.html))
 
-# Equivalent verbose version:
+# Equivalent version 1:
 mailbox = MailBox('imap.mail.com')
-mailbox.login('test@mail.com', 'pwd', 'INBOX')  # or use mailbox.folder.set instead initial_folder arg
+mailbox.login('test@mail.com', 'pwd', 'INBOX')
 for msg in mailbox.fetch(AND(all=True)):
     print(msg.date, msg.subject, len(msg.text or msg.html))
 mailbox.logout()
+
+# Equivalent version 2:
+with MailBox('imap.mail.com').login('test@mail.com', 'pwd', None) as mailbox:  # None - do not set folder at login
+    mailbox.folder.set('INBOX')
+    for msg in mailbox.fetch():
+        print(msg.date, msg.subject, len(msg.text or msg.html))
 
 """
 Mailbox class choosing:
