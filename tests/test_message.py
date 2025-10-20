@@ -117,9 +117,9 @@ class MessageTest(MailboxTestCase):
                         eml_path_set.append(full_path)
 
         for eml_path in eml_path_set:
-            # *there are many parser improvements at 3.13
+            # parser differences since 3.13
             fixed_in_py313 = ('missing_body.eml', 'bad_date_header.eml', 'raw_email_with_at_display_name.eml')
-            if any(i in eml_path for i in fixed_in_py313) and PYTHON_VERSION_MINOR == 13:
+            if any(i in eml_path for i in fixed_in_py313) and PYTHON_VERSION_MINOR in (13, 14):
                 continue
             py_path = eml_path.replace('/messages/', '/messages_data/')[:-4] + '.py'
             eml_data_module = _load_module(py_path)
