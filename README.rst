@@ -4,7 +4,7 @@
    :trim:
 
 imap_tools 📧
-=============
+========================================================================================================================
 
 High level lib for work with email by IMAP:
 
@@ -19,7 +19,7 @@ High level lib for work with email by IMAP:
 
 .. image:: https://img.shields.io/pypi/dm/imap_tools.svg?style=social
 
-===============  ================================================================================================
+===============  =======================================================================================================
 Python version   3.8+
 License          Apache-2.0
 PyPI             https://pypi.python.org/pypi/imap_tools/
@@ -27,21 +27,21 @@ RFC              `IMAP4.1 <https://tools.ietf.org/html/rfc3501>`_,
                  `EMAIL <https://tools.ietf.org/html/rfc2822>`_,
                  `IMAP related RFCs <https://github.com/ikvk/imap_tools/blob/master/docs/IMAP_related_RFCs.txt>`_
 Repo mirror      https://gitflic.ru/project/ikvk/imap-tools
-===============  ================================================================================================
+===============  =======================================================================================================
 
 .. contents::
 
-Installation
-------------
+⚙️ Installation
+------------------------------------------------------------------------------------------------------------------------
 ::
 
     $ pip install imap-tools
 
-Guide
------
+📘 Guide
+------------------------------------------------------------------------------------------------------------------------
 
-Basic
-^^^^^
+📋 Basic
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Info about lib are at: *this page*, docstrings, issues, pull requests,
 `examples <https://github.com/ikvk/imap_tools/tree/master/examples>`_, source, stackoverflow.com
@@ -90,8 +90,8 @@ Info about lib are at: *this page*, docstrings, issues, pull requests,
 
 ``BaseMailBox.client`` - imaplib.IMAP4/IMAP4_SSL client instance.
 
-Email attributes
-^^^^^^^^^^^^^^^^
+📧 Email attributes
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Email has 2 basic body variants: text and html. Sender can choose to include: one, other, both or neither(rare).
 
@@ -135,8 +135,8 @@ MailMessage and MailAttachment public attributes are cached by functools.cached_
         # imap_tools.EmailAddress example:
         # EmailAddress(name='Ya', email='im@ya.ru')  # has "full" property = 'Ya <im@ya.ru>'
 
-Search criteria
-^^^^^^^^^^^^^^^
+🔍 Search criteria
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The ``criteria`` argument is used at ``fetch, uids, numbers`` methods of MailBox. Criteria can be of three types:
 
@@ -228,8 +228,8 @@ header         H(str, str)*     HEADER "A-Spam" "5.8"   have a header that conta
 gmail_label    str*             X-GM-LABELS "label1"    have this gmail label
 =============  ===============  ======================  ================================================================
 
-Actions with emails
-^^^^^^^^^^^^^^^^^^^
+🗃️ Actions with emails
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 First of all read about UID `at rfc3501 <https://tools.ietf.org/html/rfc3501#section-2.3.1.1>`_.
 
@@ -267,8 +267,8 @@ For actions with large number of messages IMAP command may be too large and will
             msg = imap_tools.MailMessage.from_bytes(f.read())  # *or use bytes instead MailMessage
         mailbox.append(msg, 'INBOX', dt=None, flag_set=[imap_tools.MailMessageFlags.SEEN])
 
-Actions with folders
-^^^^^^^^^^^^^^^^^^^^
+📁 Actions with folders
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 BaseMailBox ``login,xoauth2`` arg ``initial_folder`` is "INBOX" by default, use None for not set folder on login.
 
@@ -305,8 +305,8 @@ BaseMailBox ``login,xoauth2`` arg ``initial_folder`` is "INBOX" by default, use 
         stat = mailbox.folder.status('some_folder')
         print(stat)  # {'MESSAGES': 41, 'RECENT': 0, 'UIDNEXT': 11996, 'UIDVALIDITY': 1, 'UNSEEN': 5}
 
-IDLE workflow
-^^^^^^^^^^^^^
+⏳ IDLE workflow
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 IDLE logic are in ``mailbox.idle`` manager, its methods are in the table below:
 
@@ -334,37 +334,39 @@ wait     Switch on IDLE, poll responses, switch off IDLE on response, return res
 
 Read docstrings and see `detailed examples <https://github.com/ikvk/imap_tools/blob/master/examples/idle.py>`_.
 
-Exceptions
-^^^^^^^^^^
+⚠️ Exceptions
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Most lib server actions raises exception if result is marked as not success.
 
 Custom lib exceptions here: `errors.py <https://github.com/ikvk/imap_tools/blob/master/imap_tools/errors.py>`_.
 
-Release notes
--------------
+📜 Release notes
+------------------------------------------------------------------------------------------------------------------------
 
 History of important changes: `release_notes.rst <https://github.com/ikvk/imap_tools/blob/master/docs/release_notes.rst>`_
 
-Contribute
-----------
+🛠️ Contribute
+------------------------------------------------------------------------------------------------------------------------
 
 If you found a bug or have a question, then:
 
 1. Look for answer at: this page, issues, pull requests, `examples <https://github.com/ikvk/imap_tools/tree/master/examples>`_, source, RFCs, stackoverflow.com, internet.
-2. And only then - create merge request or issue.
+2. And only then - create merge request or issue 🎯.
 
-Reasons
--------
+💡 Reasons
+------------------------------------------------------------------------------------------------------------------------
 
 - Excessive low level of `imaplib` library.
 - Other libraries contain various shortcomings or not convenient.
 - Open source projects make world better.
 
-Thanks
-------
+✨ Thanks
+------------------------------------------------------------------------------------------------------------------------
 
-Big thanks to people who helped develop this library:
+If the library helped you, please give it a star ⭐.
+
+Big thanks to people who helped to develop this library 🎉:
 
 `shilkazx <https://github.com/shilkazx>`_,
 `somepad <https://github.com/somepad>`_,
@@ -438,9 +440,4 @@ Big thanks to people who helped develop this library:
 `errror <https://github.com/errror>`_,
 `hurricane-dorian <https://github.com/hurricane-dorian>`_
 
-Help the project
-----------------
-1. Found a bug or figure out how to improve the library - open issue or merge request 🎯
-2. Do not know how to improve library - try to help other open projects that you use ✋
-3. Nowhere to put your money - spend it on your family, friends, loved ones, or people around you 💰
-4. Star the project ⭐
+Help other open projects that you use 🚀
