@@ -2,7 +2,7 @@ import re
 import imaplib
 import datetime
 from collections import UserString
-from typing import Optional, List, Iterable, Sequence, Union, Tuple, Iterator
+from typing import Optional, List, Iterable, Sequence, TypeVar, Union, Tuple, Iterator
 
 from .message import MailMessage
 from .folder import MailBoxFolderManager
@@ -19,7 +19,7 @@ from .errors import MailboxStarttlsError, MailboxLoginError, MailboxLogoutError,
 imaplib._MAXLINE = 20 * 1024 * 1024  # 20Mb
 
 Criteria = Union[StrOrBytes, UserString]
-
+Self = TypeVar("Self", bound="BaseMailBox")
 
 class BaseMailBox:
     """Working with the email box"""
@@ -56,7 +56,7 @@ class BaseMailBox:
         check_command_status(result, MailboxTaggedResponseError)
         return result, response_set
 
-    def login(self, username: str, password: str, initial_folder: Optional[str] = 'INBOX') -> 'BaseMailBox':
+    def login(self: Self, username: str, password: str, initial_folder: Optional[str] = 'INBOX') -> Self:
         """Authenticate to account"""
         login_result = self.client._simple_command('LOGIN', username, self.client._quote(password))  # noqa
         check_command_status(login_result, MailboxLoginError)
@@ -66,7 +66,7 @@ class BaseMailBox:
         self.login_result = login_result
         return self  # return self in favor of context manager
 
-    def login_utf8(self, username: str, password: str, initial_folder: Optional[str] = 'INBOX') -> 'BaseMailBox':
+    def login_utf8(self: Self, username: str, password: str, initial_folder: Optional[str] = 'INBOX') -> Self:
         """Authenticate to an account with a UTF-8 username and/or password"""
         # rfc2595 section 6 - PLAIN SASL mechanism
         encoded = (b"\0" + username.encode("utf8") + b"\0" + password.encode("utf8"))
@@ -78,7 +78,7 @@ class BaseMailBox:
         self.login_result = login_result
         return self
 
-    def xoauth2(self, username: str, access_token: str, initial_folder: Optional[str] = 'INBOX') -> 'BaseMailBox':
+    def xoauth2(self: Self, username: str, access_token: str, initial_folder: Optional[str] = 'INBOX') -> Self:
         """Authenticate to account using OAuth 2.0 mechanism"""
         auth_string = f'user={username}\1auth=Bearer {access_token}\1\1'
         result = self.client.authenticate('XOAUTH2', lambda x: auth_string)  # noqa
