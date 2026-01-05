@@ -13,7 +13,7 @@ class Header:
     """Header value for search by header key"""
     __slots__ = ('name', 'value')
 
-    def __init__(self, name: str, value: str):
+    def __init__(self, name: str, value: str) -> None:
         if not isinstance(name, str):
             raise TypeError(f'Header-name expected str value, "{type(name)}" received')
         self.name = quote(name)
@@ -39,7 +39,7 @@ class UidRange:
     """
     __slots__ = ('start', 'end')
 
-    def __init__(self, start: str, end: Optional[str] = None):
+    def __init__(self, start: str, end: Optional[str] = None) -> None:
         self.start = str(start).strip()
         if not (self.start.isdigit() or self.start == '*'):
             raise TypeError('UidRange start arg must be str with digits or *')
@@ -86,7 +86,7 @@ class LogicOperator(UserString):
             all: Optional[bool] = None,  # noqa
             uid: Optional[Union[str, Iterable[str], UidRange]] = None,
             header: Optional[Union[Header, List[Header]]] = None,
-            gmail_label: Optional[Union[str, List[str]]] = None):
+            gmail_label: Optional[Union[str, List[str]]] = None) -> None:
         self.converted_strings = converted_strings
         for val in converted_strings:
             if not any(isinstance(val, t) for t in (str, UserString)):
@@ -137,7 +137,7 @@ class ParamConverter:
         'header', 'gmail_label',
     )
 
-    def __init__(self, params: Dict[str, Any]):
+    def __init__(self, params: Dict[str, Any]) -> None:
         self.params = params
 
     def _gen_values(self, key: str, value: Any) -> Iterator[Any]:

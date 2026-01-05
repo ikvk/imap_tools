@@ -28,7 +28,7 @@ class BaseMailBox:
     folder_manager_class = MailBoxFolderManager
     idle_manager_class = IdleManager
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.client = self._get_mailbox_client()
         self.folder = self.folder_manager_class(self)
         self.idle = self.idle_manager_class(self)
@@ -335,7 +335,7 @@ class BaseMailBox:
 class MailBox(BaseMailBox):
     """Working with the email box through IMAP4 over SSL/TLS connection with imaplib.IMAP4_SSL"""
 
-    def __init__(self, host='', port=993, timeout=None, keyfile=None, certfile=None, ssl_context=None):
+    def __init__(self, host='', port=993, timeout=None, keyfile=None, certfile=None, ssl_context=None) -> None:
         """
         :param host: host's name (default: localhost)
         :param port: port number
@@ -368,7 +368,7 @@ class MailBox(BaseMailBox):
 class MailBoxUnencrypted(BaseMailBox):
     """Working with the email box through IMAP4 without encryption. Do NOT use it on the public internet!"""
 
-    def __init__(self, host='', port=143, timeout=None):
+    def __init__(self, host='', port=143, timeout=None) -> None:
         """
         :param host: host's name (default: localhost)
         :param port: port number
@@ -392,7 +392,7 @@ class MailBoxUnencrypted(BaseMailBox):
 class MailBoxStartTls(BaseMailBox):
     """Working with the email box through IMAP4 with imaplib.IMAP4 + STARTTLS"""
 
-    def __init__(self, host='', port=143, timeout=None, ssl_context=None):
+    def __init__(self, host='', port=143, timeout=None, ssl_context=None) -> None:
         """
         :param host: host's name (default: localhost)
         :param port: port number

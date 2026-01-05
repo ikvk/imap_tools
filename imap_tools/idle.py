@@ -43,7 +43,7 @@ class IdleManager:
         resps = mailbox.idle.wait(timeout=60)
     """
 
-    def __init__(self, mailbox):
+    def __init__(self, mailbox) -> None:
         self.mailbox = mailbox
         self._idle_tag = None
 

@@ -12,7 +12,7 @@ class MailboxFolderStatusValueError(ImapToolsError):
 class UnexpectedCommandStatusError(ImapToolsError):
     """Unexpected status in IMAP command response"""
 
-    def __init__(self, command_result: tuple, expected: Any):
+    def __init__(self, command_result: tuple, expected: Any) -> None:
         """
         :param command_result: imap command result
         :param expected: expected command status

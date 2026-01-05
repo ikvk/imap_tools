@@ -64,7 +64,7 @@ class EmailAddress:
     """Parsed email address info"""
     __slots__ = 'name', 'email'
 
-    def __init__(self, name: str, email: str):
+    def __init__(self, name: str, email: str) -> None:
         self.name = name
         self.email = email
 

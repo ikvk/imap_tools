@@ -16,7 +16,7 @@ from .consts import UID_PATTERN, CODECS_OFFICIAL_REPLACEMENT_CHAR
 class MailMessage:
     """The email message"""
 
-    def __init__(self, fetch_data: list):
+    def __init__(self, fetch_data: list) -> None:
         raw_message_data, raw_uid_data, raw_flag_data = self._get_message_data_parts(fetch_data)
         self._raw_uid_data = raw_uid_data
         self._raw_flag_data = raw_flag_data
@@ -211,7 +211,7 @@ class MailMessage:
 class MailAttachment:
     """An attachment for a MailMessage"""
 
-    def __init__(self, part):
+    def __init__(self, part) -> None:
         self.part = part
 
     def __str__(self):
