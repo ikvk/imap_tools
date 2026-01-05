@@ -34,10 +34,10 @@ class BaseMailBox:
         self.idle = self.idle_manager_class(self)
         self.login_result = None
 
-    def __enter__(self):
+    def __enter__(self: Self) -> Self:
         return self
 
-    def __exit__(self, exc_type, exc_value, exc_traceback):
+    def __exit__(self, exc_type, exc_value, exc_traceback) -> None:
         self.logout()
 
     def _get_mailbox_client(self) -> imaplib.IMAP4:
