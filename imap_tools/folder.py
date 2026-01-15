@@ -18,7 +18,7 @@ class FolderInfo:
     """
     __slots__ = 'name', 'delim', 'flags'
 
-    def __init__(self, name: str, delim: str, flags: Tuple[str, ...]):
+    def __init__(self, name: str, delim: str, flags: Tuple[str, ...]) -> None:
         self.name = name
         self.delim = delim
         self.flags = flags
@@ -33,7 +33,7 @@ class FolderInfo:
 class MailBoxFolderManager:
     """Operations with mailbox folders"""
 
-    def __init__(self, mailbox):
+    def __init__(self, mailbox) -> None:
         self.mailbox = mailbox
         self._current_folder = None
 
