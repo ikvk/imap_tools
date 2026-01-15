@@ -1,4 +1,8 @@
 
+mypy
+
+offline tests - save all imap responses
+
 add servers for tests
     rambler
     GMX Mail

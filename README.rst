@@ -438,6 +438,9 @@ Big thanks to people who helped to develop this library 🎉:
 `bh <https://github.com/bh>`_,
 `tomasmach <https://github.com/tomasmach>`_,
 `errror <https://github.com/errror>`_,
-`hurricane-dorian <https://github.com/hurricane-dorian>`_
+`hurricane-dorian <https://github.com/hurricane-dorian>`_,
+`dlucredativ <https://github.com/dlucredativ>`_,
+`ziima <https://github.com/ziima>`_
+
 
 Help other open projects that you use 🚀

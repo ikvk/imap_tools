@@ -1,3 +1,8 @@
+1.11.1
+======
+* Added: __all__ in __init__ module.
+* Improved: typing annotations for mypy
+
 1.11.0
 ======
 * Renamed: MailBoxTls -> MailBoxStartTls
