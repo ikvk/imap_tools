@@ -180,16 +180,24 @@ class MailMessage:
                 results.append(replace_html_ct_charset(html, 'utf-8'))
         return ''.join(results)
 
+    def headers_bytes(self, lower: bool = True) -> Dict[str, Tuple[bytes, ...]]:
+        """
+        Message headers as bytes
+        """
+        result = {}
+        for key, val in getattr(self.obj, '_headers', ()):
+            result.setdefault(key.lower() if lower else key, []).append(val.encode('ascii', errors='surrogateescape'))
+        return {k: tuple(v) for k, v in result.items()}
+
     @cached_property
     def headers(self) -> Dict[str, Tuple[str, ...]]:
         """
         Message headers
         Keys in result dict are in lower register (email headers are not case-sensitive)
         """
-        result = {}
-        for key, val in getattr(self.obj, '_headers', ()):
-            result.setdefault(key.lower(), []).append(val)
-        return {k: tuple(v) for k, v in result.items()}
+        return {
+            key: tuple(val.decode(errors='ignore') for val in tup) for key, tup in self.headers_bytes().items()
+        }
 
     @cached_property
     def attachments(self) -> List['MailAttachment']:

@@ -133,6 +133,31 @@ class MessageTest(MailboxTestCase):
                 for att_attr in test_att_attr_set:
                     self.assertEqual(getattr(att, att_attr), expected_data['attachments'][att_i][att_attr])
 
+    def test_headers_bytes(self):
+        headers = (
+            b'X-Header: =?utf8?b?w6TDtsO8?=\r\n' +
+            'x-header: äöü\r\n'.encode() +
+            'X-HEADER: äöü\r\n'.encode('latin1')
+        )
+        assert MailMessage.from_bytes(headers).headers_bytes() == {
+            'x-header': (
+                b'=?utf8?b?w6TDtsO8?=',
+                'äöü'.encode(),
+                'äöü'.encode('latin1')
+            ),
+        }
+        assert MailMessage.from_bytes(headers).headers_bytes(lower=False) == {
+            'X-Header': (b'=?utf8?b?w6TDtsO8?=',),
+            'x-header': ('äöü'.encode(),),
+            'X-HEADER': ('äöü'.encode('latin1'),),
+        }
+
+    def test_headers(self):
+        assert MailMessage.from_bytes(
+            b'X-Header: =?utf8?b?w6TDtsO8?=\r\n' +
+            'x-header: äöü\r\n'.encode() +
+            'X-HEADER: äöü\r\n'.encode('latin1')
+        ).headers == {'x-header': ('=?utf8?b?w6TDtsO8?=', 'äöü', '')}
 
 if __name__ == "__main__":
     unittest.main()
