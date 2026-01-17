@@ -5,9 +5,9 @@ import imaplib
 import datetime
 from itertools import chain
 from functools import cached_property
-from email.header import decode_header
+from email.header import decode_header, Header
 from email.message import _parseparam, _unquotevalue  # noqa
-from typing import Tuple, Dict, Optional, List
+from typing import Tuple, Dict, Optional, List, Union
 
 from .utils import decode_value, parse_email_addresses, parse_email_date, EmailAddress, replace_html_ct_charset
 from .consts import UID_PATTERN, CODECS_OFFICIAL_REPLACEMENT_CHAR
@@ -180,16 +180,35 @@ class MailMessage:
                 results.append(replace_html_ct_charset(html, 'utf-8'))
         return ''.join(results)
 
+    @staticmethod
+    def _header_bytes(value: Union[str, Header]) -> bytes:
+        if isinstance(value, str):
+            return value.encode('ascii')
+        return b"".join(chunk[0] for chunk in decode_header(value))
+
+    @cached_property
+    def headers_bytes(self) -> Dict[str, Tuple[bytes, ...]]:
+        """
+        Message headers (bytes)
+        Keys in result dict are in their original case
+        """
+        result: Dict[str, List[bytes]] = {}
+        for key, val in self.obj.items():
+            result.setdefault(key, []).append(self._header_bytes(val))
+        return {k: tuple(v) for k, v in result.items()}
+
     @cached_property
     def headers(self) -> Dict[str, Tuple[str, ...]]:
         """
-        Message headers
+        Message headers (str)
         Keys in result dict are in lower register (email headers are not case-sensitive)
         """
-        result = {}
-        for key, val in getattr(self.obj, '_headers', ()):
-            result.setdefault(key.lower(), []).append(val)
+        result: Dict[str, List[str]] = {}
+        for key, tup in self.headers_bytes.items():
+            for val in tup:
+                result.setdefault(key.lower(), []).append(val.decode(errors='ignore'))
         return {k: tuple(v) for k, v in result.items()}
+
 
     @cached_property
     def attachments(self) -> List['MailAttachment']:
