@@ -153,11 +153,17 @@ class MessageTest(MailboxTestCase):
         }
 
     def test_headers(self):
-        assert MailMessage.from_bytes(
+        headers = (
             b'X-Header: =?utf8?b?w6TDtsO8?=\r\n' +
             'x-header: äöü\r\n'.encode() +
             'X-HEADER: äöü\r\n'.encode('latin1')
-        ).headers == {'x-header': ('=?utf8?b?w6TDtsO8?=', 'äöü', '')}
+        )
+        assert MailMessage.from_bytes(headers).headers == {
+            'x-header': ('=?utf8?b?w6TDtsO8?=', 'äöü', '')
+        }
+        assert MailMessage.from_bytes(headers, 'backslashreplace').headers == {
+            'x-header': ('=?utf8?b?w6TDtsO8?=', 'äöü', '\\xe4\\xf6\\xfc')
+        }
 
 if __name__ == "__main__":
     unittest.main()
