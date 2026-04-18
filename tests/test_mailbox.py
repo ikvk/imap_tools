@@ -1,9 +1,12 @@
+import imaplib
 import unittest
+from unittest.mock import MagicMock, patch, call
 
 from tests.utils import MailboxTestCase, TEST_MAILBOX_NAME_SET, get_test_mailbox
 from imap_tools.errors import MailboxCopyError
 from imap_tools.consts import MailMessageFlags, SortCriteria
 from imap_tools.query import A
+from imap_tools.mailbox import MailBox
 
 TEST_MESSAGE_DATA = b'From: Mikel <test@lindsaar.net>\nTo: Mikel <raasdnil@gmail.com>\nContent-Type: text/plain; charset=US-ASCII; format=flowed\nContent-Transfer-Encoding: 7bit\nMime-Version: 1.0 (Apple Message framework v929.2)\nSubject: _append_\nDate: Sat, 22 Nov 2008 11:04:59 +1100\n\nPlain email.\n'  # noqa
 
@@ -131,6 +134,35 @@ class MailboxTest(MailboxTestCase):
             mailbox.folder.set(mailbox.folder_test_temp2)
             mailbox.delete(mailbox.uids(), self.test_chunks_size)
             self.assertEqual(len(list(mailbox.numbers())), 0)
+
+
+class LoginQuotingTest(unittest.TestCase):
+    """Verify that login() quotes both username and password (issue #265)."""
+
+    def _make_mock_client(self):
+        mock_client = MagicMock(spec=imaplib.IMAP4)
+        mock_client._quote.side_effect = lambda arg: imaplib.IMAP4._quote(mock_client, arg)
+        mock_client._simple_command.return_value = ('OK', [b'Logged in'])
+        mock_client.select.return_value = ('OK', [b'1'])
+        return mock_client
+
+    def test_login_quotes_username_with_special_chars(self):
+        """Username containing special IMAP chars (e.g. *) must be quoted."""
+        with patch.object(MailBox, '_get_mailbox_client', return_value=self._make_mock_client()):
+            mb = MailBox('localhost')
+            mb.login('user*name', 'pass', initial_folder=None)
+            mb.client._simple_command.assert_called_once_with(
+                'LOGIN', '"user*name"', '"pass"'
+            )
+
+    def test_login_quotes_plain_username(self):
+        """Plain username is also correctly passed through quoting."""
+        with patch.object(MailBox, '_get_mailbox_client', return_value=self._make_mock_client()):
+            mb = MailBox('localhost')
+            mb.login('user', 'pass', initial_folder=None)
+            mb.client._simple_command.assert_called_once_with(
+                'LOGIN', '"user"', '"pass"'
+            )
 
 
 if __name__ == "__main__":

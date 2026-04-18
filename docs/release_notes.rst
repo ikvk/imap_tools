@@ -1,3 +1,7 @@
+1.12.1
+======
+* Fixed: BaseMailBox.login now quotes username to handle special IMAP characters (e.g. ``*``)
+
 1.12.0
 ======
 * Changed: MailMessage.headers now are lazy dict-like mapping - LazyHeaders. It fetches header values when accessed only.

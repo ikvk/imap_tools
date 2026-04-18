@@ -58,7 +58,7 @@ class BaseMailBox:
 
     def login(self: Self, username: str, password: str, initial_folder: Optional[str] = 'INBOX') -> Self:
         """Authenticate to account"""
-        login_result = self.client._simple_command('LOGIN', username, self.client._quote(password))  # noqa
+        login_result = self.client._simple_command('LOGIN', self.client._quote(username), self.client._quote(password))  # noqa
         check_command_status(login_result, MailboxLoginError)
         self.client.state = 'AUTH'  # logic from self.client.login
         if initial_folder is not None:
