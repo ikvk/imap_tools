@@ -1,5 +1,6 @@
 import unittest
 
+from imap_tools.consts import PYTHON_VERSION_MINOR
 from tests.utils import MailboxTestCase, TEST_MAILBOX_NAME_SET, get_test_mailbox
 from imap_tools.errors import MailboxFolderSelectError
 
@@ -25,6 +26,12 @@ class FoldersTest(MailboxTestCase):
                 self.assertIs(type(folder.delim), str)
                 for flag in folder.flags:
                     self.assertIs(type(flag), str)
+
+            # folder unselected
+            if PYTHON_VERSION_MINOR > 8:
+                mailbox.folder.unset()
+                with self.assertRaises(ValueError):
+                    mailbox.folder.status()
 
             # SET, GET
             mailbox.folder.set(mailbox.folder_test_base)

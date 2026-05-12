@@ -238,7 +238,7 @@ Action's uid_list arg may takes:
 * str, that is comma separated uids
 * Sequence, that contains str uids
 
-To get uids, use the maibox methods: uids, fetch.
+To get uids, use the maibox methods: ``uids``, ``fetch``.
 
 For actions with large number of messages IMAP command may be too large and will cause exception at server side:
 
@@ -276,12 +276,19 @@ BaseMailBox ``login,xoauth2`` arg ``initial_folder`` is "INBOX" by default, use 
 
     with MailBox('imap.mail.com').login('test@mail.com', 'pwd') as mailbox:
 
+        # STATUS: get folder status info
+        stat = mailbox.folder.status('some_folder')
+        print(stat)  # {'MESSAGES': 41, 'RECENT': 0, 'UIDNEXT': 11996, 'UIDVALIDITY': 1, 'UNSEEN': 5}
+
         # LIST: get all subfolders of the specified folder (root by default)
         for f in mailbox.folder.list('INBOX'):
             print(f)  # FolderInfo(name='INBOX|cats', delim='|', flags=('\\Unmarked', '\\HasChildren'))
 
         # SET: select folder for work
         mailbox.folder.set('INBOX')
+
+        # UNSET: unselect folder
+        mailbox.folder.unset()
 
         # GET: get selected folder
         current_folder = mailbox.folder.get()
@@ -300,10 +307,6 @@ BaseMailBox ``login,xoauth2`` arg ``initial_folder`` is "INBOX" by default, use 
 
         # DELETE: delete folder
         mailbox.folder.delete('folder4')
-
-        # STATUS: get folder status info
-        stat = mailbox.folder.status('some_folder')
-        print(stat)  # {'MESSAGES': 41, 'RECENT': 0, 'UIDNEXT': 11996, 'UIDVALIDITY': 1, 'UNSEEN': 5}
 
 ⏳ IDLE workflow
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

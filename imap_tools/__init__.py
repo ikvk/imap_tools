@@ -16,7 +16,7 @@ from .errors import (
     MailboxLoginError, MailboxLogoutError, MailboxMoveError, MailboxNumbersError, MailboxStarttlsError,
     MailboxTaggedResponseError, MailboxUidsError, UnexpectedCommandStatusError)
 
-__version__ = '1.12.1'
+__version__ = '1.13.0'
 
 __all__ = [
     'A', 'AND', 'BaseMailBox', 'EmailAddress', 'FolderInfo', 'H', 'Header', 'ImapToolsError', 'MailAttachment',

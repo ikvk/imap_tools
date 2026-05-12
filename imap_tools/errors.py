@@ -29,6 +29,10 @@ class MailboxFolderSelectError(UnexpectedCommandStatusError):
     pass
 
 
+class MailboxFolderUnselectError(UnexpectedCommandStatusError):
+    pass
+
+
 class MailboxFolderCreateError(UnexpectedCommandStatusError):
     pass
 

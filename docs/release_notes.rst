@@ -1,3 +1,8 @@
+1.13.0
+======
+* Added: MailBoxFolderManager.unset - Unselect current folder, raises MailboxFolderUnselectError
+* Added: ValueError at MailBoxFolderManager.status - Folder argument are not specified and current folder is unset
+
 1.12.1
 ======
 * Fixed: BaseMailBox.login now quotes username to handle special IMAP characters (e.g. ``*``)

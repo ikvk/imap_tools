@@ -5,7 +5,8 @@ from .imap_utf7 import utf7_decode
 from .consts import MailBoxFolderStatusOptions
 from .utils import check_command_status, pairs_to_dict, encode_folder, StrOrBytes
 from .errors import MailboxFolderStatusValueError, MailboxFolderSelectError, MailboxFolderCreateError, \
-    MailboxFolderRenameError, MailboxFolderDeleteError, MailboxFolderStatusError, MailboxFolderSubscribeError
+    MailboxFolderRenameError, MailboxFolderDeleteError, MailboxFolderStatusError, MailboxFolderSubscribeError, \
+    MailboxFolderUnselectError
 
 
 class FolderInfo:
@@ -42,6 +43,15 @@ class MailBoxFolderManager:
         result = self.mailbox.client.select(encode_folder(folder), readonly)
         check_command_status(result, MailboxFolderSelectError)
         self._current_folder = folder
+        return result
+
+    def unset(self) -> tuple:
+        """Unselect current folder"""
+        if self._current_folder is None:
+            return 'OK', [b'Already unselected']
+        result = self.mailbox.client._simple_command('UNSELECT')
+        check_command_status(result, MailboxFolderUnselectError)
+        self._current_folder = None
         return result
 
     def exists(self, folder: str) -> bool:
@@ -90,6 +100,8 @@ class MailBoxFolderManager:
         command = 'STATUS'
         if folder is None:
             folder = self.get()
+            if folder is None:
+                raise ValueError('Folder argument are not specified and current folder is unset.')
         if not options:
             options = tuple(MailBoxFolderStatusOptions.all)
         for opt in options:
