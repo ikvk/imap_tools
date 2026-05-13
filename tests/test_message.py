@@ -1,5 +1,4 @@
 import os
-import sys
 import unittest
 import datetime
 
@@ -12,7 +11,7 @@ from imap_tools.consts import PYTHON_VERSION_MINOR
 
 def _load_module(full_path: str):
     module_name = ''
-    if sys.version_info.minor >= 5:
+    if PYTHON_VERSION_MINOR >= 5:
         import importlib.util
         spec = importlib.util.spec_from_file_location(module_name, full_path)
         module = importlib.util.module_from_spec(spec)

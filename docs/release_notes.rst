@@ -1,3 +1,7 @@
+next
+======
+* Added: ruff
+
 1.13.0
 ======
 * Added: MailBoxFolderManager.unset - Unselect current folder, raises MailboxFolderUnselectError

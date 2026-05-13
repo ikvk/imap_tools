@@ -1,12 +1,19 @@
 import re
-from typing import Optional, Iterable, List, Dict, Tuple
+from typing import Dict, Iterable, List, Optional, Tuple
 
-from .imap_utf7 import utf7_decode
 from .consts import MailBoxFolderStatusOptions
-from .utils import check_command_status, pairs_to_dict, encode_folder, StrOrBytes
-from .errors import MailboxFolderStatusValueError, MailboxFolderSelectError, MailboxFolderCreateError, \
-    MailboxFolderRenameError, MailboxFolderDeleteError, MailboxFolderStatusError, MailboxFolderSubscribeError, \
-    MailboxFolderUnselectError
+from .errors import (
+    MailboxFolderCreateError,
+    MailboxFolderDeleteError,
+    MailboxFolderRenameError,
+    MailboxFolderSelectError,
+    MailboxFolderStatusError,
+    MailboxFolderStatusValueError,
+    MailboxFolderSubscribeError,
+    MailboxFolderUnselectError,
+)
+from .imap_utf7 import utf7_decode
+from .utils import StrOrBytes, check_command_status, encode_folder, pairs_to_dict
 
 
 class FolderInfo:
@@ -17,6 +24,7 @@ class FolderInfo:
         flags: (str,) - folder flags
     A 'NIL' delimiter means that no hierarchy exists, the name is a "flat" name.
     """
+
     __slots__ = 'name', 'delim', 'flags'
 
     def __init__(self, name: str, delim: str, flags: Tuple[str, ...]) -> None:
@@ -155,7 +163,7 @@ class MailBoxFolderManager:
             result.append(FolderInfo(
                 name=name.replace('\\"', '"'),
                 delim=folder_dict['delim'].replace('"', ''),
-                flags=tuple(folder_dict['flags'].split())  # noqa,
+                flags=tuple(folder_dict['flags'].split())  # noqa
             ))
         return result
 

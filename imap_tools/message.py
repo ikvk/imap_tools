@@ -1,21 +1,22 @@
-import re
-import email
 import base64
-import imaplib
 import datetime
+import email
+import imaplib
+import re
 from collections.abc import Mapping
-from itertools import chain
-from functools import cached_property
 from email.header import decode_header
-from email.message import _parseparam, _unquotevalue, Message  # noqa
-from typing import Tuple, Optional, List
+from email.message import Message, _parseparam, _unquotevalue  # noqa
+from functools import cached_property
+from itertools import chain
+from typing import List, Optional, Tuple
 
-from .utils import decode_value, parse_email_addresses, parse_email_date, EmailAddress, replace_html_ct_charset
-from .consts import UID_PATTERN, CODECS_OFFICIAL_REPLACEMENT_CHAR
+from .consts import CODECS_OFFICIAL_REPLACEMENT_CHAR, UID_PATTERN
+from .utils import EmailAddress, decode_value, parse_email_addresses, parse_email_date, replace_html_ct_charset
 
 
 class LazyHeaders(Mapping):
     """Lazy dict-like mapping, it fetches header values when accessed only."""
+
     def __init__(self, email_obj: Message):
         self._email_obj = email_obj
         self._cache = {}
@@ -90,7 +91,7 @@ class MailMessage:
 
     @staticmethod
     def _get_message_data_parts(fetch_data: list) -> (bytes, bytes, List[bytes]):
-        """
+        r"""
         :param fetch_data: Message object model
         :returns (raw_message_data: bytes, raw_uid_data: bytes, raw_flag_data: [bytes])
         *Elements may contain byte strings in any order, like: b'4517 (FLAGS (\\Recent NonJunk))'

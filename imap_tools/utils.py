@@ -1,12 +1,11 @@
-import re
-import sys
 import datetime
-from itertools import zip_longest
+import re
+from email.header import Header, decode_header
 from email.utils import getaddresses, parsedate_to_datetime
-from email.header import decode_header, Header
-from typing import Union, Optional, Tuple, Iterable, Any, List, Dict, Iterator, Sequence
+from itertools import zip_longest
+from typing import Any, Dict, Iterable, Iterator, List, Optional, Sequence, Tuple, Union
 
-from .consts import SHORT_MONTH_NAMES, MailMessageFlags
+from .consts import PYTHON_VERSION_MINOR, SHORT_MONTH_NAMES, MailMessageFlags
 from .imap_utf7 import utf7_encode
 
 StrOrBytes = Union[str, bytes]
@@ -62,6 +61,7 @@ def decode_value(value: StrOrBytes, encoding: Optional[str] = None) -> str:
 
 class EmailAddress:
     """Parsed email address info"""
+
     __slots__ = 'name', 'email'
 
     def __init__(self, name: str, email: str) -> None:
@@ -85,7 +85,7 @@ def remove_non_printable(value: str) -> str:
 
 
 def parse_email_addresses(raw_header: Union[str, Header]) -> Tuple[EmailAddress, ...]:
-    """
+    r"""
     Parse email addresses from header
     :param raw_header: example: '=?UTF-8?B?0J7Qu9C1=?= <name@company.ru>,\r\n "\'\\"z, z\\"\'" <imap.tools@ya.ru>'
     :return: (EmailAddress, ...)
@@ -176,7 +176,7 @@ def clean_flags(flag_set: Union[str, Iterable[str]]) -> List[str]:
         flag_set = [flag_set]
     upper_sys_flags = tuple(i.upper() for i in MailMessageFlags.all)
     for flag in flag_set:
-        if not type(flag) is str:
+        if type(flag) is not str:
             raise ValueError(f'Flag - str value expected, but {type(flag_set)} received')
         if flag.upper() not in upper_sys_flags and flag.startswith('\\'):
             raise ValueError('Non system flag must not start with "\\"')
@@ -185,7 +185,7 @@ def clean_flags(flag_set: Union[str, Iterable[str]]) -> List[str]:
 
 def check_timeout_arg_support(timeout):
     """If timeout arg not supports - raise ValueError"""
-    if timeout is not None and sys.version_info.minor < 9:
+    if timeout is not None and PYTHON_VERSION_MINOR < 9:
         raise ValueError('imaplib.IMAP4 timeout argument supported since python 3.9')
 
 

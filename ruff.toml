@@ -1,0 +1,55 @@
+# https://docs.astral.sh/ruff/rules/
+
+line-length = 120
+indent-width = 4
+target-version = "py312"
+
+exclude = [
+    ".git",
+    "__pycache__",
+    "docs",
+    ".tox",
+    "build",
+    "dist",
+    "examples",
+    "tests",
+    "imap_tools.egg-info",
+]
+
+[format]
+indent-style = "space"
+skip-magic-trailing-comma = false
+
+[lint]
+preview = true
+select = [
+    'N', # pep8-naming 84
+    'S321',
+    'BLE', # flake8-blind-except 53
+    'S', # flake8-bandit 310
+    'G004',
+    'T20', 'T203',  # prints
+    'F', # Pyflakes
+    'E', # pycodestyle
+    'W', # pycodestyle
+    'I', # isort
+    'D', # pydocstyle
+    'YTT', # flake8-2020
+    'ASYNC', # flake8-async
+    'ASYNC1', # flake8-trio
+    'S101', 'S110', 'S112', 'S306', 'S314', 'S324', 'S501', 'S605', 'S608', 'S609', 'S610',
+    'B', # flake8-bugbear
+    'SLOT', # flake8-slots
+    'INT', # flake8-gettext
+    'E', # Pylint errors
+    'RUF032', # Checks for Decimal calls passing a float literal.
+    'TID',  # tidy-imports
+]
+ignore = [
+    "W291", # W291 trailing whitespace
+    "B007", # Loop control variable 'x' not used within the loop body. If this is intended, start the name with an underscore.
+    "B009", # Do not call getattr with a constant attribute value, it is not any safer than normal property access.
+    "B010", # Do not call setattr with a constant attribute value, it is not any safer than normal property access.
+    'D1', 'D4', 'D200', 'D201', 'D202', 'D203', 'D204', 'D205', 'D206', 'D207', 'D208', 'D209', 'D211', 'D212', 'D213', 'D214', 'D215', # pydocstyle
+    'F841', # Local variable `unuse` is assigned to but never used - срабатывает если возвращаемых значений много и исп. не все
+]

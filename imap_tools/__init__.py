@@ -3,18 +3,36 @@
 # Mirror: https://gitflic.ru/project/ikvk/imap-tools
 # License: Apache-2.0
 
-from .query import AND, OR, NOT, Header, UidRange, A, O, N, H, U
-from .mailbox import BaseMailBox, MailBox, MailBoxUnencrypted, MailBoxStartTls
-from .message import MailMessage, MailAttachment, LazyHeaders
-from .folder import MailBoxFolderManager, FolderInfo
-from .consts import MailMessageFlags, MailBoxFolderStatusOptions, SortCriteria
-from .utils import EmailAddress
+from .consts import MailBoxFolderStatusOptions, MailMessageFlags, SortCriteria
 from .errors import (
-    ImapToolsError, MailboxAppendError, MailboxCopyError, MailboxDeleteError, MailboxExpungeError, MailboxFetchError,
-    MailboxFlagError, MailboxFolderCreateError, MailboxFolderDeleteError, MailboxFolderRenameError,
-    MailboxFolderSelectError, MailboxFolderStatusError, MailboxFolderStatusValueError, MailboxFolderSubscribeError,
-    MailboxLoginError, MailboxLogoutError, MailboxMoveError, MailboxNumbersError, MailboxStarttlsError,
-    MailboxTaggedResponseError, MailboxUidsError, UnexpectedCommandStatusError)
+    ImapToolsError,
+    MailboxAppendError,
+    MailboxCopyError,
+    MailboxDeleteError,
+    MailboxExpungeError,
+    MailboxFetchError,
+    MailboxFlagError,
+    MailboxFolderCreateError,
+    MailboxFolderDeleteError,
+    MailboxFolderRenameError,
+    MailboxFolderSelectError,
+    MailboxFolderStatusError,
+    MailboxFolderStatusValueError,
+    MailboxFolderSubscribeError,
+    MailboxLoginError,
+    MailboxLogoutError,
+    MailboxMoveError,
+    MailboxNumbersError,
+    MailboxStarttlsError,
+    MailboxTaggedResponseError,
+    MailboxUidsError,
+    UnexpectedCommandStatusError,
+)
+from .folder import FolderInfo, MailBoxFolderManager
+from .mailbox import BaseMailBox, MailBox, MailBoxStartTls, MailBoxUnencrypted
+from .message import LazyHeaders, MailAttachment, MailMessage
+from .query import AND, NOT, OR, A, H, Header, N, O, U, UidRange
+from .utils import EmailAddress
 
 __version__ = '1.13.0'
 
@@ -26,5 +44,5 @@ __all__ = [
     'MailboxFolderDeleteError', 'MailboxFolderRenameError', 'MailboxFolderSelectError', 'MailboxFolderStatusError',
     'MailboxFolderStatusValueError', 'MailboxFolderSubscribeError', 'MailboxLoginError', 'MailboxLogoutError',
     'MailboxMoveError', 'MailboxNumbersError', 'MailboxStarttlsError', 'MailboxTaggedResponseError', 'MailboxUidsError',
-    'N', 'NOT', 'O', 'OR', 'SortCriteria', 'U', 'UidRange', 'UnexpectedCommandStatusError', '__version__'
+    'N', 'NOT', 'O', 'OR', 'SortCriteria', 'U', 'UidRange', 'UnexpectedCommandStatusError', '__version__', 'LazyHeaders'
 ]

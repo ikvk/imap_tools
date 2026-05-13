@@ -11,11 +11,13 @@ PYTHON_VERSION_MINOR = int(sys.version_info.minor)
 
 MOVE_RESULT_TAG = ('_MOVE',)  # const delete_result part for mailbox.move result, when server have MOVE in capabilities
 
+
 class MailMessageFlags:
-    """
+    r"""
     System email message flags
     All system flags begin with "\"
     """
+
     SEEN = '\\Seen'
     ANSWERED = '\\Answered'
     FLAGGED = '\\Flagged'
@@ -29,6 +31,7 @@ class MailMessageFlags:
 
 class MailBoxFolderStatusOptions:
     """Valid mailbox folder status options"""
+
     MESSAGES = 'MESSAGES'
     RECENT = 'RECENT'
     UIDNEXT = 'UIDNEXT'
@@ -59,6 +62,7 @@ class SortCriteria:
     SUBJECT - Base subject text.
     TO - [IMAP] addr-mailbox of the first "To" address.
     """
+
     ARRIVAL_DT_ASC = 'ARRIVAL'
     CC_ASC = 'CC'
     DATE_ASC = 'DATE'

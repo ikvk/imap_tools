@@ -1,18 +1,38 @@
-import re
-import imaplib
 import datetime
+import imaplib
+import re
 from collections import UserString
-from typing import Optional, List, Iterable, Sequence, TypeVar, Union, Tuple, Iterator
+from typing import Iterable, Iterator, List, Optional, Sequence, Tuple, TypeVar, Union
 
-from .message import MailMessage
+from .consts import MOVE_RESULT_TAG, PYTHON_VERSION_MINOR, UID_PATTERN
+from .errors import (
+    MailboxAppendError,
+    MailboxCopyError,
+    MailboxDeleteError,
+    MailboxExpungeError,
+    MailboxFetchError,
+    MailboxFlagError,
+    MailboxLoginError,
+    MailboxLogoutError,
+    MailboxMoveError,
+    MailboxNumbersError,
+    MailboxStarttlsError,
+    MailboxTaggedResponseError,
+    MailboxUidsError,
+)
 from .folder import MailBoxFolderManager
 from .idle import IdleManager
-from .consts import UID_PATTERN, PYTHON_VERSION_MINOR, MOVE_RESULT_TAG
-from .utils import clean_uids, check_command_status, chunked, encode_folder, clean_flags, check_timeout_arg_support, \
-    chunked_crop, StrOrBytes
-from .errors import MailboxStarttlsError, MailboxLoginError, MailboxLogoutError, MailboxNumbersError, \
-    MailboxFetchError, MailboxExpungeError, MailboxDeleteError, MailboxCopyError, MailboxFlagError, \
-    MailboxAppendError, MailboxUidsError, MailboxTaggedResponseError, MailboxMoveError
+from .message import MailMessage
+from .utils import (
+    StrOrBytes,
+    check_command_status,
+    check_timeout_arg_support,
+    chunked,
+    chunked_crop,
+    clean_flags,
+    clean_uids,
+    encode_folder,
+)
 
 # Maximal line length when calling readline(). This is to prevent reading arbitrary length lines.
 # 20Mb is enough for search response with about 2 000 000 message numbers
@@ -20,6 +40,7 @@ imaplib._MAXLINE = 20 * 1024 * 1024  # 20Mb
 
 Criteria = Union[StrOrBytes, UserString]
 Self = TypeVar("Self", bound="BaseMailBox")
+
 
 class BaseMailBox:
     """Working with the email box"""
@@ -48,7 +69,8 @@ class BaseMailBox:
         tagged_commands = self.client.tagged_commands
         response_set = []
         while True:
-            response: bytes = self.client._get_response()  # noqa, example: b'IJDH3 OK IDLE Terminated'
+            # response example: b'IJDH3 OK IDLE Terminated'
+            response: bytes = self.client._get_response()  # noqa
             if tagged_commands[tag]:
                 break
             response_set.append(response)
@@ -58,7 +80,8 @@ class BaseMailBox:
 
     def login(self: Self, username: str, password: str, initial_folder: Optional[str] = 'INBOX') -> Self:
         """Authenticate to account"""
-        login_result = self.client._simple_command('LOGIN', self.client._quote(username), self.client._quote(password))  # noqa
+        login_result = (
+            self.client._simple_command('LOGIN', self.client._quote(username), self.client._quote(password)))  # noqa
         check_command_status(login_result, MailboxLoginError)
         self.client.state = 'AUTH'  # logic from self.client.login
         if initial_folder is not None:
@@ -190,7 +213,8 @@ class BaseMailBox:
         message_parts = \
             f"(BODY{'' if mark_seen else '.PEEK'}[{'HEADER' if headers_only else ''}] UID FLAGS RFC822.SIZE)"
         limit_range = slice(0, limit) if type(limit) is int else limit or slice(None)
-        assert type(limit_range) is slice
+        if not isinstance(limit_range, slice):
+            raise TypeError(f"slice expected, but received: {type(limit_range).__name__}")
         uids = tuple((reversed if reverse else iter)(self.uids(criteria, charset, sort)))[limit_range]
         if bulk:
             message_generator = self._fetch_in_bulk(uids, message_parts, reverse, bulk)

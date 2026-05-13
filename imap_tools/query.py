@@ -1,9 +1,9 @@
 """IMAP Query builder"""
 import datetime
-import itertools
 import functools
+import itertools
 from collections import UserString
-from typing import Iterable, Optional, Dict, Any, List, Union, Iterator
+from typing import Any, Dict, Iterable, Iterator, List, Optional, Union
 
 from .consts import SHORT_MONTH_NAMES
 from .utils import clean_uids, quote
@@ -11,6 +11,7 @@ from .utils import clean_uids, quote
 
 class Header:
     """Header value for search by header key"""
+
     __slots__ = ('name', 'value')
 
     def __init__(self, name: str, value: str) -> None:
@@ -37,6 +38,7 @@ class UidRange:
     even if <value> is higher than any assigned UID value ->
     any UID range with * indicates at least one message (with the highest numbered UID), unless the mailbox is empty.
     """
+
     __slots__ = ('start', 'end')
 
     def __init__(self, start: str, end: Optional[str] = None) -> None:
@@ -98,7 +100,7 @@ class LogicOperator(UserString):
         super().__init__(self.combine_params())
 
     def combine_params(self) -> str:
-        """combine self.converted_strings and self.converted_params to IMAP search criteria format"""
+        """Combine self.converted_strings and self.converted_params to IMAP search criteria format"""
         raise NotImplementedError
 
     @staticmethod
@@ -211,7 +213,7 @@ class ParamConverter:
         try:
             return ','.join(clean_uids(value))
         except TypeError as e:
-            raise TypeError(f'{key} parse error: {str(e)}')
+            raise TypeError(f'{key} parse error: {str(e)}') from e
 
     @staticmethod
     def cleaned_header(key: str, value: Header) -> Header:

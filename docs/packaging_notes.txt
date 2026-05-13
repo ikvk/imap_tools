@@ -13,20 +13,23 @@ https://packaging.python.org/tutorials/packaging-projects/
     C:\python\venv\imap_tools312-64\Scripts\python.exe -m pip install --upgrade pip
     C:\python\venv\imap_tools312-64\Scripts\pip install --upgrade -r C:\kvk\develop\Python\imap_tools\docs\dev_requirements.txt
 
-3. Generating distribution archives
+3. ruff
+    C:\python\venv\imap_tools312-64\Scripts\python.exe -m ruff check --no-cache --fix C:\kvk\develop\Python\imap_tools
+
+4. Generating distribution archives
     cd C:\kvk\develop\Python\imap_tools\
     C:\python\venv\imap_tools312-64\Scripts\python.exe -m build
 
-4. Check the distribution archives:
+5. Check the distribution archives:
     C:\python\venv\imap_tools312-64\Scripts\python.exe -m twine check dist/*
 
-5. Uploading the distribution archives:
+6. Uploading the distribution archives:
     C:\python\venv\imap_tools312-64\Scripts\python.exe -m twine upload dist/*
 
-6. Create release
+7. Create release
     at https://github.com/ikvk/imap_tools
 
-7. Mirror
+8. Mirror
     cd to repo
         cd C:\kvk\develop\Python\imap_tools\
     Cleaning old references to remote branches

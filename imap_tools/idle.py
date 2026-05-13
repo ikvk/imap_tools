@@ -1,11 +1,11 @@
-import sys
-import socket
-import select
 import imaplib
-from typing import Optional, List
+import select
+import socket
+import sys
+from typing import List, Optional
 
-from .utils import check_command_status
 from .errors import MailboxTaggedResponseError
+from .utils import check_command_status
 
 imaplib.Commands.setdefault("IDLE", ("NONAUTH", "AUTH", "SELECTED"))  # noqa
 
