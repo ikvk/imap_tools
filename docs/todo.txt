@@ -19,6 +19,19 @@ https://github.com/sts0210/imap_tools/commit/36c0189600170fe573fa40620b09b53d010
     …the folder has umlauts as in "Gelöschte Elemente"
     странный фикс в ветке
 
+reduce reliance on private imaplib/email internals (_simple_command, _get_response,
+_parseparam, etc) where feasible - already caused one real break (CVE-2023-27043
+changed email.parseaddr behavior in 3.12.6+). at minimum, add a canary test that
+would catch stdlib-internal signature/behavior changes earlier.
+
+expose parse_email_date's unparseable-date fallback (datetime(1900, 1, 1)) as a
+named constant so callers can detect the failure case instead of guessing
+
+document thread-safety expectations (none currently - BaseMailBox/IdleManager/
+MailBoxFolderManager hold mutable instance state with no locking) and the global
+stdlib monkeypatches done at import time (imaplib._MAXLINE in mailbox.py,
+imaplib.Commands["IDLE"] in idle.py)
+
 IMAP_SERVERS = {
     "outlook.com": "imap-mail.outlook.com",  # Outlook
     "163.com": "imap.163.com",  # 163 Mail
