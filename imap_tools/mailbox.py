@@ -42,6 +42,25 @@ Criteria = Union[StrOrBytes, UserString]
 Self = TypeVar("Self", bound="BaseMailBox")
 
 
+def _create_imap4_client(host: str, port: int, timeout: Optional[float]) -> imaplib.IMAP4:
+    if PYTHON_VERSION_MINOR < 9:
+        return imaplib.IMAP4(host, port)
+    elif PYTHON_VERSION_MINOR < 12:
+        return imaplib.IMAP4(host, port, timeout)
+    else:
+        return imaplib.IMAP4(host, port, timeout=timeout)
+
+
+def _create_imap4_ssl_client(
+        host: str, port: int, keyfile, certfile, ssl_context, timeout: Optional[float]) -> imaplib.IMAP4_SSL:
+    if PYTHON_VERSION_MINOR < 9:
+        return imaplib.IMAP4_SSL(host, port, keyfile, certfile, ssl_context)  # noqa
+    elif PYTHON_VERSION_MINOR < 12:
+        return imaplib.IMAP4_SSL(host, port, keyfile, certfile, ssl_context, timeout)  # noqa
+    else:
+        return imaplib.IMAP4_SSL(host, port, ssl_context=ssl_context, timeout=timeout)
+
+
 class BaseMailBox:
     """Working with the email box"""
 
@@ -340,10 +359,7 @@ class BaseMailBox:
         :param flag_set: email message flags, no flags by default. System flags at consts.MailMessageFlags.all
         :return: command results
         """
-        if PYTHON_VERSION_MINOR < 6:
-            timezone = datetime.timezone(datetime.timedelta(hours=0))
-        else:
-            timezone = datetime.datetime.now().astimezone().tzinfo  # system timezone
+        timezone = datetime.datetime.now().astimezone().tzinfo  # system timezone
         cleaned_flags = clean_flags(flag_set or [])
         typ, dat = self.client.append(
             encode_folder(folder),  # noqa
@@ -380,13 +396,8 @@ class MailBox(BaseMailBox):
         super().__init__()
 
     def _get_mailbox_client(self) -> imaplib.IMAP4:
-        if PYTHON_VERSION_MINOR < 9:
-            return imaplib.IMAP4_SSL(self._host, self._port, self._keyfile, self._certfile, self._ssl_context)  # noqa
-        elif PYTHON_VERSION_MINOR < 12:
-            return imaplib.IMAP4_SSL(
-                self._host, self._port, self._keyfile, self._certfile, self._ssl_context, self._timeout)  # noqa
-        else:
-            return imaplib.IMAP4_SSL(self._host, self._port, ssl_context=self._ssl_context, timeout=self._timeout)
+        return _create_imap4_ssl_client(
+            self._host, self._port, self._keyfile, self._certfile, self._ssl_context, self._timeout)
 
 
 class MailBoxUnencrypted(BaseMailBox):
@@ -405,12 +416,7 @@ class MailBoxUnencrypted(BaseMailBox):
         super().__init__()
 
     def _get_mailbox_client(self) -> imaplib.IMAP4:
-        if PYTHON_VERSION_MINOR < 9:
-            return imaplib.IMAP4(self._host, self._port)
-        elif PYTHON_VERSION_MINOR < 12:
-            return imaplib.IMAP4(self._host, self._port, self._timeout)
-        else:
-            return imaplib.IMAP4(self._host, self._port, timeout=self._timeout)
+        return _create_imap4_client(self._host, self._port, self._timeout)
 
 
 class MailBoxStartTls(BaseMailBox):
@@ -433,12 +439,7 @@ class MailBoxStartTls(BaseMailBox):
     def _get_mailbox_client(self) -> imaplib.IMAP4:
         if self._port == 993:
             raise ValueError("Port 993 requires IMAP4_SSL. Use MailBox class for SSL/TLS connection.")
-        if PYTHON_VERSION_MINOR < 9:
-            client = imaplib.IMAP4(self._host, self._port)
-        elif PYTHON_VERSION_MINOR < 12:
-            client = imaplib.IMAP4(self._host, self._port, self._timeout)
-        else:
-            client = imaplib.IMAP4(self._host, self._port, timeout=self._timeout)
+        client = _create_imap4_client(self._host, self._port, self._timeout)
         result = client.starttls(self._ssl_context)
         check_command_status(result, MailboxStarttlsError)
         return client
