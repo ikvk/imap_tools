@@ -93,7 +93,7 @@ Info about lib are at: *this page*, docstrings, issues, pull requests,
 
 Thread safety expectation: lib is not thread‑safe.
 
-Monkeypatches for imaplib: sets `imaplib._MAXLINE` (mailbox.py) and modifies `imaplib.Commands["IDLE"]` (idle.py)
+Monkeypatches for imaplib: sets ``imaplib._MAXLINE`` (mailbox.py) and modifies ``imaplib.Commands["IDLE"]`` (idle.py)
 
 📧 Email attributes
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
