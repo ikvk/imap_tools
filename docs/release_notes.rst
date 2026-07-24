@@ -1,5 +1,8 @@
-next
+1.14.0
 ======
+* Added: BaseMailBox.fetch arg uid_list: UIDs for fetch. If set: (criteria, charset, sort) will be ignored, SEARCH will not be used.
+* Added: BaseMailBox.fetch star in args after charset arg.
+* Added: consts.DEFAULT_EMAIL_DATE - useful for detect is date valid or unparsable.
 * Added: ruff
 
 1.13.0

@@ -209,9 +209,9 @@ class BaseMailBox:
             for built_fetch_item in chunked((reversed if reverse else iter)(fetch_result[1]), 2):
                 yield built_fetch_item
 
-    def fetch(self, criteria: Criteria = 'ALL', charset: str = 'US-ASCII', limit: Optional[Union[int, slice]] = None,
+    def fetch(self, criteria: Criteria = 'ALL', charset: str = 'US-ASCII', *, limit: Optional[Union[int, slice]] = None,
               mark_seen=True, reverse=False, headers_only=False, bulk: Union[bool, int] = False,
-              sort: Optional[Union[str, Iterable[str]]] = None) \
+              sort: Optional[Union[str, Iterable[str]]] = None, uid_list: Union[str, Iterable[str]] = None) \
             -> Iterator[MailMessage]:
         """
         Mail message generator in current folder by search criteria
@@ -220,13 +220,14 @@ class BaseMailBox:
         :param limit: int | slice - limit number of read emails | slice emails range for read
                       useful for actions with a large number of messages, like "move" | paging
         :param mark_seen: mark emails as seen on fetch
-        :param reverse: in order from the larger date to the smaller
+        :param reverse: in order from the larger date to the smaller, works at client side
         :param headers_only: get only email headers (without text, html, attachments)
         :param bulk:
             False - fetch each message separately per N commands - low memory consumption, slow
             True  - fetch all messages per 1 command - high memory consumption, fast. Fails on big bulk at server
             int - fetch messages by bulks of the specified size
         :param sort: criteria for sort messages on server, use SortCriteria constants. Charset arg is important for sort
+        :param uid_list: UIDs for fetch. If set: (criteria, charset, sort) will be ignored, SEARCH will not be used.
         :return generator: MailMessage
         """
         message_parts = \
@@ -234,7 +235,11 @@ class BaseMailBox:
         limit_range = slice(0, limit) if type(limit) is int else limit or slice(None)
         if not isinstance(limit_range, slice):
             raise TypeError(f"slice expected, but received: {type(limit_range).__name__}")
-        uids = tuple((reversed if reverse else iter)(self.uids(criteria, charset, sort)))[limit_range]
+        if uid_list:
+            uids = clean_uids(uid_list)
+        else:
+            uids = self.uids(criteria, charset, sort)
+        uids = tuple((reversed if reverse else iter)(uids))[limit_range]
         if bulk:
             message_generator = self._fetch_in_bulk(uids, message_parts, reverse, bulk)
         else:

@@ -5,7 +5,7 @@ from email.utils import getaddresses, parsedate_to_datetime
 from itertools import zip_longest
 from typing import Any, Dict, Iterable, Iterator, List, Optional, Sequence, Tuple, Union
 
-from .consts import PYTHON_VERSION_MINOR, SHORT_MONTH_NAMES, MailMessageFlags
+from .consts import DEFAULT_EMAIL_DATE, PYTHON_VERSION_MINOR, SHORT_MONTH_NAMES, MailMessageFlags
 from .imap_utf7 import utf7_encode
 
 StrOrBytes = Union[str, bytes]
@@ -142,7 +142,7 @@ def parse_email_date(value: str) -> datetime.datetime:
             )
         except ValueError:
             pass
-    return datetime.datetime(1900, 1, 1)
+    return DEFAULT_EMAIL_DATE
 
 
 def quote(value: StrOrBytes) -> StrOrBytes:

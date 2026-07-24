@@ -1,6 +1,6 @@
 import imaplib
 import unittest
-from unittest.mock import MagicMock, patch, call
+from unittest.mock import MagicMock, patch
 
 from tests.utils import MailboxTestCase, TEST_MAILBOX_NAME_SET, get_test_mailbox
 from imap_tools.errors import MailboxCopyError
@@ -41,6 +41,10 @@ class MailboxTest(MailboxTestCase):
             found_msgs = tuple(mailbox.fetch(bulk=3, headers_only=1))
             self.assertEqual(len(found_msgs), self.base_test_msg_cnt)
 
+            # FETCH by uid_list
+            found_msgs_by_uids = tuple(mailbox.fetch(uid_list=mailbox.uids(), reverse=True))
+            self.assertEqual(len(found_msgs_by_uids), self.base_test_msg_cnt)
+
             # FETCH nonexistent
             nonexistent_criteria = A(uid=['1000000000'])
             nonexistent_msgs1 = tuple(mailbox.fetch(nonexistent_criteria, bulk=False))
@@ -67,6 +71,7 @@ class MailboxTest(MailboxTestCase):
             # cnt
             self.assertTrue(
                 len(found_msgs) ==
+                len(found_msgs_by_uids) ==
                 len(found_nums) ==
                 len(found_uids) ==
                 self.base_test_msg_cnt

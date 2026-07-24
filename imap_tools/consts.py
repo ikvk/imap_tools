@@ -1,3 +1,4 @@
+import datetime
 import re
 import sys
 
@@ -10,6 +11,11 @@ CODECS_OFFICIAL_REPLACEMENT_CHAR = '�'
 PYTHON_VERSION_MINOR = int(sys.version_info.minor)
 
 MOVE_RESULT_TAG = ('_MOVE',)  # const delete_result part for mailbox.move result, when server have MOVE in capabilities
+
+# RFC 2822: The day is the numeric day of the month. The year is any numeric year 1900 or later.
+# There is no standard date for unparsable dates in emails, this is default date at imap_tools.
+# It is useful for detect is date valid or unparsable.
+DEFAULT_EMAIL_DATE = datetime.datetime(1900, 1, 1)
 
 
 class MailMessageFlags:

@@ -67,10 +67,11 @@ Info about lib are at: *this page*, docstrings, issues, pull requests,
 * *charset* = 'US-ASCII', indicates charset of the strings that appear in the search criteria. See rfc2978
 * *limit* = None, limit on the number of read emails, useful for actions with a large number of messages, like "move". May be int or slice.
 * *mark_seen* = True, mark emails as seen on fetch
-* *reverse* = False, in order from the larger date to the smaller
+* *reverse* = False, in order from the larger date to the smaller, works at client side
 * *headers_only* = False, get only email headers (without text, html, attachments)
 * *bulk* = False, False - fetch each message separately per N commands - low memory consumption, slow; True - fetch all messages per 1 command - high memory consumption, fast; int - fetch all messages by bulks of the specified size, for 20 messages and bulk=5 -> 4 IMAP commands
 * *sort* = None, criteria for sort messages on server, use SortCriteria constants. Charset arg is important for sort
+* *uid_list* = None, UIDs for fetch. If set: (criteria, charset, sort) will be ignored, SEARCH will not be used.
 
 ``BaseMailBox.uids`` - search mailbox for matching message uids in current folder, returns List[str], args:
 
@@ -89,6 +90,10 @@ Info about lib are at: *this page*, docstrings, issues, pull requests,
 ``BaseMailBox.numbers_to_uids`` - Get message uids by message numbers, returns [str]
 
 ``BaseMailBox.client`` - imaplib.IMAP4/IMAP4_SSL client instance.
+
+Thread safety expectation: lib is not thread‑safe.
+
+Monkeypatches for imaplib: sets `imaplib._MAXLINE` (mailbox.py) and modifies `imaplib.Commands["IDLE"]` (idle.py)
 
 📧 Email attributes
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
