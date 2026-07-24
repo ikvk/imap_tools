@@ -5,7 +5,7 @@ import imaplib
 import re
 from collections.abc import Mapping
 from email.header import decode_header
-from email.message import Message, _parseparam, _unquotevalue  # noqa
+from email.message import Message, _parseparam  # noqa
 from functools import cached_property
 from itertools import chain
 from typing import List, Optional, Tuple
