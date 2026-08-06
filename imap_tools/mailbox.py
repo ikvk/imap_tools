@@ -136,16 +136,18 @@ class BaseMailBox:
         check_command_status(result, MailboxLogoutError, expected='BYE')
         return result
 
-    def numbers(self, criteria: Criteria = 'ALL', charset: str = 'US-ASCII') -> List[str]:
+    def numbers(self, criteria: Criteria = 'ALL', charset: Optional[str] = 'US-ASCII') -> List[str]:
         """
         Search mailbox for matching message numbers in current folder (this is not uids)
         Message Sequence Number Message Attribute - to accessing messages by relative position in the mailbox,
         it also can be used in mathematical calculations, see rfc3501.
         :param criteria: message search criteria (see examples at ./doc/imap_search_criteria.txt)
         :param charset: IANA charset, indicates charset of the strings that appear in the search criteria. See rfc2978
+                        Some servers reject an explicit CHARSET, use None for them
         :return email message numbers
         """
-        encoded_criteria = criteria if type(criteria) is bytes else str(criteria).encode(charset)
+        encoded_criteria = criteria if type(criteria) is bytes else str(criteria).encode(charset or 'us-ascii')
+        # self.client.search can proc charset=None
         search_result = self.client.search(charset, encoded_criteria)
         check_command_status(search_result, MailboxNumbersError)
         return search_result[1][0].decode().split() if search_result[1][0] else []
@@ -163,21 +165,29 @@ class BaseMailBox:
                 result.append(uid_match.group('uid'))
         return result
 
-    def uids(self, criteria: Criteria = 'ALL', charset: str = 'US-ASCII',
+    def uids(self, criteria: Criteria = 'ALL', charset: Optional[str] = 'US-ASCII',
              sort: Optional[Union[str, Iterable[str]]] = None) -> List[str]:
         """
         Search mailbox for matching message uids in current folder
         :param criteria: message search criteria (see examples at ./doc/imap_search_criteria.txt)
         :param charset: IANA charset, indicates charset of the strings that appear in the search criteria. See rfc2978
+                        Some servers reject an explicit CHARSET, use None for them
         :param sort: criteria for sort messages on server, use SortCriteria constants. Charset arg is important for sort
         :return: email message uids
         """
-        encoded_criteria = criteria if type(criteria) is bytes else str(criteria).encode(charset)
+        encoded_criteria = criteria if type(criteria) is bytes else str(criteria).encode(charset or 'us-ascii')
         if sort:
             sort = (sort,) if isinstance(sort, str) else sort
-            uid_result = self.client.uid('SORT', f'({" ".join(sort)})', charset, encoded_criteria)
+            sort_cmd = f'({" ".join(sort)})'
+            if charset is None:
+                uid_result = self.client.uid('SORT', sort_cmd, encoded_criteria)
+            else:
+                uid_result = self.client.uid('SORT', sort_cmd, charset, encoded_criteria)
         else:
-            uid_result = self.client.uid('SEARCH', 'CHARSET', charset, encoded_criteria)  # *charset are opt here
+            if charset is None:
+                uid_result = self.client.uid('SEARCH', encoded_criteria)
+            else:
+                uid_result = self.client.uid('SEARCH', 'CHARSET', charset, encoded_criteria)
         check_command_status(uid_result, MailboxUidsError)
         return uid_result[1][0].decode().split() if uid_result[1][0] else []
 

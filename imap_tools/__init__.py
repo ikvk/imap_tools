@@ -34,7 +34,7 @@ from .message import LazyHeaders, MailAttachment, MailMessage
 from .query import AND, NOT, OR, A, H, Header, N, O, U, UidRange
 from .utils import EmailAddress
 
-__version__ = '1.14.0'
+__version__ = '1.15.0'
 
 __all__ = [
     'A', 'AND', 'BaseMailBox', 'EmailAddress', 'FolderInfo', 'H', 'Header', 'ImapToolsError', 'MailAttachment',

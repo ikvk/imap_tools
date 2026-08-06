@@ -1,3 +1,9 @@
+1.15.0
+======
+Some servers reject an explicit CHARSET, use None for them
+* Changed: BaseMailBox.uids arg charset: is optional now.
+* Changed: BaseMailBox.numbers arg charset: is optional now.
+
 1.14.0
 ======
 * Added: BaseMailBox.fetch arg uid_list: UIDs for fetch. If set: (criteria, charset, sort) will be ignored, SEARCH will not be used.

@@ -36,10 +36,10 @@ class MailboxTest(MailboxTestCase):
                 self.assertEqual(len(found_msgs), self.base_test_msg_cnt)
 
             # FETCH
-            found_msgs = tuple(mailbox.fetch(bulk=True, headers_only=1))
-            self.assertEqual(len(found_msgs), self.base_test_msg_cnt)
-            found_msgs = tuple(mailbox.fetch(bulk=3, headers_only=1))
-            self.assertEqual(len(found_msgs), self.base_test_msg_cnt)
+            found_msgs_fetch_bulk = tuple(mailbox.fetch(bulk=True, headers_only=1))
+            self.assertEqual(len(found_msgs_fetch_bulk), self.base_test_msg_cnt)
+            found_msgs_fetch_bulk3 = tuple(mailbox.fetch(bulk=3, headers_only=1))
+            self.assertEqual(len(found_msgs_fetch_bulk3), self.base_test_msg_cnt)
 
             # FETCH by uid_list
             found_msgs_by_uids = tuple(mailbox.fetch(uid_list=mailbox.uids(), reverse=True))
@@ -53,29 +53,29 @@ class MailboxTest(MailboxTestCase):
             self.assertEqual(len(nonexistent_msgs2), 0)
 
             # NUMBERS
-            found_nums = mailbox.numbers()
-            self.assertTrue(bool(found_nums))
-            self.assertTrue(all(type(i) is str for i in found_nums))
+            found_numbers = mailbox.numbers()
+            self.assertTrue(bool(found_numbers))
+            self.assertTrue(all(type(i) is str for i in found_numbers))
+            self.assertEqual(len(found_numbers), self.base_test_msg_cnt)
+
+            # NUMBERS charset=None
+            self.assertEqual(len(mailbox.numbers(charset=None)), self.base_test_msg_cnt)
 
             # NUMBERS_TO_UIDS
-            found_uids = mailbox.numbers_to_uids(found_nums)
-            self.assertTrue(bool(found_uids))
-            self.assertTrue(all(type(i) is str for i in found_uids))
+            found_uids1 = mailbox.numbers_to_uids(found_numbers)
+            self.assertTrue(bool(found_uids1))
+            self.assertTrue(all(type(i) is str for i in found_uids1))
+            self.assertEqual(len(found_uids1), self.base_test_msg_cnt)
 
             # UIDS
-            found_uids = mailbox.uids()
-            self.assertTrue(bool(found_uids))
-            self.assertTrue(all(type(i) is str for i in found_uids))
-            self.assertEqual(set([i.uid for i in mailbox.fetch(headers_only=True, bulk=True)]), set(found_uids))
+            found_uids2 = mailbox.uids()
+            self.assertTrue(bool(found_uids2))
+            self.assertTrue(all(type(i) is str for i in found_uids2))
+            self.assertEqual(set([i.uid for i in mailbox.fetch(headers_only=True, bulk=True)]), set(found_uids2))
+            self.assertEqual(len(found_uids2), self.base_test_msg_cnt)
 
-            # cnt
-            self.assertTrue(
-                len(found_msgs) ==
-                len(found_msgs_by_uids) ==
-                len(found_nums) ==
-                len(found_uids) ==
-                self.base_test_msg_cnt
-            )
+            # UIDS charset=None
+            self.assertEqual(len(mailbox.uids(charset=None)), self.base_test_msg_cnt)
 
             # APPEND
             if mailbox.mailbox_name not in ('MAIL_RU', 'YANDEX'):

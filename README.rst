@@ -449,7 +449,8 @@ Big thanks to people who helped to develop this library 🎉:
 `hurricane-dorian <https://github.com/hurricane-dorian>`_,
 `dlucredativ <https://github.com/dlucredativ>`_,
 `ziima <https://github.com/ziima>`_,
-`Zomono <https://github.com/Zomono>`_
+`Zomono <https://github.com/Zomono>`_,
+`sebmuc99 <https://github.com/sebmuc99>`_
 
 
 Help other open projects that you use 🚀
