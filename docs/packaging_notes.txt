@@ -38,3 +38,6 @@ https://packaging.python.org/tutorials/packaging-projects/
         git push --prune git@gitflic.ru:ikvk/imap-tools.git +refs/remotes/origin/*:refs/heads/* +refs/tags/*:refs/tags/*
 
     https://dev.to/sourcelevel/how-to-properly-mirror-a-git-repository-19d9
+
+* запуск тестов из консоли
+    C:\python\Python314-64\python -m unittest discover -s tests.test_mailbox -t C:\kvk\develop\Python\imap_tools\tests

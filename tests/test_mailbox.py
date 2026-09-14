@@ -142,10 +142,14 @@ class MailboxTest(MailboxTestCase):
 
 
 class LoginQuotingTest(unittest.TestCase):
-    """Verify that login() quotes both username and password (issue #265)."""
+    """
+    Verify that login() quotes both username and password (issue #265).
+    [*1] v3.14.7 quoting changed https://github.com/python/cpython/commit/03d090972a368cbac89acff5ed2a63bdba14dff7
+    """
 
     def _make_mock_client(self):
         mock_client = MagicMock(spec=imaplib.IMAP4)
+        mock_client._encoding = 'utf-8'  # [*1]
         mock_client._quote.side_effect = lambda arg: imaplib.IMAP4._quote(mock_client, arg)
         mock_client._simple_command.return_value = ('OK', [b'Logged in'])
         mock_client.select.return_value = ('OK', [b'1'])
@@ -156,8 +160,10 @@ class LoginQuotingTest(unittest.TestCase):
         with patch.object(MailBox, '_get_mailbox_client', return_value=self._make_mock_client()):
             mb = MailBox('localhost')
             mb.login('user*name', 'pass', initial_folder=None)
-            mb.client._simple_command.assert_called_once_with(
-                'LOGIN', '"user*name"', '"pass"'
+            self.assertIn(
+                mb.client._simple_command.call_args[0],
+                (('LOGIN', '"user*name"', '"pass"'),
+                 ('LOGIN', b'"user*name"', b'"pass"'))  # [*1]
             )
 
     def test_login_quotes_plain_username(self):
@@ -165,8 +171,10 @@ class LoginQuotingTest(unittest.TestCase):
         with patch.object(MailBox, '_get_mailbox_client', return_value=self._make_mock_client()):
             mb = MailBox('localhost')
             mb.login('user', 'pass', initial_folder=None)
-            mb.client._simple_command.assert_called_once_with(
-                'LOGIN', '"user"', '"pass"'
+            self.assertIn(
+                mb.client._simple_command.call_args[0],
+                (('LOGIN', '"user"', '"pass"'),
+                 ('LOGIN', b'"user"', b'"pass"'))  # [*1]
             )
 
 
