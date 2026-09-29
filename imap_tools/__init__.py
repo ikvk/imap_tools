@@ -32,12 +32,14 @@ from .folder import FolderInfo, MailBoxFolderManager
 from .mailbox import BaseMailBox, MailBox, MailBoxStartTls, MailBoxUnencrypted
 from .message import LazyHeaders, MailAttachment, MailMessage
 from .query import AND, NOT, OR, A, H, Header, N, O, U, UidRange
+from .contacts import ContactInfo, collect_contacts, write_contacts_csv, write_contacts_json
 from .utils import EmailAddress
 
-__version__ = '1.15.0'
+__version__ = '1.16.0'
 
 __all__ = [
-    'A', 'AND', 'BaseMailBox', 'EmailAddress', 'FolderInfo', 'H', 'Header', 'ImapToolsError', 'MailAttachment',
+    'A', 'AND', 'BaseMailBox', 'ContactInfo', 'EmailAddress', 'FolderInfo', 'H', 'Header', 'ImapToolsError',
+    'MailAttachment', 'collect_contacts', 'write_contacts_csv', 'write_contacts_json',
     'MailBox', 'MailBoxFolderManager', 'MailBoxFolderStatusOptions', 'MailBoxStartTls', 'MailBoxUnencrypted',
     'MailMessage', 'MailMessageFlags', 'MailboxAppendError', 'MailboxCopyError', 'MailboxDeleteError',
     'MailboxExpungeError', 'MailboxFetchError', 'MailboxFlagError', 'MailboxFolderCreateError',

@@ -57,6 +57,20 @@ Info about lib are at: *this page*, docstrings, issues, pull requests,
 
 `Description of basic example^, that you should to read <https://github.com/ikvk/imap_tools/blob/master/examples/basic.py>`_.
 
+📇 Export correspondents
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Collect unique addresses from inbound (From) and outbound (To/Cc/Bcc) mail and save to CSV or JSON.
+`CLI example <https://github.com/ikvk/imap_tools/blob/master/examples/export_contacts.py>`_.
+
+.. code-block:: python
+
+    from imap_tools import MailBox, collect_contacts, write_contacts_csv
+
+    with MailBox('imap.mail.com').login('test@mail.com', 'pwd') as mailbox:
+        contacts = collect_contacts(mailbox, exclude_emails=['test@mail.com'], mark_seen=False)
+        write_contacts_csv('contacts.csv', contacts)
+
 ``MailBox, MailBoxStartTls, MailBoxUnencrypted`` - for create mailbox client. `STARTTLS example <https://github.com/ikvk/imap_tools/blob/master/examples/starttls.py>`_.
 
 ``BaseMailBox.<auth>`` - ``login, login_utf8, xoauth2, logout`` - authentication functions, support context manager.

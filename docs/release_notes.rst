@@ -1,3 +1,8 @@
+1.16.0
+======
+* Added: imap_tools.contacts - collect unique correspondents from IMAP folders, export CSV/JSON
+* Added: examples/export_contacts.py CLI
+
 1.15.0
 ======
 Some servers reject an explicit CHARSET, use None for them
