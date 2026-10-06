@@ -219,14 +219,23 @@ class BaseMailBox:
             for built_fetch_item in chunked((reversed if reverse else iter)(fetch_result[1]), 2):
                 yield built_fetch_item
 
-    def fetch(self, criteria: Criteria = 'ALL', charset: str = 'US-ASCII', *, limit: Optional[Union[int, slice]] = None,
-              mark_seen=True, reverse=False, headers_only=False, bulk: Union[bool, int] = False,
-              sort: Optional[Union[str, Iterable[str]]] = None, uid_list: Union[str, Iterable[str]] = None) \
+    def fetch(self,
+              criteria: Criteria = 'ALL',
+              charset: Optional[str] = 'US-ASCII',
+              *,
+              limit: Optional[Union[int, slice]] = None,
+              mark_seen=True,
+              reverse=False,
+              headers_only=False,
+              bulk: Union[bool, int] = False,
+              sort: Optional[Union[str, Iterable[str]]] = None,
+              uid_list: Union[str, Iterable[str]] = None) \
             -> Iterator[MailMessage]:
         """
         Mail message generator in current folder by search criteria
         :param criteria: message search criteria (see examples at ./doc/imap_search_criteria.txt)
         :param charset: IANA charset, indicates charset of the strings that appear in the search criteria. See rfc2978
+                        Some servers reject an explicit CHARSET, use None for them
         :param limit: int | slice - limit number of read emails | slice emails range for read
                       useful for actions with a large number of messages, like "move" | paging
         :param mark_seen: mark emails as seen on fetch

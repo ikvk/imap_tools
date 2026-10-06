@@ -450,7 +450,8 @@ Big thanks to people who helped to develop this library 🎉:
 `dlucredativ <https://github.com/dlucredativ>`_,
 `ziima <https://github.com/ziima>`_,
 `Zomono <https://github.com/Zomono>`_,
-`sebmuc99 <https://github.com/sebmuc99>`_
+`sebmuc99 <https://github.com/sebmuc99>`_,
+`BrianWillows <https://github.com/BrianWillows>`_
 
 
 Help other open projects that you use 🚀

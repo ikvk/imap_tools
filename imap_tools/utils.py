@@ -191,7 +191,8 @@ def check_timeout_arg_support(timeout):
 
 def replace_html_ct_charset(html: str, new_charset: str) -> str:
     """Replace charset in META tag with content-type attribute in HTML text"""
-    meta_ct_match = re.search(r'<\s*meta .*?content-type.*?>', html, re.IGNORECASE | re.DOTALL)
+    # [^<>] keeps each attempt inside one tag, so the search stays linear on hostile html
+    meta_ct_match = re.search(r'<\s*meta\s[^<>]*?content-type[^<>]*>', html, re.IGNORECASE)
     if meta_ct_match:
         meta = meta_ct_match.group(0)
         meta_new = re.sub(

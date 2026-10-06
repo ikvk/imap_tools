@@ -1,3 +1,4 @@
+import time
 import unittest
 import datetime
 import unicodedata
@@ -183,3 +184,10 @@ class UtilsTest(unittest.TestCase):
         res2 = replace_html_ct_charset(data2, 'utf-8')
         self.assertIn(target, res2)
         self.assertTrue(res2.count(target) == 1)
+
+    def test_replace_html_ct_charset_malformed_html_is_linear(self):
+        # many unclosed meta tags used to cost quadratic time (seconds per 64 KB)
+        for payload in ('<meta ' * 50_000, '<meta x' + ' ' * 300_000, '<' * 300_000):
+            start = time.monotonic()
+            self.assertEqual(replace_html_ct_charset(payload, 'utf-8'), payload)
+            self.assertLess(time.monotonic() - start, 1)
