@@ -455,3 +455,5 @@ Big thanks to people who helped to develop this library 🎉:
 
 
 Help other open projects that you use 🚀
+
+Do you making games on python? Check `ecs_pattern <https://github.com/ikvk/ecs_pattern>`_ 🎮
