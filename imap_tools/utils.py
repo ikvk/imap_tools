@@ -25,13 +25,15 @@ def clean_uids(uid_set: Union[str, Iterable[str]]) -> List[str]:
         if re.search(r'^([\d*:]+,)*[\d*:]+$', uid_set):  # *optimization for already good str
             return uid_set.split(',')
         uid_set = uid_set.split(',')
-    # check uid types
+    # Validate and collect in one pass so iterators are not exhausted.
+    result = []
     for uid in uid_set:
         if type(uid) is not str:
             raise TypeError(f'uid "{str(uid)}" is not string')
         if not re.match(r'^[\d*:]+$', uid.strip()):
             raise TypeError(f'Wrong uid: "{uid}"')
-    return [i.strip() for i in uid_set]
+        result.append(uid.strip())
+    return result
 
 
 def check_command_status(command_result: tuple, exception: type, expected='OK'):
@@ -175,12 +177,14 @@ def clean_flags(flag_set: Union[str, Iterable[str]]) -> List[str]:
     if type(flag_set) is str:
         flag_set = [flag_set]
     upper_sys_flags = tuple(i.upper() for i in MailMessageFlags.all)
+    result = []
     for flag in flag_set:
         if type(flag) is not str:
             raise ValueError(f'Flag - str value expected, but {type(flag_set)} received')
         if flag.upper() not in upper_sys_flags and flag.startswith('\\'):
             raise ValueError('Non system flag must not start with "\\"')
-    return flag_set
+        result.append(flag)
+    return result
 
 
 def check_timeout_arg_support(timeout):

@@ -358,13 +358,14 @@ class BaseMailBox:
         cleaned_uid_list = clean_uids(uid_list)
         if not cleaned_uid_list:
             return None
+        cleaned_flags = clean_flags(flag_set)
         results = []
         for cleaned_uid_list_i in chunked_crop(cleaned_uid_list, chunks):
             store_result = self.client.uid(
                 'STORE',
                 ','.join(cleaned_uid_list_i),
                 ('+' if value else '-') + 'FLAGS',
-                f'({" ".join(clean_flags(flag_set))})'
+                f'({" ".join(cleaned_flags)})'
             )
             check_command_status(store_result, MailboxFlagError)
             expunge_result = self.expunge()

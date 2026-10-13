@@ -23,6 +23,7 @@ class UtilsTest(unittest.TestCase):
     def test_clean_uids(self):
         # *clean_uids also implicitly tested in test_query.py
         self.assertEqual(clean_uids('11'), ['11'])
+        self.assertEqual(clean_uids(iter([' 1 ', '2:*'])), ['1', '2:*'])
         self.assertEqual(clean_uids('1,2'), ['1', '2'])
         self.assertEqual(clean_uids(' 1,2, 4 '), ['1', '2', '4'])
         self.assertEqual(clean_uids('1,222'), ['1', '222'])
@@ -35,6 +36,7 @@ class UtilsTest(unittest.TestCase):
         self.assertEqual(clean_flags([MailMessageFlags.FLAGGED, MailMessageFlags.SEEN]), ['\\Flagged', '\\Seen'])
         self.assertEqual(clean_flags(['\\FLAGGED', '\\seen']), ['\\FLAGGED', '\\seen'])
         self.assertEqual(clean_flags(['TAG1']), ['TAG1'])
+        self.assertEqual(clean_flags(iter(['TAG1', 'TAG2'])), ['TAG1', 'TAG2'])
         self.assertEqual(clean_flags(['tag2']), ['tag2'])
         for flag in MailMessageFlags.all:
             self.assertEqual(clean_flags(flag), ['\\' + flag.replace('\\', '', 1).capitalize()])

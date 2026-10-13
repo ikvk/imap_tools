@@ -241,7 +241,7 @@ First of all read about UID `at rfc3501 <https://tools.ietf.org/html/rfc3501#sec
 Action's uid_list arg may takes:
 
 * str, that is comma separated uids
-* Sequence, that contains str uids
+* Iterable, that contains str uids (including generators, consumed before commands are sent)
 
 To get uids, use the maibox methods: ``uids``, ``fetch``.
 

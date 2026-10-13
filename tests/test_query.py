@@ -6,6 +6,9 @@ from imap_tools.query import ParamConverter, A, AND, OR, NOT, H, U
 
 class QueryTest(unittest.TestCase):
 
+    def test_uid_generator(self):
+        self.assertEqual(str(A(uid=iter(['1', '2']))), '(UID 1,2)')
+
     def test_cleaners(self):
         for cleaned_fn_name, good_vals, bad_vals in (
                 ('cleaned_bool', (True, False), (1, 'str', [], {}, type, b'1')),
