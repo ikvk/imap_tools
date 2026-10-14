@@ -43,7 +43,7 @@ Repo mirror      https://gitflic.ru/project/ikvk/imap-tools
 📋 Basic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Docs for `imap_tools` are at: *this page*, docstrings,
+Docs for ``imap_tools`` are at: *this page*, docstrings,
 `examples <https://github.com/ikvk/imap_tools/tree/master/examples>`_, issues, pull requests, source, stackoverflow.com
 
 .. code-block:: python
