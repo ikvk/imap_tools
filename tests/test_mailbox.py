@@ -1,6 +1,6 @@
 import imaplib
 import unittest
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock, call, patch
 
 from tests.utils import MailboxTestCase, TEST_MAILBOX_NAME_SET, get_test_mailbox
 from imap_tools.errors import MailboxCopyError
@@ -176,6 +176,66 @@ class LoginQuotingTest(unittest.TestCase):
                 (('LOGIN', '"user"', '"pass"'),
                  ('LOGIN', b'"user"', b'"pass"'))  # [*1]
             )
+
+
+class IterableArgumentsTest(unittest.TestCase):
+    def setUp(self):
+        self.client = MagicMock(spec=imaplib.IMAP4)
+        self.client.capabilities = ()
+        self.client.uid.return_value = ('OK', [b'done'])
+        self.client.expunge.return_value = ('OK', [])
+        self.client.append.return_value = ('OK', [b'done'])
+        with patch.object(MailBox, '_get_mailbox_client', return_value=self.client):
+            self.mailbox = MailBox('localhost')
+
+    def test_uid_generators_reach_each_command(self):
+        for operation in ('copy', 'delete', 'move'):
+            for server_move in (False, True):
+                with self.subTest(operation=operation, server_move=server_move):
+                    self.client.reset_mock()
+                    self.client.capabilities = ('MOVE',) if server_move else ()
+                    args = () if operation == 'delete' else ('Archive',)
+                    result = getattr(self.mailbox, operation)(
+                        (uid for uid in (' 1 ', '2')), *args, chunks=1)
+                    self.assertEqual(len(result), 2)
+                    command = 'COPY' if operation == 'copy' else 'STORE'
+                    if operation == 'move':
+                        command = 'MOVE' if server_move else 'COPY'
+                    self.assertEqual(
+                        [c.args[1] for c in self.client.uid.call_args_list if c.args[0] == command],
+                        ['1', '2'])
+
+    def test_flag_generators_are_reused_for_all_chunks(self):
+        for value in (True, False):
+            with self.subTest(value=value):
+                self.client.reset_mock()
+                self.mailbox.flag(iter(['1', '2']), iter(['\\Seen', 'custom']), value, chunks=1)
+                operation = '+FLAGS' if value else '-FLAGS'
+                self.assertEqual(self.client.uid.call_args_list, [
+                    call('STORE', '1', operation, '(\\Seen custom)'),
+                    call('STORE', '2', operation, '(\\Seen custom)'),
+                ])
+
+    def test_append_retains_generator_flags(self):
+        self.mailbox.append(TEST_MESSAGE_DATA, flag_set=iter(['\\Seen', 'custom']))
+        self.assertEqual(self.client.append.call_args.args[1], '(\\Seen custom)')
+
+    def test_invalid_generator_values_do_not_send_commands(self):
+        with self.assertRaises(TypeError):
+            self.mailbox.copy(iter(['1', 'invalid']), 'Archive', chunks=1)
+        with self.assertRaises(ValueError):
+            self.mailbox.flag(['1', '2'], iter(['\\Seen', '\\Invalid']), True, chunks=1)
+        self.client.uid.assert_not_called()
+
+    def test_empty_generator_is_noop(self):
+        self.assertIsNone(self.mailbox.copy(iter([]), 'Archive'))
+        self.assertIsNone(self.mailbox.flag(iter([]), ['\\Seen'], True))
+        self.client.uid.assert_not_called()
+
+    def test_fetch_accepts_uid_generator(self):
+        with patch.object(self.mailbox, '_fetch_by_one', return_value=iter([])) as fetch:
+            list(self.mailbox.fetch(uid_list=iter(['1', '2'])))
+        self.assertEqual(fetch.call_args.args[0], ('1', '2'))
 
 
 if __name__ == "__main__":
