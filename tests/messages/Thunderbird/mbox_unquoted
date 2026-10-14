@@ -1,0 +1,18 @@
+From 
+From: Author <author@example.com>
+To: Recipient <recipient@example.com>
+Subject: Sample message 1
+Date: Wed, 22 Aug 2005 17:20:08 +0000
+
+Earlier versions of Thunderbird don't seem to quote things like this:
+From 
+This could cause problems, if a reader decides to split the message
+here.
+
+From 
+From: Author <author@example.com>
+To: Recipient <recipient@example.com>
+Subject: Sample message 2
+Date: Thu, 23 Aug 2005 11:17:43 +0000
+
+This is the second body.

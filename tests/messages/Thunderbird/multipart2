@@ -1,0 +1,13 @@
+Content-Type: multipart/mixed; boundary=boundary
+
+This is a text/html message. This part shouldn't appear at all!
+
+--boundary
+Content-Type: text/html
+
+<html><body>Multipart HTML message with just a single part!
+</body></html>
+
+--boundary--
+
+Actually, this part shouldn't appear either.

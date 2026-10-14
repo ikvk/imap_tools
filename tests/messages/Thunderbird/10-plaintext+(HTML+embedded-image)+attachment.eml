@@ -1,0 +1,69 @@
+To: test@example.com
+From: test@example.com
+Subject: 10 plaintext + (HTML + embedded image) + attachment
+Message-ID: <1e58c8f2-3a15-96e7-76b7-046cf6e1ce1e@example.com>
+Date: Sat, 30 Dec 2017 20:50:01 +0100
+User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:59.0) Gecko/20100101
+ Thunderbird/59.0a1
+MIME-Version: 1.0
+Content-Type: multipart/mixed;
+ boundary="------------B94553864BC0A4472640622E"
+Content-Language: en-GB
+
+This is a multi-part message in MIME format.
+--------------B94553864BC0A4472640622E
+Content-Type: multipart/alternative;
+ boundary="------------B24EA868A72E5E6144485481"
+
+
+--------------B24EA868A72E5E6144485481
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Transfer-Encoding: base64
+
+U2VhcmNoIGZvciBoaWhp
+
+
+--------------B24EA868A72E5E6144485481
+Content-Type: multipart/related;
+ boundary="------------D1360749D11EBC0C64444B6C"
+
+
+--------------D1360749D11EBC0C64444B6C
+Content-Type: text/html; charset=windows-1252
+Content-Transfer-Encoding: base64
+
+PGh0bWw+DQogIDxoZWFkPg0KDQogICAgPG1ldGEgaHR0cC1lcXVpdj0iY29udGVudC10eXBl
+IiBjb250ZW50PSJ0ZXh0L2h0bWw7IGNoYXJzZXQ9d2luZG93cy0xMjUyIj4NCiAgPC9oZWFk
+Pg0KICA8Ym9keSB0ZXh0PSIjMDAwMDAwIiBiZ2NvbG9yPSIjRkZGRkZGIj4NCiAgICA8cD48
+dHQ+U2VhcmNoIGZvciBodWh1PC90dD48L3A+DQogICAgPHA+PGltZyBzcmM9ImNpZDpwYXJ0
+MS44QzVFNkE4MS5EMEMxQjkxQUBqb3Jnay5jb20iIGFsdD0iIj48L3A+DQogIDwvYm9keT4N
+CjwvaHRtbD4=
+
+--------------D1360749D11EBC0C64444B6C
+Content-Type: image/png;
+ name="kigaaldcbanejcbi.png"
+Content-Transfer-Encoding: base64
+Content-ID: <part1.8C5E6A81.D0C1B91A@jorgk.com>
+Content-Disposition: inline;
+ filename="kigaaldcbanejcbi.png"
+
+iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAAXNSR0IArs4c6QAAAARnQU1B
+AACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAASdEVYdFNvZnR3YXJlAEdyZWVuc2hv
+dF5VCAUAAABpSURBVDhP3dA7EoAgDEXR7Ew+bgdx/018BEYyiICtb27FcCig3Z7Im6gK3ZxN
+/RcQkb6aK8DjtuRMzMEAiNGvlFpgtyOdEjFz14xA10wA1pg5wLRZAthtVgEm5vGtA4DhvILa
+O8A+AuYLy0U5xUUpL8kAAAAASUVORK5CYII=
+--------------D1360749D11EBC0C64444B6C--
+
+--------------B24EA868A72E5E6144485481--
+
+--------------B94553864BC0A4472640622E
+Content-Type: image/png;
+ name="attach2.png"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+ filename="attach2.png"
+
+iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAIAAACQKrqGAAAAAXNSR0IArs4c6QAAAARnQU1B
+AACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAASdEVYdFNvZnR3YXJlAEdyZWVuc2hv
+dF5VCAUAAAAVSURBVChTY/hPNBhVOqqUaKX//wMA005J0zvV0VsAAAAASUVORK5CYII=
+--------------B94553864BC0A4472640622E--

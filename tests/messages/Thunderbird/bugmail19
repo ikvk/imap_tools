@@ -1,0 +1,61 @@
+From - Tue Oct 02 00:26:47 2007
+X-UIDL: UID18345-1161858178
+X-Mozilla-Status: 0001
+X-Mozilla-Status2: 00000000
+Received: (from root@localhost)
+	by mrapp51.mozilla.org (8.13.8/8.13.8/Submit) id m47LtAEf007542;
+	Wed, 7 May 2008 14:55:10 -0700
+Date: Wed, 7 May 2008 14:55:10 -0700
+Message-Id: <200805072155.m47LtAEf007542@mrapp51.mozilla.org>
+To: invalid@example.com
+From: PrimaryEmail1@test.invalid
+Cc: invalid@example.com
+Subject: [Bug 655578] list-id filter broken
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: newchanged
+X-Bugzilla-Watch-Reason: QAcontact filters@mail.bugs
+X-Bugzilla-Product: Core
+X-Bugzilla-Component: MailNews: Filters
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: enhancement
+X-Bugzilla-Who: bugmail@example.org
+X-Bugzilla-Status: NEW
+X-Bugzilla-Priority: --
+X-Bugzilla-Assigned-To: nobody@mozilla.org
+X-Bugzilla-Target-Milestone: ---
+X-Bugzilla-Changed-Fields: Blocks
+In-Reply-To: <bug-397009-254728@https.bugzilla.mozilla.org/>
+References: <bug-397009-254728@https.bugzilla.mozilla.org/>
+	<4DC2493C.4060403@gmx.invalid>
+	<BANLkTin2w8LJxYGHV3_5NpFbsiBhrP96XA@mail.gmail.invalid>
+	<175221688.20110506234025@my_localhost>
+	<201105072315.25120@thufir.ingo-kloecker.invalid>
+	<BANLkTinacQCd+mZ7fL1THLK55X2+u9g5-w@mail.gmail.invalid>
+	<05433510.20110507224940@my_localhost>
+	<4DC5C015.7050800@sixdemonbag.invalid>
+	<BANLkTinv7NvPG9gE1Fha+X+6ZkHzdXdRdg@mail.gmail.invalid>
+	<BANLkTi=6zDTsYymc+bUTwPOM2AohJD2wfA@mail.gmail.invalid>
+Reply-To: FOO <bar@foo.invalid>
+List-Id: Help and discussion among users of GnuPG <gnupg-users.gnupg.org>
+Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+
+Do not reply to this email.  You can add comments to this bug at
+https://bugzilla.mozilla.org/show_bug.cgi?id=397009
+
+
+Some User <bugmail@example.org> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Blocks|                            |432710
+
+
+
+
+-- 
+Configure bugmail: https://bugzilla.mozilla.org/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are watching the QA contact of the bug.
+
+

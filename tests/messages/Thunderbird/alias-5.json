@@ -1,0 +1,14 @@
+{
+  "description": "OpenPGP alias rules",
+  "rules": [
+    {
+      "email": "nobody@example.com",
+      "keys": [
+        { "fingerprint": "EB85BB5FA33A75E15E944E63F231550C4F47E38E" },
+        { "fingerprint": "D1A66E1A23B182C9980F788CFBFCC82A015E7330" },
+        { "fingerprint": "B8F2F6F4BD3AD3F82DC446833099FF1238852B9F" },
+        { "fingerprint": "0123456789012345678901234567890123456789" }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+Date: Fri, 01 Jan 2010 12:00 -0500
+To: x@x.x
+From: y@y.y
+Subject: download on demand problem
+MIME-Version: 1.0
+Content-Type: multipart/mixed;
+	boundary="----Part0+"
+
+This is a multi-part message in MIME format.
+
+------Part0+
+Content-Type: multipart/related;
+	type="multipart/alternative";
+	boundary="----Part1.n"
+
+
+------Part1.n
+Content-Type: multipart/alternative;
+	boundary="----Part1.1.n"
+
+
+------Part1.1.n
+Content-Type: text/plain;
+
+thisplaintextneedstodisplaytopasstest
+plaintextshouldnotbefetchedtopasstest
+
+------Part1.1.n
+Content-Type: text/html;
+
+<html>
+thishtmltextneedstodisplaytopasstest
+htmltextshouldnotbefetchedtopasstest
+</html>
+
+------Part1.1.n--
+
+------Part1.n
+Content-Type: image/jpeg;
+	name="someimage.jpg"
+
+This is someimage.jpg
+
+------Part1.n--
+
+------Part0+
+Content-Type: application/zip;
+	name="somename.zip"
+
+This is somename.zip
+
+------Part0+
+Content-Type: text/html;
+
+This is a text part that should not be displayed
+it is not inline and is not an attachment
+------Part0+--

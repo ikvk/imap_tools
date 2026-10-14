@@ -1,0 +1,31 @@
+Date: Sun, 7 Feb 2010 00:01:00 -0600
+From: from@invalid.invalid
+To: to@invalid.invalid
+Subject: bug246415modified
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="-------toppart"
+
+---------toppart
+Content-Type: multipart/alternative; boundary="-------bug246415partN"
+
+---------bug246415partN
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+thisplaintextneedstodisplaytopasstest
+plaintextshouldnotbefetchedtopasstest
+
+---------bug246415partN
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<html>
+<body>
+<pre>
+thishtmltextneedstodisplaytopasstest
+htmltextshouldnotbefetchedtopasstest
+</pre>
+</body></html>
+
+---------bug246415partN--
+---------toppart--

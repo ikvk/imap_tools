@@ -1,0 +1,75 @@
+From - Mon Jan 1 00:00:00 1965
+X-Mozilla-Status: 0001
+X-Mozilla-Status2: 10000000
+From: <aaa bbb>
+To: <aaa@bb.invalid>
+Subject: xxx
+Date: Tue, 9 Dec 2008 16:49:02 +0200
+MIME-Version: 1.0
+Content-Type: multipart/mixed;
+	boundary="----=_NextPart_000_36B5_01C9DB8C.9514C300"
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2900.2180
+
+This is a multi-part message in MIME format.
+
+------=_NextPart_000_36B5_01C9DB8C.9514C300
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META HTTP-EQUIV=3D"Content-Type" CONTENT=3D"text/html; =
+charset=3Dus-ascii">
+
+
+<META content=3D"MSHTML 6.00.6000.16735" name=3DGENERATOR></HEAD>
+<BODY> bbb
+</BODY></HTML>
+------=_NextPart_000_36B5_01C9DB8C.9514C300
+Content-Type: message/rfc822
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment
+
+From: <sys admin>
+To: <dd@ee.invalid>
+Subject: yyy
+Date: Sun, 7 Dec 2008 17:53:47 +0200
+MIME-Version: 1.0
+Content-Type: message/rfc822
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2900.2180
+
+From: <aa@b>
+To: <aa@b>
+Subject: ccc
+Date: Sat, 23 May 2009 09:55:19 +0200
+MIME-Version: 1.0
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2900.2180
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV=3D"Content-Type" CONTENT=3D"text/html; =
+charset=3Diso-8859-1">
+<META NAME=3D"Generator" CONTENT=3D"MS Exchange Server version =
+08.00.0681.000">
+<TITLE>ccc</TITLE>
+</HEAD>
+<BODY>
+<!-- Converted from text/plain format -->
+
+</BODY>
+</HTML>
+------=_NextPart_000_36B5_01C9DB8C.9514C300--
+

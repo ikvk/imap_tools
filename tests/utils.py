@@ -4,7 +4,7 @@ import configparser
 from imap_tools import MailBox
 
 # all: 'GOOGLE', 'YANDEX', 'ZIMBRA', 'MAIL_RU', 'YAHOO', 'OUTLOOK'
-TEST_MAILBOX_NAME_SET = {'YANDEX', 'ZIMBRA', 'MAIL_RU', 'YAHOO'}
+TEST_MAILBOX_NAME_SET = {'ZIMBRA', 'MAIL_RU', 'YAHOO'}
 
 
 def get_test_mailbox_config(mailbox_name: str) -> dict:

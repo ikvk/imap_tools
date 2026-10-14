@@ -1,0 +1,30 @@
+From - Sun 24 Jan 2016 21:57:32
+X-Mozilla-Status: 0000
+X-Mozilla-Status2: 00000000
+X-Mozilla-Keys:                                                                                 
+FCC: mailbox://nobody@Local%20Folders/Sent
+BCC: Some User <u1@example.com>, Another Person <u2@example.com>
+X-Identity-Key: id2
+From: Some User <example@example.com>
+Subject: =?UTF-8?B?bGF0aW4xIHRlbXBsYXRlIMOlw6TDtg==?=
+Message-ID: <8fd7dc38-5b3b-c1a3-2003-4d33dd1c70bf@example.com>
+Date: Sun, 24 Jan 2016 21:57:32 +0200
+X-Mozilla-Draft-Info: internal/draft; vcard=0; receipt=0; DSN=0; uuencode=0;
+ attachmentreminder=0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:46.0) Gecko/20100101
+ Thunderbird/46.0a1
+MIME-Version: 1.0
+Content-Type: text/html; charset=windows-1252
+Content-Transfer-Encoding: 8bit
+
+<html>
+  <head>
+    <meta content="text/html; charset=windows-1252"
+      http-equiv="Content-Type">
+  </head>
+  <body bgcolor="#FFFFFF" text="#000000">
+    html åäö xlatin1<br>
+  </body>
+</html>
+
+

@@ -1,0 +1,47 @@
+From - Mon Jun 02 19:00:00 2008
+X-Mozilla-Status: 0001
+X-Mozilla-Status2: 00000000
+X-Mozilla-Keys:                                                                                 
+Return-path: <example@example.com>
+Delivered-To: bugmail@example.org
+Received: by 10.114.166.12 with SMTP id o12cs163262wae;
+        Fri, 11 Apr 2008 07:17:31 -0700 (PDT)
+Received: by 10.115.60.1 with SMTP id n1mr214763wak.181.1207923450166;
+        Fri, 11 Apr 2008 07:17:30 -0700 (PDT)
+Return-Path: <bugzilla-daemon@mozilla.org>
+Received: from webapp-out.mozilla.org (webapp01.sj.mozilla.com [63.245.208.146])
+        by mx.google.com with ESMTP id n38si6807242wag.2.2008.04.11.07.17.29;
+        Fri, 11 Apr 2008 07:17:30 -0700 (PDT)
+Received-SPF: neutral (google.com: 63.245.208.146 is neither permitted nor denied by best guess record for domain of bugzilla-daemon@mozilla.org) client-ip=63.245.208.146;
+Authentication-Results: mx.google.com; spf=neutral (google.com: 63.245.208.146 is neither permitted nor denied by best guess record for domain of bugzilla-daemon@mozilla.org) smtp.mail=bugzilla-daemon@mozilla.org
+Received: from mrapp51.mozilla.org (mrapp51.mozilla.org [127.0.0.1])
+	by webapp-out.mozilla.org (8.13.8/8.13.8) with ESMTP id m3BEHTGU030132
+	for <bugmail@example.org>; Fri, 11 Apr 2008 07:17:29 -0700
+Received: (from root@localhost)
+	by mrapp51.mozilla.org (8.13.8/8.13.8/Submit) id m3BEHTk4030129;
+	Fri, 11 Apr 2008 07:17:29 -0700
+Date: Fri, 11 Apr 2008 07:17:29 -0700
+Message-Id: <200804111417.m3BEHTk4030129@mrapp51.mozilla.org>
+From: bugzilla-daemon@mozilla.org
+To: bugmail@example.org
+Subject: Bugzilla: confirm account creation
+X-Bugzilla-Type: admin
+Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+
+Bugzilla has received a request to create a user account
+using your email address (example@example.org).
+
+To confirm that you want to create an account using that email address,
+visit the following link:
+
+https://bugzilla.mozilla.org/token.cgi?t=xxxxxxxxxx&a=request_new_account
+
+If you are not the person who made this request, or you wish to cancel
+this request, visit the following link:
+
+https://bugzilla.mozilla.org/token.cgi?t=xxxxxxxxxx&a=cancel_new_account
+
+If you do nothing, the request will lapse after 3 days
+(on April 14th, 2008 at 07:17 PDT).
+

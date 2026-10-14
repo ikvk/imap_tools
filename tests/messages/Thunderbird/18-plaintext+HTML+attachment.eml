@@ -1,0 +1,46 @@
+To: test@example.com
+From: test@example.com
+Subject: 18 plaintext + HTML + attachment
+Message-ID: <b09c8682-a485-98ee-8f8e-edb89a1deec3@example.com>
+Date: Sat, 30 Dec 2017 19:58:40 +0100
+User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:59.0) Gecko/20100101
+ Thunderbird/59.0a1
+MIME-Version: 1.0
+Content-Type: multipart/mixed;
+ boundary="------------A1EC8071C6B86B871C9CB87F"
+Content-Language: en-GB
+
+This is a multi-part message in MIME format.
+--------------A1EC8071C6B86B871C9CB87F
+Content-Type: multipart/alternative;
+ boundary="------------9EC5D7C387C9839604A227BB"
+
+
+--------------9EC5D7C387C9839604A227BB
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+
+Search for hïhï
+
+
+--------------9EC5D7C387C9839604A227BB
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: 8bit
+
+<body>Search for <b>hühü</b></body>
+
+--------------9EC5D7C387C9839604A227BB--
+
+--------------A1EC8071C6B86B871C9CB87F
+Content-Type: image/png;
+ name="attach.png"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+ filename="attach.png"
+
+iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAAXNSR0IArs4c6QAAAARnQU1B
+AACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAASdEVYdFNvZnR3YXJlAEdyZWVuc2hv
+dF5VCAUAAABpSURBVDhP3dA7EoAgDEXR7Ew+bgdx/018BEYyiICtb27FcCig3Z7Im6gK3ZxN
+/RcQkb6aK8DjtuRMzMEAiNGvlFpgtyOdEjFz14xA10wA1pg5wLRZAthtVgEm5vGtA4DhvILa
+O8A+AuYLy0U5xUUpL8kAAAAASUVORK5CYII=
+--------------A1EC8071C6B86B871C9CB87F--

@@ -1,0 +1,30 @@
+Date: Sun, 7 Feb 2010 00:01:00 -0600
+From: from@invalid.invalid
+To: to@invalid.invalid
+Subject: bug246415
+MIME-Version: 1.0
+Content-Type: multipart/related; boundary="-------bug246415partN"
+
+---------bug246415partN
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<html>
+<body>
+<pre>
+Only one text content-type so this html needs
+to display in both tests, plain and html
+
+thishtmltextneedstodisplaytopasstest
+thisplaintextneedstodisplaytopasstest
+</pre>
+</body></html>
+
+---------bug246415partN
+Content-Type: image/gif
+Content-Transfer-Encoding: base64
+Content-Disposition: inline; filename="solid.gif"
+Content-ID: <8aa65aaf56c805fc71ef7c76fb22614b>
+
+R0lGODlhDAABAIAAAM7P2AAAACH5BAAAAAAALAAAAAAMAAEAAAIDhI9WADs=
+---------bug246415partN--

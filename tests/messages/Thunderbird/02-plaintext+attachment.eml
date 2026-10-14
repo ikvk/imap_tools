@@ -1,0 +1,32 @@
+To: test@example.com
+From: test@example.com
+Subject: 2 plaintext + attachment
+Message-ID: <9ec4f4cb-b14b-aed6-a042-58897d12e4a9@example.com>
+Date: Sat, 30 Dec 2017 19:15:38 +0100
+User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:59.0) Gecko/20100101
+ Thunderbird/59.0a1
+MIME-Version: 1.0
+Content-Type: multipart/mixed;
+ boundary="------------BC006DD22051247571F398E0"
+Content-Language: en-GB
+
+This is a multi-part message in MIME format.
+--------------BC006DD22051247571F398E0
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Transfer-Encoding: base64
+
+U2VhcmNoIGZvciBodWh1
+
+--------------BC006DD22051247571F398E0
+Content-Type: image/png;
+ name="attach.png"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+ filename="attach.png"
+
+iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAAXNSR0IArs4c6QAAAARnQU1B
+AACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAASdEVYdFNvZnR3YXJlAEdyZWVuc2hv
+dF5VCAUAAABpSURBVDhP3dA7EoAgDEXR7Ew+bgdx/018BEYyiICtb27FcCig3Z7Im6gK3ZxN
+/RcQkb6aK8DjtuRMzMEAiNGvlFpgtyOdEjFz14xA10wA1pg5wLRZAthtVgEm5vGtA4DhvILa
+O8A+AuYLy0U5xUUpL8kAAAAASUVORK5CYII=
+--------------BC006DD22051247571F398E0--

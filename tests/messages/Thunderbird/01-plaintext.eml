@@ -1,0 +1,14 @@
+To: test@example.com
+From: test@example.com
+Subject: 1 plaintext
+Message-ID: <8259dd8e-2293-8765-e720-61dfcd10a6f3@example.com>
+Date: Sat, 30 Dec 2017 19:12:38 +0100
+User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:59.0) Gecko/20100101
+ Thunderbird/59.0a1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Transfer-Encoding: base64
+Content-Language: en-GB
+
+U2VhcmNoIGZvciBodWh1
+

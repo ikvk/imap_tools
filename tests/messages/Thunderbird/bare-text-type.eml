@@ -1,0 +1,7 @@
+From: sender@example.invalid
+To: recipient@example.invalid
+Subject: Message with content-type text
+Message-ID: <bare-text-type@example.invalid>
+Content-Type: text
+
+Try a Thunderbird Quick Filter for waldo in the message body.

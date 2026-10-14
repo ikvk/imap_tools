@@ -1,0 +1,12 @@
+Content-Type: multipart/mixed;
+ boundary="boundary"
+
+This is a text message in MIME format.
+This part shouldn't appear in the output.
+
+--boundary
+Content-Type: text/plain
+
+Hello, world! (yet again...)
+
+--boundary--

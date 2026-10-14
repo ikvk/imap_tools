@@ -1,0 +1,11 @@
+To: recipient@example.invalid
+From: sender@example.invalid
+Subject: Plaintext quoted-printable body ending on a soft line break
+Message-ID: <qp-trailing-equals-plain@example.invalid>
+Date: Mon, 6 Jul 2026 06:06:06 +0000
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+This message body ends on a quoted-printable soft line break.
+The needle qptrailingplain sits on the final line=

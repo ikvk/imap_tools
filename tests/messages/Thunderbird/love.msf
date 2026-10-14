@@ -1,0 +1,58 @@
+// <!-- <mdb:mork:z v="1.4"/> -->
+< <(a=c)> // (f=iso-8859-1)
+  (B8=junkscore)(B9=keywords)(80=ns:msg:db:row:scope:msgs:all)
+  (81=subject)(82=sender)(83=message-id)(84=references)(85=recipients)
+  (86=date)(87=size)(88=flags)(89=priority)(8A=label)(8B=numLines)
+  (8C=ccList)(8D=bccList)(8E=msgThreadId)(8F=threadId)(90=threadFlags)
+  (91=threadNewestMsgDate)(92=children)(93=unreadChildren)
+  (94=threadSubject)(95=msgCharSet)(96=ns:msg:db:table:kind:msgs)
+  (97=ns:msg:db:table:kind:thread)(98=ns:msg:db:table:kind:allthreads)
+  (99=ns:msg:db:row:scope:threads:all)(9A=threadParent)(9B=threadRoot)
+  (9C=msgOffset)(9D=offlineMsgSize)(9E=uidOnServer)
+  (9F=ns:msg:db:row:scope:dbfolderinfo:all)
+  (A0=ns:msg:db:table:kind:dbfolderinfo)(A1=numMsgs)(A2=numNewMsgs)
+  (A3=folderSize)(A4=expungedBytes)(A5=folderDate)(A6=highWaterKey)
+  (A7=mailboxName)(A8=UIDValidity)(A9=totPendingMsgs)
+  (AA=unreadPendingMsgs)(AB=expiredMark)(AC=version)(AD=forceReparse)
+  (AE=fixedBadRefThreading)(AF=folderName)(B0=indexingPriority)
+  (B1=MRUTime)(B2=MRMTime)(B3=storeToken)(B4=dateReceived)
+  (B5=sender_name)(B6=ProtoThreadFlags)(B7=account)>
+<(80=1)(92=fffffffe)(8B=67cfeb73)(81=0)>
+[1:m(^9B=1)(^8F^92)(^91^8B)(^90=0)(^92=1)]
+
+<(86=Homer <homer@example.com>)(87=marge@raspberrypi.local)(88
+    ==?UTF-8?Q?=E2=9D=A4_from_homer?=)(89
+    =fe06cac4-18ed-43aa-98a9-ee358e82b368@example.com)(8A=)(8C=UTF-8)
+  (8D=212)(8E=2)(8F=17e)(90=17|Homer <homer@example.com>)(91=ffffffff)>
+{1:^80 {(k^96:c)(s=9)} 
+  [1(^B3=0)(^88=1)(^82^86)(^85^87)(^81^88)(^83^89)(^84=)(^B4^8B)(^86^8B)
+    (^89=1)(^95^8C)(^87^8D)(^8B=2)(^9D^8F)(^B5^90)(^9A^91)(^8E^92)(^B6=0)]}
+{FFFFFFFE:^80 {(k^97:c)(s=9)1:m } 1 }
+{FFFFFFFD:^99 {(k^98:c)(s=9)} [FFFFFFFE(^94^88)]}
+
+<(82=4)(83=love)(93=235)(94=67cfeb8d)(85=1741679501)>
+{1:^9F {(k^A0:c)(s=9u)} 
+  [1(^AC=1)(^AD=0)(^AE=1)(^88=4)(^A7^83)(^A3^93)(^A5^94)(^B1^85)(^B2^85)
+    (^A1=1)(^A6=1)]}
+
+@$${A{@
+< <(a=c)> // (f=iso-8859-1)
+  (BA=columnStates)(BB=sortType)(BC=sortOrder)(BD=viewFlags)(BE=viewType)>
+<(95=1741679504)>[1:^9F(^B1^95)]
+@$$}A}@
+
+@$${B{@
+< <(a=c)> // (f=iso-8859-1)
+  (BF=sortColumns)(C0=customSortCol)(C1=useServerRetention)(C2=retainBy)
+  (C3=daysToKeepHdrs)(C4=numHdrsToKeep)(C5=daysToKeepBodies)
+  (C6=useServerDefaults)(C7=cleanupBodies)(C8=applyToFlaggedMessages)>
+<(96=12)(97=$122)>[-1:^9F(^AC=1)(^AD=0)(^AE=1)(^88=4)(^A7^83)(^A3^93)
+    (^A5^94)(^B1^95)(^B2^85)(^A1=1)(^A6=1)(^BB=12)(^BC=2)(^BD=1)(^BE=0)
+    (^BF^97)(^C1=1)]
+@$$}B}@
+
+@$${C{@
+< <(a=c)> // (f=iso-8859-1)
+  (C9=imageSize)(CA=notAPhishMessage)(CB=gloda-id)(CC=gloda-dirty)>
+<(98=c1)>[1:^80(^CB=c1)]
+@$$}C}@

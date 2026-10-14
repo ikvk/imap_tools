@@ -1,0 +1,23 @@
+{
+  "nextId": 9,
+  "logins": [
+    {
+      "id": 8,
+      "hostname": "imap://localhost",
+      "httpRealm": "imap://localhost",
+      "formSubmitURL": null,
+      "usernameField": "",
+      "passwordField": "",
+      "encryptedUsername": "MEMEEPgAAAAAAAAAAAAAAAAAAAEwHQYJYIZIAWUDBAEqBBAml39xFeV8UvTcT8RmftZYBBBzhqQPHY2PZfoFsYbZHFYo",
+      "encryptedPassword": "MEMEEPgAAAAAAAAAAAAAAAAAAAEwHQYJYIZIAWUDBAEqBBCkPYMo4h3WtaQdMdx60hDqBBBgMz6r8xDNb/WWln5ZyUZn",
+      "guid": "{eb8bfa99-c485-4852-ad18-3bd9444ed341}",
+      "encType": 1,
+      "timeCreated": 1401842558439,
+      "timeLastUsed": 1401842558439,
+      "timePasswordChanged": 1401842558439,
+      "timesUsed": 1
+    }
+  ],
+  "disabledHosts": [],
+  "version": 1
+}

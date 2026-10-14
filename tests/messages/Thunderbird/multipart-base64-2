@@ -1,0 +1,12 @@
+Content-Type: multipart/mixed; boundary=boundary
+
+yadda yadda
+
+--boundary
+Content-Type: text/html
+Content-Transfer-Encoding: base64
+
+PGh0bWw+PGhlYWQ+YmFzZTY0ZW5jb2RlZCBIVE1MIHRleHQgaW5zaWRlIGEgbXVsdGlwYXJ0IG1lc3N
+hZ2UuPC9oZWFkPjwvaHRtbD4=
+
+--boundary--

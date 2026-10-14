@@ -1,0 +1,57 @@
+To: test@example.com
+From: test@example.com
+Subject: Test message with attached message
+Message-ID: <8259dd8e-2293-8765-e720-61dfcd10a6f3@example.com>
+Date: Sat, 30 Dec 2017 19:12:38 +0100
+User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:59.0) Gecko/20100101
+ Thunderbird/59.0a1
+MIME-Version: 1.0
+Content-Type: multipart/mixed;
+ boundary="------------9B410E80D6DA0868F068B0E4"
+Content-Language: en-GB
+
+This is a multi-part message in MIME format.
+--------------9B410E80D6DA0868F068B0E4
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Transfer-Encoding: 7bit
+
+This is a test message with an attached message.
+
+
+--------------9B410E80D6DA0868F068B0E4
+Content-Type: message/rfc822;
+ name="attached-message.eml"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename="attached-message.eml"
+
+To: test@example.com
+From: test@example.com
+Subject: Attached message (plaintext + HMTL)
+Message-ID: <a30f750d-d56c-8a52-971c-f95a131e8332@example.com>
+Date: Sat, 30 Dec 2017 19:31:21 +0100
+User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:59.0) Gecko/20100101
+ Thunderbird/59.0a1
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+ boundary="------------FAB286B8794CC63C0A0FD1BB"
+Content-Language: de-DE
+
+This is a multi-part message in MIME format.
+--------------FAB286B8794CC63C0A0FD1BB
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+
+Here is the body of the attached message. Search for bodyOfAttachedMessagePläin.
+
+
+--------------FAB286B8794CC63C0A0FD1BB
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+<body>Here is the body of the attached message. Search for bodyOfAttachedMessageHTML.</body>
+
+--------------FAB286B8794CC63C0A0FD1BB--
+
+
+--------------9B410E80D6DA0868F068B0E4--

@@ -1,0 +1,22 @@
+From: Alice <alice@example.com>
+To: Bob <bob@example.com>
+Subject: Test HTML Parsing
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+<html>
+<head>
+  <style>
+    .header { opacity: 0.8; }
+  </style>
+  <script>
+    var specificCity = "HiddenCity";
+  </script>
+</head>
+<body>
+  <p>I am traveling to M&uuml;nster for work.</p>
+  <p>I need to call AT&amp;T because my phone is broken. A &lt; B.</p>
+  <p>The weather is beauti&shy;ful, and I am meeting my co&zwnj;worker.</p>
+  <p>Don't miss the Sale&nbsp;Today!</p>
+</body>
+</html>

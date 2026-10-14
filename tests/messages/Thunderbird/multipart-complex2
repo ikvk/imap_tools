@@ -1,0 +1,61 @@
+Content-Type: multipart/mixed; boundary="bou"
+Message-Id: <123456@example.com>
+
+Part 1
+--bou                       
+Content-Type: multipart/related; boundary="bound"
+
+Part 2
+--bound
+Content-Type: multipart/digest; boundary="boundar"
+
+Part 3
+--boundar
+Content-Type: multipart/alternative; boundary="boundary"
+
+Part 4
+--boundary
+Content-Type: application/octet-stream
+
+Wow, what alternatives!
+
+We're trying to confuse the parser here.
+
+--bou
+
+--bound
+
+--boundar
+
+--boundary
+Content-Type: application/pdf
+
+A choice between a PDF and an octet stream! How marvellous!
+
+--boundary--
+
+--boundar
+Content-Type: multipart/mixed; boundary="boundary123456"
+
+--boundary123456
+Content-Type: text/plain
+
+This is the correct answer.
+
+--boundary123456--
+
+--boundar--
+
+--bound
+Content-Type: text/plain
+
+One last attempt at confusing the parser.
+
+--bound--
+
+--bou
+Content-Type: text/html
+
+<html><body>No harm in making another.</body></html>
+
+--bou--

@@ -1,0 +1,8 @@
+From - Sun Apr 26 21:30:59 2015
+Subject: mail with no from
+To: from@foo.invalid
+Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+
+This mail has no from address.
+

@@ -1,0 +1,3 @@
+Hello, world! (Again...)
+
+Let's see how well base64 text is handled.                            Yay, lots of spaces! There's even a CRLF at the end and one at the beginning, but the output shouldn't have it.

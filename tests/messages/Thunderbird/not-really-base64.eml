@@ -1,0 +1,10 @@
+From: sender@test.invalid
+To: recipient@test.invalid
+Subject: claims to be base64 but isn't
+Message-ID: <not-really-base64@test.invalid>
+Date: Fri, 18 Sep 2026 12:00:00 +0300
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+
+notActuallyBase64 just plain text!

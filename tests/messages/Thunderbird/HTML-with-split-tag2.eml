@@ -1,0 +1,41 @@
+To: test@example.com
+From: test@example.com
+Subject: HTML with split tag
+Message-ID: <8259dd8e-2293-8765-e720-61dfcd10a6f3@example.com>
+Date: Sat, 30 Dec 2017 19:12:38 +0100
+User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:59.0) Gecko/20100101
+ Thunderbird/59.0a1
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+ boundary="------------FAB286B8794CC63C0A0FD1BB"
+
+This is a multi-part message in MIME format.
+--------------FAB286B8794CC63C0A0FD1BB
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+
+Text part
+
+
+--------------FAB286B8794CC63C0A0FD1BB
+Content-Type: text/html; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+
+<body>
+HTML part. Now comes the tag
+
+<tag attr1=ShouldNotFindThis
+attr2="ShouldntFindThisEither">
+
+ShouldFindThisAgain
+
+The following should *not* be found: ShouldNotFind
+AcrossLines
+
+<a href="ShouldntFindHref">ShouldFind
+AcrossLines</a>
+</body>
+
+--------------FAB286B8794CC63C0A0FD1BB--
+
+

@@ -1,0 +1,42 @@
+To: test@example.com
+From: test@example.com
+Subject: 25 HTML + embedded image
+Message-ID: <c1ddcd5d-71c1-9c9d-1b81-e3b9abb99030@example.com>
+Date: Sat, 30 Dec 2017 19:26:23 +0100
+User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:59.0) Gecko/20100101
+ Thunderbird/59.0a1
+MIME-Version: 1.0
+Content-Type: multipart/related;
+ boundary="------------B2BBD36A919AB2B2F84E2469"
+Content-Language: en-GB
+
+This is a multi-part message in MIME format.
+--------------B2BBD36A919AB2B2F84E2469
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+<html>
+  <head>
+
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  </head>
+  <body text="#000000" bgcolor="#FFFFFF">
+    <p><tt>Search for h=C3=B6h=C3=B6</tt></p>
+    <p><img src="cid:part1.8C5E6A81.D0C1B91A@example.com" alt=""></p>
+  </body>
+</html>
+
+--------------B2BBD36A919AB2B2F84E2469
+Content-Type: image/png;
+ name="kigaaldcbanejcbi.png"
+Content-Transfer-Encoding: base64
+Content-ID: <part1.8C5E6A81.D0C1B91A@example.com>
+Content-Disposition: inline;
+ filename="kigaaldcbanejcbi.png"
+
+iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAAXNSR0IArs4c6QAAAARnQU1B
+AACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAASdEVYdFNvZnR3YXJlAEdyZWVuc2hv
+dF5VCAUAAABpSURBVDhP3dA7EoAgDEXR7Ew+bgdx/018BEYyiICtb27FcCig3Z7Im6gK3ZxN
+/RcQkb6aK8DjtuRMzMEAiNGvlFpgtyOdEjFz14xA10wA1pg5wLRZAthtVgEm5vGtA4DhvILa
+O8A+AuYLy0U5xUUpL8kAAAAASUVORK5CYII=
+--------------B2BBD36A919AB2B2F84E2469--

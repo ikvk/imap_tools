@@ -96,7 +96,7 @@ def parse_email_addresses(raw_header: Union[str, Header]) -> Tuple[EmailAddress,
     if type(raw_header) is Header:
         raw_header = decode_value(*decode_header(raw_header)[0])
     for raw_name, email in getaddresses([remove_non_printable(raw_header)]):
-        name = decode_value(*decode_header(raw_name)[0]).strip()
+        name = ''.join(decode_value(*part) for part in decode_header(raw_name)).strip()
         email = email.strip()
         if not (name or email):
             continue

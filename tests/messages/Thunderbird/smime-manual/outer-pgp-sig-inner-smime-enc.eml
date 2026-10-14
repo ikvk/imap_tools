@@ -1,0 +1,56 @@
+X-Info: Based on alice.dsig.SHA256.multipart.env.eml
+MIME-Version: 1.0
+Date: Tue, 21 Nov 2023 20:50:06 +0000
+From: Alice@example.com
+To: Bob@example.com
+Subject: enveloped 
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------rvEyIV4on03ewe0w3mDNOC3U"
+
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------rvEyIV4on03ewe0w3mDNOC3U
+Content-Type: application/pkcs7-mime; name=smime.p7m;
+    smime-type=enveloped-data
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename=smime.p7m
+Content-Description: S/MIME Encrypted Message
+
+MIAGCSqGSIb3DQEHA6CAMIACAQAxggGFMIIBgQIBADBpMGQxCzAJBgNVBAYTAlVT
+MRMwEQYDVQQIEwpDYWxpZm9ybmlhMRYwFAYDVQQHEw1Nb3VudGFpbiBWaWV3MRIw
+EAYDVQQKEwlCT0dVUyBOU1MxFDASBgNVBAMTC05TUyBUZXN0IENBAgEoMA0GCSqG
+SIb3DQEBAQUABIIBALAilHYmQY9S/H2MP0JZkHLxqlBshzmkaVeCm8xrhJSjUqLN
+Y2dob849A8/sYystVGkuravuVAv5HQGTmQ0ntE7VlOJpBB+nKsRWUAZ8kr4HhAJl
+G2GirOwKbQnNrL/feB+AotQTJqEcKtxUsSfk9tMBp2EIh/g0WaV+jOcIjERZcnU8
+EKp/zBN0PkCykWP/3zJKaVcPaH/4ylrRXebcCblTZOhK9bLuCsyeOrFDr7XcWszL
+V1+bSS5VtnpO3Mg58720MyzNQ/rHHHSMl7LoG7V2IwbxBsM+RpBOXateTt+70tmh
+Yi+IpTYXkZqWxwnfwcCBFUzt6VK/BFD3QY4SyNEwgAYJKoZIhvcNAQcBMB0GCWCG
+SAFlAwQBAgQQmIgaQceqX0qrIHhaZ0lFoaCABIGgiPZeDBvazh0FYnaNXcSbP9kV
+Aw632l9ziRyCF7WgtODI7cf2ZNUZ/QBPYRo+mr4nsMHlFqDV7W4Z5bZiEcSmn017
+E44Mvx7swnZwhO7CWSyPifZqnHDjzFMPeyGvcsKcMlEBBU2TCF6WpszoJ6adrKHM
+bnaJ/zFaReR/mZEIXtPoYkEfG2aqjkBcACalmDm7ww2kHjEb7EXm9VaV5SPiUgQQ
+yzIt+J5gqf4Wi2CjUNwoFQAAAAAAAAAAAAA=
+
+--------------rvEyIV4on03ewe0w3mDNOC3U
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEuPL29L060/gtxEaDMJn/EjiFK58FAmObNeAACgkQMJn/EjiF
+K58aPQ/+OYoMsHjVrAHhxKZ4HiK9hz+rt5mbI9udUx0krf0/QRug6Lz+zw4SLfjM
+jHRCHCBImTWB9LooIKQvFngM1Y9f2sA8i5xRLWR326ZJgDNkiUMpRokpzNCH7Xf3
+ybdFpKJTFEqMIEfuNiWWKbwla+O2ZwvfE60b2QnSRq/ICbqZfzvGNpbVOHfyuKWn
+gd/fyWqDBFmRx6+PJuuP6GmZH7h4wnkHDF7faem+ZgW4qZbly53s80H5tsQ2Bydi
+BCk00eqbNPJqUNqFgYH91ANfn9qZPD9o3mydCIyPcRnR/3QIQa35ZgM7AWApBdPc
+uOIdNkoVCDSFQZUuuPtrK+Me9dohxzdQ656pI/Z1NIO8hAUOG5tWM857RXGHrIxA
+7LKYd5nm2m95I0xOsL3KqnZkonqH6XTuUucUt1oKO5x8yjJnedlYhazolaCARB9R
+YSALXbJkDEs52M4B0NTQq6i/mD8pO644wKuxqD8es3CaRkKREPphxzcWWCjo19ex
+7e8N0P6cAg6RfNql82OLgBGiQ2UvZSY73kwbNAZ3ZKORleRNE9kjOvGIixxhVoG2
+vszvZbdDo4NtQD4BcXtR6faAnSiOCW5RRNN39NGcQMXVZf1DY2ryo6rD7B2HQThI
+KkbOWzlJ9sYt5g8khTUxNipmnNe9kMyim8VpKdMnOV8TxBHb0r4=
+=b2z0
+-----END PGP SIGNATURE-----
+
+--------------rvEyIV4on03ewe0w3mDNOC3U--

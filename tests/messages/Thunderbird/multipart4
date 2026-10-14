@@ -1,0 +1,7 @@
+Content-Type: multipart/mixed; boundary=boundary
+
+--boundary
+
+This has no headers, so should be recognized as plain text.
+
+--boundary--

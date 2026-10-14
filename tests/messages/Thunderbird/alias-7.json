@@ -1,0 +1,20 @@
+{
+  "description": "OpenPGP alias rules",
+  "rules": [
+    {
+      "domain": "domain1.example.com",
+      "keys": [{ "fingerprint": "EB85BB5FA33A75E15E944E63F231550C4F47E38E" }]
+    },
+    {
+      "domain": "domain2.example.com",
+      "keys": [{ "fingerprint": "D1A66E1A23B182C9980F788CFBFCC82A015E7330" }]
+    },
+    {
+      "email": "contact@domain1.example.com",
+      "keys": [
+        { "fingerprint": "D1A66E1A23B182C9980F788CFBFCC82A015E7330" },
+        { "id": "F231550C4F47E38E" }
+      ]
+    }
+  ]
+}

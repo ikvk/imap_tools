@@ -1,0 +1,9 @@
+{
+  "description": "OpenPGP alias rules",
+  "rules": [
+    {
+      "domain": "example.com",
+      "keys": [{ "fingerprint": "B8F2F6F4BD3AD3F82DC446833099FF1238852B9F" }]
+    }
+  ]
+}

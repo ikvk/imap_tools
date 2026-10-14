@@ -1,0 +1,56 @@
+Date: Sun, 7 Feb 2010 00:01:00 -0600
+From: from@invalid.invalid
+To: to@invalid.invalid
+Subject: bug246415
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="-------bodystructure3partN"
+
+---------bodystructure3partN
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<html>
+<body>
+<pre>
+Only one text content-type so this html needs
+to display in both tests, plain and html
+
+thishtmltextneedstodisplaytopasstest
+thisplaintextneedstodisplaytopasstest
+</pre>
+</body></html>
+
+---------bodystructure3partN
+Content-Type: text/plain
+Content-Disposition: inline; filename="inline.txt"
+
+line line line line line line line line line line line line line line line line
+line line line line line line line line line line line line line line line line
+line line line line line line line line line line line line line line line line
+line line line line line line line line line line line line line line line line
+line line line line line line line line line line line line line line line line
+line line line line line line line line line line line line line line line line
+line line line line line line line line line line line line line line line line
+line line line line line line line line line line line line line line line line
+line line line line line line line line line line line line line line line line
+line line line line line line line line line line line line line line line line
+line line line line line line line line line line line line line line line line
+line line line line line line line line line line line line line line line line
+line line line line line line line line line line line line line line line line
+line line line line line line line line line line line line line line line line
+line line line line line line line line line line line line line line line line
+line line line line line line line line line line line line line line line line
+line line line line line line line line line line line line line line line line
+line line line line line line line line line line line line line line line line
+line line line line line line line line line line line line line line line line
+line line line line line line line line line line line line line line line line
+line line line line line line line line line line line line line line line line
+line line line line line line line line line line line line line line line line
+line line line line line line line line line line line line line line line line
+line line line line line line line line line line line line line line line line
+line line line line line line line line line line line line line line line line
+line line line line line line line line line line line line line line line line
+line line line line line line line line line line line line line line line line
+line line line line line line line line line line line line line line line line
+line line line line line line line line line line line line line line line line
+---------bodystructure3partN--

@@ -1,0 +1,58 @@
+From - Tue Feb 24 09:09:10 2009
+X-Account-Key: account4
+X-UIDL: 1235429919.7600.xx
+X-Mozilla-Status: 0001
+X-Mozilla-Status2: 10000000
+X-Mozilla-Keys:                                                                                 
+To: abc@xyc.com
+Subject: zzz
+From: def@a.org
+Reply-To: zyx@foo.com
+X-Mailer: Simple Mailer
+MIME-Version: 1.0
+Content-Type: multipart/mixed;
+ boundary="PHP-mixed-45bdaa586a68b372a68536239277dcd8"
+Message-Id: <20090223142458.B361A1347C@60xx.ttt.net>
+Date: Mon, 23 Feb 2009 15:24:58 +0100 (CET)
+
+
+If you can read this then you should upgrade to a MIME complaint email reader - try Thunderbird.
+
+--PHP-mixed-45bdaa586a68b372a68536239277dcd8
+Content-Type: multipart/related;
+ boundary="PHP-rel-45bdaa586a68b372a68536239277dcd8"
+
+--PHP-rel-45bdaa586a68b372a68536239277dcd8
+Content-Type: multipart/alternative;
+ boundary="PHP-alt-45bdaa586a68b372a68536239277dcd8"
+
+--PHP-alt-45bdaa586a68b372a68536239277dcd8
+Content-type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: 7bit
+
+--PHP-alt-45bdaa586a68b372a68536239277dcd8
+Content-type: text/html; charset=ISO-8859-1
+Content-Transfer-Encoding: 7bit
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML><head></head>
+</body>
+<br /><br />
+</HTML>
+
+--PHP-alt-45bdaa586a68b372a68536239277dcd8--
+
+--PHP-rel-45bdaa586a68b372a68536239277dcd8
+Content-type: text/plain; name="foo.txt"
+Content-ID: <logoufe.01030301.08030105@hhh.org>
+Content-Disposition: inline
+
+abc
+
+--PHP-rel-45bdaa586a68b372a68536239277dcd8--
+
+--PHP-mixed-45bdaa586a68b372a68536239277dcd8
+--PHP-mixed-45bdaa586a68b372a68536239277dcd8--
+

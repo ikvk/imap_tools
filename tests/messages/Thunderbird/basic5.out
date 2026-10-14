@@ -1,0 +1,3 @@
+<html><body>Since this message has no content type, it should be assumed to be
+<b>text/plain</b>. This means that asking to strip HTML tags should not have a
+difference.</body></html>

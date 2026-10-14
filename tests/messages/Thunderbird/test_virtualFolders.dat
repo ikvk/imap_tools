@@ -1,0 +1,14 @@
+version=1
+uri=mailbox://nobody@Local%20Folders/unread-local
+scope=mailbox://nobody@Local%20Folders/Inbox|mailbox://nobody@Local%20Folders/Trash|mailbox://nobody@Local%20Folders/non-existent
+terms=ALL
+searchOnline=false
+uri=mailbox://nobody@Local%20Folders/invalidserver-local
+scope=mailbox://nobody@Local%20Folders/Inbox|user@foo/INBOX
+terms=ALL
+searchOnline=false
+uri=mailbox://nobody@Local%20Folders/%24label1
+searchFolderFlag=1000
+scope=*
+terms=AND (tag,contains,$label1)
+searchOnline=false

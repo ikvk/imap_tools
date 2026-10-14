@@ -1,0 +1,26 @@
+From - Sat Jun 11 17:26:54 2009
+Message-ID: <foo.12345@bar>
+Date: Sun, 19 Oct 2008 08:00:00 +0000
+From: Me <me@example.net>
+To: You <you@example.org>
+Content-Type: multipart/alternative; boundary=pleasekillMIME
+Subject: Test message
+
+Testing that we do body search according to bug 132340 correctly.
+
+--pleasekillMIME
+Content-Type: text/plain
+
+This is a plain-text part to match on.
+
+--pleasekillMIME
+Content-Type: application/x-javascript
+
+dump("Hello, World!");
+
+--pleasekillMIME
+Content-Type: text/plain
+Content-Transfer-Encoding: BASE64
+
+U2VtaSBjYXNlLWluc2Vuc2l0aXZpdHkgc3Vja3MuIE1hdGNoIG9uICJiYXNlIDY0IHRleHQi
+--pleasekillMIME--

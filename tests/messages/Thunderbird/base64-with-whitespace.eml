@@ -1,0 +1,46 @@
+Date: Tue, 31 Aug 2018 16:33:00 +0200
+From: From <from@example.com>
+To: To <to@example.com>
+Subject: Bug 1487421 - BASE64 MIME body and attachment with empty lines in between
+MIME-Version: 1.0
+Message-ID: <1dcZe4@example.com>
+Content-Type: multipart/mixed;
+ boundary="------------DA562B250842CC7332F16476"
+
+This is a multi-part message in MIME format.
+--------------DA562B250842CC7332F16476
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: base64
+
+YWJj
+
+ZG
+
+V
+
+mZ2hpamtsbW
+
+5vcHFyc3R1dnd4
+
+eXo=
+
+--------------DA562B250842CC7332F16476
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+ filename="test.txt"
+
+YWJj
+
+ZG
+
+V
+
+mZ2hpamtsbW
+
+5vcHFyc3R1dnd4
+
+eXo=
+
+--------------DA562B250842CC7332F16476--
+

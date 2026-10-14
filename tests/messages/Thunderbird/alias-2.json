@@ -1,0 +1,9 @@
+{
+  "description": "OpenPGP alias rules",
+  "rules": [
+    {
+      "email": "alice@openpgp.example",
+      "keys": [{ "fingerprint": "0123456789012345678901234567890123456789" }]
+    }
+  ]
+}

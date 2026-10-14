@@ -1,0 +1,6 @@
+From: sender@example.invalid
+To: recipient@example.invalid
+Subject: Message with no content-type in header
+Message-ID: <no-content-type@example.invalid>
+
+Try a Thunderbird Quick Filter for waldo in the message body.

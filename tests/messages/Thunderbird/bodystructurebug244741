@@ -1,0 +1,72 @@
+Date: Sun, 7 Feb 2010 00:01:00 -0600
+From: from@invalid.invalid
+To: to@invalid.invalid
+Subject: bug244741
+MIME-Version: 1.0
+Content-Type: multipart/mixed;
+	boundary="-------bug244741partN"
+
+This is a multi-part message in MIME format.
+
+---------bug244741partN
+Content-Type: multipart/related;
+	type="multipart/alternative";
+	boundary="-------bug244741part1.N"
+
+
+---------bug244741part1.N
+Content-Type: multipart/alternative;
+	boundary="-------bug244741part1.1.N"
+
+
+---------bug244741part1.1.N
+Content-Type: text/plain;
+	charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+
+thisplaintextneedstodisplaytopasstest
+plaintextshouldnotbefetchedtopasstest
+
+---------bug244741part1.1.N
+Content-Type: text/html;
+	charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+
+<html>
+<body><pre>
+thishtmltextneedstodisplaytopasstest
+htmltextshouldnotbefetchedtopasstest
+</pre></body></html>
+
+---------bug244741part1.1.N--
+
+---------bug244741part1.N
+Content-Type: image/jpeg;
+	name="image001.jpg"
+Content-Transfer-Encoding: base64
+Content-ID: <image001.jpg@01CA0BAD.274DAC50>
+Content-Description: image001.jpg
+Content-Location: image001.jpg
+
+
+---------bug244741part1.N--
+
+---------bug244741partN
+Content-Type: application/octet-stream;
+	name=".pdf"
+Content-Transfer-Encoding: base64
+Content-Description: .pdf
+Content-Disposition: attachment;
+	filename=".pdf"
+
+
+---------bug244741partN
+Content-Type: application/octet-stream;
+	name=".pdf"
+Content-Transfer-Encoding: base64
+Content-Description: .pdf
+Content-Disposition: attachment;
+	filename=".pdf"
+
+
+---------bug244741partN--

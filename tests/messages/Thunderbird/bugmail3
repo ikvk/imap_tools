@@ -1,0 +1,72 @@
+From - Tue Oct 02 00:26:47 2007
+X-Account-Key: account2
+X-UIDL: UID18345-1161858178
+X-Mozilla-Status: 0001
+X-Mozilla-Status2: 00000000
+X-Mozilla-Keys: $label4                                                                         
+Received: from example by host29.example.com with local-bsmtp (Exim 4.68)
+	(envelope-from <bugzilla-daemon@mozilla.org>)
+	id 1JtrbR-0001Kc-Nf
+	for invalid@example.com; Wed, 07 May 2008 15:55:21 -0600
+X-Spam-Checker-Version: SpamAssassin 3.2.3 (2007-08-08) on
+	host29.example.com
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.4 required=5.0 tests=AWL,BAYES_00 autolearn=ham
+	version=3.2.3
+Received: from webapp01.sj.mozilla.com ([10.3.4.5] helo=webapp-out.mozilla.org)
+	by host29.example.com with esmtps (TLSv1:AES256-SHA:256)
+	(Exim 4.68)
+	(envelope-from <bugzilla-daemon@mozilla.org>)
+	id 1JtrbR-0001KT-FP
+	for invalid@example.com; Wed, 07 May 2008 15:55:09 -0600
+Received: from mrapp51.mozilla.org (mrapp51.mozilla.org [127.0.0.1])
+	by webapp-out.mozilla.org (8.13.8/8.13.8) with ESMTP id m47LtAFJ007547
+	for <invalid@example.com>; Wed, 7 May 2008 14:55:10 -0700
+Received: (from root@localhost)
+	by mrapp51.mozilla.org (8.13.8/8.13.8/Submit) id m47LtAEf007542;
+	Wed, 7 May 2008 14:55:10 -0700
+Date: Wed, 7 May 2008 14:55:10 -0700
+Message-Id: <bugmail3.m47LtAEf007542@mrapp51.mozilla.org>
+From: invalid@example.com
+To: PrimaryEmail1@test.invalid
+Cc: invalid@example.com
+Subject: [Bug 397009] A filter will let me tag, but not untag
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: newchanged
+X-Bugzilla-Watch-Reason: QAcontact filters@mail.bugs
+X-Bugzilla-Product: Core
+X-Bugzilla-Component: MailNews: Filters
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: enhancement
+X-Bugzilla-Who: bugmail@example.org
+X-Bugzilla-Status: NEW
+X-Bugzilla-Priority: --
+X-Bugzilla-Assigned-To: nobody@mozilla.org
+X-Bugzilla-Target-Milestone: ---
+X-Bugzilla-Changed-Fields: Blocks
+In-Reply-To: <bug-397009-254728@https.bugzilla.mozilla.org/>
+References: <bug-397009-254728@https.bugzilla.mozilla.org/>
+Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+X-user: ::::10.0.1.2:host29.example.net::::::
+DomainKey-Status: no signature
+
+Do not reply to this email.  You can add comments to this bug at
+https://bugzilla.mozilla.org/show_bug.cgi?id=397009
+
+
+Some User <bugmail@example.org> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Blocks|                            |432710
+
+
+
+
+-- 
+Configure bugmail: https://bugzilla.mozilla.org/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are watching the QA contact of the bug.
+
+

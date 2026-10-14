@@ -1,0 +1,22 @@
+From - Sun Feb 09 12:56:43 2014
+X-Mozilla-Status: 0001
+X-Mozilla-Status2: 00000000
+X-Mozilla-Keys:                                                                          
+Delivered-To: from@FOO.invalid
+Received: from webapp-out.mozilla.org (webapp01.sj.mozilla.com [63.245.208.146])
+        by mx.google.com with ESMTPSA id g8sm16554434lae.1.2014.02.09.02.56.44
+        for <multiple recipients>
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 09 Feb 2014 02:56:45 -0800 (PST)
+Message-ID: <52F75EEB.9080701@example.com>
+Date: Sun, 09 Feb 2014 12:56:43 +0200
+From: someone@example.com
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:30.0) Gecko/20100101 Thunderbird/30.0a1
+MIME-Version: 1.0
+To: from@FOO.invalid
+Subject: reply filter test
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+
+testing!
+

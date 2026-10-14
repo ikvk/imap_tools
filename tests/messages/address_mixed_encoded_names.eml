@@ -1,0 +1,13 @@
+From: Team =?utf-8?q?M=C3=BCnchen?= <team@example.com>
+To: =?utf-8?q?J=C3=B6rg?= Example <joerg@example.com>
+Cc: =?iso-8859-1?q?Andr=E9?= =?utf-8?q?_M=C3=BCller?= <andre@example.com>
+Bcc: =?utf-8?q?Doe=2C_Jane?= Team <jane@example.com>
+Reply-To: Team =?utf-8?q?M=C3=BCnchen?= <reply@example.com>
+Subject: =?utf-8?q?Test_mixed_encoded_names?=
+Date: Tue, 14 Oct 2026 12:00:00 +0000
+Message-ID: <mixed-encoded-001@example.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+
+Body for mixed encoded display names test.

@@ -1,0 +1,16 @@
+From - Sat Apr 14 14:01:30 2018
+Date: Sat, 14 Apr 2018 14:01:30 +0200
+Subject: Badly    
+ folded   
+    headers,    
+ one
+ 
+ 
+ line
+ with   space   between   To and From
+ 
+To: "Recipient  with  spaces" <recipient@example.com>
+ 
+From: sender@example.com
+
+Here's our body

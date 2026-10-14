@@ -1,0 +1,35 @@
+Content-Type: multipart/mixed; boundary="boundary"
+
+This shouldn't appear.
+--boundary
+Content-Type: application/octet-stream
+Content-Transfer-Encoding: base64
+
+VGhpcyBpc24ndCByZWFsbHkgYW4gYXBwbGljYXRpb24vb2N0ZXQtc3RyZWFtLiA7KQ=='
+
+--boundary
+Content-Type: image/png
+Content-Transfer-Encoding: base64
+
+TmVpdGhlciBpcyB0aGlzIGFuIGltYWdlL3BuZy4=
+
+--boundary
+Content-Type: multipart/related; boundary="boundary2"
+
+--boundary2
+Content-Type: text/html
+
+<html><head>This part should be returned.</head></html>
+
+--boundary2--
+
+--boundary
+Content-Type: text/plain
+
+This part shouldn't.
+
+--boundary
+
+Neither should this part!
+
+--boundary--

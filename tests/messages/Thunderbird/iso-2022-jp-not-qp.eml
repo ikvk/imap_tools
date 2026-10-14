@@ -1,0 +1,14 @@
+To: test@example.com
+From: test@example.com
+Subject: ISO-2022-JP and 7bit containing =67 and hence looking like quoted-printable
+Message-ID: <10a2aa17-e92f-417c-864e-575d4e371702@example.com>
+Date: Tue, 3 Apr 2018 19:09:16 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.6.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset=ISO-2022-JP; format=flowed
+Content-Language: ja-JP
+Content-Transfer-Encoding: 7bit
+
+現況
+

@@ -43,8 +43,8 @@ Repo mirror      https://gitflic.ru/project/ikvk/imap-tools
 📋 Basic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Info about lib are at: *this page*, docstrings, issues, pull requests,
-`examples <https://github.com/ikvk/imap_tools/tree/master/examples>`_, source, stackoverflow.com
+Docs for `imap_tools` are at: *this page*, docstrings,
+`examples <https://github.com/ikvk/imap_tools/tree/master/examples>`_, issues, pull requests, source, stackoverflow.com
 
 .. code-block:: python
 
@@ -451,7 +451,8 @@ Big thanks to people who helped to develop this library 🎉:
 `ziima <https://github.com/ziima>`_,
 `Zomono <https://github.com/Zomono>`_,
 `sebmuc99 <https://github.com/sebmuc99>`_,
-`BrianWillows <https://github.com/BrianWillows>`_
+`BrianWillows <https://github.com/BrianWillows>`_,
+`ac1982 <https://github.com/ac1982>`_
 
 
 Help other open projects that you use 🚀

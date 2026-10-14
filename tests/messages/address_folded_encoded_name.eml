@@ -1,0 +1,12 @@
+From: Team
+ =?utf-8?q?M=C3=BCnchen?= <team@example.com>
+To: Folded =?utf-8?q?M=C3=BCnchen?=
+ <folded@example.com>
+Subject: =?utf-8?q?Folded_display_name_test?=
+Date: Tue, 14 Oct 2026 12:05:00 +0000
+Message-ID: <folded-encoded-001@example.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+
+Body for folded display name test.

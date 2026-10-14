@@ -1,0 +1,39 @@
+{
+  "nextId": 11,
+  "logins": [
+    {
+      "id": 9,
+      "hostname": "mailbox://invalid",
+      "httpRealm": "mailbox://invalid",
+      "formSubmitURL": null,
+      "usernameField": "",
+      "passwordField": "",
+      "encryptedUsername": "MEMEEPgAAAAAAAAAAAAAAAAAAAEwHQYJYIZIAWUDBAEqBBBuuSwv9p21CqNJuYzb77iUBBBpNLvzxMDDSMcRvDGJcToj",
+      "encryptedPassword": "MEMEEPgAAAAAAAAAAAAAAAAAAAEwHQYJYIZIAWUDBAEqBBCtkr879CXRpnZsZdOIl23OBBCPAkwkjdCeJ65jvr8qAVcJ",
+      "guid": "{026a391c-afbc-4934-9c06-0087a2acbf7f}",
+      "encType": 1,
+      "timeCreated": 1401842558488,
+      "timeLastUsed": 1401842558488,
+      "timePasswordChanged": 1401842558488,
+      "timesUsed": 1
+    },
+    {
+      "id": 10,
+      "hostname": "news://invalid",
+      "httpRealm": "news://invalid",
+      "formSubmitURL": null,
+      "usernameField": "",
+      "passwordField": "",
+      "encryptedUsername": "MEMEEPgAAAAAAAAAAAAAAAAAAAEwHQYJYIZIAWUDBAEqBBA1Zao+ltfck0h+2lL4hitBBBAun9fMxJwXBQBCFWKr56cJ",
+      "encryptedPassword": "MEMEEPgAAAAAAAAAAAAAAAAAAAEwHQYJYIZIAWUDBAEqBBBoQH3t7gDzLLAX8PmPNSTrBBDGeTc30llJ1tnRen1WpNfe",
+      "guid": "{4cc2961e-aa25-4239-a332-40c110257005}",
+      "encType": 1,
+      "timeCreated": 1401842558499,
+      "timeLastUsed": 1401842558499,
+      "timePasswordChanged": 1401842558499,
+      "timesUsed": 1
+    }
+  ],
+  "disabledHosts": [],
+  "version": 1
+}

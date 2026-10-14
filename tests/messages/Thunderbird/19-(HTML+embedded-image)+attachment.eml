@@ -1,0 +1,59 @@
+To: test@example.com
+From: test@example.com
+Subject: 19 (HTML + embedded image) + attachment
+Message-ID: <cdf5bf44-03a4-4be1-c9c7-88cb4a5838ed@example.com>
+Date: Sat, 30 Dec 2017 20:19:46 +0100
+User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:59.0) Gecko/20100101
+ Thunderbird/59.0a1
+MIME-Version: 1.0
+Content-Type: multipart/mixed;
+ boundary="------------F5CEBCED9FC06ACB07B3D485"
+Content-Language: en-GB
+
+This is a multi-part message in MIME format.
+--------------F5CEBCED9FC06ACB07B3D485
+Content-Type: multipart/related;
+ boundary="------------1722706F2C203820A6CAA06F"
+
+
+--------------1722706F2C203820A6CAA06F
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: 8bit
+
+<html>
+  <head>
+
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  </head>
+  <body text="#000000" bgcolor="#FFFFFF">
+    <p><tt>Search for hühü</tt></p>
+    <p><img src="cid:part1.8C5E6A81.D0C1B91A@example.com" alt=""></p>
+  </body>
+</html>
+
+--------------1722706F2C203820A6CAA06F
+Content-Type: image/png;
+ name="kigaaldcbanejcbi.png"
+Content-Transfer-Encoding: base64
+Content-ID: <part1.8C5E6A81.D0C1B91A@example.com>
+Content-Disposition: inline;
+ filename="kigaaldcbanejcbi.png"
+
+iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAAXNSR0IArs4c6QAAAARnQU1B
+AACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAASdEVYdFNvZnR3YXJlAEdyZWVuc2hv
+dF5VCAUAAABpSURBVDhP3dA7EoAgDEXR7Ew+bgdx/018BEYyiICtb27FcCig3Z7Im6gK3ZxN
+/RcQkb6aK8DjtuRMzMEAiNGvlFpgtyOdEjFz14xA10wA1pg5wLRZAthtVgEm5vGtA4DhvILa
+O8A+AuYLy0U5xUUpL8kAAAAASUVORK5CYII=
+--------------1722706F2C203820A6CAA06F--
+
+--------------F5CEBCED9FC06ACB07B3D485
+Content-Type: image/png;
+ name="attach2.png"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+ filename="attach2.png"
+
+iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAIAAACQKrqGAAAAAXNSR0IArs4c6QAAAARnQU1B
+AACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAASdEVYdFNvZnR3YXJlAEdyZWVuc2hv
+dF5VCAUAAAAVSURBVChTY/hPNBhVOqqUaKX//wMA005J0zvV0VsAAAAASUVORK5CYII=
+--------------F5CEBCED9FC06ACB07B3D485--

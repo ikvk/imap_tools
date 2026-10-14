@@ -1,0 +1,10 @@
+Content-Type: multipart/mixed; boundary=boundary
+
+etc etc
+--boundary
+Content-Type: text/html
+Content-Transfer-Encoding: base64
+
+PGh0bWw+PGhlYWQ+VGhpcyB0aW1lLCB0aGUgdGFncw0Kc2hvdWxkIGJlIHN0cmlwcGVkIG91dC48L2hlYWQ+PC9odG1sPg==
+
+--boundary--

@@ -1,0 +1,11 @@
+From: sender@test.invalid
+To: recipient@test.invalid
+Subject: base64 encoded UTF-16 body
+Message-ID: <base64-utf16@test.invalid>
+Date: Fri, 18 Sep 2026 12:00:00 +0300
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-16
+Content-Transfer-Encoding: base64
+
+dQB0AGYAMQA2AE0AYQByAGsAZQByACAAZQBpAG4AcwANAAoAegB3AGUAaQAgAHUAdABmADEANgBF
+AG4AZAA=

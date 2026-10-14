@@ -1,0 +1,27 @@
+To: test@example.com
+From: test@example.com
+Subject: 26 plaintext + HMTL
+Message-ID: <a30f750d-d56c-8a52-971c-f95a131e8332@example.com>
+Date: Sat, 30 Dec 2017 19:31:21 +0100
+User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:59.0) Gecko/20100101
+ Thunderbird/59.0a1
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+ boundary="------------FAB286B8794CC63C0A0FD1BB"
+Content-Language: de-DE
+
+This is a multi-part message in MIME format.
+--------------FAB286B8794CC63C0A0FD1BB
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: quoted-printable
+
+Search for h=C3=A4h=C3=A4
+
+
+--------------FAB286B8794CC63C0A0FD1BB
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+<body>Search for <b>h=C3=B6h=C3=B6</b></body>
+
+--------------FAB286B8794CC63C0A0FD1BB--

@@ -1,3 +1,9 @@
+1.16.0
+======
+* Fixed: silent no-op behavior at BaseMailBox.<action> when using iterables. (#274)
+* Fixed: parse_email_addresses - complete decoding of mixed ASCII + encoded-word display names in address headers.
+* Added: .eml set for tests: from Thunderbird collection
+
 1.15.1
 ======
 * Fixed: MailMessage.html parser - prevent ReDoS (Regular Expression Denial of Service).

@@ -1,0 +1,29 @@
+Content-Type: multipart/mixed; boundary=boundary
+
+--boundary
+Content-Type: text/html
+
+<html>
+
+
+<body>
+
+
+
+Here, the HTML tags should be stripped out.
+
+
+
+</body>
+
+
+
+</html>
+
+
+
+
+
+
+
+--boundary--

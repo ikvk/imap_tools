@@ -1,0 +1,12 @@
+X-Spam-Status: Yes, score=10.0 required=5.0 tests=AWL,BAYES_00 autolearn=ham
+	version=3.2.3
+Date: Wed, 7 May 2008 14:55:10 -0700
+Message-Id: <bugmail7.m47LtAEf007543@mrapp51.mozilla.org>
+From: invalid@example.com
+To: PrimaryEmail1@test.invalid
+Subject: [Bug 397009] A filter will let me tag, but not untag
+Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+
+Do not reply to this email.  You can add comments to this bug at
+https://bugzilla.mozilla.org/show_bug.cgi?id=397009

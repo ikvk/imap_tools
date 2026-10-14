@@ -1,0 +1,52 @@
+To: test@example.com
+From: test@example.com
+Subject: 7 plaintext + (HTML + embedded image)
+Message-ID: <fd7a5d4a-6a3a-8b9b-b3e4-9e9391c3c703@example.com>
+Date: Sat, 30 Dec 2017 19:36:00 +0100
+User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:59.0) Gecko/20100101
+ Thunderbird/59.0a1
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+ boundary="------------77E82F0826A0A90EABD21FC3"
+Content-Language: en-GB
+
+This is a multi-part message in MIME format.
+--------------77E82F0826A0A90EABD21FC3
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Transfer-Encoding: base64
+
+U2VhcmNoIGZvciBoaWhp
+
+
+--------------77E82F0826A0A90EABD21FC3
+Content-Type: multipart/related;
+ boundary="------------D719681335F2A7D71D3761B1"
+
+
+--------------D719681335F2A7D71D3761B1
+Content-Type: text/html; charset=windows-1252
+Content-Transfer-Encoding: base64
+
+PGh0bWw+DQogIDxoZWFkPg0KDQogICAgPG1ldGEgaHR0cC1lcXVpdj0iY29udGVudC10eXBl
+IiBjb250ZW50PSJ0ZXh0L2h0bWw7IGNoYXJzZXQ9d2luZG93cy0xMjUyIj4NCiAgPC9oZWFk
+Pg0KICA8Ym9keSB0ZXh0PSIjMDAwMDAwIiBiZ2NvbG9yPSIjRkZGRkZGIj4NCiAgICA8cD48
+dHQ+U2VhcmNoIGZvciBodWh1PC90dD48L3A+DQogICAgPHA+PGltZyBzcmM9ImNpZDpwYXJ0
+MS44QzVFNkE4MS5EMEMxQjkxQUBqb3Jnay5jb20iIGFsdD0iIj48L3A+DQogIDwvYm9keT4N
+CjwvaHRtbD4=
+
+--------------D719681335F2A7D71D3761B1
+Content-Type: image/png;
+ name="kigaaldcbanejcbi.png"
+Content-Transfer-Encoding: base64
+Content-ID: <part1.8C5E6A81.D0C1B91A@jorgk.com>
+Content-Disposition: inline;
+ filename="kigaaldcbanejcbi.png"
+
+iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAAXNSR0IArs4c6QAAAARnQU1B
+AACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAASdEVYdFNvZnR3YXJlAEdyZWVuc2hv
+dF5VCAUAAABpSURBVDhP3dA7EoAgDEXR7Ew+bgdx/018BEYyiICtb27FcCig3Z7Im6gK3ZxN
+/RcQkb6aK8DjtuRMzMEAiNGvlFpgtyOdEjFz14xA10wA1pg5wLRZAthtVgEm5vGtA4DhvILa
+O8A+AuYLy0U5xUUpL8kAAAAASUVORK5CYII=
+--------------D719681335F2A7D71D3761B1--
+
+--------------77E82F0826A0A90EABD21FC3--

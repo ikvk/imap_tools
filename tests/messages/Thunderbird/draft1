@@ -1,0 +1,35 @@
+X-Mozilla-Status: 0000
+X-Mozilla-Status2: 00000000
+X-Mozilla-Keys:                                                                                 
+FCC: mailbox://nobody@Local%20Folders/Sent
+BCC: Some User <u1@example.com>, Another Person <u2@example.com>
+X-Identity-Key: id2
+Message-ID: <4849BF7B.2030800@example.com>
+Date: Sat, 07 Jun 2008 04:23:42 +0530
+From: Some User <example@example.com>
+X-Mozilla-Draft-Info: internal/draft; vcard=0; receipt=0; DSN=0; uuencode=0
+User-Agent: Thunderbird 3.0a2pre (Windows/2008060416)
+MIME-Version: 1.0
+To: bugmail@example.org
+Subject: Hello, did you receive my bugmail?
+Content-Type: text/html; charset=ISO-8859-1
+Content-Transfer-Encoding: 7bit
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+</head>
+<body text="#000000" bgcolor="#ffffff">
+This is an HTML message. Did you receive my bugmail?<br>
+<br>
+Thanks, and goodbye.<br>
+<br>
+--<br>
+Some User<br>
+<br>
+</body>
+</html>
+
+

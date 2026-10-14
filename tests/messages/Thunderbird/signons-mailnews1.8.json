@@ -1,0 +1,55 @@
+{
+  "nextId": 4,
+  "logins": [
+    {
+      "id": 1,
+      "hostname": "mailbox://localhost",
+      "httpRealm": "mailbox://localhost",
+      "formSubmitURL": null,
+      "usernameField": "",
+      "passwordField": "",
+      "encryptedUsername": "MEMEEPgAAAAAAAAAAAAAAAAAAAEwHQYJYIZIAWUDBAEqBBBco1wDiecdgaq9M54iOAIBBBDXdp8zsBRUB8wosaNGHgjb",
+      "encryptedPassword": "MEMEEPgAAAAAAAAAAAAAAAAAAAEwHQYJYIZIAWUDBAEqBBCQD1Sh8s6gkmV09fSvNYkoBBBkDlnAX81ktfsFxakNqs37",
+      "guid": "{b6a4b5c7-e507-4770-9cc0-214b49e369db}",
+      "encType": 1,
+      "timeCreated": 1401842558236,
+      "timeLastUsed": 1401842558236,
+      "timePasswordChanged": 1401842558236,
+      "timesUsed": 1
+    },
+    {
+      "id": 2,
+      "hostname": "news://localhost",
+      "httpRealm": "news://localhost",
+      "formSubmitURL": null,
+      "usernameField": "",
+      "passwordField": "",
+      "encryptedUsername": "MEMEEPgAAAAAAAAAAAAAAAAAAAEwHQYJYIZIAWUDBAEqBBAFpQBN+t/XDgtDaRXUKb1NBBBsZnjtPwasVIDb57pjIgJv",
+      "encryptedPassword": "MEMEEPgAAAAAAAAAAAAAAAAAAAEwHQYJYIZIAWUDBAEqBBDsRp18dQUNut+vGShyTlA4BBAClmcFm6tfUM/L3/FTMJqn",
+      "guid": "{9cab979b-d7a2-4982-8f4c-1bc4bad723ad}",
+      "encType": 1,
+      "timeCreated": 1401842558250,
+      "timeLastUsed": 1401842558250,
+      "timePasswordChanged": 1401842558250,
+      "timesUsed": 1
+    },
+    {
+      "id": 3,
+      "hostname": "smtp://localhost",
+      "httpRealm": "smtp://localhost",
+      "formSubmitURL": null,
+      "usernameField": "",
+      "passwordField": "",
+      "encryptedUsername": "MEMEEPgAAAAAAAAAAAAAAAAAAAEwHQYJYIZIAWUDBAEqBBBBs4GBtLx6nMeVc+ZWIeJbBBBdPE1stk7uSr6LepedsbSI",
+      "encryptedPassword": "MEMEEPgAAAAAAAAAAAAAAAAAAAEwHQYJYIZIAWUDBAEqBBDHuBXUkeaQgLAyX+ILDiKCBBAwO8gfAI2aK2mrrbdpc6vS",
+      "guid": "{1f71f892-275d-4379-a495-602955ea2b27}",
+      "encType": 1,
+      "timeCreated": 1401842558263,
+      "timeLastUsed": 1401842558263,
+      "timePasswordChanged": 1401842558263,
+      "timesUsed": 1
+    }
+  ],
+  "disabledHosts": [],
+  "version": 1
+}

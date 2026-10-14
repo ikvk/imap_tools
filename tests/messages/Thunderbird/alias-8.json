@@ -1,0 +1,19 @@
+{
+  "description": "OpenPGP alias rules",
+  "rules": [
+    {
+      "email": "c@mixED.exAMPLE",
+      "keys": [{ "fingerprint": "B8F2F6F4BD3AD3F82DC446833099FF1238852B9F" }]
+    },
+
+    {
+      "domain": "upperdom.example",
+      "keys": [{ "fingerprint": "EB85BB5FA33A75E15E944E63F231550C4F47E38E" }]
+    },
+
+    {
+      "domain": "LOWERDOM.EXAMPLE",
+      "keys": [{ "fingerprint": "D1A66E1A23B182C9980F788CFBFCC82A015E7330" }]
+    }
+  ]
+}

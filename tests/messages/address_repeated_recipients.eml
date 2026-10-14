@@ -1,0 +1,11 @@
+From: Sender <sender@example.com>
+To: Team =?utf-8?q?M=C3=BCnchen?= <team@example.com>
+To: Plain Name <plain@example.com>
+Subject: =?utf-8?q?Repeated_recipients?=
+Date: Tue, 14 Oct 2026 12:10:00 +0000
+Message-ID: <repeated-recipients-001@example.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+
+Body for repeated recipients test.
