@@ -246,7 +246,8 @@ class BaseMailBox:
             True  - fetch all messages per 1 command - high memory consumption, fast. Fails on big bulk at server
             int - fetch messages by bulks of the specified size
         :param sort: criteria for sort messages on server, use SortCriteria constants. Charset arg is important for sort
-        :param uid_list: UIDs for fetch. If set: (criteria, charset, sort) will be ignored, SEARCH will not be used.
+        :param uid_list: UIDs for fetch. If not None: (criteria, charset, sort) are ignored and SEARCH is not used.
+                         An empty iterable fetches no messages.
         :return generator: MailMessage
         """
         message_parts = \
@@ -254,7 +255,7 @@ class BaseMailBox:
         limit_range = slice(0, limit) if type(limit) is int else limit or slice(None)
         if not isinstance(limit_range, slice):
             raise TypeError(f"slice expected, but received: {type(limit_range).__name__}")
-        if uid_list:
+        if uid_list is not None:
             uids = clean_uids(uid_list)
         else:
             uids = self.uids(criteria, charset, sort)

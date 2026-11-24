@@ -178,6 +178,63 @@ class LoginQuotingTest(unittest.TestCase):
             )
 
 
+class FetchUidListTest(unittest.TestCase):
+    def setUp(self):
+        self.client = MagicMock(spec=imaplib.IMAP4)
+        self.client.capabilities = ()
+        self.client.uid.side_effect = self._uid_response
+        with patch.object(MailBox, '_get_mailbox_client', return_value=self.client):
+            self.mailbox = MailBox('localhost')
+
+    def _uid_response(self, command, *args):
+        if command == 'SEARCH':
+            return 'OK', [b'1 2']
+        self.assertEqual(command, 'fetch')
+        data = []
+        for uid in args[0].split(','):
+            data.extend([(f'1 (UID {uid} BODY[] {{{len(TEST_MESSAGE_DATA)}}}'.encode(), TEST_MESSAGE_DATA), b')'])
+        return 'OK', data
+
+    def test_empty_uid_collections_do_not_search_or_fetch(self):
+        for bulk in (False, True, 2):
+            for kind in (list, tuple, iter):
+                with self.subTest(bulk=bulk, kind=kind.__name__):
+                    self.client.reset_mock()
+                    self.assertEqual(list(self.mailbox.fetch(uid_list=kind([]), bulk=bulk)), [])
+                    self.client.uid.assert_not_called()
+
+    def test_empty_uid_generator_does_not_search_or_fetch(self):
+        for bulk in (False, True, 2):
+            with self.subTest(bulk=bulk):
+                self.client.reset_mock()
+                self.assertEqual(list(self.mailbox.fetch(uid_list=(uid for uid in []), bulk=bulk)), [])
+                self.client.uid.assert_not_called()
+
+    def test_omitted_or_none_uid_list_uses_search(self):
+        for bulk in (False, True, 2):
+            for kwargs in ({}, {'uid_list': None}):
+                with self.subTest(bulk=bulk, kwargs=kwargs):
+                    self.client.reset_mock()
+                    messages = list(self.mailbox.fetch(bulk=bulk, **kwargs))
+                    self.assertEqual([message.uid for message in messages], ['1', '2'])
+                    self.assertEqual(self.client.uid.call_args_list[0], call('SEARCH', 'CHARSET', 'US-ASCII', b'ALL'))
+
+    def test_nonempty_uid_lists_skip_search(self):
+        for bulk in (False, True, 2):
+            for uid_list in ('2', ['2'], ('2',), (uid for uid in ['2'])):
+                with self.subTest(bulk=bulk, kind=type(uid_list).__name__):
+                    self.client.reset_mock()
+                    messages = list(self.mailbox.fetch(uid_list=uid_list, bulk=bulk))
+                    self.assertEqual([message.uid for message in messages], ['2'])
+                    self.assertEqual(len(self.client.uid.call_args_list), 1)
+                    self.assertEqual(self.client.uid.call_args.args[0], 'fetch')
+
+    def test_invalid_empty_uid_string_does_not_search(self):
+        with self.assertRaises(TypeError):
+            list(self.mailbox.fetch(uid_list=''))
+        self.client.uid.assert_not_called()
+
+
 class IterableArgumentsTest(unittest.TestCase):
     def setUp(self):
         self.client = MagicMock(spec=imaplib.IMAP4)
