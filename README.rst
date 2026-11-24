@@ -71,7 +71,7 @@ Docs for ``imap_tools`` are at: *this page*, docstrings,
 * *headers_only* = False, get only email headers (without text, html, attachments)
 * *bulk* = False, False - fetch each message separately per N commands - low memory consumption, slow; True - fetch all messages per 1 command - high memory consumption, fast; int - fetch all messages by bulks of the specified size, for 20 messages and bulk=5 -> 4 IMAP commands
 * *sort* = None, criteria for sort messages on server, use SortCriteria constants. Charset arg is important for sort
-* *uid_list* = None, UIDs for fetch. If set: (criteria, charset, sort) will be ignored, SEARCH will not be used.
+* *uid_list* = None, UIDs for fetch. If not None: (criteria, charset, sort) will be ignored, SEARCH will not be used. An empty iterable fetches no messages.
 
 ``BaseMailBox.uids`` - search mailbox for matching message uids in current folder, returns List[str], args:
 
